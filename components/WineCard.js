@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-use-before-define
-const generateStars = (stars) => {
+const generateStars = stars => {
   const result = []
 
   for (let i = 0; i < 5; i += 1) {
@@ -56,8 +55,7 @@ const WineCard = ({
         <h2 className='name'>{name}</h2>
         <p className='text'>{info}</p>
         <p className='suitable'>Подходит вам на {percentage}%</p>
-        {/* eslint-disable-next-line no-use-before-define */}
-        <div className='stars'>{generateStars(stars).map((star) => star)}</div>
+        <div className='stars'>{generateStars(stars).map(star => star)}</div>
         {discount ? (
           <div className='discount'>
             <p className='discount-top'>
