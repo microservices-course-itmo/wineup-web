@@ -1,5 +1,40 @@
 import { useState } from 'react'
 
+// eslint-disable-next-line
+const generateStars = (stars) => {
+  const result = []
+
+  for (let i = 0; i < 5; i += 1) {
+    if (i < stars) {
+      result.push(
+        <img
+          src='assets/card/filled-star.svg'
+          className='star'
+          alt='filled star'
+          key={i}
+        />
+      )
+    } else {
+      result.push(
+        <img
+          src='assets/card/empty-star.svg'
+          className='star'
+          alt='filled star'
+          key={i}
+        />
+      )
+    }
+  }
+
+  return result
+}
+
+const { format } = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+  minimumFractionDigits: 0,
+})
+
 const WineCard = ({
   imageSrc,
   shop,
@@ -178,40 +213,5 @@ const WineCard = ({
     </div>
   )
 }
-
-// eslint-disable-next-line
-const generateStars = (stars) => {
-  const result = []
-
-  for (let i = 0; i < 5; i += 1) {
-    if (i < stars) {
-      result.push(
-        <img
-          src='assets/card/filled-star.svg'
-          className='star'
-          alt='filled star'
-          key={i}
-        />
-      )
-    } else {
-      result.push(
-        <img
-          src='assets/card/empty-star.svg'
-          className='star'
-          alt='filled star'
-          key={i}
-        />
-      )
-    }
-  }
-
-  return result
-}
-
-const { format } = new Intl.NumberFormat('ru-RU', {
-  style: 'currency',
-  currency: 'RUB',
-  minimumFractionDigits: 0,
-})
 
 export default WineCard
