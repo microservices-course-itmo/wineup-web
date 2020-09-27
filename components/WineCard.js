@@ -1,36 +1,4 @@
-const generateStars = stars => {
-  const result = []
-
-  for (let i = 0; i < 5; i += 1) {
-    if (i < stars) {
-      result.push(
-        <img
-          src='assets/card/filled-star.svg'
-          className='star'
-          alt='filled star'
-          key={i}
-        />
-      )
-    } else {
-      result.push(
-        <img
-          src='assets/card/empty-star.svg'
-          className='star'
-          alt='filled star'
-          key={i}
-        />
-      )
-    }
-  }
-
-  return result
-}
-
-const { format } = new Intl.NumberFormat('ru-RU', {
-  style: 'currency',
-  currency: 'RUB',
-  minimumFractionDigits: 0,
-})
+import { useState } from 'react'
 
 const WineCard = ({
   imageSrc,
@@ -43,6 +11,8 @@ const WineCard = ({
   discount,
   isLiked,
 }) => {
+  const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
+
   return (
     <div className='card'>
       <div className='img-container'>
@@ -55,7 +25,8 @@ const WineCard = ({
         <h2 className='name'>{name}</h2>
         <p className='text'>{info}</p>
         <p className='suitable'>Подходит вам на {percentage}%</p>
-        <div className='stars'>{generateStars(stars).map(star => star)}</div>
+        {/* eslint-disable-next-line */}
+        <div className='stars'>{generateStars(stars).map((star) => star)}</div>
         {discount ? (
           <div className='discount'>
             <p className='discount-top'>
@@ -67,11 +38,18 @@ const WineCard = ({
         ) : (
           <h2 className='price'>{format(price)}</h2>
         )}
-        <img
+        <button
           className='heart'
-          src={`assets/card/${isLiked ? 'filled' : 'empty'}-heart.svg`}
-          alt={`${isLiked ? 'filled' : 'empty'} heart`}
-        />
+          onClick={() => setIsHeartFilled(!isHeartFilled)}
+          type='button'
+        >
+          <svg width='35' height='28' viewBox='0 0 640 480'>
+            <path
+              className={`heart-image ${isHeartFilled ? 'filled' : ''}`}
+              d='m219.28949,21.827393c-66.240005,0 -119.999954,53.76001 -119.999954,120c0,134.755524 135.933151,170.08728 228.562454,303.308044c87.574219,-132.403381 228.5625,-172.854584 228.5625,-303.308044c0,-66.23999 -53.759888,-120 -120,-120c-48.047913,0 -89.401611,28.370422 -108.5625,69.1875c-19.160797,-40.817078 -60.514496,-69.1875 -108.5625,-69.1875z'
+            />
+          </svg>
+        </button>
       </div>
 
       <style jsx>
@@ -175,13 +153,65 @@ const WineCard = ({
 
           .heart {
             position: absolute;
-            right: 19px;
+            right: 15px;
             bottom: 12px;
+
+            padding: 0;
+            border: none;
+            background-color: #c4c4c4;
+            outline: none;
+            cursor: pointer;
+          }
+
+          .heart-image {
+            fill: transparent;
+            stroke: #cc4747;
+            stroke-width: 6px;
+            transition: fill 0.3s;
+          }
+
+          .heart-image.filled {
+            fill: #cc4747;
           }
         `}
       </style>
     </div>
   )
 }
+
+// eslint-disable-next-line
+const generateStars = (stars) => {
+  const result = []
+
+  for (let i = 0; i < 5; i += 1) {
+    if (i < stars) {
+      result.push(
+        <img
+          src='assets/card/filled-star.svg'
+          className='star'
+          alt='filled star'
+          key={i}
+        />
+      )
+    } else {
+      result.push(
+        <img
+          src='assets/card/empty-star.svg'
+          className='star'
+          alt='filled star'
+          key={i}
+        />
+      )
+    }
+  }
+
+  return result
+}
+
+const { format } = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+  minimumFractionDigits: 0,
+})
 
 export default WineCard
