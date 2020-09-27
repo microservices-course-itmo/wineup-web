@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-// eslint-disable-next-line
-const generateStars = (stars) => {
+const generateStars = stars => {
   const result = []
 
   for (let i = 0; i < 5; i += 1) {
@@ -60,8 +59,7 @@ const WineCard = ({
         <h2 className='name'>{name}</h2>
         <p className='text'>{info}</p>
         <p className='suitable'>Подходит вам на {percentage}%</p>
-        {/* eslint-disable-next-line */}
-        <div className='stars'>{generateStars(stars).map((star) => star)}</div>
+        <div className='stars'>{generateStars(stars).map(star => star)}</div>
         {discount ? (
           <div className='discount'>
             <p className='discount-top'>
@@ -90,8 +88,7 @@ const WineCard = ({
       <style jsx>
         {`
           .card {
-            min-width: 300px;
-            max-width: 300px;
+            width: 300px;
             margin: 17px 13px;
             text-align: center;
             background-color: #f2f0f0;
@@ -99,7 +96,7 @@ const WineCard = ({
           }
 
           .info {
-            height: 250px;
+            height: 300px;
             padding: 20px 45px;
             position: relative;
 
@@ -114,14 +111,13 @@ const WineCard = ({
           .wine-img {
             width: auto;
             height: 160px;
-            margin: 8px 0;
+            margin: 8px auto;
 
             border: none;
           }
 
           .shop {
-            margin: 0;
-            padding: 8px;
+            padding: 5px;
 
             color: #ffffff;
             background-color: #878787;
@@ -130,23 +126,23 @@ const WineCard = ({
           }
 
           .name {
-            margin: 0 0 14px 0;
+            margin-bottom: 14px;
 
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
           }
 
           .text {
-            margin: 0 0 19px 0;
+            margin-bottom: 9px;
 
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
           }
 
           .suitable {
-            margin: 0 0 7px 0;
+            margin-bottom: 7px;
 
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
           }
 
@@ -161,7 +157,7 @@ const WineCard = ({
             margin-top: 47px;
             margin-bottom: 24px;
 
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
           }
 
@@ -173,17 +169,13 @@ const WineCard = ({
           .discount-top {
             margin-top: 28px;
             margin-bottom: 3px;
-            font-size: 14px;
+            font-size: 13px;
           }
 
           .old-price {
             margin-right: 5px;
             color: #000;
             text-decoration: line-through;
-          }
-
-          .new-price {
-            margin: 0;
           }
 
           .heart {
