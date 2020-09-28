@@ -1,10 +1,29 @@
 import React from 'react'
 
-export const Search = () => {
+const handleClickButton = e => {
+  e.preventDefault()
+  console.log('Click')
+}
+const handleClickField = e => {
+  e.preventDefault()
+  if (e.key === 'Enter') {
+    console.log('Clock')
+  }
+}
+
+const Search = () => {
   return (
     <div className='search-form'>
-      <input className='search-field' placeholder='Красное ...' />
-      <button type='button' className='button search-button'>
+      <input
+        className='search-field'
+        placeholder='Красное ...'
+        onKeyDown={handleClickField}
+      />
+      <button
+        type='button'
+        className='button search-button'
+        onClick={handleClickButton}
+      >
         <img
           src='assets/search-component/search-icon.png'
           alt='search-icon.png'
@@ -14,18 +33,15 @@ export const Search = () => {
       <style jsx>
         {`
           .search-form {
-            display: block;
+            display: flex;
             width: 100%;
-            height: 30px;
           }
           .search-field {
             border-radius: 20px 0 0 20px;
             margin: 0 0.5% 0 0;
             width: 75%;
-            height: 26px;
+            height: 30px;
             padding: 0px;
-            position: relative;
-            top: -4px;
           }
           .search-field::placeholder {
             color: black;
