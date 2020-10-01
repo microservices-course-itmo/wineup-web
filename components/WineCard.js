@@ -234,7 +234,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
           }
 
           .discount-percent {
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: 900;
             font-size: 30px;
@@ -244,7 +244,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
 
           .old-price {
             position: relative;
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 20px;
@@ -258,7 +258,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
             top: 40px;
             left: 20px;
 
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
@@ -272,7 +272,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
             bottom: 5px;
             right: 5px;
 
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 18px;
@@ -285,7 +285,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
             top: 340px;
             left: 10px;
 
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
@@ -309,7 +309,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
             bottom: 5px;
             right: 5px;
 
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 30px;
