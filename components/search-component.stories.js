@@ -10,4 +10,5 @@ export default {
 const Template = args => <Search {...args} />
 
 export const search = Template.bind({})
+
 search.args = {}
