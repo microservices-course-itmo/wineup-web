@@ -25,6 +25,8 @@ const FilterBar = ({ criteriaMap }) => {
   })
   return (
     <div className='filter-list-container'>
+      <div className='filter-bar-title'>Фильтры</div>
+      <div className='filter-bar-subtitle'>WineUp</div>
       <ul className='filter-list'>{list}</ul>
       <style jsx>
         {`
@@ -34,6 +36,18 @@ const FilterBar = ({ criteriaMap }) => {
           }
           .filter-list {
             margin: 20px;
+          }
+          .filter-bar-title {
+            color: white;
+            font-weight: bold;
+            font-size: 44px;
+            text-align: center;
+          }
+          .filter-bar-subtitle {
+            color: white;
+            font-size: 24px;
+            text-align: right;
+            margin-right: 48px;
           }
         `}
       </style>
