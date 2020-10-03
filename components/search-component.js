@@ -6,7 +6,7 @@ export const Search = () => {
       <input className='search-field' placeholder='Красное ...' />
       <button type='button' className='button search-button'>
         <img
-          src={require('../assets/search-component/search-icon.svg')}
+          src='assets/search-component/search-icon.svg'
           alt='search-icon.svg'
         />
         найти

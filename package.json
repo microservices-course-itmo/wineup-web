@@ -7,19 +7,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint '**/*.js'",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
     "next": "9.5.3",
     "react": "16.13.1",
     "react-country-flag": "^2.3.0",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "styled-components": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@storybook/addon-actions": "^6.0.22",
     "@storybook/addon-essentials": "^6.0.22",
+    "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.0.22",
     "@storybook/react": "^6.0.22",
     "babel-loader": "^8.1.0",
@@ -36,7 +38,9 @@
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "react-is": "^16.13.1",
-    "react-test-renderer": "^16.13.1"
+    "react-test-renderer": "^16.13.1",
+    "storybook-addon-jsx": "^7.3.4",
+    "storybook-addon-prettier-source": "^2.1.2"
   },
   "husky": {
     "hooks": {

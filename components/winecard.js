@@ -1,6 +1,7 @@
+import React from 'react'
 import { useState } from 'react'
 import ReactCountryFlag from 'react-country-flag'
-import React from 'react'
+
 
 /**
  * Функция генерирующая плашку с оценкой экспертов в звёздах
@@ -13,7 +14,7 @@ const generateStars = stars => {
     if (i < stars) {
       result.push(
         <img
-          src={require('../assets/card/filled-star.svg')}
+          src='assets/card/filled-star.svg'
           className='star'
           alt='filled star'
           key={i}
@@ -22,7 +23,7 @@ const generateStars = stars => {
     } else {
       result.push(
         <img
-          src={require('../assets/card/empty-star.svg')}
+          src='assets/card/empty-star.svg'
           className='star'
           alt='filled star'
           key={i}
@@ -216,7 +217,7 @@ export const WineCard = ({ imageSrc, info, isLiked, color }) => {
             right: 5px;
           }
           .discount-percent {
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: 900;
             font-size: 30px;
@@ -225,7 +226,7 @@ export const WineCard = ({ imageSrc, info, isLiked, color }) => {
           }
           .old-price {
             position: relative;
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 20px;
@@ -237,7 +238,7 @@ export const WineCard = ({ imageSrc, info, isLiked, color }) => {
             position: absolute;
             top: 40px;
             left: 20px;
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
@@ -248,7 +249,7 @@ export const WineCard = ({ imageSrc, info, isLiked, color }) => {
             position: absolute;
             bottom: 5px;
             right: 5px;
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 18px;
@@ -259,7 +260,7 @@ export const WineCard = ({ imageSrc, info, isLiked, color }) => {
             position: absolute;
             top: 340px;
             left: 10px;
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
@@ -277,7 +278,7 @@ export const WineCard = ({ imageSrc, info, isLiked, color }) => {
             position: absolute;
             bottom: 5px;
             right: 5px;
-            font-family: Playfair Display, sans-serif;
+            font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 30px;

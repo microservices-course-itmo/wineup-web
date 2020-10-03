@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { WineCard } from './winecard'
+import { WineCard } from '../winecard'
 
 export default {
   title: 'WineCard',
   component: WineCard,
+
 }
 
 const Template = args => <WineCard {...args} />
 
-export const winecard = Template.bind({})
+export const winecard =  Template.bind({})
+
 
 winecard.args = {
   imageSrc:
     'https://amwine.ru/upload/resize_cache/iblock/b8b/620_620_1/b8b1bb64748968fe374765a9f6dc2738.png',
-  info: {
+  info: { 
     shop: 'Ароматный мир',
     name: 'Estate Vineyards Sauvignon Blanc',
     about: 'Красное, полусладкое',

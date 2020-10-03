@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Search } from './search-component'
+import { Search } from '../search-component'
 
 export default {
   title: 'Search',
