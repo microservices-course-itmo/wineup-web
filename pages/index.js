@@ -1,9 +1,10 @@
 import Search from '../components/search-component'
+import Header from '../components/header'
 
 const Home = () => {
   return (
     <>
-      <h1>Home page</h1>
+      <Header />
       <Search />
     </>
   )

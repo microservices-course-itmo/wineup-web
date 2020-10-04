@@ -15,8 +15,13 @@ const Search = () => {
   return (
     <div className='search-form'>
       <input
-        className='search-field'
-        placeholder='Красное ...'
+        className='search-field-1'
+        placeholder='|'
+        onKeyDown={handleClickField}
+      />
+      <input
+        className='search-field-2'
+        placeholder='Найти'
         onKeyDown={handleClickField}
       />
       <button
@@ -24,39 +29,84 @@ const Search = () => {
         className='button search-button'
         onClick={handleClickButton}
       >
-        <img
-          src='assets/search-component/search-icon.png'
-          alt='search-icon.png'
-        />
-        найти
+        <div className='search-button-content'>
+          <img
+            className='loop'
+            src='assets/search-component/search-icon.png'
+            alt='search-icon.png'
+          />
+          Найти
+        </div>
       </button>
       <style jsx>
         {`
           .search-form {
             display: flex;
-            width: 100%;
+            margin: 10px 10px 10px 10px;
           }
-          .search-field {
+          .search-field-1 {
             border-radius: 20px 0 0 20px;
+            border-color: #9e9e9e;
             margin: 0 0.5% 0 0;
             width: 75%;
-            height: 30px;
+            height: 38px;
             padding: 0px;
+            text-indent: 20px;
+          }
+          .search-field-2 {
+            height: 0px;
+            width: 0px;
+            visibility: hidden;
           }
           .search-field::placeholder {
             color: black;
             padding: 20px;
           }
           .search-button {
-            height: 30px;
-            width: 23%;
-            background: #cf3737;
+            height: 38px;
+            width: 24.5%;
+            background: #931332;
             color: white;
             border-radius: 0 20px 20px 0;
             border: 0px;
             padding: 0px;
             margin: 0px;
-            text-align: center;
+          }
+          .search-button-content {
+            display: flex;
+            justify-content: center;
+            color: white;
+          }
+          .loop {
+            padding: 0px;
+            margin: 0px;
+          }
+          @media screen and (max-width: 600px) {
+            .search-field-1 {
+              height: 0px;
+              width: 0px;
+              visibility: hidden;
+            }
+            .search-field-2 {
+              width: 100%;
+              margin: 0 0.5% 0 0.5%;
+              border-radius: 20px 20px 20px 20px;
+              border-color: #9e9e9e;
+              margin: 0 0.5% 0 0;
+              height: 38px;
+              padding: 0px;
+              visibility: visible;
+              background-image: url(assets/search-component/search-icon-grey.png);
+              background-repeat: no-repeat;
+              background-attachment: fixed;
+              background-position: 30px 19px;
+              text-indent: 40px;
+            }
+            .search-button {
+              height: 0px;
+              width: 0px;
+              visibility: hidden;
+            }
           }
         `}
       </style>
