@@ -62,6 +62,7 @@ const App = ({ Component, pageProps }) => {
           }
 
           /* Inherit fonts for inputs and buttons */
+
           input,
           button,
           textarea,
