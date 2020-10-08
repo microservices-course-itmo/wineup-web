@@ -1,27 +1,26 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 
-function InputBox(props) {
+function InputPrice({
+  labelFrom = 'FROM',
+  labelTo = 'TO',
+  placeholderFrom = 0,
+  placeholderTo = 10000,
+  currency = '₹',
+}) {
   return (
     <>
       <div className='row-direction item-gap'>
         <div className='column-direction color'>
-          <label htmlFor='input'>
-            {/* eslint-disable-next-line */}
-            {props.labelFrom}
-          </label>
+          <label htmlFor='input'>{labelFrom}</label>
           <div className='row-direction'>
             <input
               id='input'
               className='input-price color'
-              type='text'
-              /* eslint-disable-next-line */
-              value={props.value}
-              /* eslint-disable-next-line */
-              placeholder={props.placeholderFrom}
+              type='number'
+              placeholder={placeholderFrom}
             />
             <label className='symbol' htmlFor='input'>
-              {/* eslint-disable-next-line */}
-              {props.currency}
+              {currency}
             </label>
           </div>
         </div>
@@ -29,21 +28,17 @@ function InputBox(props) {
         <div className='column-direction color'>
           <label htmlFor='inputTo'>
             {/* eslint-disable-next-line */}
-            {props.labelTo}
+            {labelTo}
           </label>
           <div className='row-direction'>
             <input
               id='inputTo'
               className='input-price color'
-              type='text'
-              /* eslint-disable-next-line */
-              value={props.value}
-              /* eslint-disable-next-line */
-              placeholder={props.placeholderTo}
+              type='number'
+              placeholder={placeholderTo}
             />
             <label className='symbol' htmlFor='inputTo'>
-              {/* eslint-disable-next-line */}
-              {props.currency}
+              {currency}
             </label>
           </div>
         </div>
@@ -70,7 +65,7 @@ function InputBox(props) {
 
           .symbol {
             position: relative;
-            right: +15px;
+            right: 15px;
             font-weight: bold;
             font-size: 24px;
           }
@@ -80,6 +75,9 @@ function InputBox(props) {
           }
 
           .input-price {
+            -moz-appearance: textfield;
+            // -webkit-appearance: none;
+            // margin: 0;
             border: none;
             background: none;
             border-bottom: 2px solid #666666;
@@ -90,5 +88,11 @@ function InputBox(props) {
     </>
   )
 }
-
-export default InputBox
+InputPrice.propTypes = {
+  labelFrom: PropTypes.string.isRequired,
+  labelTo: PropTypes.string.isRequired,
+  placeholderFrom: PropTypes.number.isRequired,
+  placeholderTo: PropTypes.number.isRequired,
+  currency: PropTypes.symbol.isRequired,
+}
+export default InputPrice
