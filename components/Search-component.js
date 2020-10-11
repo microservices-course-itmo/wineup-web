@@ -30,8 +30,8 @@ const Search = () => {
         <div className='search-button-content'>
           <img
             className='loop'
-            src='assets/search-component/search-icon.png'
-            alt='search-icon.png'
+            src='assets/search-component/search-icon.svg'
+            alt=''
           />
           Найти
         </div>
@@ -39,6 +39,7 @@ const Search = () => {
       <style jsx>
         {`
           .search-form {
+            font: 18px Sans;
             display: flex;
             margin: 10px;
           }
@@ -68,6 +69,12 @@ const Search = () => {
             padding: 0px;
             margin: 0px;
           }
+          .search-button:hover {
+            background: #af2f4e;
+          }
+          .search-button:focus {
+            background: #680019;
+          }
           .search-button-content {
             display: flex;
             justify-content: center;
@@ -90,7 +97,7 @@ const Search = () => {
               margin: 0 0.5% 0 0;
               height: 38px;
               padding: 0px;
-              background-image: url(assets/search-component/search-icon-grey.png);
+              background-image: url(assets/search-component/search-icon-grey.svg);
               background-repeat: no-repeat;
               background-attachment: fixed;
               background-position: 30px 19px;

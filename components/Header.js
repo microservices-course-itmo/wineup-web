@@ -5,7 +5,7 @@ const Header = () => {
         <div className='city'>
           <img
             className='city-icon'
-            src='assets/search-component/city-icon.png'
+            src='assets/search-component/city-icon.svg'
             alt='город'
           />
           Город
@@ -16,12 +16,12 @@ const Header = () => {
         <div className='login'>
           <img
             className='city-icon'
-            src='assets/search-component/heart.png'
+            src='assets/search-component/heart.svg'
             alt='сердечко'
           />
           <img
             className='city-icon'
-            src='assets/search-component/man.png'
+            src='assets/search-component/man.svg'
             alt='профиль'
           />
           Войти
