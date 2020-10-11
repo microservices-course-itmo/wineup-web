@@ -1,25 +1,23 @@
-const handleClickButton = e => {
-  e.preventDefault()
-  console.log('Click')
-}
-const handleClickField = e => {
-  e.preventDefault()
-  if (e.key === 'Enter') {
-    console.log('Clock')
-  }
-}
+import React from 'react'
 
-const Search = () => {
+export function Search() {
+  const [input, setInput] = React.useState('')
+  const handleClickButton = e => {
+    e.preventDefault()
+    setInput(document.getElementById('f1').value)
+  }
+  const handleClickField = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setInput(document.getElementById('f1').value)
+    }
+  }
   return (
     <div className='search-form'>
       <input
-        className='search-field-1'
-        placeholder='|'
-        onKeyDown={handleClickField}
-      />
-      <input
-        className='search-field-2'
-        placeholder='Найти'
+        className='search-field'
+        placeholder=' '
+        id='f1'
         onKeyDown={handleClickField}
       />
       <button
@@ -43,7 +41,7 @@ const Search = () => {
             display: flex;
             margin: 10px;
           }
-          .search-field-1 {
+          .search-field {
             border-radius: 20px 0 0 20px;
             border-color: #9e9e9e;
             margin: 0 0.5% 0 0;
@@ -51,9 +49,6 @@ const Search = () => {
             height: 38px;
             padding: 0px;
             text-indent: 20px;
-          }
-          .search-field-2 {
-            display: none;
           }
           .search-field::placeholder {
             color: black;
@@ -85,10 +80,7 @@ const Search = () => {
             margin: 0px;
           }
           @media screen and (max-width: 600px) {
-            .search-field-1 {
-              display: none;
-            }
-            .search-field-2 {
+            .search-field {
               display: flex;
               width: 100%;
               margin: 0 0.5% 0 0.5%;
@@ -112,5 +104,3 @@ const Search = () => {
     </div>
   )
 }
-
-export default Search
