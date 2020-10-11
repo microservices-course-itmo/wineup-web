@@ -1,7 +1,7 @@
-import React from 'react'
+import { useState } from 'react'
 
 export function Search() {
-  const [input, setInput] = React.useState('')
+  const [input, setInput] = useState('')
   const handleClickButton = e => {
     e.preventDefault()
     setInput(document.getElementById('f1').value)
