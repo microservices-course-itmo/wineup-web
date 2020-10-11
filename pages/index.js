@@ -1,5 +1,5 @@
-import Search from '../components/search-component'
-import Header from '../components/header'
+import Search from '../components/Search-component'
+import Header from '../components/Header'
 
 const Home = () => {
   return (

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Header = () => {
   return (
     <div>
@@ -8,23 +6,23 @@ const Header = () => {
           <img
             className='city-icon'
             src='assets/search-component/city-icon.png'
-            alt='city-icon.png'
+            alt='город'
           />
           Город
         </div>
-        <div className='tittle'>
+        <div className='title'>
           <b>Wine Up</b>
         </div>
         <div className='login'>
           <img
             className='city-icon'
             src='assets/search-component/heart.png'
-            alt='heart.png'
+            alt='сердечко'
           />
           <img
             className='city-icon'
             src='assets/search-component/man.png'
-            alt='man.png'
+            alt='профиль'
           />
           Войти
         </div>
@@ -46,7 +44,7 @@ const Header = () => {
           .city-icon {
             margin: 0 10px 0 0;
           }
-          .tittle {
+          .title {
             display: flex;
             width: 40%;
             font-size: 60px;

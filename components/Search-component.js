@@ -1,5 +1,3 @@
-import React from 'react'
-
 const handleClickButton = e => {
   e.preventDefault()
   console.log('Click')
@@ -42,7 +40,7 @@ const Search = () => {
         {`
           .search-form {
             display: flex;
-            margin: 10px 10px 10px 10px;
+            margin: 10px;
           }
           .search-field-1 {
             border-radius: 20px 0 0 20px;
@@ -54,9 +52,7 @@ const Search = () => {
             text-indent: 20px;
           }
           .search-field-2 {
-            height: 0px;
-            width: 0px;
-            visibility: hidden;
+            display: none;
           }
           .search-field::placeholder {
             color: black;
@@ -83,19 +79,17 @@ const Search = () => {
           }
           @media screen and (max-width: 600px) {
             .search-field-1 {
-              height: 0px;
-              width: 0px;
-              visibility: hidden;
+              display: none;
             }
             .search-field-2 {
+              display: flex;
               width: 100%;
               margin: 0 0.5% 0 0.5%;
-              border-radius: 20px 20px 20px 20px;
+              border-radius: 20px;
               border-color: #9e9e9e;
               margin: 0 0.5% 0 0;
               height: 38px;
               padding: 0px;
-              visibility: visible;
               background-image: url(assets/search-component/search-icon-grey.png);
               background-repeat: no-repeat;
               background-attachment: fixed;
@@ -103,9 +97,7 @@ const Search = () => {
               text-indent: 40px;
             }
             .search-button {
-              height: 0px;
-              width: 0px;
-              visibility: hidden;
+              display: none;
             }
           }
         `}
