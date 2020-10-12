@@ -3,7 +3,7 @@ import Header from '../components/Header'
 
 const App = ({ Component, pageProps }) => {
   return (
-    <div className='wrapper'>
+    <>
       <Header />
       <Search />
       <Component {...pageProps} />
@@ -75,14 +75,7 @@ const App = ({ Component, pageProps }) => {
           }
         `}
       </style>
-      <style jsx>{`
-        .wrapper {
-          max-width: 1440px;
-          padding: 0 20px;
-          margin: 0 auto;
-        }
-      `}</style>
-    </div>
+    </>
   )
 }
 
