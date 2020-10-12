@@ -1,11 +1,11 @@
-export const Header = () => {
+const Header = () => {
   return (
     <div>
       <div className='header'>
         <div className='city'>
           <img
             className='city-icon'
-            src='assets/search-component/city-icon.svg'
+            src='assets/search/city-icon.svg'
             alt='город'
           />
           Город
@@ -16,12 +16,12 @@ export const Header = () => {
         <div className='login'>
           <img
             className='city-icon'
-            src='assets/search-component/heart.svg'
+            src='assets/search/heart.svg'
             alt='сердечко'
           />
           <img
             className='city-icon'
-            src='assets/search-component/man.svg'
+            src='assets/search/man.svg'
             alt='профиль'
           />
           Войти
@@ -71,3 +71,5 @@ export const Header = () => {
     </div>
   )
 }
+
+export default Header

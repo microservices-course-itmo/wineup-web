@@ -1,24 +1,22 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
-export function Search() {
+const Search = () => {
   const [input, setInput] = useState('')
-  const handleClickButton = e => {
+  const handleClickButton = useCallback(e => {
     e.preventDefault()
-    setInput(document.getElementById('f1').value)
-  }
-  const handleClickField = e => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      setInput(document.getElementById('f1').value)
-    }
-  }
+  }, [])
+  const handleChangeField = useCallback(e => {
+    e.preventDefault()
+    setInput(e.target.value)
+  }, [])
+
   return (
     <div className='search-form'>
       <input
+        onChange={handleChangeField}
         className='search-field'
-        placeholder=' '
         id='f1'
-        onKeyDown={handleClickField}
+        value={input}
       />
       <button
         type='button'
@@ -26,11 +24,7 @@ export function Search() {
         onClick={handleClickButton}
       >
         <div className='search-button-content'>
-          <img
-            className='loop'
-            src='assets/search-component/search-icon.svg'
-            alt=''
-          />
+          <img className='loop' src='assets/search/search-icon.svg' alt='' />
           Найти
         </div>
       </button>
@@ -49,6 +43,7 @@ export function Search() {
             height: 38px;
             padding: 0px;
             text-indent: 20px;
+            outline: none;
           }
           .search-field::placeholder {
             color: black;
@@ -63,6 +58,8 @@ export function Search() {
             border: 0px;
             padding: 0px;
             margin: 0px;
+            outline: none;
+            cursor: pointer;
           }
           .search-button:hover {
             background: #af2f4e;
@@ -89,7 +86,7 @@ export function Search() {
               margin: 0 0.5% 0 0;
               height: 38px;
               padding: 0px;
-              background-image: url(assets/search-component/search-icon-grey.svg);
+              background-image: url(assets/search/search-icon-grey.svg);
               background-repeat: no-repeat;
               background-attachment: fixed;
               background-position: 30px 19px;
@@ -104,3 +101,5 @@ export function Search() {
     </div>
   )
 }
+
+export default Search
