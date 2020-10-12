@@ -94,7 +94,6 @@ const InputContainer = ({ title, type, inputList }) => {
             />
           </svg>
         </button>
-        {/* <InputList hidden inputType={type} inputList={inputList} /> */}
       </div>
       <style jsx>
         {`
