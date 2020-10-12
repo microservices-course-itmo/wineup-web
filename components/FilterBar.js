@@ -1,17 +1,13 @@
 import InputContainer from './InputContainer'
 
-const getCriteriaGroup = (criteria, mapObject) => {
-  const group = mapObject[criteria]
-  return {
-    title: group.title,
-    type: group.type,
-    inputList: group.inputList,
-  }
-}
-
 const FilterBar = ({ criteriaMap }) => {
   const list = Object.keys(criteriaMap).map(criteria => {
-    const group = getCriteriaGroup(criteria, criteriaMap)
+    const g = criteriaMap[criteria]
+    const group = {
+      title: g.title,
+      type: g.type,
+      inputList: g.inputList,
+    }
     return (
       <li>
         <InputContainer
