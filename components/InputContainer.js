@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import CustomCheckBox from './CustomCheckBox'
 
 const InputList = ({ hidden, inputType, inputList }) => {

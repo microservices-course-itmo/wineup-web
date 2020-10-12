@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CustomCheckBox = ({ id, label, name, value }) => {
   return (
     <div className='checkbox-container'>

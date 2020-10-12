@@ -1,4 +1,3 @@
-import React from 'react'
 import InputContainer from './InputContainer'
 
 const getCriteriaGroup = (criteria, mapObject) => {
