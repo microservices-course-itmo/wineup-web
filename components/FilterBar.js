@@ -23,7 +23,6 @@ const FilterBar = ({ criteriaMap }) => {
       <div className='filter-bar-title'>Фильтры</div>
       <div className='filter-bar-subtitle'>WineUp</div>
       <ul className='filter-list'>{list}</ul>
-      {/* eslint-disable-next-line react/button-has-type */}
       <button type='reset' className='clear-filter-button'>
         <span className='btn-text'>
           <span>Очистить фильтр</span>
