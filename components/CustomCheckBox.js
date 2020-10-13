@@ -57,7 +57,7 @@ const CustomCheckBox = ({ id, label, name, value }) => {
             background-color: #931332;
             background-position: 50% 50%;
             background-repeat: no-repeat;
-            background-image: url("data:image/svg+xml,%3Csvg width='14' height='15' viewBox='0 0 14 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L6.5 14L13 1.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-image: url('assets/checkboxTick.svg');
             border-radius: 1px;
             opacity: 1;
             border: 1px solid #931332;

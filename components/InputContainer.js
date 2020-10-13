@@ -81,18 +81,7 @@ const InputContainer = ({ title, type, inputList }) => {
           className={open ? 'arrow-up' : 'arrow-down'}
           onClick={() => setOpen(prevState => !prevState)}
         >
-          <svg
-            width='16'
-            height='9'
-            viewBox='0 0 16 9'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              d='M14.0179 0L8 5.42578L1.98213 0L0 1.78711L8 9L16 1.78711L14.0179 0Z'
-              fill='white'
-            />
-          </svg>
+          <img src='assets/arrowDown.svg' alt='' />
         </button>
       </div>
       <style jsx>
