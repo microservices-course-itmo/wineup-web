@@ -6,7 +6,7 @@ const InputList = ({ hidden, inputType, inputList }) => {
   switch (inputType) {
     case 'checkbox':
       customInputList = inputList.map(checkbox => (
-        <li>
+        <li key={checkbox.id}>
           <CustomCheckBox
             id={checkbox.id}
             name={checkbox.name}
@@ -18,7 +18,7 @@ const InputList = ({ hidden, inputType, inputList }) => {
       break
     case 'buttons':
       customInputList = inputList.map(buttonInput => (
-        <li>
+        <li key={buttonInput.id}>
           <input
             type='radio'
             id={buttonInput.id}
@@ -32,7 +32,7 @@ const InputList = ({ hidden, inputType, inputList }) => {
       break
     case 'number':
       customInputList = inputList.map(numberInput => (
-        <li>
+        <li key={numberInput.id}>
           <label htmlFor={numberInput.id}>{numberInput.textLabel}</label>
           <input
             type='number'

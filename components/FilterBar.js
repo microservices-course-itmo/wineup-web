@@ -4,12 +4,13 @@ const FilterBar = ({ criteriaMap }) => {
   const list = Object.keys(criteriaMap).map(criteria => {
     const g = criteriaMap[criteria]
     const group = {
+      id: g.id,
       title: g.title,
       type: g.type,
       inputList: g.inputList,
     }
     return (
-      <li>
+      <li key={group.id}>
         <InputContainer
           title={group.title}
           type={group.type}
