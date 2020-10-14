@@ -23,7 +23,7 @@ const InputList = ({ hidden, inputType, inputList }) => {
             type='radio'
             id={buttonInput.id}
             name={buttonInput.name}
-            checked={buttonInput.value}
+            defaultChecked={buttonInput.value}
             value={buttonInput.id}
           />
           <label htmlFor={buttonInput.id}>{buttonInput.textLabel}</label>
@@ -38,7 +38,7 @@ const InputList = ({ hidden, inputType, inputList }) => {
             type='number'
             placeholder={numberInput.value}
             id={numberInput.id}
-            value=''
+            defaultValue=''
           />
         </li>
       ))
@@ -70,18 +70,22 @@ const InputList = ({ hidden, inputType, inputList }) => {
 }
 
 const InputContainer = ({ title, type, inputList }) => {
-  const [open, setOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   return (
     <>
       <div className='criteria-title'>{title}</div>
       <div className='list-container'>
         <InputList hidden={false} inputType={type} inputList={inputList} />
         <button
+          className='arrow-btn'
+          onClick={() => setIsOpen(!isOpen)}
           type='button'
-          className={open ? 'arrow-up' : 'arrow-down'}
-          onClick={() => setOpen(prevState => !prevState)}
         >
-          <img src='assets/arrowDown.svg' alt='' />
+          <img
+            className={` arrow-${isOpen ? 'down' : 'up'}`}
+            src={`assets/arrow${isOpen ? 'Down' : 'Up'}.svg`}
+            alt='arrow'
+          />
         </button>
       </div>
       <style jsx>
@@ -96,9 +100,12 @@ const InputContainer = ({ title, type, inputList }) => {
             font-size: 22px;
             font-weight: bold;
           }
-          .arrow-down {
+          .arrow-btn {
             background-color: transparent;
-            border: 0;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px;
           }
         `}
       </style>
