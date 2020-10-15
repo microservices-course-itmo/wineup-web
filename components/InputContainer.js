@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import CustomCheckBox from './CustomCheckBox'
 
-const InputList = ({ hidden, inputType, inputList }) => {
+const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
   let customInputList
   switch (inputType) {
     case 'checkbox':
@@ -11,6 +11,7 @@ const InputList = ({ hidden, inputType, inputList }) => {
             id={checkbox.id}
             name={checkbox.name}
             value={checkbox.value}
+            defaultChecked={checkbox.id in defaultValue}
             label={checkbox.textLabel}
           />
         </li>
@@ -23,8 +24,8 @@ const InputList = ({ hidden, inputType, inputList }) => {
             type='radio'
             id={buttonInput.id}
             name={buttonInput.name}
-            defaultChecked={buttonInput.value}
-            value={buttonInput.id}
+            defaultChecked={defaultValue === buttonInput.value}
+            value={buttonInput.value}
           />
           <label htmlFor={buttonInput.id}>{buttonInput.textLabel}</label>
         </li>
@@ -36,9 +37,10 @@ const InputList = ({ hidden, inputType, inputList }) => {
           <label htmlFor={numberInput.id}>{numberInput.textLabel}</label>
           <input
             type='number'
-            placeholder={numberInput.value}
             id={numberInput.id}
-            defaultValue=''
+            name={numberInput.name}
+            value={numberInput.value}
+            placeholder={defaultValue[numberInput.name]}
           />
         </li>
       ))
@@ -69,13 +71,18 @@ const InputList = ({ hidden, inputType, inputList }) => {
   )
 }
 
-const InputContainer = ({ title, type, inputList }) => {
+const InputContainer = ({ title, type, inputList, defaultValue }) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
       <div className='criteria-title'>{title}</div>
       <div className='list-container'>
-        <InputList hidden={false} inputType={type} inputList={inputList} />
+        <InputList
+          hidden={false}
+          inputType={type}
+          inputList={inputList}
+          defaultValue={defaultValue}
+        />
         <button
           className='arrow-btn'
           onClick={() => setIsOpen(!isOpen)}

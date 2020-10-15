@@ -7,6 +7,7 @@ const FilterBar = ({ criteriaMap }) => {
       id: g.id,
       title: g.title,
       type: g.type,
+      defaultValue: g.defaultInputValue,
       inputList: g.inputList,
     }
     return (
@@ -15,6 +16,7 @@ const FilterBar = ({ criteriaMap }) => {
           title={group.title}
           type={group.type}
           inputList={group.inputList}
+          defaultValue={group.defaultValue}
         />
       </li>
     )
