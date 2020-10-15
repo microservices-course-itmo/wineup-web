@@ -40,6 +40,7 @@ const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
             id={numberInput.id}
             name={numberInput.name}
             value={numberInput.value}
+            defaultValue=''
             placeholder={defaultValue[numberInput.name]}
           />
         </li>
