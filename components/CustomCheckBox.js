@@ -27,6 +27,9 @@ const CustomCheckBox = ({ id, label, name, value, defaultChecked }) => {
             font-size: 18px;
             height: 23px;
             line-height: 20px;
+            color: #9e9e9e;
+          }
+          input:checked ~ .checkbox-label {
             color: white;
           }
 
@@ -50,7 +53,7 @@ const CustomCheckBox = ({ id, label, name, value, defaultChecked }) => {
             -moz-transition: all 0.3s ease-out;
             -ms-transition: all 0.3s ease-out;
             -o-transition: all 0.3s ease-out;
-            border: 1px solid lightgray;
+            border: 1px solid #9e9e9e;
           }
 
           input:checked ~ .checkbox-custom {

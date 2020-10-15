@@ -36,6 +36,7 @@ const FilterBar = ({ criteriaMap }) => {
         {`
           .filter-list-container {
             background-color: gray;
+            background-image: url('assets/filterBackground.png');
             width: 375px;
             overflow: hidden;
             height: 100vh;
@@ -62,6 +63,8 @@ const FilterBar = ({ criteriaMap }) => {
             position: relative;
             height: 60px;
             width: 100%;
+            border: none;
+            outline: none;
             background-color: #931332;
             color: white;
             font-size: 22px;
