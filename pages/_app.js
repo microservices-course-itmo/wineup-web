@@ -1,11 +1,17 @@
 import Search from '../components/Search'
 import Header from '../components/Header'
+import Button from '../components/Button'
 
 const App = ({ Component, pageProps }) => {
   return (
     <>
       <Header />
       <Search />
+
+      <Button selected>Рекомендованные</Button>
+      <Button>Популярности</Button>
+      <Button>Убыванию цен</Button>
+      <Button>Возрастанию цен</Button>
       <Component {...pageProps} />
       <style jsx global>
         {`
