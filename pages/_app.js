@@ -1,11 +1,6 @@
-import Search from '../components/Search'
-import Header from '../components/Header'
-
 const App = ({ Component, pageProps }) => {
   return (
     <>
-      <Header />
-      <Search />
       <Component {...pageProps} />
       <style jsx global>
         {`
