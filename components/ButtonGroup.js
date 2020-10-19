@@ -1,54 +1,26 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { useState } from 'react'
 
-function ButtonGroup({
-  firstBtnValue = '1',
-  secondBtnValue = '2',
-  thirdBtnValue = '3',
-  forthBtnValue = '4',
-}) {
-  const types = [firstBtnValue, secondBtnValue, thirdBtnValue, forthBtnValue]
+import SortButton from './SortButton'
 
-  const [active, setActive] = useState(types[0])
-
-  const Button = styled.button`
-    background: transparent;
-
-    color: grey;
-
-    width: 150px;
-
-    height: 30px;
-
-    border-radius: 20px;
-
-    outline: 0;
-    ${({ active }) =>
-      active &&
-      `
-            background-color: red;
-
-            color: white;
-
-            width: 150px;
-
-            height: 30px;
-
-            border-radius: 20px;
-
-            border: none;
-
-            outline: 0;
-            `}
-  `
-
+function ButtonGroup() {
+  const types = [
+    { name: 'Recommended' },
+    { name: 'High price' },
+    { name: 'Low price' },
+    { name: 'Popular' },
+  ]
+  const [active, setActive] = useState(0)
+  function setActiveButton(index) {
+    setActive(index)
+  }
   return (
     <div className='container'>
-      {types.map(type => (
-        <Button active={active === type} onClick={() => setActive(type)}>
-          {type}
-        </Button>
+      {types.map((type, index) => (
+        <SortButton
+          classValue={active === index ? 'activeBtn' : 'notActiveBtn'}
+          onClickSort={() => setActiveButton(index)}
+          btnValue={type.name}
+        />
       ))}
       <style jsx>
         {`
@@ -61,12 +33,5 @@ function ButtonGroup({
       </style>
     </div>
   )
-}
-
-ButtonGroup.propTypes = {
-  firstBtnValue: PropTypes.string.isRequired,
-  secondBtnValue: PropTypes.string.isRequired,
-  thirdBtnValue: PropTypes.string.isRequired,
-  forthBtnValue: PropTypes.string.isRequired,
 }
 export default ButtonGroup
