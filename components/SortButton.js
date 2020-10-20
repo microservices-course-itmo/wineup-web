@@ -3,7 +3,7 @@
  * @param {function} onClickSort
  * @param {string} classValue
  */
-function SortButton({ btnValue, onClickSort, classValue }) {
+const SortButton = ({ btnValue, onClickSort, classValue }) => {
   return (
     <div className='container'>
       <button

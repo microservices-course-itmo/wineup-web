@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import SortButton from './SortButton'
 
-function ButtonGroup() {
+const ButtonGroup = () => {
   const types = [
     { name: 'Recommended' },
     { name: 'High price' },

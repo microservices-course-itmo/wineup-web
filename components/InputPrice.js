@@ -5,13 +5,13 @@
  * @param {number} placeholderTo
  * @param {symbol} currency
  */
-function InputPrice({
+const InputPrice = ({
   labelFrom = 'FROM',
   labelTo = 'TO',
   placeholderFrom = 0,
   placeholderTo = 10000,
   currency = '₹',
-}) {
+}) => {
   return (
     <>
       <div className='row-direction item-gap'>
@@ -71,8 +71,6 @@ function InputPrice({
           }
           .input-price {
             -moz-appearance: textfield;
-            // -webkit-appearance: none;
-            // margin: 0;
             border: none;
             background: none;
             border-bottom: 2px solid #666666;
