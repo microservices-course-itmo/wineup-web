@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import CustomCheckBox from './CustomCheckBox'
 
-const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
+const InputGroup = ({ type, inputList, onChange }) => {
   let customInputList
-  switch (inputType) {
+  switch (type) {
     case 'checkbox':
       customInputList = inputList.map(checkbox => (
         <li key={checkbox.id}>
@@ -11,8 +11,9 @@ const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
             id={checkbox.id}
             name={checkbox.name}
             value={checkbox.value}
-            defaultChecked={checkbox.id in defaultValue}
+            defaultChecked={checkbox.defaultChecked}
             label={checkbox.textLabel}
+            onChange={onChange}
           />
         </li>
       ))
@@ -24,8 +25,9 @@ const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
             type='radio'
             id={buttonInput.id}
             name={buttonInput.name}
-            defaultChecked={defaultValue === buttonInput.value}
+            defaultChecked={buttonInput.defaultChecked}
             value={buttonInput.value}
+            onChange={onChange}
           />
           <label htmlFor={buttonInput.id}>{buttonInput.textLabel}</label>
         </li>
@@ -39,22 +41,19 @@ const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
             type='number'
             id={numberInput.id}
             name={numberInput.name}
-            value={numberInput.value}
-            defaultValue=''
-            placeholder={defaultValue[numberInput.name]}
+            placeholder={numberInput.defaultValue}
+            onChange={onChange}
           />
         </li>
       ))
       break
     default:
-      customInputList = <li className={`${inputType} default`} />
+      customInputList = <li className={`${type} default`} />
       break
   }
   return (
     <>
-      <ul className={`${hidden ? 'hidden' : 'visible'} input-list`}>
-        {customInputList}
-      </ul>
+      <ul className='input-list'>{customInputList}</ul>
       <style jsx>
         {`
           .input-list {
@@ -63,27 +62,19 @@ const InputList = ({ hidden, inputType, inputList, defaultValue }) => {
             align-items: flex-start;
             width: 50%;
           }
-          .hidden {
-            display: none;
-          }
         `}
       </style>
     </>
   )
 }
 
-const InputContainer = ({ title, type, inputList, defaultValue }) => {
+const InputContainer = ({ title, type, inputList, onChange }) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
       <div className='criteria-title'>{title}</div>
       <div className='list-container'>
-        <InputList
-          hidden={false}
-          inputType={type}
-          inputList={inputList}
-          defaultValue={defaultValue}
-        />
+        <InputGroup type={type} inputList={inputList} onChange={onChange} />
         <button
           className='arrow-btn'
           onClick={() => setIsOpen(!isOpen)}
