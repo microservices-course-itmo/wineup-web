@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import CustomCheckBox from './CustomCheckBox'
 import InputPrice from './InputPrice'
+import ButtonGroup from './ButtonGroup'
 
 const InputGroup = ({ type, inputList, onChange, ...props }) => {
   let customInputList
@@ -8,31 +9,12 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
     case 'checkbox':
       customInputList = inputList.map(checkbox => (
         <li key={checkbox.id}>
-          <CustomCheckBox
-            id={checkbox.id}
-            name={checkbox.name}
-            value={checkbox.value}
-            defaultChecked={checkbox.defaultChecked}
-            label={checkbox.textLabel}
-            onChange={onChange}
-          />
+          <CustomCheckBox checkbox={checkbox} onChange={onChange} />
         </li>
       ))
       break
     case 'buttons':
-      customInputList = inputList.map(buttonInput => (
-        <li key={buttonInput.id}>
-          <input
-            type='radio'
-            id={buttonInput.id}
-            name={buttonInput.name}
-            defaultChecked={buttonInput.defaultChecked}
-            value={buttonInput.value}
-            onChange={onChange}
-          />
-          <label htmlFor={buttonInput.id}>{buttonInput.textLabel}</label>
-        </li>
-      ))
+      customInputList = <ButtonGroup buttons={inputList} onChange={onChange} />
       break
     case 'number':
       customInputList = (
