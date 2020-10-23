@@ -1,8 +1,16 @@
 /**
- * @param {Object} inputFrom
- * @param {Object} inputTo
+ * @param {Object} inputFrom - Данные поля "Цена от"
+ * @param {string} inputFrom.id
+ * @param {string} inputFrom.name - Имя поля, необходимо как ключ к state
+ * @param {number} inputFrom.defaultValue - Значение по-умолчанию для placeholder
+ * @param {string} inputFrom.textLabel - Текст label для этого поля
+ * @param {Object} inputTo - Данные поля "Цена до"
+ * @param {string} inputTo.id
+ * @param {string} inputTo.name - Имя поля, необходимо как ключ к state
+ * @param {number} inputTo.defaultValue - Значение по-умолчанию для placeholder
+ * @param {string} inputTo.textLabel - Текст label для этого поля
  * @param {symbol} currency
- * @param {function} onChange
+ * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
  */
 const InputPrice = ({ inputFrom, inputTo, currency = '₹', onChange }) => {
   return (
