@@ -3,15 +3,18 @@
  * @param {function} onClickSort
  * @param {string} classValue
  */
-const SortButton = ({ btnValue, onClickSort, classValue }) => {
+const SortButton = ({ btn, onBtnClick }) => {
   return (
-    <div className='container'>
+    <div className='container' key={btn.id}>
       <button
+        id={btn.id}
         type='button'
-        className={classValue}
-        onClick={() => onClickSort()}
+        name={btn.name}
+        value={btn.value}
+        className={`${btn.defaultChecked ? 'active ' : ''}btn`}
+        onClick={onBtnClick}
       >
-        {btnValue}
+        {btn.textLabel}
       </button>
       <style jsx>
         {`
@@ -20,22 +23,19 @@ const SortButton = ({ btnValue, onClickSort, classValue }) => {
             flex-direction: column;
             row-gap: 10px;
           }
-          .activeBtn {
-            background-color: red;
-            color: white;
-            width: 150px;
-            height: 30px;
-            border-radius: 20px;
-            border: none;
-            outline: 0;
-          }
-          .notActiveBtn {
+          .btn {
             background: transparent;
             color: grey;
             width: 150px;
             height: 30px;
             border-radius: 20px;
             outline: 0;
+            cursor: pointer;
+          }
+          .active {
+            background-color: #931332;
+            color: white;
+            border: none;
           }
         `}
       </style>
