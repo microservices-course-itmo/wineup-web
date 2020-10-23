@@ -64,6 +64,7 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
             -ms-transition: all 0.3s ease-out;
             -o-transition: all 0.3s ease-out;
             border: 1px solid #9e9e9e;
+            cursor: pointer;
           }
 
           input:checked ~ .checkbox-custom {
