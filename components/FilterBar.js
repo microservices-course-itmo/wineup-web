@@ -330,6 +330,8 @@ const FilterBar = () => {
   })
 
   const handleSubmit = event => {
+    // eslint-disable-next-line no-console
+    console.log(formState)
     event.preventDefault()
   }
   const handleReset = () => {
@@ -389,6 +391,7 @@ const FilterBar = () => {
             background-color: #931332;
             color: white;
             font-size: 22px;
+            cursor: pointer;
           }
           .btn-text {
             display: flex;
