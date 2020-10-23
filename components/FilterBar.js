@@ -2,7 +2,7 @@ import { useState } from 'react'
 import InputContainer from './InputContainer'
 
 const FilterBar = () => {
-  const [formState, setFormState] = useState({
+  const initialFormState = {
     sortingBy: 'recommendations',
     priceFrom: 0,
     priceTo: 100000,
@@ -13,7 +13,8 @@ const FilterBar = () => {
     country: [],
     region: [],
     sparkling: [],
-  })
+  }
+  const [formState, setFormState] = useState(initialFormState)
 
   const handleCheckoutChange = event => {
     const { name, value, checked } = event.target
@@ -78,13 +79,13 @@ const FilterBar = () => {
         {
           id: 'priceFrom',
           name: 'priceFrom',
-          defaultValue: '0',
+          defaultValue: formState.priceFrom,
           textLabel: 'от',
         },
         {
           id: 'priceTo',
           name: 'priceTo',
-          defaultValue: '10000',
+          defaultValue: formState.priceTo,
           textLabel: 'до',
         },
       ],
@@ -330,11 +331,17 @@ const FilterBar = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    console.log(formState)
+  }
+  const handleReset = () => {
+    setFormState(initialFormState)
   }
 
   return (
-    <form className='filter-list-container' onSubmit={handleSubmit}>
+    <form
+      className='filter-list-container'
+      onSubmit={handleSubmit}
+      onReset={handleReset}
+    >
       <button type='submit'>Submit</button>
       <div className='filter-bar-title'>Фильтры</div>
       <div className='filter-bar-subtitle'>WineUp</div>
