@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import CustomCheckBox from './CustomCheckBox'
+import InputPrice from './InputPrice'
 
-const InputGroup = ({ type, inputList, onChange }) => {
+const InputGroup = ({ type, inputList, onChange, ...props }) => {
   let customInputList
   switch (type) {
     case 'checkbox':
@@ -34,33 +35,36 @@ const InputGroup = ({ type, inputList, onChange }) => {
       ))
       break
     case 'number':
-      customInputList = inputList.map(numberInput => (
-        <li key={numberInput.id}>
-          <label htmlFor={numberInput.id}>{numberInput.textLabel}</label>
-          <input
-            type='number'
-            id={numberInput.id}
-            name={numberInput.name}
-            placeholder={numberInput.defaultValue}
-            onChange={onChange}
-          />
-        </li>
-      ))
+      customInputList = (
+        <InputPrice
+          inputFrom={inputList[0]}
+          inputTo={inputList[1]}
+          currency={props.currency}
+          onChange={onChange}
+        />
+      )
       break
     default:
       customInputList = <li className={`${type} default`} />
       break
   }
+  const fullWidth = type === 'number'
   return (
     <>
-      <ul className='input-list'>{customInputList}</ul>
+      <ul className={`input-list ${fullWidth ? 'full-width' : ''}`}>
+        {customInputList}
+      </ul>
       <style jsx>
         {`
           .input-list {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            width: 50%;
+            align-items: baseline;
+            margin: 0 auto;
+            width: 165px;
+          }
+          .full-width {
+            width: 100%;
           }
         `}
       </style>

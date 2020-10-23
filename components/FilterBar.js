@@ -72,6 +72,7 @@ const FilterBar = () => {
       id: 'price',
       title: 'Цена',
       type: 'number',
+      currency: 'RUB',
       onChange: handleInputChange,
       inputList: [
         {
@@ -342,15 +343,16 @@ const FilterBar = () => {
           .filter-list-container {
             background-color: gray;
             background-image: url('assets/filterBackground.png');
-            width: 375px;
+            min-width: 375px;
             overflow: hidden;
             height: 100vh;
           }
           .filter-list {
             margin-left: 20px;
-            overflow: auto;
+            overflow-y: auto;
             height: calc(100vh - 160px);
             width: 100%;
+            padding-right: 20px;
           }
           .filter-bar-title {
             color: white;
