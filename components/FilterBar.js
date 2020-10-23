@@ -78,13 +78,13 @@ const FilterBar = () => {
         {
           id: 'priceFrom',
           name: 'priceFrom',
-          defaultValue: 0,
+          defaultValue: '0',
           textLabel: 'от',
         },
         {
           id: 'priceTo',
           name: 'priceTo',
-          defaultValue: 10000,
+          defaultValue: '10000',
           textLabel: 'до',
         },
       ],
@@ -327,8 +327,15 @@ const FilterBar = () => {
       </li>
     )
   })
+
+  const handleSubmit = event => {
+    event.preventDefault()
+    console.log(formState)
+  }
+
   return (
-    <form className='filter-list-container'>
+    <form className='filter-list-container' onSubmit={handleSubmit}>
+      <button type='submit'>Submit</button>
       <div className='filter-bar-title'>Фильтры</div>
       <div className='filter-bar-subtitle'>WineUp</div>
       <ul className='filter-list'>{list}</ul>
@@ -383,6 +390,9 @@ const FilterBar = () => {
           }
           .btn-text span {
             margin: 10px;
+          }
+          button[type='submit'] {
+            display: none;
           }
         `}
       </style>

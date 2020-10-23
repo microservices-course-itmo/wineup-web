@@ -2,8 +2,9 @@
  * @param {Object} inputFrom
  * @param {Object} inputTo
  * @param {symbol} currency
+ * @param {function} onChange
  */
-const InputPrice = ({ inputFrom, inputTo, currency = '₹' }) => {
+const InputPrice = ({ inputFrom, inputTo, currency = '₹', onChange }) => {
   return (
     <>
       <div className='row-direction item-gap'>
@@ -18,6 +19,7 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₹' }) => {
               className='input-price color'
               type='number'
               placeholder={inputFrom.defaultValue}
+              onChange={onChange}
             />
             <label className='symbol color' htmlFor={inputFrom.id}>
               {currency}
@@ -35,6 +37,7 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₹' }) => {
               className='input-price color'
               type='number'
               placeholder={inputTo.defaultValue}
+              onChange={onChange}
             />
             <label className='symbol color' htmlFor={inputTo.id}>
               {currency}
