@@ -126,10 +126,10 @@ const WinePosition = ({ imageSrc, info, color = 0 }) => (
           background: linear-gradient(
             180deg,
             white 0,
-            white 204px,
-            ${colors[color]} 204px,
-            ${colors[color]} 325px,
-            white 273px,
+            white 144px,
+            ${colors[color]} 144px,
+            ${colors[color]} 265px,
+            white 265px,
             white 600px
           );
           position: relative;
@@ -181,7 +181,7 @@ const WinePosition = ({ imageSrc, info, color = 0 }) => (
           width: 350px;
           position: absolute;
           right: 0;
-          top: 210px;
+          top: 150px;
           font-family: Playfair Display, serif;
           font-style: normal;
           font-weight: bold;
