@@ -26,7 +26,7 @@ const CustomCheckBox = ({
             display: block;
             position: relative;
             height: 20px;
-            margin: 10px;
+            margin: 10px 0;
             width: fit-content;
           }
           .checkbox-label {

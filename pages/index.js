@@ -3,6 +3,8 @@ import Search from '../components/Search'
 import Catalog from '../components/Catalog'
 import WineCard from '../components/WineCard'
 
+import FilterBar from '../components/FilterBar'
+
 const Home = () => {
   return (
     <div className='wrapper'>
@@ -11,7 +13,7 @@ const Home = () => {
       <div className='nav' />
 
       <div className='content'>
-        <div className='filter' />
+        <FilterBar />
 
         <Catalog>
           {[0, 1, 2, 3, 4].map((item, index) => (
