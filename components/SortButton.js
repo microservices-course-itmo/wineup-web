@@ -1,7 +1,11 @@
 /**
- * @param {string} btnValue
- * @param {function} onClickSort
- * @param {string} classValue
+ * @param {Object} btn
+ * @param {string} btn.id
+ * @param {string} btn.name - Имя поля, необходимо как ключ к state
+ * @param {string} btn.value - Значение поля, добавляемое по ключу name к state
+ * @param {boolean} btn.defaultChecked
+ * @param {string} btn.textLabel - Текст кнопки
+ * @param {function} onBtnClick - Функция-обработчик изменений для контролируемого поля
  */
 const SortButton = ({ btn, onBtnClick }) => {
   return (
