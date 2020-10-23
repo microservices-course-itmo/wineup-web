@@ -2,7 +2,6 @@ import Header from '../components/Header'
 import Search from '../components/Search'
 import Catalog from '../components/Catalog'
 import WineCard from '../components/WineCard'
-import WinePosition from '../components/WinePosition'
 
 const Home = () => {
   return (
