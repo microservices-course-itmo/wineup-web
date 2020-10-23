@@ -1,24 +1,26 @@
-const CustomCheckBox = ({
-  id,
-  label,
-  name,
-  value,
-  defaultChecked,
-  onChange,
-}) => {
+/**
+ * @param {Object} checkbox - Данные поля
+ * @param {string} checkbox.id
+ * @param {string} checkbox.name - Имя поля, необходимо как ключ к state
+ * @param {string} checkbox.value - Значение поля, добавляемое по ключу name к state
+ * @param {boolean} checkbox.defaultChecked
+ * @param {string} checkbox.textLabel - Текст label для этого checkbox
+ * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
+ */
+const CustomCheckBox = ({ checkbox, onChange }) => {
   return (
     <div className='checkbox-container'>
       <input
-        id={id}
+        id={checkbox.id}
         type='checkbox'
-        name={name}
-        value={value}
-        defaultChecked={defaultChecked}
+        name={checkbox.name}
+        value={checkbox.value}
+        defaultChecked={checkbox.defaultChecked}
         onChange={onChange}
       />
       <span className='checkbox-custom' />
-      <label htmlFor={id} className='checkbox-label'>
-        {label}
+      <label htmlFor={checkbox.id} className='checkbox-label'>
+        {checkbox.textLabel}
       </label>
       <style jsx>
         {`
