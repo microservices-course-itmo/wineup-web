@@ -1,26 +1,14 @@
-import { useState } from 'react'
-
 import SortButton from './SortButton'
 
-const ButtonGroup = () => {
-  const types = [
-    { name: 'Recommended' },
-    { name: 'High price' },
-    { name: 'Low price' },
-    { name: 'Popular' },
-  ]
-  const [active, setActive] = useState(0)
-  function setActiveButton(index) {
-    setActive(index)
-  }
+/**
+ * @param {Array<Object>} buttons - Список кнопок для отображения
+ * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
+ */
+const ButtonGroup = ({ buttons, onChange }) => {
   return (
     <div className='container'>
-      {types.map((type, index) => (
-        <SortButton
-          classValue={active === index ? 'activeBtn' : 'notActiveBtn'}
-          onClickSort={() => setActiveButton(index)}
-          btnValue={type.name}
-        />
+      {buttons.map(button => (
+        <SortButton btn={button} onBtnClick={onChange} />
       ))}
       <style jsx>
         {`
