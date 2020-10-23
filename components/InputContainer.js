@@ -3,6 +3,13 @@ import CustomCheckBox from './CustomCheckBox'
 import InputPrice from './InputPrice'
 import ButtonGroup from './ButtonGroup'
 
+/**
+ * @param {string} type - 'checkbox' || 'number' || 'buttons'
+ * @param {Array<Object>} inputList - Список полей ввода для этой группы
+ * @param {function} onChange - Функция-обработчик изменений для этой группы полей ввода
+ * @param props
+ * @returns {JSX.Element} InputGroup - Список кастомных полей ввода одной группы
+ */
 const InputGroup = ({ type, inputList, onChange, ...props }) => {
   let customInputList
   switch (type) {
