@@ -1,11 +1,14 @@
 import Search from '../components/Search'
 import Header from '../components/Header'
+import AuthorizationForm from '../components/AuthorizationForm'
+import '@mobiscroll/react-lite/dist/css/mobiscroll.min.css'
 
 const App = ({ Component, pageProps }) => {
   return (
     <>
       <Header />
       <Search />
+      <AuthorizationForm />
       <Component {...pageProps} />
       <style jsx global>
         {`
