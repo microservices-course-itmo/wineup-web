@@ -9,7 +9,6 @@
     "lint": "eslint \"**/*.js\""
   },
   "dependencies": {
-    "@mobiscroll/react-lite": "^4.10.6",
     "next": "9.5.3",
     "react": "16.13.1",
     "react-country-flag": "^2.3.0",
