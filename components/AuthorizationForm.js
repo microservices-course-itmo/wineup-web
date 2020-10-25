@@ -39,9 +39,7 @@ const AuthorizationForm = () => {
           <input className='inputField' placeholder='Москва' />
           <img className='icon2' src='assets/authorization/arrow.svg' alt='' />
         </div>
-        <button type='button' className='authButton'>
-          Зарегистрироваться
-        </button>
+        <div className='authButton'>Зарегистрироваться</div>
         <div className='soulContract'>
           Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с политикой
           конфиденциальности
@@ -112,13 +110,25 @@ const AuthorizationForm = () => {
           .authButton {
             width: 274px;
             height: 58px;
-            background: #af2f4e;
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            background: #232323;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50px;
             margin: 50px 206px 5px 205px;
             font: 22px Sans;
             color: white;
             border: 0px;
+          }
+          .authButton:active {
+            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            background: #af2f4e;
+            outline: none;
+          }
+          a.authButton:focus {
+            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            background: #af2f4e;
+            outline: none;
           }
           .authForm {
             border: 2px solid black;
