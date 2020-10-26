@@ -12,7 +12,7 @@
  * @param {symbol} currency
  * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
  */
-const InputPrice = ({ inputFrom, inputTo, currency = '₹', onChange }) => {
+const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
   return (
     <>
       <div className='row-direction item-gap'>
