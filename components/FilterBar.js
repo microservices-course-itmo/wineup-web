@@ -3,7 +3,6 @@ import InputContainer from './InputContainer'
 
 const FilterBar = () => {
   const initialFormState = {
-    sortingBy: 'recommendations',
     priceFrom: 0,
     priceTo: 100000,
     volume: [],
@@ -33,42 +32,6 @@ const FilterBar = () => {
     setFormState({ ...formState, [event.target.name]: event.target.value })
   }
   const inputGroupMap = {
-    sortingBy: {
-      id: 'sortingBy',
-      title: 'Сортировать по',
-      type: 'buttons',
-      onChange: handleInputChange,
-      inputList: [
-        {
-          id: 'sortingByRecommendations',
-          name: 'sortingBy',
-          value: 'recommendations',
-          defaultChecked: formState.sortingBy === 'recommendations',
-          textLabel: 'Рекомендованные',
-        },
-        {
-          id: 'sortingByPriceAsc',
-          name: 'sortingBy',
-          value: 'priceAsc',
-          defaultChecked: formState.sortingBy === 'priceAsc',
-          textLabel: 'Возрастанию цен',
-        },
-        {
-          id: 'sortingByPriceDesc',
-          name: 'sortingBy',
-          value: 'priceDesc',
-          defaultChecked: formState.sortingBy === 'priceDesc',
-          textLabel: 'Убыванию цен',
-        },
-        {
-          id: 'sortingByPopularity',
-          name: 'sortingBy',
-          value: 'popularity',
-          defaultChecked: formState.sortingBy === 'popularity',
-          textLabel: 'Популярности',
-        },
-      ],
-    },
     price: {
       id: 'price',
       title: 'Цена',
