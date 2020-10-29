@@ -29,9 +29,10 @@ const SortButton = ({ btn, onBtnClick }) => {
           }
           .btn {
             background: transparent;
-            color: grey;
+            color: #931332;
             width: 150px;
             height: 30px;
+            border-color: #931332;
             border-radius: 20px;
             outline: 0;
             cursor: pointer;
