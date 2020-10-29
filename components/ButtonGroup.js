@@ -1,21 +1,34 @@
 import SortButton from './SortButton'
 
 /**
+ * @param {string} title - Заголовок группы кнопок
  * @param {Array<Object>} buttons - Список кнопок для отображения
  * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
  */
-const ButtonGroup = ({ buttons, onChange }) => {
+const ButtonGroup = ({ title, buttons, onChange }) => {
   return (
-    <div className='container'>
-      {buttons.map(button => (
-        <SortButton btn={button} onBtnClick={onChange} />
-      ))}
+    <div className='button-group-container'>
+      <div className='title'>{title}</div>
+      <div className='buttons-list'>
+        {buttons.map(button => (
+          <SortButton btn={button} onBtnClick={onChange} />
+        ))}
+      </div>
       <style jsx>
         {`
-          .container {
+          .button-group-container {
+            margin-bottom: 40px;
+          }
+          .buttons-list {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            justify-content: space-around;
             row-gap: 10px;
+            margin-top: 15px;
+          }
+          .title {
+            font-size: 22px;
+            font-weight: bold;
           }
         `}
       </style>
