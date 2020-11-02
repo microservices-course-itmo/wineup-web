@@ -10,11 +10,13 @@ const App = ({ Component, pageProps }) => {
           *::after {
             box-sizing: border-box;
           }
+
           /* Remove default padding */
           ul[class],
           ol[class] {
             padding: 0;
           }
+
           /* Remove default margin */
           body,
           h1,
@@ -32,6 +34,7 @@ const App = ({ Component, pageProps }) => {
           dd {
             margin: 0;
           }
+
           /* Set core body defaults */
           body {
             font-family: 'PT Sans', sans-serif;
@@ -40,20 +43,24 @@ const App = ({ Component, pageProps }) => {
             text-rendering: optimizeSpeed;
             line-height: 1.5;
           }
+
           /* Remove list styles on ul, ol elements with a class attribute */
           ul[class],
           ol[class] {
             list-style: none;
           }
+
           /* A elements that don't have a class get default styles */
           a:not([class]) {
             text-decoration-skip-ink: auto;
           }
+
           /* Make images easier to work with */
           img {
             max-width: 100%;
             display: block;
           }
+
           /* Inherit fonts for inputs and buttons */
           input,
           button,
