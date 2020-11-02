@@ -2,7 +2,6 @@ import Header from '../components/Header'
 import Search from '../components/Search'
 import Catalog from '../components/Catalog'
 import WineCard from '../components/WineCard'
-
 import FilterBar from '../components/FilterBar'
 
 const Home = () => {
@@ -10,7 +9,6 @@ const Home = () => {
     <div className='wrapper'>
       <Header />
       <Search />
-      <div className='nav' />
 
       <div className='content'>
         <FilterBar />
@@ -59,6 +57,7 @@ const Home = () => {
 
         .content {
           display: flex;
+          margin-top: 40px;
         }
 
         .filter {
