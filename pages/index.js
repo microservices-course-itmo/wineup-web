@@ -17,7 +17,7 @@ const Home = () => {
         <div style={{ margin: '15px' }}>
           <ButtonGroup />
         </div>
-        <div style={{ margin: '15px', width: '300px', background: 'white' }}>
+        <div style={{ margin: '15px', width: '400px', background: 'white' }}>
           <ReviewCard
             logDate='19.10.2020'
             logName='Андрей'
