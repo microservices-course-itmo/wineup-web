@@ -1,17 +1,24 @@
 /**
- * @param {string} btnValue
- * @param {function} onClickSort
- * @param {string} classValue
+ * @param {Object} btn
+ * @param {string} btn.id
+ * @param {string} btn.name - Имя поля, необходимо как ключ к state
+ * @param {string} btn.value - Значение поля, добавляемое по ключу name к state
+ * @param {boolean} btn.defaultChecked
+ * @param {string} btn.textLabel - Текст кнопки
+ * @param {function} onBtnClick - Функция-обработчик изменений для контролируемого поля
  */
-const SortButton = ({ btnValue, onClickSort, classValue }) => {
+const SortButton = ({ btn, onBtnClick }) => {
   return (
-    <div className='container'>
+    <div className='container' key={btn.id}>
       <button
+        id={btn.id}
         type='button'
-        className={classValue}
-        onClick={() => onClickSort()}
+        name={btn.name}
+        value={btn.value}
+        className={`${btn.defaultChecked ? 'active ' : ''}btn`}
+        onClick={onBtnClick}
       >
-        {btnValue}
+        {btn.textLabel}
       </button>
       <style jsx>
         {`
@@ -20,22 +27,20 @@ const SortButton = ({ btnValue, onClickSort, classValue }) => {
             flex-direction: column;
             row-gap: 10px;
           }
-          .activeBtn {
-            background-color: red;
-            color: white;
-            width: 150px;
-            height: 30px;
-            border-radius: 20px;
-            border: none;
-            outline: 0;
-          }
-          .notActiveBtn {
+          .btn {
             background: transparent;
-            color: grey;
+            color: #931332;
             width: 150px;
             height: 30px;
+            border-color: #931332;
             border-radius: 20px;
             outline: 0;
+            cursor: pointer;
+          }
+          .active {
+            background-color: #931332;
+            color: white;
+            border: none;
           }
         `}
       </style>

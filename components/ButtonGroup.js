@@ -1,33 +1,34 @@
-import { useState } from 'react'
-
 import SortButton from './SortButton'
 
-const ButtonGroup = () => {
-  const types = [
-    { name: 'Recommended' },
-    { name: 'High price' },
-    { name: 'Low price' },
-    { name: 'Popular' },
-  ]
-  const [active, setActive] = useState(0)
-  function setActiveButton(index) {
-    setActive(index)
-  }
+/**
+ * @param {string} title - Заголовок группы кнопок
+ * @param {Array<Object>} buttons - Список кнопок для отображения
+ * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
+ */
+const ButtonGroup = ({ title, buttons, onChange }) => {
   return (
-    <div className='container'>
-      {types.map((type, index) => (
-        <SortButton
-          classValue={active === index ? 'activeBtn' : 'notActiveBtn'}
-          onClickSort={() => setActiveButton(index)}
-          btnValue={type.name}
-        />
-      ))}
+    <div className='button-group-container'>
+      <div className='title'>{title}</div>
+      <div className='buttons-list'>
+        {buttons.map(button => (
+          <SortButton btn={button} onBtnClick={onChange} />
+        ))}
+      </div>
       <style jsx>
         {`
-          .container {
+          .button-group-container {
+            margin-bottom: 40px;
+          }
+          .buttons-list {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            justify-content: space-around;
             row-gap: 10px;
+            margin-top: 15px;
+          }
+          .title {
+            font-size: 22px;
+            font-weight: bold;
           }
         `}
       </style>

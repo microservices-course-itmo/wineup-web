@@ -38,6 +38,7 @@
     "jsx-a11y/no-static-element-interactions": 0,
     "quotes": [2, "single"],
     "jsx-quotes": ["error", "prefer-single"],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/button-has-type": [1, { "reset": true }]
   }
 }
