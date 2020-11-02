@@ -31,9 +31,13 @@ const Header = () => {
         {`
           .header {
             display: flex;
-            margin: 10px 10px 10px 10px;
+            margin: 0px 0px 10px 0px;
+            height: 113px;
+            background: #ffffff;
+            box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.19);
           }
           .city {
+            margin-left: 10px;
             position: relative;
             top: 30px;
             display: flex;
@@ -47,10 +51,15 @@ const Header = () => {
           .title {
             display: flex;
             width: 40%;
-            font-size: 60px;
+            font-family: Poller One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 70px;
+            line-height: 83px;
             justify-content: center;
           }
           .login {
+            margin-right: 10px;
             position: relative;
             top: 30px;
             display: flex;

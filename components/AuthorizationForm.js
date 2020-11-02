@@ -1,26 +1,163 @@
-import { useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 
 const AuthorizationForm = () => {
-  const handleClickCalendar = useCallback(e => {
-    e.preventDefault()
-    if (document.getElementById('calendar').style.visibility === 'hidden') {
-      document.getElementById('calendar').style.visibility = 'visible'
-    } else {
-      document.getElementById('calendar').style.visibility = 'hidden'
-    }
-  }, [])
+  const [authForm, setAuthForm] = useState(1)
+  const [telephone, setTelephone] = useState('')
+  const [telCode, setTelCode] = useState('')
+  const [date, setDate] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [day, month, year] = useMemo(() => date.split('.'), [date])
+  const [username, setUserName] = useState('')
+  const [nameError, setNameError] = useState('')
+  const [calendarError, setCalendarError] = useState('')
+  const handleDate = useCallback(
+    e => {
+      setDate(e.target.value)
+      if (parseInt(e.target.value, 10) > 2012) {
+        setCalendarError('Ошибка: не достигли 18 лет')
+      } else {
+        setCalendarError('')
+      }
+    },
+    [setDate]
+  )
 
+  const handleDay = useCallback(
+    e => {
+      setDate([e.target.value, month, year].join('.'))
+    },
+    [month, year, setDate]
+  )
+  const handleMonth = useCallback(
+    e => {
+      setDate([day, e.target.value, year].join('.'))
+    },
+    [day, year, setDate]
+  )
+  const handleYear = useCallback(
+    e => {
+      setDate([day, month, e.target.value].join('.'))
+      if (parseInt(e.target.value, 10) > 2012) {
+        setCalendarError('Ошибка: не достигли 18 лет')
+      } else {
+        setCalendarError('')
+      }
+    },
+    [day, month, setDate]
+  )
+  const handleClickCalendar = useCallback(() => {
+    setIsOpen(!isOpen)
+  }, [isOpen])
+
+  const handleUserName = useCallback(
+    e => {
+      setUserName(e.target.value)
+      if (e.target.value.length < 2) {
+        setNameError(
+          'Ошибка: слишком короткое значение. Допустимая длина 2-15 символов'
+        )
+      } else if (e.target.value.length > 15) {
+        setNameError(
+          'Ошибка: слишком длинное значение. Допустимая длина 2-15 символов'
+        )
+      } else {
+        const format = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+        if (format.test(e.target.value)) {
+          setNameError('Ошибка: недопустимые символы')
+        } else {
+          setNameError('')
+        }
+      }
+    },
+    [setNameError]
+  )
+  const handleTelephone = useCallback(e => {
+    setTelephone(e.target.value)
+  }, [])
+  const handleTelCode = useCallback(e => {
+    setTelCode(e.target.value)
+  }, [])
+  const handleFirstForm = useCallback(() => {
+    setAuthForm(2)
+  }, [])
+  const handleSecondForm1 = useCallback(() => {
+    setAuthForm(3)
+  }, [])
+  const handleSecondForm2 = useCallback(() => {
+    setAuthForm(1)
+  }, [])
+  const handleThirdForm = useCallback(() => {
+    setAuthForm(1)
+  }, [])
   return (
-    <div>
-      <div className='authForm'>
+    <div className='authForm'>
+      <div className='authForm1'>
+        <div className='header'>Войдите или зарегистрируйтесь</div>
+        <div className='inputForm'>
+          <div className='formName'>Введите номер телефона</div>
+          <input
+            className='inputField'
+            placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
+            value={telephone}
+            onChange={handleTelephone}
+          />
+        </div>
+        <div className='telButton1' onClick={handleFirstForm}>
+          Запросить код подтверждения
+        </div>
+      </div>
+      <div className='authForm2'>
+        <div className='header'>Войдите или зарегистрируйтесь</div>
+        <div className='inputForm'>
+          <div className='formName'>Введите номер телефона</div>
+          <input
+            className='inputField'
+            placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
+            value={telephone}
+            onChange={handleTelephone}
+          />
+        </div>
+        <div className='inputForm'>
+          <div className='formName'>Введите код</div>
+          <input
+            className='inputField'
+            placeholder='_ _ _ _ _ _'
+            value={telCode}
+            onChange={handleTelCode}
+          />
+        </div>
+        <div className='telButton21'>
+          <div className='telButton2Inner' onClick={handleSecondForm1}>
+            Подтвердить
+          </div>
+        </div>
+        <div className='telButton22'>
+          <div className='telButton2Inner' onClick={handleSecondForm2}>
+            Отправить повторно
+          </div>
+        </div>
+      </div>
+      <div className='authForm3'>
         <div className='header'>Войдите или зарегистрируйтесь</div>
         <div className='inputForm'>
           <div className='formName'>Введите имя</div>
-          <input className='inputField' placeholder='Иван' />
+          <input
+            className='inputField'
+            placeholder='Иван'
+            value={username}
+            onChange={handleUserName}
+          />
+          <input className='errorMessage' value={nameError} disabled />
         </div>
         <div className='inputForm'>
           <div className='formName'>Дата рождения</div>
-          <input className='inputField' placeholder='ДД.ММ.ГГГГ' />
+          <input
+            className='inputField'
+            placeholder='ДД.ММ.ГГГГ'
+            value={date}
+            onChange={handleDate}
+          />
+          <input className='errorMessage' value={calendarError} disabled />
           <div onClick={handleClickCalendar}>
             <img
               className='icon1'
@@ -29,17 +166,35 @@ const AuthorizationForm = () => {
             />
           </div>
           <div className='calendar' id='calendar'>
-            <div className='day'>ДД</div>
-            <div className='month'>ММ</div>
-            <div className='year'>ГГГГ</div>
+            <input
+              className='day'
+              placeholder='ДД'
+              value={day}
+              onChange={handleDay}
+            />
+            <input
+              className='month'
+              placeholder='ММ'
+              value={month}
+              onChange={handleMonth}
+            />
+            <input
+              className='year'
+              placeholder='ГГГГ'
+              value={year}
+              onChange={handleYear}
+            />
           </div>
         </div>
         <div className='inputForm'>
           <div className='formName'>Город</div>
           <input className='inputField' placeholder='Москва' />
+          <input className='errorMessage' disabled />
           <img className='icon2' src='assets/authorization/arrow.svg' alt='' />
         </div>
-        <div className='authButton'>Зарегистрироваться</div>
+        <div className='authButton' onClick={handleThirdForm}>
+          Зарегистрироваться
+        </div>
         <div className='soulContract'>
           Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с политикой
           конфиденциальности
@@ -47,6 +202,50 @@ const AuthorizationForm = () => {
       </div>
       <style jsx>
         {`
+          .authForm {
+            background-image: url(assets/authorization/signUp.svg);
+            background-repeat: repeat;
+            height: 1996px;
+            display: flex;
+            justify-content: center;
+          }
+          .authForm1 {
+            background: white;
+            display: ${authForm === 1 ? 'block' : 'none'};
+            border: 2px solid black;
+            border-radius: 10px;
+            width: 685px;
+            height: 512px;
+            position: relative;
+            top: 110px;
+            margin: 0px 377px 110px 378px;
+            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+          }
+          .authForm2 {
+            background: white;
+            display: ${authForm === 2 ? 'block' : 'none'};
+            border: 2px solid black;
+            border-radius: 10px;
+            width: 685px;
+            height: 630px;
+            position: relative;
+            top: 110px;
+            margin: 0px 377px 110px 378px;
+            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+          }
+          .errorMessage {
+            color: #cf3737;
+            font-family: PT Sans;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 18px;
+            height: 18px;
+            width: 499px;
+            border: 0px;
+            padding: 0px;
+            background: inherit;
+          }
           .day {
             margin: 25px 4px 25px 25px;
             width: 46px;
@@ -54,6 +253,7 @@ const AuthorizationForm = () => {
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
             border-radius: 5px 0px 0px 5px;
+            text-indent: 10px;
           }
           .month {
             width: 41px;
@@ -62,6 +262,7 @@ const AuthorizationForm = () => {
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
             border-radius: 0px;
+            text-indent: 5px;
           }
           .year {
             margin: 25px 25px 25px 0px;
@@ -70,9 +271,10 @@ const AuthorizationForm = () => {
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
             border-radius: 0px 5px 5px 0px;
+            text-indent: 10px;
           }
           .calendar {
-            visibility: hidden;
+            visibility: ${isOpen ? 'visible' : 'hidden'};
             width: 201px;
             height: 91px;
             border: 1px solid #9e9e9e;
@@ -81,18 +283,18 @@ const AuthorizationForm = () => {
             border-radius: 5px;
             position: relative;
             left: 510px;
-            top: -92px;
+            top: -110px;
             background: white;
             display: flex;
           }
           .icon1 {
             position: relative;
-            top: -37px;
+            top: -55px;
             left: 463px;
           }
           .icon2 {
             position: relative;
-            top: -29.5px;
+            top: -47.5px;
             left: 467px;
           }
           .soulContract {
@@ -106,6 +308,62 @@ const AuthorizationForm = () => {
             line-height: 18px;
             text-align: center;
             color: #9e9e9e;
+          }
+          .telButton1 {
+            width: 464px;
+            height: 58px;
+            background: #232323;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            margin: 50px 120px 5px 119px;
+            font: 22px Sans;
+            color: white;
+            border: 0px;
+          }
+          .telButton1:active {
+            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            background: #af2f4e;
+            outline: none;
+          }
+          .telButton21 {
+            background: #232323;
+            font: 22px Sans;
+            color: white;
+            border: 0px;
+            display: inline-block;
+            border-radius: 50px;
+            width: 274px;
+            height: 58px;
+            margin: 58px 39px 140px 49px;
+          }
+          .telButton22 {
+            background: #232323;
+            font: 22px Sans;
+            color: white;
+            border: 0px;
+            display: inline-block;
+            border-radius: 50px;
+            width: 274px;
+            height: 58px;
+            margin: 58px 0px 140px 0px;
+          }
+          .telButton21:active {
+            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            background: #af2f4e;
+            outline: none;
+          }
+          .telButton22:active {
+            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            background: #af2f4e;
+            outline: none;
+          }
+          .telButton2Inner {
+            display: flex;
+            height: 58px;
+            align-items: center;
+            justify-content: center;
           }
           .authButton {
             width: 274px;
@@ -130,12 +388,16 @@ const AuthorizationForm = () => {
             background: #af2f4e;
             outline: none;
           }
-          .authForm {
+          .authForm3 {
+            background: white;
+            display: ${authForm === 3 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
             height: 797px;
-            margin: 110px 377px 110px 378px;
+            position: relative;
+            top: 110px;
+            margin: 0px 377px 110px 378px;
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
           .header {
@@ -149,9 +411,9 @@ const AuthorizationForm = () => {
             font-weight: bold;
           }
           .inputForm {
-            margin: 30px 93px 30px 93px;
+            margin: 2px 93px 2px 93px;
             width: 499px;
-            height: 85px;
+            height: 103px;
           }
           .formName {
             height: 22px;
