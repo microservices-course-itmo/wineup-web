@@ -1,18 +1,11 @@
 import { useState } from 'react'
 
-const starsNumber = [1, 2, 3, 4, 5]
 /**
-
  * @param {string} logDate
-
  * @param {string} logName
-
  * @param {string} review
-
  * @param {number} stars
-
  */
-
 const ReviewCard = ({ logDate, logName, stars, review }) => {
   const [allText, setAllText] = useState(true)
   const [btnText, setBtnText] = useState('Читать полностью')
@@ -31,9 +24,9 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
       const text = words.slice(position, length).join('')
       position += length
       if (count < 110) {
-        elements.push(<text>{text}</text>)
+        elements.push(<p>{text}</p>)
       } else {
-        elements.push(<text>{text}.</text>)
+        elements.push(<text>{text}..</text>)
       }
     }
     return elements
@@ -43,17 +36,16 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
     <div className='container'>
       <div className='columnGap'>
         <div className='logs'>
-          <text>{logDate}</text>
-          <text>{logName}</text>
+          <p>{logDate}</p>
+          <p>{logName}</p>
         </div>
         <div className='stars'>
-          {starsNumber.map((star, index) => (
+          {Array.from({ length: 5 }).map((star, index) => (
             <img
               src={`assets/review/${
                 index < stars ? 'filled' : 'empty'
               }-star.svg`}
               alt={`${index < stars ? 'filled' : 'empty'} star`}
-              key={star.toString()}
             />
           ))}
         </div>
