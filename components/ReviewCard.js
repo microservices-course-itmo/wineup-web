@@ -109,6 +109,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
             font-style: italic;
             text-decoration-line: underline;
             padding-left: 40px;
+            cursor: pointer;
           }
           .stars {
             width: 100px;
