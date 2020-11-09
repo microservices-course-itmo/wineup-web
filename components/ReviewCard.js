@@ -54,13 +54,17 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
         <div className='module'>
           <p>{allText ? firstPartText : review}</p>
         </div>
-        <button
-          className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
-          onClick={() => handleReview()}
-          type='button'
-        >
-          <text className='textBtn'>{btnText}</text>
-        </button>
+        {review.length > 110 ? (
+          <button
+            className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
+            onClick={() => handleReview()}
+            type='button'
+          >
+            <text className='textBtn'>{btnText}</text>
+          </button>
+        ) : (
+          ''
+        )}
       </div>
       <style jsx>
         {`
