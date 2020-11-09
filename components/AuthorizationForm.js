@@ -3,6 +3,7 @@ import { useState, useCallback, useMemo } from 'react'
 const AuthorizationForm = () => {
   const [authForm, setAuthForm] = useState(1)
   const [telephone, setTelephone] = useState('')
+  const [telephoneError, setTelephoneError] = useState('')
   const [telCode, setTelCode] = useState('')
   const [date, setDate] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -12,35 +13,71 @@ const AuthorizationForm = () => {
   const [calendarError, setCalendarError] = useState('')
   const handleDate = useCallback(
     e => {
-      setDate(e.target.value)
-      if (parseInt(e.target.value, 10) > 2012) {
+      if (parseInt(e.target.value.split('.')[2], 10) > 2020) {
+        setCalendarError('Приветствую тебя, гость из будущего!')
+      } else if (parseInt(e.target.value.split('.')[2], 10) > 2012) {
         setCalendarError('Ошибка: не достигли 18 лет')
+      } else if (parseInt(e.target.value.split('.')[0], 10) > 31) {
+        setCalendarError('Ошибка: дней не может быть больше 31')
+      } else if (parseInt(e.target.value.split('.')[1], 10) > 12) {
+        setCalendarError('Ошибка: месяцев всего 12')
       } else {
         setCalendarError('')
       }
+      if (e.target.value.split('.')[0].length > 2)
+        setCalendarError('Ошибка: не надо так делать')
+      if (e.target.value.length > 4)
+        if (e.target.value.split('.')[1].length > 2)
+          setCalendarError('Ошибка: не надо так делать')
+      if (e.target.value.length > 7)
+        if (e.target.value.split('.')[2].length > 4)
+          setCalendarError('Ошибка: не надо так делать')
+      if (calendarError === '') {
+        if (!(e.target.value.charAt(e.target.value.length - 1) === '.')) {
+          if (e.target.value.length === 2 || e.target.value.length === 5) {
+            setDate(`${e.target.value}.`)
+          } else if (e.target.value.length < 11) {
+            setDate(e.target.value)
+          }
+        }
+      }
     },
-    [setDate]
+    [setDate, calendarError]
   )
 
   const handleDay = useCallback(
     e => {
-      setDate([e.target.value, month, year].join('.'))
+      if (e.target.value.length <= 2) {
+        if (parseInt(e.target.value, 10) < 32) {
+          setDate([e.target.value, month, year].join('.'))
+          setCalendarError('')
+        } else setCalendarError('Ошибка: дней не может быть больше 31')
+      }
     },
     [month, year, setDate]
   )
   const handleMonth = useCallback(
     e => {
-      setDate([day, e.target.value, year].join('.'))
+      if (e.target.value.length <= 2) {
+        if (parseInt(e.target.value, 10) < 13) {
+          setDate([day, e.target.value, year].join('.'))
+          setCalendarError('')
+        } else setCalendarError('Ошибка: месяцев всего 12')
+      }
     },
     [day, year, setDate]
   )
   const handleYear = useCallback(
     e => {
-      setDate([day, month, e.target.value].join('.'))
-      if (parseInt(e.target.value, 10) > 2012) {
-        setCalendarError('Ошибка: не достигли 18 лет')
-      } else {
-        setCalendarError('')
+      if (e.target.value.length <= 4) {
+        setDate([day, month, e.target.value].join('.'))
+        if (parseInt(e.target.value, 10) > 2020) {
+          setCalendarError('Приветствую тебя, гость из будущего!')
+        } else if (parseInt(e.target.value, 10) > 2012) {
+          setCalendarError('Ошибка: не достигли 18 лет')
+        } else {
+          setCalendarError('')
+        }
       }
     },
     [day, month, setDate]
@@ -71,11 +108,29 @@ const AuthorizationForm = () => {
     },
     [setNameError]
   )
-  const handleTelephone = useCallback(e => {
-    setTelephone(e.target.value)
-  }, [])
+  const handleTelephone = useCallback(
+    e => {
+      const format = /[ `№!@#$%^&*()_\-=[\]{};':"\\|,.<>/?~a-zA-Zа-яА-Я]/
+      if (format.test(e.target.value))
+        setTelephoneError('Ошибка: недопустимые символы')
+      else if (
+        (e.target.value.charAt(0) === '+' &&
+          e.target.value.charAt(1) === '7' &&
+          e.target.value.length <= 12) ||
+        (e.target.value.charAt(0) === '8' && e.target.value.length <= 11) ||
+        e.target.value.length <= 2
+      )
+        setTelephoneError('')
+      else
+        setTelephoneError(
+          'Ошибка: Неправильный формат номера телефона, допустимы лишь +7 и 8'
+        )
+      setTelephone(e.target.value)
+    },
+    [setTelephoneError]
+  )
   const handleTelCode = useCallback(e => {
-    setTelCode(e.target.value)
+    if (e.target.value.length <= 6) setTelCode(e.target.value)
   }, [])
   const handleFirstForm = useCallback(() => {
     setAuthForm(2)
@@ -101,6 +156,7 @@ const AuthorizationForm = () => {
             value={telephone}
             onChange={handleTelephone}
           />
+          <input className='errorMessage' value={telephoneError} disabled />
         </div>
         <div className='telButton1' onClick={handleFirstForm}>
           Запросить код подтверждения
@@ -116,6 +172,7 @@ const AuthorizationForm = () => {
             value={telephone}
             onChange={handleTelephone}
           />
+          <input className='errorMessage' value={telephoneError} disabled />
         </div>
         <div className='inputForm'>
           <div className='formName'>Введите код</div>
