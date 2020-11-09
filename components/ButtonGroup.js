@@ -11,7 +11,7 @@ const ButtonGroup = ({ title, buttons, onChange }) => {
       <div className='title'>{title}</div>
       <div className='buttons-list'>
         {buttons.map(button => (
-          <SortButton btn={button} onBtnClick={onChange} />
+          <SortButton btn={button} onBtnClick={onChange} key={button.id} />
         ))}
       </div>
       <style jsx>

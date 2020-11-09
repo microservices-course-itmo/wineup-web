@@ -1,8 +1,29 @@
 import { useState } from 'react'
-import ButtonGroup from './ButtonGroup'
+import { selector, useRecoilValueLoadable } from 'recoil'
 
-const Catalog = ({ children }) => {
+import ButtonGroup from './ButtonGroup'
+import WineCard from './WineCard'
+
+const winesQuery = selector({
+  key: 'Wines',
+  get: async () => {
+    const response = await fetch(
+      'http://77.234.215.138:48080/catalog-service/wine',
+      {
+        headers: {
+          accessToken: '123',
+        },
+      }
+    )
+
+    return response.json()
+  },
+})
+
+const Catalog = () => {
   const [sortingBy, setSortingBy] = useState('recommendations')
+  const { contents, state } = useRecoilValueLoadable(winesQuery)
+
   const sortingByObj = {
     title: 'Сортировать по',
     onChange: event => setSortingBy(event.currentTarget.value),
@@ -37,6 +58,7 @@ const Catalog = ({ children }) => {
       },
     ],
   }
+
   return (
     <div className='catalog'>
       <ButtonGroup
@@ -44,7 +66,37 @@ const Catalog = ({ children }) => {
         buttons={sortingByObj.inputList}
         onChange={sortingByObj.onChange}
       />
-      <div className='grid'>{children}</div>
+
+      {state === 'hasValue' && contents && (
+        <div className='grid'>
+          {contents.map((wine, index) => (
+            <WineCard
+              key={wine.toString()}
+              imageSrc='https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png'
+              info={{
+                shop: 'Ароматный мир',
+                name: wine,
+                about: 'Красное, полусладкое',
+                country: { code: 'pt', name: 'Португалия' },
+                size: 0.75,
+                year: 2011,
+                fitsPercent: 75,
+                stars: index % 5,
+                price: '1200',
+                discount: {
+                  price: '900',
+                  percent: 12,
+                },
+              }}
+              isLiked={index % 2}
+              color={index % 3}
+            />
+          ))}
+        </div>
+      )}
+
+      {state === 'hasError' && <p>Error</p>}
+
       <style jsx>{`
         .catalog {
           width: 100%;
