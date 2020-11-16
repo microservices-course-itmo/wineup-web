@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @param {string} color
  * @param {string} scent
