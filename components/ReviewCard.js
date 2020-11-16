@@ -47,7 +47,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
         <div className='stars'>
           {Array.from({ length: 5 }).map((star, index) => (
             <img
-              src={`assets/review/${
+              src={`/assets/review/${
                 index < stars ? 'filled' : 'empty'
               }-star.svg`}
               alt={`${index < stars ? 'filled' : 'empty'} star`}

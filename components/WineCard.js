@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ReactCountryFlag from 'react-country-flag'
 
 // Форматирует цены
@@ -106,9 +106,9 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
           countryCode={info.country.code}
           svg
         />
-        <img src='assets/card/bottle-icon.svg' alt='bottle icon' />
-        <img src='assets/card/fits-icon.svg' alt='fits icon' />
-        <img src='assets/card/shop-icon.svg' alt='shop icon' />
+        <img src='/assets/card/bottle-icon.svg' alt='bottle icon' />
+        <img src='/assets/card/fits-icon.svg' alt='fits icon' />
+        <img src='/assets/card/shop-icon.svg' alt='shop icon' />
       </div>
 
       <div className='info'>

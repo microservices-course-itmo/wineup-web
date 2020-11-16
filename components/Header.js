@@ -3,7 +3,7 @@ const Header = () => {
     <div>
       <div className='header'>
         <div className='city'>
-          <img className='icon' src='assets/search/city-icon.svg' alt='city' />
+          <img className='icon' src='/assets/search/city-icon.svg' alt='city' />
           Санкт-Петербург
         </div>
         <div className='title'>
@@ -12,10 +12,10 @@ const Header = () => {
         <div className='login'>
           <img
             className='heart-icon'
-            src='assets/search/heart.svg'
+            src='/assets/search/heart.svg'
             alt='heart'
           />
-          <img className='icon' src='assets/search/man.svg' alt='profile' />
+          <img className='icon' src='/assets/search/man.svg' alt='profile' />
           Войти
         </div>
       </div>
