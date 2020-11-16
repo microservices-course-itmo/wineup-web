@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 /**
  * @param {string} logDate
@@ -15,23 +15,28 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
       allText ? setBtnText('Меньше') : setBtnText('Читать полностью')
     )
   }
-  function split(string, length = 110) {
+  const split = (string, length = 110) => {
     const words = string.split('')
     const count = words.length
     const elements = []
     let position = 0
+
     while (position < count) {
       const text = words.slice(position, length).join('')
+
       position += length
+
       if (count < 110) {
         elements.push(<p>{text}</p>)
       } else {
         elements.push(<text>{text}..</text>)
       }
     }
+
     return elements
   }
   const firstPartText = split(review)
+
   return (
     <div className='container'>
       <div className='columnGap'>
@@ -54,13 +59,17 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
         <div className='module'>
           <p>{allText ? firstPartText : review}</p>
         </div>
-        <button
-          className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
-          onClick={() => handleReview()}
-          type='button'
-        >
-          <text className='textBtn'>{btnText}</text>
-        </button>
+        {review.length > 110 ? (
+          <button
+            className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
+            onClick={() => handleReview()}
+            type='button'
+          >
+            <text className='textBtn'>{btnText}</text>
+          </button>
+        ) : (
+          ''
+        )}
       </div>
       <style jsx>
         {`

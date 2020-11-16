@@ -39,6 +39,9 @@
     "quotes": [2, "single"],
     "jsx-quotes": ["error", "prefer-single"],
     "react/react-in-jsx-scope": "off",
-    "react/button-has-type": [1, { "reset": true }]
+    "react/button-has-type": [1, { "reset": true }],
+    "prettier/prettier": ["error", {
+     "endOfLine":"auto"
+   }]
   }
 }
