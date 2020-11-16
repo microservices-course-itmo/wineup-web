@@ -43,19 +43,26 @@ const ReviewBox = () => {
     <div>
       <h1>Отзывы</h1>
       <div className='box'>
-        {reviews.map((review, index) => (
-          <div
-            id={index}
-            className={`marginComponent ${index > 2 ? showResults : ''}`}
-          >
-            <ReviewCard
-              logDate={review.logDate}
-              logName={review.logName}
-              stars={review.stars}
-              review={review.review}
-            />
+        {reviews.length ? (
+          reviews.map((review, index) => (
+            <div
+              id={index}
+              className={`marginComponent ${index > 2 ? showResults : ''}`}
+            >
+              <ReviewCard
+                logDate={review.logDate}
+                logName={review.logName}
+                stars={review.stars}
+                review={review.review}
+              />
+            </div>
+          ))
+        ) : (
+          <div className='marginEmptyReview'>
+            <p>Здесь пока нет отзывов, но скоро появятся!</p>
+            <img src='assets/review/emptyReview.jpg' alt=';)' />
           </div>
-        ))}
+        )}
         <div>
           {reviews.length > 3 ? (
             <button
@@ -101,6 +108,9 @@ const ReviewBox = () => {
           }
           .marginComponent {
             margin-top: 10px;
+          }
+          .marginEmptyReview {
+            margin-top: 40px;
           }
         `}
       </style>
