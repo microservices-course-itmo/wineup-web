@@ -1,7 +1,37 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ReviewCard from './ReviewCard'
 
-const ReviewBox = () => {
+const reviewsMock = [
+  {
+    logDate: '11.10.2020',
+    logName: 'Petar',
+    stars: '1',
+    review:
+      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
+  },
+  {
+    logDate: '10.10.2020',
+    logName: 'Petar',
+    stars: '2',
+    review: 'Здесь будут оставлять свои ревю...',
+  },
+  {
+    logDate: '11.10.2020',
+    logName: 'Petar',
+    stars: '3',
+    review:
+      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
+  },
+  {
+    logDate: '11.10.2020',
+    logName: 'Petar',
+    stars: '4',
+    review:
+      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
+  },
+]
+
+const ReviewBox = ({ reviews = reviewsMock }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
   const handleAllReview = () => {
@@ -10,35 +40,7 @@ const ReviewBox = () => {
       clicked ? setShowResults('hidden') : setShowResults('')
     )
   }
-  const reviews = [
-    {
-      logDate: '11.10.2020',
-      logName: 'Petar',
-      stars: '1',
-      review:
-        'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-    },
-    {
-      logDate: '10.10.2020',
-      logName: 'Petar',
-      stars: '2',
-      review: 'Здесь будут оставлять свои ревю...',
-    },
-    {
-      logDate: '11.10.2020',
-      logName: 'Petar',
-      stars: '3',
-      review:
-        'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-    },
-    {
-      logDate: '11.10.2020',
-      logName: 'Petar',
-      stars: '4',
-      review:
-        'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-    },
-  ]
+
   return (
     <div>
       <h1>Отзывы</h1>
@@ -56,21 +58,19 @@ const ReviewBox = () => {
             />
           </div>
         ))}
-        <div>
-          {reviews.length > 3 ? (
-            <button
-              type='button'
-              className='btnAllReviews'
-              onClick={() => handleAllReview()}
-            >
-              <text className='textAllReviews'>
-                {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
-              </text>
-            </button>
-          ) : (
-            ''
-          )}
-        </div>
+        {reviews.length > 3 ? (
+          <button
+            type='button'
+            className='btnAllReviews'
+            onClick={() => handleAllReview()}
+          >
+            <text className='textAllReviews'>
+              {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
+            </text>
+          </button>
+        ) : (
+          ''
+        )}
       </div>
       <style jsx>
         {`
@@ -89,6 +89,7 @@ const ReviewBox = () => {
             border: none;
             width: 160px;
             outline: 0;
+            margin-top: 45px;
           }
           .textAllReviews {
             font-size: 12px;
@@ -100,7 +101,7 @@ const ReviewBox = () => {
             cursor: pointer;
           }
           .marginComponent {
-            margin-top: 10px;
+            margin-top: 30px;
           }
         `}
       </style>
