@@ -2,7 +2,7 @@
  * @param {boolean} show
  * @param {string} message
  */
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const Toast = ({ show = true, message }) => {
   const [showToast, setShowToast] = useState(show)
