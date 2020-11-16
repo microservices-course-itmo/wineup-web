@@ -38,3 +38,6 @@ reviewBox.args = {
     },
   ],
 }
+
+export const emptyReviewBox = Template.bind({})
+emptyReviewBox.args = { reviews: [] }
