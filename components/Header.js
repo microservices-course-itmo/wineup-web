@@ -37,7 +37,7 @@ const Header = () => {
             align-items: center;
             margin: 10px;
 
-            font-family: Playfair Display, serif;
+            font-family: Arial;
             font-style: normal;
             font-weight: normal;
 
