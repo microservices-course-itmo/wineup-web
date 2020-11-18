@@ -1,37 +1,7 @@
 import React, { useState } from 'react'
 import ReviewCard from './ReviewCard'
 
-const reviewsMock = [
-  {
-    logDate: '11.10.2020',
-    logName: 'Petar',
-    stars: '1',
-    review:
-      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-  },
-  {
-    logDate: '10.10.2020',
-    logName: 'Petar',
-    stars: '2',
-    review: 'Здесь будут оставлять свои ревю...',
-  },
-  {
-    logDate: '11.10.2020',
-    logName: 'Petar',
-    stars: '3',
-    review:
-      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-  },
-  {
-    logDate: '11.10.2020',
-    logName: 'Petar',
-    stars: '4',
-    review:
-      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-  },
-]
-
-const ReviewBox = ({ reviews = reviewsMock }) => {
+const ReviewBox = ({ reviews }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
   const handleAllReview = () => {
@@ -45,32 +15,41 @@ const ReviewBox = ({ reviews = reviewsMock }) => {
     <div>
       <h1>Отзывы</h1>
       <div className='box'>
-        {reviews.map((review, index) => (
-          <div
-            id={index}
-            className={`marginComponent ${index > 2 ? showResults : ''}`}
-          >
-            <ReviewCard
-              logDate={review.logDate}
-              logName={review.logName}
-              stars={review.stars}
-              review={review.review}
-            />
-          </div>
-        ))}
-        {reviews.length > 3 ? (
-          <button
-            type='button'
-            className='btnAllReviews'
-            onClick={() => handleAllReview()}
-          >
-            <text className='textAllReviews'>
-              {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
-            </text>
-          </button>
+        {reviews.length ? (
+          reviews.map((review, index) => (
+            <div
+              id={index}
+              className={`marginComponent ${index > 2 ? showResults : ''}`}
+            >
+              <ReviewCard
+                logDate={review.logDate}
+                logName={review.logName}
+                stars={review.stars}
+                review={review.review}
+              />
+            </div>
+          ))
         ) : (
-          ''
+          <div className='marginEmptyReview'>
+            <p>Здесь пока нет отзывов, но скоро появятся!</p>
+            <img src='/assets/review/emptyReview.jpg' alt=';)' />
+          </div>
         )}
+        <div>
+          {reviews.length > 3 ? (
+            <button
+              type='button'
+              className='btnAllReviews'
+              onClick={() => handleAllReview()}
+            >
+              <text className='textAllReviews'>
+                {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
+              </text>
+            </button>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
       <style jsx>
         {`
@@ -89,7 +68,6 @@ const ReviewBox = ({ reviews = reviewsMock }) => {
             border: none;
             width: 160px;
             outline: 0;
-            margin-top: 45px;
           }
           .textAllReviews {
             font-size: 12px;
@@ -101,7 +79,19 @@ const ReviewBox = ({ reviews = reviewsMock }) => {
             cursor: pointer;
           }
           .marginComponent {
-            margin-top: 30px;
+            margin-top: 10px;
+          }
+          .marginEmptyReview {
+            width: 340px;
+            margin-top: 40px;
+          }
+          .marginEmptyReview p {
+            font-family: Times New Roman;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 28px;
+            line-height: 32px;
+            text-align: center;
           }
         `}
       </style>
