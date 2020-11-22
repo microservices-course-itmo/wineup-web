@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import ReviewCard from './ReviewCard'
 
 const reviewsMock = [
@@ -42,13 +42,13 @@ const ReviewBox = ({ reviews = reviewsMock }) => {
   }
 
   return (
-    <div>
-      <h1>Отзывы</h1>
+    <div className='container'>
+      <h2 className='title'>Отзывы</h2>
       <div className='box'>
         {reviews.map((review, index) => (
           <div
             id={index}
-            className={`marginComponent ${index > 2 ? showResults : ''}`}
+            className={`review-container ${index > 2 ? showResults : ''}`}
           >
             <ReviewCard
               logDate={review.logDate}
@@ -72,36 +72,53 @@ const ReviewBox = ({ reviews = reviewsMock }) => {
           ''
         )}
       </div>
+
       <style jsx>
         {`
+          .container {
+            width: 47%;
+          }
+
+          .review-container {
+            width: 100%;
+          }
+
+          .title {
+            margin-bottom: 45px;
+
+            font-size: 28px;
+            font-family: 'Playfair Display', serif;
+          }
+
           .box {
+            width: 100%;
+            padding: 0 40px;
+
             display: flex;
             align-items: center;
             flex-direction: column;
           }
+
           .hidden {
             display: none;
           }
+
           .btnAllReviews {
             display: flex;
             align-self: center;
             background: transparent;
             border: none;
-            width: 160px;
             outline: 0;
-            margin-top: 45px;
+            margin-top: 35px;
           }
+
           .textAllReviews {
             font-size: 12px;
             color: grey;
-            font-family: arial;
             font-style: italic;
             text-decoration-line: underline;
             padding-left: 40px;
             cursor: pointer;
-          }
-          .marginComponent {
-            margin-top: 30px;
           }
         `}
       </style>

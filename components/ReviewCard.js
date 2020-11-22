@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 /**
  * @param {string} logDate
@@ -9,12 +9,14 @@ import React, { useState } from 'react'
 const ReviewCard = ({ logDate, logName, stars, review }) => {
   const [allText, setAllText] = useState(true)
   const [btnText, setBtnText] = useState('Читать полностью')
+
   const handleReview = () => {
     return (
       allText ? setAllText(false) : setAllText(true),
-      allText ? setBtnText('Меньше') : setBtnText('Читать полностью')
+      allText ? setBtnText('Свернуть отзыв') : setBtnText('Читать полностью')
     )
   }
+
   const split = (string, length = 110) => {
     const words = string.split('')
     const count = words.length
@@ -35,6 +37,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
 
     return elements
   }
+
   const firstPartText = split(review)
 
   return (
@@ -55,6 +58,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
           ))}
         </div>
       </div>
+
       <div className='reviewContainer'>
         <div className='module'>
           <p>{allText ? firstPartText : review}</p>
@@ -71,28 +75,34 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
           ''
         )}
       </div>
+
       <style jsx>
         {`
           .container {
             display: flex;
             flex-direction: column;
+            width: 100%;
           }
+
           .reviewContainer {
             display: flex;
             flex-direction: column;
-            width: 360px;
           }
+
           .columnGap {
             display: flex;
+            align-items: center;
             column-gap: 50px;
           }
+
           .logs {
             display: flex;
             column-gap: 5px;
-            font-size: 12px;
+            font-size: 16px;
             color: grey;
-            font-family: arial;
+            font-family: PT Sans, sans-serif;
           }
+
           .transparentBtn {
             display: flex;
             align-self: flex-end;
@@ -100,8 +110,11 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
             border: none;
             width: 160px;
             outline: 0;
-            margin-top: -20px;
+            margin-top: -25px;
+
+            font-size: 16px;
           }
+
           .hideBtn {
             display: flex;
             width: 100px;
@@ -109,26 +122,34 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
             background: transparent;
             border: none;
             outline: 0;
-            margin-top: -5px;
           }
+
           .textBtn {
-            font-size: 10px;
+            font-size: 12px;
             color: grey;
-            font-family: arial;
+            font-family: PT Sans, sans-serif;
             font-style: italic;
             text-decoration-line: underline;
-            padding-left: 40px;
             cursor: pointer;
           }
+
           .stars {
             width: 100px;
             display: flex;
             justify-content: space-between;
           }
+
           .module {
-            width: 340px;
+            margin: 10px 0 30px 0;
+            padding-right: 0;
+
             overflow: hidden;
-            padding-right: 0rem;
+          }
+
+          .module p {
+            font-weight: 300;
+            font-size: 18px;
+            font-family: 'Roboto', sans-serif;
           }
         `}
       </style>

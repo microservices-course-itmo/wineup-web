@@ -57,7 +57,7 @@ const Header = () => {
             left: 50%;
             transform: translate(-50%, -50%);
 
-            font-family: Poller One, cursive;
+            font-family: 'Poller One', cursive;
             font-style: normal;
             font-weight: normal;
             font-size: 70px;
