@@ -47,7 +47,7 @@ const Wine = () => {
 
         <div className='line-vertical' />
 
-        <ReviewBox />
+        <ReviewBox reviews={{}} />
       </div>
 
       <div className='line' />
