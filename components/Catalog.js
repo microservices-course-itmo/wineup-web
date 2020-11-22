@@ -3,12 +3,15 @@ import { selector, useRecoilValueLoadable } from 'recoil'
 
 import ButtonGroup from './ButtonGroup'
 import WineCard from './WineCard'
+import Loader from './Loader'
 
 const winesQuery = selector({
   key: 'Wines',
   get: async () => {
+    // const response = await fetch('https://jsonplaceholder.typicode.com/users')
+
     const response = await fetch(
-      'http://77.234.215.138:48080/catalog-service/wine',
+      'http://77.234.215.138:48080/catalog-service/position/',
       {
         headers: {
           accessToken: '123',
@@ -71,11 +74,11 @@ const Catalog = () => {
         <div className='grid'>
           {contents.map((wine, index) => (
             <WineCard
-              key={wine.toString()}
+              key={wine.id}
               imageSrc='https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png'
               info={{
                 shop: 'Ароматный мир',
-                name: wine,
+                name: 'Vodka',
                 about: 'Красное, полусладкое',
                 country: { code: 'pt', name: 'Португалия' },
                 size: 0.75,
@@ -95,7 +98,30 @@ const Catalog = () => {
         </div>
       )}
 
-      {state === 'hasError' && <p>Error</p>}
+      {state !== 'hasValue' && (
+        <div className='message'>
+          {state === 'hasError' && (
+            <div div className='loading'>
+              <img
+                className='error-icon'
+                src='assets/error.svg'
+                alt='error icon'
+              />
+              <p>
+                Произошла ошибка
+                <br />
+                Попробуйте перезагрузить страницу
+              </p>
+            </div>
+          )}
+          {state === 'loading' && (
+            <div className='loading'>
+              <Loader />
+              <p>Загружаем каталог...</p>
+            </div>
+          )}
+        </div>
+      )}
 
       <style jsx>{`
         .catalog {
@@ -110,11 +136,33 @@ const Catalog = () => {
           gap: 45px;
         }
 
-        .sorting {
-          width: 100%;
-          height: 77px;
-          margin-bottom: 30px;
-          background-color: lightgray;
+        .message {
+          padding-top: 30px;
+
+          display: flex;
+          justify-content: center;
+        }
+
+        .loading {
+          max-width: 250px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          text-align: center;
+        }
+
+        .loading p {
+          margin-top: 25px;
+
+          font-family: Playfair Display, serif;
+          font-size: 16px;
+          color: #000000;
+        }
+
+        .error-icon {
+          width: 120px;
+          height: auto;
         }
       `}</style>
     </div>
