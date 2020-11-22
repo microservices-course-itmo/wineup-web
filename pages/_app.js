@@ -1,11 +1,8 @@
-import Header from '../components/Header'
-import AuthorizationForm from '../components/AuthorizationForm'
+import 'reactjs-popup/dist/index.css'
 
 const App = ({ Component, pageProps }) => {
   return (
     <>
-      <Header />
-      <AuthorizationForm />
       <Component {...pageProps} />
       <style jsx global>
         {`

@@ -13,33 +13,33 @@ const AuthorizationForm = () => {
   const [calendarError, setCalendarError] = useState('')
   const handleDate = useCallback(
     e => {
-      if (parseInt(e.target.value.split('.')[2], 10) > 2020) {
-        setCalendarError('Приветствую тебя, гость из будущего!')
-      } else if (parseInt(e.target.value.split('.')[2], 10) > 2012) {
-        setCalendarError('Ошибка: не достигли 18 лет')
-      } else if (parseInt(e.target.value.split('.')[0], 10) > 31) {
-        setCalendarError('Ошибка: дней не может быть больше 31')
-      } else if (parseInt(e.target.value.split('.')[1], 10) > 12) {
-        setCalendarError('Ошибка: месяцев всего 12')
-      } else {
-        setCalendarError('')
-      }
-      if (e.target.value.split('.')[0].length > 2)
-        setCalendarError('Ошибка: не надо так делать')
-      if (e.target.value.length > 4)
-        if (e.target.value.split('.')[1].length > 2)
-          setCalendarError('Ошибка: не надо так делать')
-      if (e.target.value.length > 7)
-        if (e.target.value.split('.')[2].length > 4)
-          setCalendarError('Ошибка: не надо так делать')
-      if (calendarError === '') {
-        if (!(e.target.value.charAt(e.target.value.length - 1) === '.')) {
-          if (e.target.value.length === 2 || e.target.value.length === 5) {
-            setDate(`${e.target.value}.`)
-          } else if (e.target.value.length < 11) {
-            setDate(e.target.value)
+      if (e.target.value.length < 11) {
+        setDate(e.target.value)
+        if (parseInt(e.target.value.split('.')[2], 10) > 2020) {
+          setCalendarError('Приветствую тебя, гость из будущего!')
+        } else if (parseInt(e.target.value.split('.')[2], 10) > 2012) {
+          setCalendarError('Ошибка: не достигли 18 лет')
+        } else if (parseInt(e.target.value.split('.')[0], 10) > 31) {
+          setCalendarError('Ошибка: дней не может быть больше 31')
+        } else if (parseInt(e.target.value.split('.')[1], 10) > 12) {
+          setCalendarError('Ошибка: месяцев всего 12')
+        } else {
+          setCalendarError('')
+        }
+        if (calendarError === '') {
+          if (!(e.target.value.charAt(e.target.value.length - 1) === '.')) {
+            if (e.target.value.length === 2) {
+              if (e.target.value.split('.')[0].length === 2)
+                setDate(`${e.target.value}.`)
+            } else if (e.target.value.length === 5)
+              if (e.target.value.split('.')[1].length === 2)
+                setDate(`${e.target.value}.`)
           }
         }
+      } else {
+        setCalendarError(
+          'Предупреждение: вы пытаетесь ввести слишком длинную строку'
+        )
       }
     },
     [setDate, calendarError]
@@ -135,6 +135,7 @@ const AuthorizationForm = () => {
   const handleFirstForm = useCallback(() => {
     setAuthForm(2)
   }, [])
+
   const handleSecondForm1 = useCallback(() => {
     setAuthForm(3)
   }, [])
@@ -158,7 +159,7 @@ const AuthorizationForm = () => {
           />
           <input className='errorMessage' value={telephoneError} disabled />
         </div>
-        <div className='telButton1' onClick={handleFirstForm}>
+        <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
           Запросить код подтверждения
         </div>
       </div>
@@ -260,22 +261,20 @@ const AuthorizationForm = () => {
       <style jsx>
         {`
           .authForm {
-            background-image: url(assets/authorization/signUp.svg);
-            background-repeat: repeat;
-            height: 1996px;
-            display: flex;
-            justify-content: center;
+            display: hidden;
+            position: relative;
+            left: 200px;
+            top: -1080px;
           }
           .authForm1 {
+            position: relative;
+            right: -378px;
             background: white;
             display: ${authForm === 1 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
             height: 512px;
-            position: relative;
-            top: 110px;
-            margin: 0px 377px 110px 378px;
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
           .authForm2 {
@@ -285,8 +284,6 @@ const AuthorizationForm = () => {
             border-radius: 10px;
             width: 685px;
             height: 630px;
-            position: relative;
-            top: 110px;
             margin: 0px 377px 110px 378px;
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
@@ -452,8 +449,6 @@ const AuthorizationForm = () => {
             border-radius: 10px;
             width: 685px;
             height: 797px;
-            position: relative;
-            top: 110px;
             margin: 0px 377px 110px 378px;
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
