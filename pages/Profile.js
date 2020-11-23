@@ -1,43 +1,66 @@
+import React from 'react'
+import Header from '../components/Header'
+import Search from '../components/Search'
+
 /**
  * @param {Object} user
  * @param {string} user.name
  * @param {string} user.city
  * @param {string} user.tel
  */
-const UserProfile = ({ user }) => {
+const Profile = ({ user }) => {
   return (
-    <div className='profile-wrapper'>
-      <div className='profile'>
-        <div className='icon-container'>
-          <div className='user-avatar'>
-            <img className='avatar' src='/assets/user.svg' alt='user-pic' />
-            <img className='edit-btn' src='/assets/edit-icon.svg' alt='edit' />
+    <div className='wrapper'>
+      <Header />
+      <Search />
+      <div className='content'>
+        <div className='profile-wrapper'>
+          <div className='profile'>
+            <div className='icon-container'>
+              <div className='user-avatar'>
+                <img className='avatar' src='/assets/user.svg' alt='user-pic' />
+                <img
+                  className='edit-btn'
+                  src='/assets/edit-icon.svg'
+                  alt='edit'
+                />
+              </div>
+            </div>
+            <div className='info-container'>
+              <div className='info-list'>
+                <label htmlFor='name-input'>
+                  <div>Ваше имя</div>
+                  <input id='name-input' value={user.name} />
+                </label>
+                <label htmlFor='city-input'>
+                  <div>Город</div>
+                  <input id='city-input' value={user.city} />
+                </label>
+                <label htmlFor='tel-input'>
+                  <div>Телефон</div>
+                  <input id='tel-input' value={user.tel} />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className='btn-footer'>
+            <button type='button' className='close-btn'>
+              Close
+            </button>
           </div>
         </div>
-        <div className='info-container'>
-          <div className='info-list'>
-            <label htmlFor='name-input'>
-              <div>Ваше имя</div>
-              <input id='name-input' value={user.name} />
-            </label>
-            <label htmlFor='city-input'>
-              <div>Город</div>
-              <input id='city-input' value={user.city} />
-            </label>
-            <label htmlFor='tel-input'>
-              <div>Телефон</div>
-              <input id='tel-input' value={user.tel} />
-            </label>
-          </div>
-        </div>
-      </div>
-      <div className='btn-footer'>
-        <button type='button' className='close-btn'>
-          Close
-        </button>
       </div>
       <style jsx>
         {`
+          .wrapper {
+            max-width: 1440px;
+            padding: 0 20px;
+            margin: 0 auto;
+          }
+          .content {
+            display: flex;
+            margin-top: 40px;
+          }
           .profile-wrapper {
             display: flex;
             flex-flow: column nowrap;
@@ -118,4 +141,4 @@ const UserProfile = ({ user }) => {
   )
 }
 
-export default UserProfile
+export default Profile
