@@ -61,17 +61,8 @@ const Header = () => {
           }
 
           .title {
-<<<<<<< HEAD
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-
             font-family: 'Poller One', cursive;
-=======
             padding: 0 10px;
-            font-family: Poller One, cursive;
->>>>>>> master
             font-style: normal;
             font-weight: normal;
             font-size: 70px;
