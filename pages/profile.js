@@ -45,7 +45,7 @@ const Profile = ({ user }) => {
           </div>
           <div className='btn-footer'>
             <button type='button' className='close-btn'>
-              Close
+              Выйти
             </button>
           </div>
         </div>
