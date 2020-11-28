@@ -37,7 +37,7 @@ const ItemDescription = ({ color, scent, gastro, taste }) => {
         {`
           .description {
             font-size: 15px;
-            width: 47%;
+            width: 42vw;
           }
 
           .descriptionBox {

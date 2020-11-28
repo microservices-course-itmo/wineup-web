@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ReviewCard from './ReviewCard'
 
 const ReviewBox = ({ reviews }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
   const handleAllReview = () => {
-    return (
-      clicked ? setClicked(false) : setClicked(true),
-      clicked ? setShowResults('hidden') : setShowResults('')
-    )
+    if (clicked) {
+      setClicked(false)
+      setShowResults('hidden')
+    } else {
+      setClicked(true)
+      setShowResults('')
+    }
   }
 
   return (
@@ -42,9 +45,9 @@ const ReviewBox = ({ reviews }) => {
               className='btnAllReviews'
               onClick={() => handleAllReview()}
             >
-              <text className='textAllReviews'>
+              <span className='textAllReviews'>
                 {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
-              </text>
+              </span>
             </button>
           ) : (
             ''
@@ -55,7 +58,8 @@ const ReviewBox = ({ reviews }) => {
       <style jsx>
         {`
           .container {
-            width: 47%;
+            width: 42vw;
+            min-width: 500px;
           }
 
           .review-container {
@@ -85,18 +89,23 @@ const ReviewBox = ({ reviews }) => {
           .btnAllReviews {
             display: flex;
             align-self: center;
+            margin-top: 20px;
+
             background: transparent;
             border: none;
             outline: 0;
-            margin-top: 35px;
           }
 
           .textAllReviews {
-            font-size: 12px;
-            color: grey;
+            padding-left: 40px;
+
+            font-size: 16px;
+            font-weight: 300;
+            font-family: 'Roboto', sans-serif;
             font-style: italic;
             text-decoration-line: underline;
-            padding-left: 40px;
+            color: #707070;
+
             cursor: pointer;
           }
 
@@ -110,7 +119,7 @@ const ReviewBox = ({ reviews }) => {
           }
 
           .marginEmptyReview p {
-            //font-family: Times New Roman;
+            font-family: 'Playfair Display', serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;

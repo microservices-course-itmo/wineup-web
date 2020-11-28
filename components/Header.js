@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 const Header = () => {
   return (
     <div className='header'>
@@ -13,9 +15,9 @@ const Header = () => {
         <img className='icon' src='/assets/header/community.svg' alt='city' />
         <p>Сообщество</p>
       </div>
-      <div className='title'>
-        <b>WineUp</b>
-      </div>
+      <Link href='/'>
+        <p className='title'>WineUp</p>
+      </Link>
       <div className='menu-item likes'>
         <img className='icon' src='/assets/header/likes.svg' alt='city' />
         <p>Лайки</p>
@@ -61,14 +63,16 @@ const Header = () => {
           }
 
           .title {
-            font-family: 'Poller One', cursive;
             padding: 0 10px;
+
+            font-family: 'Poller One', cursive;
             font-style: normal;
             font-weight: normal;
             font-size: 70px;
             line-height: 83px;
-
             color: #000000;
+
+            cursor: pointer;
           }
 
           @media screen and (max-width: 1200px) {

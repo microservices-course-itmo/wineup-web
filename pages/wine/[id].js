@@ -5,6 +5,36 @@ import Header from '../../components/Header'
 import Search from '../../components/Search'
 import Wrapper from '../../components/Wrapper'
 
+const reviewsMock = [
+  {
+    logDate: '11.10.2020',
+    logName: 'Petar',
+    stars: '1',
+    review:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci autem provident ratione rerum sunt, voluptates!',
+  },
+  {
+    logDate: '10.10.2020',
+    logName: 'Petar',
+    stars: '2',
+    review: 'Lorem ipsum dolor sit amet. ',
+  },
+  {
+    logDate: '11.10.2020',
+    logName: 'Petar',
+    stars: '3',
+    review:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium corporis deleniti enim et fuga iste, iusto possimus quod! Accusantium, assumenda dignissimos dolorem eum eveniet expedita impedit itaque labore laboriosam laborum magni nobis nostrum quidem quo recusandae similique voluptatem. Id, ipsam.',
+  },
+  {
+    logDate: '11.10.2020',
+    logName: 'Petar',
+    stars: '4',
+    review:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dicta error, fugiat iste praesentium rem sapiente! At, hic libero magni porro provident quidem sit tempora.',
+  },
+]
+
 const Wine = () => {
   return (
     <Wrapper>
@@ -47,7 +77,7 @@ const Wine = () => {
 
         <div className='line-vertical' />
 
-        <ReviewBox reviews={{}} />
+        <ReviewBox reviews={reviewsMock} />
       </div>
 
       <div className='line' />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 /**
  * @param {string} logDate
@@ -11,31 +11,27 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
   const [btnText, setBtnText] = useState('Читать полностью')
 
   const handleReview = () => {
-    return (
-      allText ? setAllText(false) : setAllText(true),
-      allText ? setBtnText('Свернуть отзыв') : setBtnText('Читать полностью')
-    )
+    if (allText) {
+      setAllText(false)
+      setBtnText('Свернуть отзыв')
+    } else {
+      setAllText(true)
+      setBtnText('Читать полностью')
+    }
   }
 
-  const split = (string, length = 110) => {
-    const words = string.split('')
-    const count = words.length
-    const elements = []
-    let position = 0
-
-    while (position < count) {
-      const text = words.slice(position, length).join('')
-
-      position += length
-
-      if (count < 110) {
-        elements.push(<p>{text}</p>)
-      } else {
-        elements.push(<text>{text}..</text>)
-      }
+  const split = (string, length = 120) => {
+    if (string.length <= length) {
+      return string
     }
 
-    return elements
+    let newString = ''
+
+    while (newString.length < length && string.length > newString.length) {
+      newString += string[newString.length]
+    }
+
+    return `${newString}...`
   }
 
   const firstPartText = split(review)
@@ -62,18 +58,17 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
       <div className='reviewContainer'>
         <div className='module'>
           <p>{allText ? firstPartText : review}</p>
+
+          {review.length > 120 ? (
+            <button
+              className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
+              onClick={() => handleReview()}
+              type='button'
+            >
+              {btnText}
+            </button>
+          ) : null}
         </div>
-        {review.length > 110 ? (
-          <button
-            className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
-            onClick={() => handleReview()}
-            type='button'
-          >
-            <text className='textBtn'>{btnText}</text>
-          </button>
-        ) : (
-          ''
-        )}
       </div>
 
       <style jsx>
@@ -82,6 +77,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
             display: flex;
             flex-direction: column;
             width: 100%;
+            margin: 20px 0;
           }
 
           .reviewContainer {
@@ -104,33 +100,26 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
           }
 
           .transparentBtn {
-            display: flex;
-            align-self: flex-end;
+            display: block;
+            padding: 0;
+            margin: -25px 30px 0 auto;
+
             background: transparent;
             border: none;
-            width: 160px;
             outline: 0;
-            margin-top: -25px;
 
             font-size: 16px;
+            font-weight: 300;
+            font-family: 'Roboto', sans-serif;
+            font-style: italic;
+            text-decoration-line: underline;
+            color: #707070;
+
+            cursor: pointer;
           }
 
           .hideBtn {
-            display: flex;
-            width: 100px;
-            align-self: flex-end;
-            background: transparent;
-            border: none;
-            outline: 0;
-          }
-
-          .textBtn {
-            font-size: 12px;
-            color: grey;
-            font-family: PT Sans, sans-serif;
-            font-style: italic;
-            text-decoration-line: underline;
-            cursor: pointer;
+            margin-top: 0;
           }
 
           .stars {
@@ -140,16 +129,21 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
           }
 
           .module {
-            margin: 10px 0 30px 0;
+            position: relative;
+            margin-top: 10px;
             padding-right: 0;
 
             overflow: hidden;
           }
 
           .module p {
-            font-weight: 300;
+            margin-right: 50px;
+
             font-size: 18px;
+            font-weight: 300;
             font-family: 'Roboto', sans-serif;
+
+            color: #000000;
           }
         `}
       </style>
