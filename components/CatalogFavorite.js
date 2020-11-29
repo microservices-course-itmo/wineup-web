@@ -5,13 +5,11 @@ const CatalogFavorite = ({ children }) => {
       <style jsx>{`
         .catalog {
           width: 100%;
-          margin-left: 35px;
         }
         .grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, 300px);
-          justify-content: center;
-          gap: 45px;
+          gap: 65px;
         }
       `}</style>
     </div>
