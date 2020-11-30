@@ -38,7 +38,12 @@ const starsNumber = [1, 2, 3, 4, 5]
  * @param {number} info.discount.price - Цена со скидкой
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
-const WineCard = ({ imageSrc, info, isLiked, color }) => {
+const WineCard = ({
+  imageSrc = 'https://amwine.ru/local/templates/am/images/dummy_site_product_medium.png',
+  info,
+  isLiked,
+  color,
+}) => {
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
 
   return (

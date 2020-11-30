@@ -9,15 +9,24 @@ const winesQuery = selector({
   key: 'Wines',
   get: async () => {
     // const response = await fetch('https://jsonplaceholder.typicode.com/users')
+    // return response.json()
 
     const response = await fetch(
-      'http://77.234.215.138:48080/catalog-service/position/',
+      'http://77.234.215.138:48080/catalog-service/position/true/',
       {
+        method: 'POST',
         headers: {
           accessToken: '123',
+          'Content-Type': 'application/json',
+        },
+        body: {
+          from: 1,
+          to: 12,
         },
       }
     )
+
+    console.log(await response.json())
 
     return response.json()
   },
@@ -101,7 +110,7 @@ const Catalog = () => {
       {state !== 'hasValue' && (
         <div className='message'>
           {state === 'hasError' && (
-            <div div className='loading'>
+            <div className='loading'>
               <img
                 className='error-icon'
                 src='assets/error.svg'
