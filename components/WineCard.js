@@ -51,7 +51,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
         >
           <img
             className={`heart ${isHeartFilled ? 'filled' : ''}`}
-            src={`assets/card/heart-${isHeartFilled ? 'filled' : 'empty'}.svg`}
+            src={`/assets/card/heart-${isHeartFilled ? 'filled' : 'empty'}.svg`}
             alt='heart'
           />
         </button>
@@ -60,7 +60,7 @@ const WineCard = ({ imageSrc, info, isLiked, color }) => {
           <div className='stars'>
             {starsNumber.map((star, index) => (
               <img
-                src={`assets/card/${
+                src={`/assets/card/${
                   index < info.stars ? 'filled' : 'empty'
                 }-star.svg`}
                 alt={`${index < info.stars ? 'filled' : 'empty'} star`}

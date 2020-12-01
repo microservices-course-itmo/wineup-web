@@ -4,6 +4,7 @@ import ReviewBox from '../../components/ReviewBox'
 import Header from '../../components/Header'
 import Search from '../../components/Search'
 import Wrapper from '../../components/Wrapper'
+import SameWines from '../../components/SameWines'
 
 const reviewsMock = [
   {
@@ -81,6 +82,8 @@ const Wine = () => {
       </div>
 
       <div className='line' />
+
+      <SameWines />
 
       <style jsx>{`
         .wrapper {
