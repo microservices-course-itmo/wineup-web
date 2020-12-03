@@ -8,9 +8,6 @@ import Loader from './Loader'
 const winesQuery = selector({
   key: 'Wines',
   get: async () => {
-    // const response = await fetch('https://jsonplaceholder.typicode.com/users')
-    // return response.json()
-
     const response = await fetch(
       'http://77.234.215.138:48080/catalog-service/position/true/',
       {
@@ -19,14 +16,12 @@ const winesQuery = selector({
           accessToken: '123',
           'Content-Type': 'application/json',
         },
-        body: {
+        body: JSON.stringify({
           from: 1,
           to: 12,
-        },
+        }),
       }
     )
-
-    console.log(await response.json())
 
     return response.json()
   },
