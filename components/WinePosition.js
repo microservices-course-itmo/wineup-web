@@ -1,3 +1,5 @@
+import React from 'react'
+
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
@@ -91,7 +93,7 @@ const WinePosition = ({ imageSrc, info, color = 0 }) => (
           <div className='stars'>
             {starsNumber.map((star, index) => (
               <img
-                src={`assets/card/${
+                src={`/assets/card/${
                   index < info.stars ? 'filled' : 'empty'
                 }-star.svg`}
                 alt={`${index < info.stars ? 'filled' : 'empty'} star`}
