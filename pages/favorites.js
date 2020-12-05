@@ -7,15 +7,15 @@ import WineCard from '../components/WineCard'
 import ButtonGroupCatalog from '../components/ButtonGroupCatalog'
 
 const Favorite = () => {
-  const [showResults, setShowResults] = useState('hidden')
-  const [clicked, setClicked] = useState(false)
+  // const [showResults, setShowResults] = useState('hidden')
+  // const [clicked, setClicked] = useState(false)
   const [liked, setLiked] = useState(true)
-  const handleAllFavorites = () => {
-    return (
-      clicked ? setClicked(false) : setClicked(true),
-      clicked ? setShowResults('hidden') : setShowResults('')
-    )
-  }
+  // const handleAllFavorites = () => {
+  //   return (
+  //     clicked ? setClicked(false) : setClicked(true),
+  //     clicked ? setShowResults('hidden') : setShowResults('')
+  //   )
+  // }
   const clearItem = () => {
     setLiked(false)
   }
@@ -178,8 +178,8 @@ const Favorite = () => {
           <button type='button' className='buttonClear' onClick={clearItem}>
             <text className='textBtn'>Очистить избранное?</text>
           </button>
-          <hr className='line' />
-          <p className='textFavorite'>Найдено в избранном:</p>
+          {/* <hr className='line' />
+          <p className='textFavorite'>Найдено в избранном:</p> */}
         </div>
         <CatalogFavorite>
           {favorites && favorites.filter(({ isLiked }) => isLiked).length ? (
@@ -209,7 +209,7 @@ const Favorite = () => {
             </div>
           )}
         </CatalogFavorite>
-        {favorites && !favorites.filter(({ isLiked }) => isLiked).length ? (
+        {/* {favorites && !favorites.filter(({ isLiked }) => isLiked).length ? (
           <div />
         ) : (
           <div>
@@ -247,7 +247,7 @@ const Favorite = () => {
               )}
             </div>
           </div>
-        )}
+        )} */}
       </div>
       <style jsx>{`
         .wrapper {
