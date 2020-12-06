@@ -1,54 +1,96 @@
 import React from 'react'
+import { selector, useRecoilValueLoadable } from 'recoil'
 import Header from '../components/Header'
 import Search from '../components/Search'
 
-/**
- * @param {Object} user
- * @param {string} user.name
- * @param {string} user.city
- * @param {string} user.tel
- */
-const Profile = ({ user }) => {
+const currentUserIdSelector = selector({
+  key: 'profileInfo',
+  get: async () => {
+    const userResponse = await fetch(
+      'http://77.234.215.138:48080/user-service/users/me',
+      {
+        headers: {
+          accessToken: '123',
+        },
+      }
+    )
+    const user = await userResponse.json()
+    return await user.id
+  },
+})
+
+const userFullInfoSelector = selector({
+  key: 'userFullInfo',
+  get: async ({ get }) => {
+    const response = await fetch(
+      `http://77.234.215.138:48080/user-service/users/${get(
+        currentUserIdSelector
+      )}/full`
+    )
+    if (response.error) {
+      throw response.error
+    }
+    return await response.json()
+  },
+})
+
+const Profile = () => {
+  const { contents, state } = useRecoilValueLoadable(userFullInfoSelector)
+  const user =
+    state === 'hasValue' && !contents.error
+      ? {
+          name: contents.name || 'Не указано',
+          cityName: (contents.city && contents.city.name) || 'Не указано',
+          phoneNumber: contents.phoneNumber || 'Не указано',
+        }
+      : null
   return (
     <div className='wrapper'>
       <Header />
       <Search />
       <div className='content'>
-        <div className='profile-wrapper'>
-          <div className='profile'>
-            <div className='icon-container'>
-              <div className='user-avatar'>
-                <img className='avatar' src='/assets/user.svg' alt='user-pic' />
-                <img
-                  className='edit-btn'
-                  src='/assets/edit-icon.svg'
-                  alt='edit'
-                />
+        {user && (
+          <div className='profile-wrapper'>
+            <div className='profile'>
+              <div className='icon-container'>
+                <div className='user-avatar'>
+                  <img
+                    className='avatar'
+                    src='/assets/user.svg'
+                    alt='user-pic'
+                  />
+                  <img
+                    className='edit-btn'
+                    src='/assets/edit-icon.svg'
+                    alt='edit'
+                  />
+                </div>
+              </div>
+              <div className='info-container'>
+                <div className='info-list'>
+                  <label htmlFor='name-input'>
+                    <div>Ваше имя</div>
+                    <input id='name-input' readOnly value={user.name} />
+                  </label>
+                  <label htmlFor='city-input'>
+                    <div>Город</div>
+                    <input id='city-input' readOnly value={user.cityName} />
+                  </label>
+                  <label htmlFor='tel-input'>
+                    <div>Телефон</div>
+                    <input id='phone-input' readOnly value={user.phoneNumber} />
+                  </label>
+                </div>
               </div>
             </div>
-            <div className='info-container'>
-              <div className='info-list'>
-                <label htmlFor='name-input'>
-                  <div>Ваше имя</div>
-                  <input id='name-input' value={user.name} />
-                </label>
-                <label htmlFor='city-input'>
-                  <div>Город</div>
-                  <input id='city-input' value={user.city} />
-                </label>
-                <label htmlFor='tel-input'>
-                  <div>Телефон</div>
-                  <input id='tel-input' value={user.tel} />
-                </label>
-              </div>
+            <div className='btn-footer'>
+              <button type='button' className='close-btn'>
+                Close
+              </button>
             </div>
           </div>
-          <div className='btn-footer'>
-            <button type='button' className='close-btn'>
-              Close
-            </button>
-          </div>
-        </div>
+        )}
+        {(state === 'hasError' || contents.error) && <p>Error</p>}
       </div>
       <style jsx>
         {`

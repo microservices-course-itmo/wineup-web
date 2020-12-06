@@ -39,6 +39,7 @@
     "pretty-quick": "^2.0.1",
     "react-is": "^16.13.1",
     "react-test-renderer": "^16.13.1",
+    "recoil": "^0.1.2",
     "storybook-addon-jsx": "^7.3.4",
     "storybook-addon-prettier-source": "^2.1.2"
   },

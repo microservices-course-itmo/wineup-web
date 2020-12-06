@@ -1,6 +1,8 @@
+import { RecoilRoot } from 'recoil'
+
 const App = ({ Component, pageProps }) => {
   return (
-    <>
+    <RecoilRoot>
       <Component {...pageProps} />
       <style jsx global>
         {`
@@ -70,7 +72,7 @@ const App = ({ Component, pageProps }) => {
           }
         `}
       </style>
-    </>
+    </RecoilRoot>
   )
 }
 
