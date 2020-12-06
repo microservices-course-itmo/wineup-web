@@ -1,14 +1,16 @@
+import Header from '../components/Header'
 import Search from '../components/Search'
 import Catalog from '../components/Catalog'
 import WineCard from '../components/WineCard'
 import FilterBar from '../components/FilterBar'
-import Header from '../components/Header'
+import Wrapper from '../components/Wrapper'
 
 const Home = () => {
   return (
-    <div className='wrapper'>
+    <Wrapper>
       <Header />
       <Search />
+
       <div className='content'>
         <FilterBar />
 
@@ -38,42 +40,32 @@ const Home = () => {
           ))}
         </Catalog>
       </div>
-      <style jsx>{`
-        .authForm {
-          width: 100%;
-          position: absolute;
-          right: 200px;
-          bottom: 900px;
-          z-index: 3;
-        }
-        .wrapper {
-          max-width: 1440px;
-          padding: 0 20px;
-          margin: 0 auto;
-        }
 
-        .nav {
-          width: 100%;
-          height: 62px;
-          background-color: lightgray;
-          margin-top: 40px;
-          margin-bottom: 40px;
-        }
+      <style jsx>
+        {`
+          .nav {
+            width: 100%;
+            height: 62px;
+            background-color: lightgray;
+            margin-top: 40px;
+            margin-bottom: 40px;
+          }
 
-        .content {
-          display: flex;
-          margin-top: 40px;
-        }
+          .content {
+            display: flex;
+            margin-top: 40px;
+          }
 
-        .filter {
-          background-color: lightgray;
-          min-width: 375px;
-          min-height: 1265px;
-          max-width: 375px;
-          max-height: 1265px;
-        }
-      `}</style>
-    </div>
+          .filter {
+            background-color: lightgray;
+            min-width: 375px;
+            min-height: 1265px;
+            max-width: 375px;
+            max-height: 1265px;
+          }
+        `}
+      </style>
+    </Wrapper>
   )
 }
 

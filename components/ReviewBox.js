@@ -1,107 +1,130 @@
 import React, { useState } from 'react'
 import ReviewCard from './ReviewCard'
 
-const reviewsMock = [
-  {
-    logDate: '11.10.2020',
-    logName: 'Petar',
-    stars: '1',
-    review:
-      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-  },
-  {
-    logDate: '10.10.2020',
-    logName: 'Petar',
-    stars: '2',
-    review: 'Здесь будут оставлять свои ревю...',
-  },
-  {
-    logDate: '11.10.2020',
-    logName: 'Petar',
-    stars: '3',
-    review:
-      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-  },
-  {
-    logDate: '11.10.2020',
-    logName: 'Petar',
-    stars: '4',
-    review:
-      'Здесь будут оставлять свои ревю...кому что понравилось,кому что непонравилось..Здесь будут оставлять свои ревю, кому что понравилось, кому что не понравилось..Здесь будут оставлять',
-  },
-]
-
-const ReviewBox = ({ reviews = reviewsMock }) => {
+const ReviewBox = ({ reviews }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
   const handleAllReview = () => {
-    return (
-      clicked ? setClicked(false) : setClicked(true),
-      clicked ? setShowResults('hidden') : setShowResults('')
-    )
+    if (clicked) {
+      setClicked(false)
+      setShowResults('hidden')
+    } else {
+      setClicked(true)
+      setShowResults('')
+    }
   }
 
   return (
-    <div>
-      <h1>Отзывы</h1>
+    <div className='container'>
+      <h2 className='title'>Отзывы</h2>
       <div className='box'>
-        {reviews.map((review, index) => (
-          <div
-            id={index}
-            className={`marginComponent ${index > 2 ? showResults : ''}`}
-          >
-            <ReviewCard
-              logDate={review.logDate}
-              logName={review.logName}
-              stars={review.stars}
-              review={review.review}
-            />
-          </div>
-        ))}
-        {reviews.length > 3 ? (
-          <button
-            type='button'
-            className='btnAllReviews'
-            onClick={() => handleAllReview()}
-          >
-            <text className='textAllReviews'>
-              {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
-            </text>
-          </button>
+        {reviews.length ? (
+          reviews.map((review, index) => (
+            <div
+              id={index}
+              className={`review-container ${index > 2 ? showResults : ''}`}
+            >
+              <ReviewCard
+                logDate={review.logDate}
+                logName={review.logName}
+                stars={review.stars}
+                review={review.review}
+              />
+            </div>
+          ))
         ) : (
-          ''
+          <div className='marginEmptyReview'>
+            <p>Здесь пока нет отзывов, но скоро появятся!</p>
+            <img src='/assets/review/emptyReview.jpg' alt=';)' />
+          </div>
         )}
+        <div>
+          {reviews.length > 3 ? (
+            <button
+              type='button'
+              className='btnAllReviews'
+              onClick={() => handleAllReview()}
+            >
+              <span className='textAllReviews'>
+                {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
+              </span>
+            </button>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
+
       <style jsx>
         {`
+          .container {
+            width: 42vw;
+            min-width: 500px;
+          }
+
+          .review-container {
+            width: 100%;
+          }
+
+          .title {
+            margin-bottom: 45px;
+
+            font-size: 28px;
+            font-family: 'Playfair Display', serif;
+          }
+
           .box {
+            width: 100%;
+            padding: 0 40px;
+
             display: flex;
             align-items: center;
             flex-direction: column;
           }
+
           .hidden {
             display: none;
           }
+
           .btnAllReviews {
             display: flex;
             align-self: center;
+            margin-top: 20px;
+
             background: transparent;
             border: none;
-            width: 160px;
             outline: 0;
-            margin-top: 45px;
           }
+
           .textAllReviews {
-            font-size: 12px;
-            color: grey;
-            font-family: arial;
+            padding-left: 40px;
+
+            font-size: 16px;
+            font-weight: 300;
+            font-family: 'Roboto', sans-serif;
             font-style: italic;
             text-decoration-line: underline;
-            padding-left: 40px;
+            color: #707070;
+
             cursor: pointer;
           }
+
           .marginComponent {
-            margin-top: 30px;
+            margin-top: 10px;
+          }
+
+          .marginEmptyReview {
+            width: 340px;
+            margin-top: 40px;
+          }
+
+          .marginEmptyReview p {
+            font-family: 'Playfair Display', serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 28px;
+            line-height: 32px;
+            text-align: center;
           }
         `}
       </style>

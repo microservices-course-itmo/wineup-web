@@ -2,6 +2,7 @@
   "name": "wineup-web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://microservices-course-itmo.github.io/wineup-web",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

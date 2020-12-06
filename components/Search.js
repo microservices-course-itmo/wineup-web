@@ -25,7 +25,7 @@ const Search = () => {
       >
         <img
           className='loop'
-          src='assets/search/search-icon.svg'
+          src='/assets/search/search-icon.svg'
           alt='search icon'
         />
         Найти
