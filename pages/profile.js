@@ -44,6 +44,10 @@ const Profile = () => {
           phoneNumber: contents.phoneNumber || 'Не указано',
         }
       : null
+  const onClose = () => {
+    window.location = '/'
+  }
+
   return (
     <div className='wrapper'>
       <Header />
@@ -84,7 +88,7 @@ const Profile = () => {
               </div>
             </div>
             <div className='btn-footer'>
-              <button type='button' className='close-btn'>
+              <button type='button' className='close-btn' onClick={onClose}>
                 Close
               </button>
             </div>
