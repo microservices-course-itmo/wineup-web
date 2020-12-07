@@ -1,4 +1,7 @@
 import 'reactjs-popup/dist/index.css'
+import { initFirebase } from '../utils/firebaseConfig'
+
+initFirebase()
 
 const App = ({ Component, pageProps }) => {
   return (

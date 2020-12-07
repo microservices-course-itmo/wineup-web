@@ -1,23 +1,7 @@
-/* eslint-disable */
-import { useState, useCallback, useMemo, useRef } from 'react'
-import { firebase, firestore } from '../utils/firebaseConfig.js'
+import { useState, useCallback, useMemo, useEffect } from 'react'
+import firebase from 'firebase'
 
 const AuthorizationForm = () => {
-  const captchaRef = useRef(null)
-
-  const OnPressLogin = async phone => {
-    await firebase.auth.signInWithPhoneNumber(
-      phone,
-      new app.auth.RecaptchaVerifier(captchaRef.current, {
-        size: 'invisible',
-        callback: response => {
-          console.info('Invisible Captcha', response)
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-        },
-      })
-    )
-  }
-
   const [authForm, setAuthForm] = useState(1)
   const [telephone, setTelephone] = useState('')
   const [telephoneError, setTelephoneError] = useState('')
@@ -28,6 +12,15 @@ const AuthorizationForm = () => {
   const [username, setUserName] = useState('')
   const [nameError, setNameError] = useState('')
   const [calendarError, setCalendarError] = useState('')
+  const [sendCode, setSendCode] = useState(null)
+  const [uid, setUid] = useState(null)
+
+  // TODO: удалить, использовалось для тестирования
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('UID changed:', uid)
+  }, [uid])
+
   const handleDate = useCallback(
     e => {
       if (e.target.value.length < 11) {
@@ -149,19 +142,41 @@ const AuthorizationForm = () => {
   const handleTelCode = useCallback(e => {
     if (e.target.value.length <= 6) setTelCode(e.target.value)
   }, [])
-  const handleFirstForm = useCallback(() => {
-    setAuthForm(2)
-  }, [])
+  const handleFirstForm = async () => {
+    const applicationVerifier = new firebase.auth.RecaptchaVerifier(
+      'telButton1',
+      { size: 'invisible' }
+    )
 
-  const handleSecondForm1 = useCallback(() => {
+    try {
+      setSendCode(
+        await firebase
+          .auth()
+          .signInWithPhoneNumber(telephone, applicationVerifier)
+      )
+    } catch (err) {
+      throw new Error(
+        `Error occurred during singing in with phone number: ${err}`
+      )
+    }
+
+    setAuthForm(2)
+  }
+  const handleSecondForm1 = async () => {
+    try {
+      setUid(await sendCode.confirm(telCode).then(({ user: { uid } }) => uid))
+    } catch (err) {
+      throw new Error('Error occurred during code confirmation')
+    }
     setAuthForm(3)
-  }, [])
+  }
   const handleSecondForm2 = useCallback(() => {
     setAuthForm(1)
   }, [])
   const handleThirdForm = useCallback(() => {
     setAuthForm(1)
   }, [])
+
   return (
     <div className='authForm'>
       <div className='authForm1'>
@@ -179,8 +194,6 @@ const AuthorizationForm = () => {
         <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
           Запросить код подтверждения
         </div>
-        <div id='recaptcha-container' ref={captchaRef} />
-        <div onSubmit={OnPressLogin} />
       </div>
       <div className='authForm2'>
         <div className='header'>Войдите или зарегистрируйтесь</div>

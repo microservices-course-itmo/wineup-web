@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: 'AIzaSyCExaLzKWdhhr_1IRPe1NIFdR7Uor12LTI',
   authDomain: 'testfire-1bc2f.firebaseapp.com',
   databaseURL: 'https://testfire-1bc2f.firebaseio.com',
@@ -9,15 +9,14 @@ export const firebaseConfig = {
   messagingSenderId: '243423113529',
   appId: '1:243423113529:web:d363f5aa8bf5ca297bf8e8',
 }
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig)
+
+export const initFirebase = () => {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig)
+  }
 }
-const firestore = firebase.firestore()
-export { firebase, firestore }
-export const uiConfig = {
-  signInFlow: 'popup',
-  signInOptions: [firebase.auth.PhoneAuthProvider.PROVIDER_ID],
-  callbacks: {
-    signInSuccessWithAuthResult: () => false,
-  },
+
+export default {
+  initFirebase,
+  firebase,
 }
