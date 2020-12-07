@@ -1,6 +1,23 @@
-import { useState, useCallback, useMemo } from 'react'
+/* eslint-disable */
+import { useState, useCallback, useMemo, useRef } from 'react'
+import { firebase, firestore } from '../utils/firebaseConfig.js'
 
 const AuthorizationForm = () => {
+  const captchaRef = useRef(null)
+
+  const OnPressLogin = async phone => {
+    await firebase.auth.signInWithPhoneNumber(
+      phone,
+      new app.auth.RecaptchaVerifier(captchaRef.current, {
+        size: 'invisible',
+        callback: response => {
+          console.info('Invisible Captcha', response)
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+        },
+      })
+    )
+  }
+
   const [authForm, setAuthForm] = useState(1)
   const [telephone, setTelephone] = useState('')
   const [telephoneError, setTelephoneError] = useState('')
@@ -162,6 +179,8 @@ const AuthorizationForm = () => {
         <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
           Запросить код подтверждения
         </div>
+        <div id='recaptcha-container' ref={captchaRef} />
+        <div onSubmit={OnPressLogin} />
       </div>
       <div className='authForm2'>
         <div className='header'>Войдите или зарегистрируйтесь</div>

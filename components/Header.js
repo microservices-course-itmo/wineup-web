@@ -1,6 +1,12 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useCallback } from 'react'
 
 const Header = () => {
+  const router = useRouter()
+  const handleButton = useCallback(() => {
+    router.push('/login')
+  }, [router])
   return (
     <div className='header'>
       <div className='menu-item city'>
@@ -26,7 +32,7 @@ const Header = () => {
         <img className='icon' src='/assets/header/heart.svg' alt='heart' />
         <p>Избранное</p>
       </div>
-      <div className='menu-item login'>
+      <div onClick={handleButton} className='menu-item login'>
         <img className='icon' src='/assets/header/man.svg' alt='profile' />
         <p>Войти</p>
       </div>
