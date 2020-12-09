@@ -5,21 +5,24 @@ const ReviewBox = ({ reviews }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
   const handleAllReview = () => {
-    return (
-      clicked ? setClicked(false) : setClicked(true),
-      clicked ? setShowResults('hidden') : setShowResults('')
-    )
+    if (clicked) {
+      setClicked(false)
+      setShowResults('hidden')
+    } else {
+      setClicked(true)
+      setShowResults('')
+    }
   }
 
   return (
-    <div>
-      <h1>Отзывы</h1>
+    <div className='container'>
+      <h2 className='title'>Отзывы</h2>
       <div className='box'>
         {reviews.length ? (
           reviews.map((review, index) => (
             <div
               id={index}
-              className={`marginComponent ${index > 2 ? showResults : ''}`}
+              className={`review-container ${index > 2 ? showResults : ''}`}
             >
               <ReviewCard
                 logDate={review.logDate}
@@ -42,51 +45,81 @@ const ReviewBox = ({ reviews }) => {
               className='btnAllReviews'
               onClick={() => handleAllReview()}
             >
-              <text className='textAllReviews'>
+              <span className='textAllReviews'>
                 {clicked ? 'Скрыть' : 'Все отзывы'}{' '}
-              </text>
+              </span>
             </button>
           ) : (
             ''
           )}
         </div>
       </div>
+
       <style jsx>
         {`
+          .container {
+            width: 42vw;
+            min-width: 500px;
+          }
+
+          .review-container {
+            width: 100%;
+          }
+
+          .title {
+            margin-bottom: 45px;
+
+            font-size: 28px;
+            font-family: 'Playfair Display', serif;
+          }
+
           .box {
+            width: 100%;
+            padding: 0 40px;
+
             display: flex;
             align-items: center;
             flex-direction: column;
           }
+
           .hidden {
             display: none;
           }
+
           .btnAllReviews {
             display: flex;
             align-self: center;
+            margin-top: 20px;
+
             background: transparent;
             border: none;
-            width: 160px;
             outline: 0;
           }
+
           .textAllReviews {
-            font-size: 12px;
-            color: grey;
-            font-family: arial;
+            padding-left: 40px;
+
+            font-size: 16px;
+            font-weight: 300;
+            font-family: 'Roboto', sans-serif;
             font-style: italic;
             text-decoration-line: underline;
-            padding-left: 40px;
+            color: #707070;
+
             cursor: pointer;
           }
+
           .marginComponent {
             margin-top: 10px;
           }
+
           .marginEmptyReview {
             width: 340px;
             margin-top: 40px;
           }
+
           .marginEmptyReview p {
-            font-family: Times New Roman;
+            font-family: 'Playfair Display', serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
