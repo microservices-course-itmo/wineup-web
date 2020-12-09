@@ -38,12 +38,7 @@ const starsNumber = [1, 2, 3, 4, 5]
  * @param {number} info.discount.price - Цена со скидкой
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
-const WineCard = ({
-  imageSrc = 'https://amwine.ru/local/templates/am/images/dummy_site_product_medium.png',
-  info,
-  isLiked,
-  color,
-}) => {
+const WineCard = ({ imageSrc, info, isLiked, color }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
 
   return (
@@ -77,7 +72,9 @@ const WineCard = ({
         </div>
 
         {imageSrc ? (
-          <img className='wine-img' src={imageSrc} alt={info.name} />
+          <div className='img-container'>
+            <img className='wine-img' src={imageSrc} alt={info.name} />
+          </div>
         ) : null}
 
         <div className='wine-bg'>
@@ -185,14 +182,18 @@ const WineCard = ({
           }
 
           .wine-img {
-            width: 67px;
-            height: auto;
+            width: auto;
+            height: 270px;
 
             position: absolute;
             top: 50px;
-            right: 80px;
+            right: 65px;
 
             z-index: 2;
+          }
+
+          .img-container {
+            //width: ;
           }
 
           .wine-bg {
@@ -259,6 +260,7 @@ const WineCard = ({
           }
 
           .name {
+            max-height: 75px;
             padding-left: 10px;
 
             font-family: Playfair Display, serif;
@@ -268,6 +270,7 @@ const WineCard = ({
             line-height: 37px;
 
             color: #000000;
+            overflow: hidden;
           }
 
           .line {

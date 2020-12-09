@@ -1,66 +1,68 @@
-import { useState } from 'react'
-import { selector, useRecoilValueLoadable } from 'recoil'
+import React, { useEffect } from 'react'
+import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
 
-import ButtonGroup from './ButtonGroup'
-import WineCard from './WineCard'
-import Loader from './Loader'
+import ButtonGroup from '../ButtonGroup'
+import WineCard from '../WineCard'
+import Loader from '../Loader'
 
-const winesQuery = selector({
-  key: 'Wines',
-  get: async () => {
-    const response = await fetch(
-      'http://77.234.215.138:48080/catalog-service/position/true/',
-      {
-        method: 'POST',
-        headers: {
-          accessToken: '123',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 1,
-          to: 12,
-        }),
-      }
-    )
-
-    return response.json()
-  },
-})
+import {
+  winesSortState,
+  winesState,
+  sortedWinesState,
+  winesQuery,
+} from './store'
+import {
+  calculateDiscount,
+  calculatePrice,
+  countries,
+  parseImageSrc,
+  parseAbout,
+  stores,
+} from './utils'
 
 const Catalog = () => {
-  const [sortingBy, setSortingBy] = useState('recommendations')
+  const [wines, setWines] = useRecoilState(winesState)
+  const sortedWine = useRecoilValue(sortedWinesState)
+  const [winesSort, setWinesSort] = useRecoilState(winesSortState)
+  // const [winesPage, setWinesPage] = useRecoilState(winesPageState)
   const { contents, state } = useRecoilValueLoadable(winesQuery)
+
+  useEffect(() => {
+    if (state === 'hasValue') {
+      setWines(contents)
+    }
+  }, [contents, setWines, state])
 
   const sortingByObj = {
     title: 'Сортировать по',
-    onChange: event => setSortingBy(event.currentTarget.value),
+    onChange: event => setWinesSort(event.currentTarget.value),
     inputList: [
       {
         id: 'sortingByRecommendations',
         name: 'sortingBy',
         value: 'recommendations',
-        defaultChecked: sortingBy === 'recommendations',
+        defaultChecked: winesSort === 'recommendations',
         textLabel: 'Рекомендованные',
       },
       {
         id: 'sortingByPriceAsc',
         name: 'sortingBy',
         value: 'priceAsc',
-        defaultChecked: sortingBy === 'priceAsc',
+        defaultChecked: winesSort === 'priceAsc',
         textLabel: 'Возрастанию цен',
       },
       {
         id: 'sortingByPriceDesc',
         name: 'sortingBy',
         value: 'priceDesc',
-        defaultChecked: sortingBy === 'priceDesc',
+        defaultChecked: winesSort === 'priceDesc',
         textLabel: 'Убыванию цен',
       },
       {
         id: 'sortingByPopularity',
         name: 'sortingBy',
         value: 'popularity',
-        defaultChecked: sortingBy === 'popularity',
+        defaultChecked: winesSort === 'popularity',
         textLabel: 'Популярности',
       },
     ],
@@ -74,32 +76,32 @@ const Catalog = () => {
         onChange={sortingByObj.onChange}
       />
 
-      {state === 'hasValue' && contents && (
-        <div className='grid'>
-          {contents.map((wine, index) => (
-            <WineCard
-              key={wine.id}
-              imageSrc='https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png'
-              info={{
-                shop: 'Ароматный мир',
-                name: 'Vodka',
-                about: 'Красное, полусладкое',
-                country: { code: 'pt', name: 'Португалия' },
-                size: 0.75,
-                year: 2011,
-                fitsPercent: 75,
-                stars: index % 5,
-                price: '1200',
-                discount: {
-                  price: '900',
-                  percent: 12,
-                },
-              }}
-              isLiked={index % 2}
-              color={index % 3}
-            />
-          ))}
-        </div>
+      {state === 'hasValue' && wines.length > 0 && (
+        <>
+          <div className='grid'>
+            {sortedWine.map((wine, index) => (
+              <WineCard
+                key={wine.wine_position_id}
+                imageSrc={parseImageSrc(wine.image)}
+                info={{
+                  shop: stores[wine.shop.site] || 'Ароматный мир',
+                  name: wine.wine.name,
+                  about: parseAbout(wine),
+                  country: countries(wine.wine.region),
+                  size: wine.volume,
+                  year: wine.wine.year || 2020,
+                  fitsPercent: Math.round(Math.random() * (85 - 45) + 45),
+                  stars: Math.round(Math.random() * (5 - 2) + 2),
+                  price: calculatePrice(wine),
+                  discount: calculateDiscount(wine),
+                }}
+                isLiked={Math.round(Math.random())}
+                color={index % 3}
+              />
+            ))}
+          </div>
+          {/* <div></div> */}
+        </>
       )}
 
       {state !== 'hasValue' && (
@@ -134,6 +136,7 @@ const Catalog = () => {
         }
 
         .grid {
+          margin-bottom: 60px;
           display: grid;
           grid-template-columns: repeat(auto-fit, 300px);
           justify-content: center;

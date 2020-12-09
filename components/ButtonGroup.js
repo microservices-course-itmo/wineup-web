@@ -22,9 +22,10 @@ const ButtonGroup = ({ title, buttons, onChange }) => {
           .buttons-list {
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
             justify-content: space-around;
             row-gap: 10px;
-            margin-top: 15px;
+            margin-top: 10px;
           }
           .title {
             font-size: 22px;

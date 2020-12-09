@@ -42,6 +42,13 @@ const Home = () => {
           max-width: 375px;
           max-height: 1265px;
         }
+
+        @media all and (max-width: 767px) {
+          .content {
+            flex-direction: column;
+            align-items: center;
+          }
+        }
       `}</style>
     </div>
   )
