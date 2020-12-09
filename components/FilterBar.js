@@ -317,6 +317,7 @@ const FilterBar = () => {
           <img src='/assets/resetBtnIcon.svg' alt='reset' />
         </span>
       </button>
+
       <style jsx>
         {`
           .filter-list-container {
@@ -366,6 +367,19 @@ const FilterBar = () => {
           }
           button[type='submit'] {
             display: none;
+          }
+
+          @media all and (max-width: 767px) {
+            .filter-list-container {
+              //min-width: 375px;
+              width: 100%;
+              overflow: hidden;
+              height: 400px;
+            }
+
+            .filter-list {
+              height: calc(400px - 160px);
+            }
           }
         `}
       </style>

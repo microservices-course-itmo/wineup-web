@@ -20,6 +20,25 @@ export const stores = {
   'https://simplewine.ru': 'SimpleWine',
 }
 
+export const sortingButtons = [
+  {
+    value: 'recommendations',
+    textLabel: 'Рекомендованные',
+  },
+  {
+    value: 'priceAsc',
+    textLabel: 'Возрастанию цен',
+  },
+  {
+    value: 'priceDesc',
+    textLabel: 'Убыванию цен',
+  },
+  {
+    value: 'popularity',
+    textLabel: 'Популярности',
+  },
+]
+
 export const sortDesc = wines => {
   const newWines = JSON.parse(JSON.stringify(wines))
 
@@ -128,6 +147,13 @@ export const calculateDiscount = wine => {
     return null
   }
 
+  if (
+    Math.round(((wine.actual_price - wine.price) / wine.actual_price) * 100) ===
+    0
+  ) {
+    return null
+  }
+
   if (wine.actual_price > wine.price) {
     return {
       price: wine.price,
@@ -153,4 +179,54 @@ export const parseImageSrc = src => {
 
 export const parseAbout = wine => {
   return `${colors[wine.wine.color]}, ${sugar[wine.wine.sugar]}`
+}
+
+const parseGrapes = grapes => {
+  if (grapes.length === 0) {
+    return 'Неизвестно'
+  }
+
+  return grapes.reduce((acc, value) => `${acc + value.name}, `, '').slice(0, -2)
+}
+
+const parseProducer = producer => {
+  if (producer === 'PRODUCER_NOT_PRESENTED') {
+    return 'Неизвестно'
+  }
+
+  return producer
+}
+
+export const getWineInfo = wine => {
+  return {
+    shop: stores[wine.shop.site] || 'Ароматный мир',
+    name: wine.wine.name,
+    about: parseAbout(wine),
+    country: countries(wine.wine.region),
+    size: wine.volume,
+    year: wine.wine.year || 2020,
+    fitsPercent: Math.round(Math.random() * (85 - 45) + 45),
+    stars: Math.round(Math.random() * (5 - 2) + 2),
+    price: calculatePrice(wine),
+    discount: calculateDiscount(wine),
+  }
+}
+
+export const getWinePositionInfo = wine => {
+  return {
+    shop: stores[wine.shop.site] || 'Ароматный мир',
+    name: wine.wine.name,
+    grape: parseGrapes(wine.wine.grape),
+    size: wine.volume,
+    country: countries(wine.wine.region).name,
+    sugar: sugar[wine.wine.sugar],
+    color: colors[wine.wine.color],
+    alcohol: wine.wine.avg,
+    brand: parseProducer(wine.wine.producer.name),
+    year: wine.wine.year || 2020,
+    fitsPercent: Math.round(Math.random() * (85 - 45) + 45),
+    stars: Math.round(Math.random() * (5 - 2) + 2),
+    price: calculatePrice(wine),
+    discount: calculateDiscount(wine),
+  }
 }

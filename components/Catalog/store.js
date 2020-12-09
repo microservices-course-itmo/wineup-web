@@ -20,7 +20,7 @@ export const winesPageState = atom({
 })
 
 export const winesQuery = selector({
-  key: 'Wines',
+  key: 'winesQuery',
   get: async ({ get }) => {
     const body = get(winesPageState)
 

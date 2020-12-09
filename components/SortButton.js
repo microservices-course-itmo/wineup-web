@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @param {Object} btn
  * @param {string} btn.id
@@ -6,20 +8,20 @@
  * @param {boolean} btn.defaultChecked
  * @param {string} btn.textLabel - Текст кнопки
  * @param {function} onBtnClick - Функция-обработчик изменений для контролируемого поля
+ * @param {boolean} active - Активна ли кнопка
  */
-const SortButton = ({ btn, onBtnClick }) => {
+const SortButton = ({ btn, onBtnClick, active }) => {
   return (
     <div className='container' key={btn.id}>
       <button
-        id={btn.id}
         type='button'
-        name={btn.name}
         value={btn.value}
-        className={`${btn.defaultChecked ? 'active ' : ''}btn`}
+        className={`${active ? 'active ' : ''}btn`}
         onClick={onBtnClick}
       >
         {btn.textLabel}
       </button>
+
       <style jsx>
         {`
           .container {
@@ -27,6 +29,7 @@ const SortButton = ({ btn, onBtnClick }) => {
             flex-direction: column;
             row-gap: 10px;
           }
+
           .btn {
             background: transparent;
             color: #931332;
@@ -37,10 +40,19 @@ const SortButton = ({ btn, onBtnClick }) => {
             outline: 0;
             cursor: pointer;
           }
+
+          .btn:hover {
+            box-shadow: 0 0 2px #931332;
+          }
+
           .active {
             background-color: #931332;
             color: white;
             border: none;
+          }
+
+          .active:hover {
+            box-shadow: unset;
           }
         `}
       </style>

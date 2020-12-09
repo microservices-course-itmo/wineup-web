@@ -12,7 +12,6 @@ const Home = () => {
 
       <div className='content'>
         <FilterBar />
-
         <Catalog />
       </div>
 

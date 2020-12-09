@@ -1,31 +1,29 @@
 import React, { useEffect } from 'react'
+import { animateScroll } from 'react-scroll'
+import { useRouter } from 'next/router'
 import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
 
 import ButtonGroup from '../ButtonGroup'
 import WineCard from '../WineCard'
 import Loader from '../Loader'
+import ChangePageButtons from '../ChangePageButtons'
 
+import { parseImageSrc, getWineInfo, sortingButtons } from './utils'
 import {
   winesSortState,
   winesState,
   sortedWinesState,
   winesQuery,
+  winesPageState,
 } from './store'
-import {
-  calculateDiscount,
-  calculatePrice,
-  countries,
-  parseImageSrc,
-  parseAbout,
-  stores,
-} from './utils'
 
 const Catalog = () => {
   const [wines, setWines] = useRecoilState(winesState)
   const sortedWine = useRecoilValue(sortedWinesState)
   const [winesSort, setWinesSort] = useRecoilState(winesSortState)
-  // const [winesPage, setWinesPage] = useRecoilState(winesPageState)
+  const [winesPage, setWinesPage] = useRecoilState(winesPageState)
   const { contents, state } = useRecoilValueLoadable(winesQuery)
+  const router = useRouter()
 
   useEffect(() => {
     if (state === 'hasValue') {
@@ -33,47 +31,46 @@ const Catalog = () => {
     }
   }, [contents, setWines, state])
 
-  const sortingByObj = {
-    title: 'Сортировать по',
-    onChange: event => setWinesSort(event.currentTarget.value),
-    inputList: [
-      {
-        id: 'sortingByRecommendations',
-        name: 'sortingBy',
-        value: 'recommendations',
-        defaultChecked: winesSort === 'recommendations',
-        textLabel: 'Рекомендованные',
-      },
-      {
-        id: 'sortingByPriceAsc',
-        name: 'sortingBy',
-        value: 'priceAsc',
-        defaultChecked: winesSort === 'priceAsc',
-        textLabel: 'Возрастанию цен',
-      },
-      {
-        id: 'sortingByPriceDesc',
-        name: 'sortingBy',
-        value: 'priceDesc',
-        defaultChecked: winesSort === 'priceDesc',
-        textLabel: 'Убыванию цен',
-      },
-      {
-        id: 'sortingByPopularity',
-        name: 'sortingBy',
-        value: 'popularity',
-        defaultChecked: winesSort === 'popularity',
-        textLabel: 'Популярности',
-      },
-    ],
+  useEffect(() => {
+    console.log(contents)
+  }, [contents])
+
+  useEffect(() => {
+    if (router.query.page) {
+      setWinesPage({
+        from: Number(router.query.page),
+        to: winesPage.to,
+      })
+    }
+  }, [router, setWinesPage, winesPage.to])
+
+  const changePage = isNextPage => {
+    animateScroll.scrollToTop({
+      duration: 100,
+    })
+
+    if (!isNextPage && winesPage.from > 1) {
+      router.push({
+        pathname: '/',
+        query: { page: winesPage.from - 1 },
+      })
+    }
+
+    if (isNextPage) {
+      router.push({
+        pathname: '/',
+        query: { page: winesPage.from + 1 },
+      })
+    }
   }
 
   return (
     <div className='catalog'>
       <ButtonGroup
-        title={sortingByObj.title}
-        buttons={sortingByObj.inputList}
-        onChange={sortingByObj.onChange}
+        title='Сортировать по'
+        activeButton={winesSort}
+        buttons={sortingButtons}
+        onChange={event => setWinesSort(event.currentTarget.value)}
       />
 
       {state === 'hasValue' && wines.length > 0 && (
@@ -82,25 +79,20 @@ const Catalog = () => {
             {sortedWine.map((wine, index) => (
               <WineCard
                 key={wine.wine_position_id}
+                wineId={wine.wine_position_id}
                 imageSrc={parseImageSrc(wine.image)}
-                info={{
-                  shop: stores[wine.shop.site] || 'Ароматный мир',
-                  name: wine.wine.name,
-                  about: parseAbout(wine),
-                  country: countries(wine.wine.region),
-                  size: wine.volume,
-                  year: wine.wine.year || 2020,
-                  fitsPercent: Math.round(Math.random() * (85 - 45) + 45),
-                  stars: Math.round(Math.random() * (5 - 2) + 2),
-                  price: calculatePrice(wine),
-                  discount: calculateDiscount(wine),
-                }}
+                info={getWineInfo(wine)}
                 isLiked={Math.round(Math.random())}
                 color={index % 3}
               />
             ))}
           </div>
-          {/* <div></div> */}
+
+          <ChangePageButtons
+            isPrev={winesPage.from !== 1}
+            previousPage={() => changePage()}
+            nextPage={() => changePage(1)}
+          />
         </>
       )}
 
@@ -136,7 +128,7 @@ const Catalog = () => {
         }
 
         .grid {
-          margin-bottom: 60px;
+          margin-bottom: 30px;
           display: grid;
           grid-template-columns: repeat(auto-fit, 300px);
           justify-content: center;
@@ -170,6 +162,13 @@ const Catalog = () => {
         .error-icon {
           width: 120px;
           height: auto;
+        }
+
+        @media all and (max-width: 767px) {
+          .catalog {
+            margin-top: 40px;
+            margin-left: 0;
+          }
         }
       `}</style>
     </div>
