@@ -32,10 +32,6 @@ const Catalog = () => {
   }, [contents, setWines, state])
 
   useEffect(() => {
-    console.log(contents)
-  }, [contents])
-
-  useEffect(() => {
     if (router.query.page) {
       setWinesPage({
         from: Number(router.query.page),

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { selectorFamily, useRecoilValueLoadable } from 'recoil'
 
@@ -37,10 +37,6 @@ const Wine = () => {
   const { state, contents } = useRecoilValueLoadable(
     winesPositionState(router.query.id)
   )
-
-  useEffect(() => {
-    console.log(contents)
-  }, [contents])
 
   return (
     <Wrapper>

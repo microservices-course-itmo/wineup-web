@@ -181,7 +181,7 @@ export const parseAbout = wine => {
   return `${colors[wine.wine.color]}, ${sugar[wine.wine.sugar]}`
 }
 
-const parseGrapes = grapes => {
+export const parseGrapes = grapes => {
   if (grapes.length === 0) {
     return 'Неизвестно'
   }
@@ -189,7 +189,7 @@ const parseGrapes = grapes => {
   return grapes.reduce((acc, value) => `${acc + value.name}, `, '').slice(0, -2)
 }
 
-const parseProducer = producer => {
+export const parseProducer = producer => {
   if (producer === 'PRODUCER_NOT_PRESENTED') {
     return 'Неизвестно'
   }
