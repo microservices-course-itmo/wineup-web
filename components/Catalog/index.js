@@ -37,6 +37,11 @@ const Catalog = () => {
         from: Number(router.query.page),
         to: winesPage.to,
       })
+    } else {
+      setWinesPage({
+        from: 1,
+        to: winesPage.to,
+      })
     }
   }, [router, setWinesPage, winesPage.to])
 
