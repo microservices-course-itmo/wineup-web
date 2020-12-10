@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import firebase from 'firebase'
 
@@ -6,6 +7,7 @@ const AuthorizationForm = () => {
   const [telephone, setTelephone] = useState('')
   const [telephoneError, setTelephoneError] = useState('')
   const [telCode, setTelCode] = useState('')
+  const [telCodeError, setTelCodeError] = useState('')
   const [date, setDate] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [day, month, year] = useMemo(() => date.split('.'), [date])
@@ -124,16 +126,14 @@ const AuthorizationForm = () => {
       if (format.test(e.target.value))
         setTelephoneError('Ошибка: недопустимые символы')
       else if (
-        (e.target.value.charAt(0) === '+' &&
-          e.target.value.charAt(1) === '7' &&
-          e.target.value.length <= 12) ||
-        (e.target.value.charAt(0) === '8' && e.target.value.length <= 11) ||
-        e.target.value.length <= 2
+        e.target.value.charAt(0) === '+' &&
+        e.target.value.charAt(1) === '7' &&
+        e.target.value.length <= 12
       )
         setTelephoneError('')
       else
         setTelephoneError(
-          'Ошибка: Неправильный формат номера телефона, допустимы лишь +7 и 8'
+          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
         )
       setTelephone(e.target.value)
     },
@@ -143,32 +143,53 @@ const AuthorizationForm = () => {
     if (e.target.value.length <= 6) setTelCode(e.target.value)
   }, [])
   const handleFirstForm = async () => {
-    const applicationVerifier = new firebase.auth.RecaptchaVerifier(
-      'telButton1',
-      { size: 'invisible' }
-    )
-
-    try {
-      setSendCode(
-        await firebase
-          .auth()
-          .signInWithPhoneNumber(telephone, applicationVerifier)
-      )
-    } catch (err) {
-      throw new Error(
-        `Error occurred during singing in with phone number: ${err}`
-      )
+    if (telephoneError === '') {
+      if (telephone.length === 12) {
+        const applicationVerifier = new firebase.auth.RecaptchaVerifier(
+          'recaptcha',
+          { size: 'invisible' }
+        )
+        try {
+          setSendCode(
+            await firebase
+              .auth()
+              .signInWithPhoneNumber(telephone, applicationVerifier)
+          )
+        } catch (err) {
+          throw new Error(
+            `Error occurred during singing in with phone number: ${err}`
+          )
+        }
+        setAuthForm(2)
+      } else {
+        setTelephoneError(
+          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
+        )
+      }
     }
-
+  }
+  const tryHandleFirstFormAgain = async () => {
     setAuthForm(2)
   }
   const handleSecondForm1 = async () => {
-    try {
-      setUid(await sendCode.confirm(telCode).then(({ user: { uid } }) => uid))
-    } catch (err) {
-      throw new Error('Error occurred during code confirmation')
+    if (telephoneError === '') {
+      if (telephone.length === 12) {
+        try {
+          setUid(
+            await sendCode.confirm(telCode).then(({ user: { uid } }) => uid)
+          )
+          setTelCodeError('')
+          setAuthForm(3)
+        } catch (err) {
+          console.log(err)
+          setTelCodeError('Ошибка: неправильный код')
+        }
+      } else {
+        setTelephoneError(
+          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
+        )
+      }
     }
-    setAuthForm(3)
   }
   const handleSecondForm2 = useCallback(() => {
     setAuthForm(1)
@@ -194,6 +215,7 @@ const AuthorizationForm = () => {
         <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
           Запросить код подтверждения
         </div>
+        <div id='recaptcha'></div>
       </div>
       <div className='authForm2'>
         <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -215,6 +237,7 @@ const AuthorizationForm = () => {
             value={telCode}
             onChange={handleTelCode}
           />
+          <input className='errorMessage' value={telCodeError} disabled />
         </div>
         <div className='telButton21'>
           <div className='telButton2Inner' onClick={handleSecondForm1}>
@@ -222,7 +245,7 @@ const AuthorizationForm = () => {
           </div>
         </div>
         <div className='telButton22'>
-          <div className='telButton2Inner' onClick={handleSecondForm2}>
+          <div className='telButton2Inner' onClick={tryHandleFirstFormAgain}>
             Отправить повторно
           </div>
         </div>
