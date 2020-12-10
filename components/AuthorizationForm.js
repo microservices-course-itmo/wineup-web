@@ -164,7 +164,7 @@ const AuthorizationForm = () => {
   }
   const handleSecondForm1 = async () => {
     try {
-      setUid(await sendCode.confirm(telCode).then(({ user: { uid } }) => uid))
+      setUid(await sendCode.confirm(telCode).then(({ user: { ya } }) => ya))
     } catch (err) {
       throw new Error('Error occurred during code confirmation')
     }
