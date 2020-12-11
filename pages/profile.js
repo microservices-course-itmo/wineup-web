@@ -1,16 +1,38 @@
 import React from 'react'
-import { selector, useRecoilValueLoadable } from 'recoil'
+import { atom, selector, useRecoilValueLoadable } from 'recoil'
 import Header from '../components/Header'
 import Search from '../components/Search'
 
-const currentUserIdSelector = selector({
+const currentUserMock = atom({
+  key: 'currentUserMock',
+  default: {
+    accessToken:
+      'eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzk5OTg4ODc3NjYiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTYiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3NzE1NTYwLCJleHAiOjE2MDc3MTkxNjB9.yfduLSC-ngalUYB2V2uJdcpNx7LYzGwmYc-kZjsjgKU',
+    refreshToken:
+      'eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzk5OTg4ODc3NjYiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTYiLCJ0eXBlIjoiUkVGUkVTSF9UT0tFTiIsImlhdCI6MTYwNzcxNTU2MCwiZXhwIjoxNjEwMzA3NTYwfQ.0-Puf8n8hHbhN2-CFsOxl4_J2e1Nq5aHFMxQftrEQp4',
+    user: {
+      id: '16',
+      phoneNumber: '+79998887766',
+      role: 'USER',
+      name: 'qwerty',
+      cityId: 1,
+      birthdate: '1999-01-01',
+    },
+  },
+})
+
+const currentUserSelector = selector({
   key: 'profileInfo',
-  get: async () => {
+  get: async ({ get }) => {
+    const userMock = get(currentUserMock)
+    if (userMock) {
+      return userMock.user.id
+    }
     const userResponse = await fetch(
       'http://77.234.215.138:48080/user-service/users/me',
       {
         headers: {
-          accessToken: '123',
+          Authorization: `Bearer ${userMock.accessToken}`,
         },
       }
     )
@@ -24,7 +46,7 @@ const userFullInfoSelector = selector({
   get: async ({ get }) => {
     const response = await fetch(
       `http://77.234.215.138:48080/user-service/users/${get(
-        currentUserIdSelector
+        currentUserSelector
       )}/full`
     )
     if (response.error) {
