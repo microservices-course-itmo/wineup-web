@@ -175,9 +175,7 @@ const AuthorizationForm = () => {
     if (telephoneError === '') {
       if (telephone.length === 12) {
         try {
-          setUid(
-            await sendCode.confirm(telCode).then(({ user: { uid } }) => uid)
-          )
+          setUid(await sendCode.confirm(telCode).then(({ user: { ya } }) => ya))
           setTelCodeError('')
           setAuthForm(3)
         } catch (err) {
@@ -191,12 +189,31 @@ const AuthorizationForm = () => {
       }
     }
   }
-  const handleSecondForm2 = useCallback(() => {
-    setAuthForm(1)
-  }, [])
-  const handleThirdForm = useCallback(() => {
-    setAuthForm(1)
-  }, [])
+  const handleThirdForm = () => {
+    registration()
+  }
+
+  const registration = async () => {
+    const data = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: 123,
+      },
+      body: {
+        birthday: date,
+        cityId: 0,
+        fireBaseToken: uid,
+        name: username,
+      },
+    }
+    console.log(data)
+    const response = await fetch(
+      'http://77.234.215.138:48080/user-service/registration',
+      data
+    )
+    console.log(response)
+  }
 
   return (
     <div className='authForm'>
