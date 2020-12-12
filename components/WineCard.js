@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { useRecoilCallback } from 'recoil'
 import ReactCountryFlag from 'react-country-flag'
+import { addWineQuery, deleteWineQuery } from './Favorites/favoritesStore'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -40,13 +42,35 @@ const starsNumber = [1, 2, 3, 4, 5]
  */
 const WineCard = ({ imageSrc, info, isLiked, color }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
+  const addFavorite = useRecoilCallback(({ snapshot }) => async () => {
+    // inside the addWineQuery need to be wine_position_id for the pressed wine
+    // eslint-disable-next-line
+    const addQueryLoadable = await snapshot.getPromise(
+      addWineQuery('f7b57f5b-d6bc-4abb-9f6b-b5bab74aa0a9')
+    )
+  })
+  const deleteFavorite = useRecoilCallback(({ snapshot }) => async () => {
+    // eslint-disable-next-line
+    const deleteQueryLoadable = await snapshot.getPromise(
+      deleteWineQuery('f7b57f5b-d6bc-4abb-9f6b-b5bab74aa0a9')
+    )
+  })
+  const clickHeart = () => {
+    if (!isHeartFilled) {
+      setIsHeartFilled(true)
+      addFavorite()
+    } else {
+      setIsHeartFilled(false)
+      deleteFavorite()
+    }
+  }
 
   return (
     <div className='card'>
       <div className='top'>
         <button
           className='heart-button'
-          onClick={() => setIsHeartFilled(!isHeartFilled)}
+          onClick={() => clickHeart()}
           type='button'
         >
           <img
