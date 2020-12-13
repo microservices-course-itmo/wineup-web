@@ -200,12 +200,12 @@ const AuthorizationForm = () => {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: 123,
       },
-      body: {
+      body: JSON.stringify({
         birthday: date,
-        cityId: 0,
+        cityId: 1,
         fireBaseToken: uid,
         name: username,
-      },
+      }),
     }
     console.log(data)
     const response = await fetch(
@@ -216,131 +216,155 @@ const AuthorizationForm = () => {
   }
 
   return (
-    <div className='authForm'>
-      <div className='authForm1'>
-        <div className='header'>Войдите или зарегистрируйтесь</div>
-        <div className='inputForm'>
-          <div className='formName'>Введите номер телефона</div>
-          <input
-            className='inputField'
-            placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
-            value={telephone}
-            onChange={handleTelephone}
-          />
-          <input className='errorMessage' value={telephoneError} disabled />
+    <div className='wrapper'>
+      <div className='authForm'>
+        <div className='authForm1'>
+          <div className='header'>Войдите или зарегистрируйтесь</div>
+          <div className='inputForm'>
+            <div className='formName'>Введите номер телефона</div>
+            <input
+              className='inputField'
+              placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
+              value={telephone}
+              onChange={handleTelephone}
+            />
+            <input className='errorMessage' value={telephoneError} disabled />
+          </div>
+          <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
+            Запросить код подтверждения
+          </div>
+          <div id='recaptcha'></div>
         </div>
-        <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
-          Запросить код подтверждения
-        </div>
-        <div id='recaptcha'></div>
-      </div>
-      <div className='authForm2'>
-        <div className='header'>Войдите или зарегистрируйтесь</div>
-        <div className='inputForm'>
-          <div className='formName'>Введите номер телефона</div>
-          <input
-            className='inputField'
-            placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
-            value={telephone}
-            onChange={handleTelephone}
-          />
-          <input className='errorMessage' value={telephoneError} disabled />
-        </div>
-        <div className='inputForm'>
-          <div className='formName'>Введите код</div>
-          <input
-            className='inputField'
-            placeholder='_ _ _ _ _ _'
-            value={telCode}
-            onChange={handleTelCode}
-          />
-          <input className='errorMessage' value={telCodeError} disabled />
-        </div>
-        <div className='telButton21'>
-          <div className='telButton2Inner' onClick={handleSecondForm1}>
-            Подтвердить
+        <div className='authForm2'>
+          <div className='header'>Войдите или зарегистрируйтесь</div>
+          <div className='inputForm'>
+            <div className='formName'>Введите номер телефона</div>
+            <input
+              className='inputField'
+              placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
+              value={telephone}
+              onChange={handleTelephone}
+            />
+            <input className='errorMessage' value={telephoneError} disabled />
+          </div>
+          <div className='inputForm'>
+            <div className='formName'>Введите код</div>
+            <input
+              className='inputField'
+              placeholder='_ _ _ _ _ _'
+              value={telCode}
+              onChange={handleTelCode}
+            />
+            <input className='errorMessage' value={telCodeError} disabled />
+          </div>
+          <div className='telButton21'>
+            <div className='telButton2Inner' onClick={handleSecondForm1}>
+              Подтвердить
+            </div>
+          </div>
+          <div className='telButton22'>
+            <div className='telButton2Inner' onClick={tryHandleFirstFormAgain}>
+              Отправить повторно
+            </div>
           </div>
         </div>
-        <div className='telButton22'>
-          <div className='telButton2Inner' onClick={tryHandleFirstFormAgain}>
-            Отправить повторно
+        <div className='authForm3'>
+          <div className='header'>Войдите или зарегистрируйтесь</div>
+          <div className='inputForm'>
+            <div className='formName'>Введите имя</div>
+            <input
+              className='inputField'
+              placeholder='Иван'
+              value={username}
+              onChange={handleUserName}
+            />
+            <input className='errorMessage' value={nameError} disabled />
           </div>
-        </div>
-      </div>
-      <div className='authForm3'>
-        <div className='header'>Войдите или зарегистрируйтесь</div>
-        <div className='inputForm'>
-          <div className='formName'>Введите имя</div>
-          <input
-            className='inputField'
-            placeholder='Иван'
-            value={username}
-            onChange={handleUserName}
-          />
-          <input className='errorMessage' value={nameError} disabled />
-        </div>
-        <div className='inputForm'>
-          <div className='formName'>Дата рождения</div>
-          <input
-            className='inputField'
-            placeholder='ДД.ММ.ГГГГ'
-            value={date}
-            onChange={handleDate}
-          />
-          <input className='errorMessage' value={calendarError} disabled />
-          <div onClick={handleClickCalendar}>
+          <div className='inputForm'>
+            <div className='formName'>Дата рождения</div>
+            <input
+              className='inputField'
+              placeholder='ДД.ММ.ГГГГ'
+              value={date}
+              onChange={handleDate}
+            />
+            <input className='errorMessage' value={calendarError} disabled />
+            <div onClick={handleClickCalendar}>
+              <img
+                className='icon1'
+                src='assets/authorization/calendar.svg'
+                alt=''
+              />
+            </div>
+            <div className='calendar' id='calendar'>
+              <input
+                className='day'
+                placeholder='ДД'
+                value={day}
+                onChange={handleDay}
+              />
+              <input
+                className='month'
+                placeholder='ММ'
+                value={month}
+                onChange={handleMonth}
+              />
+              <input
+                className='year'
+                placeholder='ГГГГ'
+                value={year}
+                onChange={handleYear}
+              />
+            </div>
+          </div>
+          <div className='inputForm'>
+            <div className='formName'>Город</div>
+            <input className='inputField' placeholder='Москва' />
+            <input className='errorMessage' disabled />
             <img
-              className='icon1'
-              src='assets/authorization/calendar.svg'
+              className='icon2'
+              src='assets/authorization/arrow.svg'
               alt=''
             />
           </div>
-          <div className='calendar' id='calendar'>
-            <input
-              className='day'
-              placeholder='ДД'
-              value={day}
-              onChange={handleDay}
-            />
-            <input
-              className='month'
-              placeholder='ММ'
-              value={month}
-              onChange={handleMonth}
-            />
-            <input
-              className='year'
-              placeholder='ГГГГ'
-              value={year}
-              onChange={handleYear}
-            />
+          <div className='authButton' onClick={handleThirdForm}>
+            Зарегистрироваться
+          </div>
+          <div className='soulContract'>
+            Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с политикой
+            конфиденциальности
           </div>
         </div>
-        <div className='inputForm'>
-          <div className='formName'>Город</div>
-          <input className='inputField' placeholder='Москва' />
-          <input className='errorMessage' disabled />
-          <img className='icon2' src='assets/authorization/arrow.svg' alt='' />
-        </div>
-        <div className='authButton' onClick={handleThirdForm}>
-          Зарегистрироваться
-        </div>
-        <div className='soulContract'>
-          Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с политикой
-          конфиденциальности
-        </div>
       </div>
+      <div className='background' />
       <style jsx>
         {`
-          .authForm {
-            display: hidden;
-            position: relative;
-            left: 200px;
-            top: -1080px;
+        .wrapper {
+          max-width: 1920px;
+          padding: 0 0px;
+          margin: 0 auto;
+        }
+        .authForm {
+           position:absolute;
+           bottom: -300px;
+           right: 0px;
+           z-index:5;
+           width: 80%;
+           height: 100%;
+          }
+          .background {
+            position:fixed;
+            right:0px;
+            bottom:0px;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            opacity: 0.5;
           }
           .authForm1 {
-            position: relative;
-            right: -378px;
+            position: absolute:
+            right:0px;
+            bottom:0px;
             background: white;
             display: ${authForm === 1 ? 'block' : 'none'};
             border: 2px solid black;
@@ -356,7 +380,6 @@ const AuthorizationForm = () => {
             border-radius: 10px;
             width: 685px;
             height: 630px;
-            margin: 0px 377px 110px 378px;
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
           .errorMessage {
@@ -521,7 +544,6 @@ const AuthorizationForm = () => {
             border-radius: 10px;
             width: 685px;
             height: 797px;
-            margin: 0px 377px 110px 378px;
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
           .header {
