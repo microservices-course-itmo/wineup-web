@@ -1,8 +1,10 @@
-/* eslint-disable */
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import firebase from 'firebase'
+import { atom } from 'recoil'
+import { useRouter } from 'next/router'
 
 const AuthorizationForm = () => {
+  const router = useRouter()
   const [authForm, setAuthForm] = useState(1)
   const [telephone, setTelephone] = useState('')
   const [telephoneError, setTelephoneError] = useState('')
@@ -16,12 +18,6 @@ const AuthorizationForm = () => {
   const [calendarError, setCalendarError] = useState('')
   const [sendCode, setSendCode] = useState(null)
   const [uid, setUid] = useState(null)
-
-  // TODO: удалить, использовалось для тестирования
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('UID changed:', uid)
-  }, [uid])
 
   const handleDate = useCallback(
     e => {
@@ -175,11 +171,48 @@ const AuthorizationForm = () => {
     if (telephoneError === '') {
       if (telephone.length === 12) {
         try {
-          setUid(await sendCode.confirm(telCode).then(({ user: { ya } }) => ya))
+          const token = await sendCode
+            .confirm(telCode)
+            .then(({ user: { ya } }) => ya)
+          setUid(token)
+          const data = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              Authorization: 123,
+            },
+            body: JSON.stringify({
+              fireBaseToken: token,
+            }),
+          }
+          const response = await fetch(
+            'http://77.234.215.138:48080/user-service/login',
+            data
+          )
+          if (response.status === 200) {
+            response.json().then(json => {
+              atom({
+                key: 'currentUser',
+                default: {
+                  accessToken: json.accessToken,
+                  refreshToken: json.refreshToken,
+                  user: {
+                    id: json.user.id,
+                    phoneNumber: json.user.phoneNumber,
+                    role: json.user.role,
+                    name: json.user.name,
+                    cityId: json.user.cityId,
+                    birthdate: json.user.birthdate,
+                  },
+                },
+              })
+            })
+            router.push('/')
+          } else {
+            setAuthForm(3)
+          }
           setTelCodeError('')
-          setAuthForm(3)
         } catch (err) {
-          console.log(err)
           setTelCodeError('Ошибка: неправильный код')
         }
       } else {
@@ -189,10 +222,6 @@ const AuthorizationForm = () => {
       }
     }
   }
-  const handleThirdForm = () => {
-    registration()
-  }
-
   const registration = async () => {
     const data = {
       method: 'POST',
@@ -207,12 +236,30 @@ const AuthorizationForm = () => {
         name: username,
       }),
     }
-    console.log(data)
     const response = await fetch(
       'http://77.234.215.138:48080/user-service/registration',
       data
     )
-    console.log(response)
+    if (response.status === 200) {
+      response.json().then(json => {
+        atom({
+          key: 'currentUser',
+          default: {
+            accessToken: json.accessToken,
+            refreshToken: json.refreshToken,
+            user: {
+              id: json.user.id,
+              phoneNumber: json.user.phoneNumber,
+              role: json.user.role,
+              name: json.user.name,
+              cityId: json.user.cityId,
+              birthdate: json.user.birthdate,
+            },
+          },
+        })
+      })
+    }
+    router.push('')
   }
 
   return (
@@ -233,7 +280,7 @@ const AuthorizationForm = () => {
           <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
             Запросить код подтверждения
           </div>
-          <div id='recaptcha'></div>
+          <div id='recaptcha' />
         </div>
         <div className='authForm2'>
           <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -327,7 +374,7 @@ const AuthorizationForm = () => {
               alt=''
             />
           </div>
-          <div className='authButton' onClick={handleThirdForm}>
+          <div className='authButton' onClick={registration}>
             Зарегистрироваться
           </div>
           <div className='soulContract'>
@@ -349,8 +396,9 @@ const AuthorizationForm = () => {
            bottom: -300px;
            right: 0px;
            z-index:5;
-           width: 80%;
+           width: 75%;
            height: 100%;
+           display: "block"
           }
           .background {
             position:fixed;
