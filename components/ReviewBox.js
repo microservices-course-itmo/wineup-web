@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReviewCard from './ReviewCard'
 
-const ReviewBox = ({ reviews }) => {
+const ReviewBox = ({ reviews = [] }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
   const handleAllReview = () => {

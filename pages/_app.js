@@ -1,11 +1,14 @@
+import { RecoilRoot } from 'recoil'
 import 'reactjs-popup/dist/index.css'
 import { initFirebase } from '../utils/firebaseConfig'
+import RecoilObserver from '../components/RecoilObserver'
 
 initFirebase()
 
 const App = ({ Component, pageProps }) => {
   return (
-    <>
+    <RecoilRoot>
+      {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
       <Component {...pageProps} />
       <style jsx global>
         {`
@@ -75,7 +78,7 @@ const App = ({ Component, pageProps }) => {
           }
         `}
       </style>
-    </>
+    </RecoilRoot>
   )
 }
 

@@ -98,8 +98,8 @@ const Header = () => {
             }
           }
 
-          @media screen and (max-width: 780px) {
-            .header {
+          @media screen and (max-width: 767px) {
+            .menu-item {
               display: none;
             }
           }
