@@ -391,7 +391,7 @@ const AuthorizationForm = () => {
           box-sizing: border-box;
           border-radius: 5px;
           font-family: Times New Roman;
-          z-index: 5;
+          z-index: 10;
 font-size: 28px;
 line-height: 33px;
 text-align: center;
@@ -409,7 +409,7 @@ text-align: center;
            position:absolute;
            bottom: -300px;
            right: 0px;
-           z-index:5;
+           z-index: 10;
            width: 70%;
            height: 100%;
            display: "block"
@@ -422,6 +422,7 @@ text-align: center;
             height: 100%;
             background-color: black;
             opacity: 0.5;
+            z-index: 8;
           }
           .authForm1 {
             position: absolute:
