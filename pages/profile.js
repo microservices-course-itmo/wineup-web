@@ -1,54 +1,93 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useRecoilValue } from 'recoil'
 import Header from '../components/Header'
 import Search from '../components/Search'
+import { userState } from '../utils/AuthorizationFormAtom'
+import useLocalStorage from '../utils/useLocalStorage'
 
-/**
- * @param {Object} user
- * @param {string} user.name
- * @param {string} user.city
- * @param {string} user.tel
- */
-const Profile = ({ user }) => {
+const Profile = () => {
+  const [accessToken] = useLocalStorage('accessToken')
+  const [currentUser, setCurrentUser] = useState(useRecoilValue(userState))
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await fetch(
+        'http://77.234.215.138:48080/user-service/users/me',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      const currentUser2 = await response.json()
+      setCurrentUser(currentUser2)
+    }
+    if (!currentUser) {
+      getUser().catch(console.log)
+    }
+  }, [accessToken])
+
+  const user = currentUser
+    ? {
+        name: currentUser.user.name || currentUser.name || 'Не указано',
+        cityName: currentUser.user.cityId || currentUser.cityId || 'Не указано',
+        phoneNumber:
+          currentUser.user.phoneNumber ||
+          currentUser.phoneNumber ||
+          'Не указано',
+      }
+    : null
+
   return (
     <div className='wrapper'>
       <Header />
       <Search />
       <div className='content'>
-        <div className='profile-wrapper'>
-          <div className='profile'>
-            <div className='icon-container'>
-              <div className='user-avatar'>
-                <img className='avatar' src='/assets/user.svg' alt='user-pic' />
-                <img
-                  className='edit-btn'
-                  src='/assets/edit-icon.svg'
-                  alt='edit'
-                />
+        {user && (
+          <div className='profile-wrapper'>
+            <div className='profile'>
+              <div className='icon-container'>
+                <div className='user-avatar'>
+                  <img
+                    className='avatar'
+                    src='/assets/user.svg'
+                    alt='user-pic'
+                  />
+                  <img
+                    className='edit-btn'
+                    src='/assets/edit-icon.svg'
+                    alt='edit'
+                  />
+                </div>
+              </div>
+              <div className='info-container'>
+                <div className='info-list'>
+                  <label htmlFor='name-input'>
+                    <div>Ваше имя</div>
+                    <input id='name-input' readOnly value={user.name} />
+                  </label>
+                  <label htmlFor='city-input'>
+                    <div>Город</div>
+                    <input id='city-input' readOnly value={user.cityName} />
+                  </label>
+                  <label htmlFor='tel-input'>
+                    <div>Телефон</div>
+                    <input id='phone-input' readOnly value={user.phoneNumber} />
+                  </label>
+                </div>
               </div>
             </div>
-            <div className='info-container'>
-              <div className='info-list'>
-                <label htmlFor='name-input'>
-                  <div>Ваше имя</div>
-                  <input id='name-input' value={user.name} />
-                </label>
-                <label htmlFor='city-input'>
-                  <div>Город</div>
-                  <input id='city-input' value={user.city} />
-                </label>
-                <label htmlFor='tel-input'>
-                  <div>Телефон</div>
-                  <input id='tel-input' value={user.tel} />
-                </label>
+            <Link href='/'>
+              <div className='btn-footer'>
+                <button type='button' className='close-btn'>
+                  Close
+                </button>
               </div>
-            </div>
+            </Link>
           </div>
-          <div className='btn-footer'>
-            <button type='button' className='close-btn'>
-              Выйти
-            </button>
-          </div>
-        </div>
+        )}
+        {currentUser === 'hasError' && <p>Error</p>}
       </div>
       <style jsx>
         {`

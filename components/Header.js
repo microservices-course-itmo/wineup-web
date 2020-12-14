@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import React from 'react'
+import { useRecoilValue } from 'recoil'
+import { userState } from '../utils/AuthorizationFormAtom'
 
 const Header = () => {
+  const user = useRecoilValue(userState)
+
   return (
     <div className='header'>
       <Link href='/'>
@@ -41,10 +45,10 @@ const Header = () => {
           <p>Избранное</p>
         </div>
       </Link>
-      <Link href='/login'>
+      <Link href={`${user ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
           <img className='icon' src='/assets/header/man.svg' alt='profile' />
-          <p>Войти</p>
+          {user ? <p>Профиль</p> : <p>Войти</p>}
         </div>
       </Link>
       <style jsx>
