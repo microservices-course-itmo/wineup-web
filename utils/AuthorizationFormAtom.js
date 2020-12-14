@@ -1,7 +1,9 @@
+/*eslint-disable*/
 import { atom } from 'recoil'
 
+export let user
 export const authorizeUser = json => {
-  atom({
+  user = atom({
     key: 'currentUser',
     default: {
       accessToken: json.accessToken,

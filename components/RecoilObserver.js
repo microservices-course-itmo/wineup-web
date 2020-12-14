@@ -1,6 +1,6 @@
+/*eslint-disable*/
 import { useEffect } from 'react'
 import { useRecoilSnapshot } from 'recoil'
-
 const RecoilObserver = () => {
   const snapshot = useRecoilSnapshot()
 
