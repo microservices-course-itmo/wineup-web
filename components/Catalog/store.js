@@ -39,7 +39,6 @@ export const winesQuery = selector({
   get: async ({ get }) => {
     const winePage = get(winesPageState)
     const wineFilter = get(formFiltersState)
-    console.log(wineFilter)
     const searchParameters = Object.keys(wineFilter).reduce((acc, el) => {
       if (wineFilter[el] !== 0 && wineFilter[el].length !== 0) {
         if (el === 'priceFrom') {
@@ -64,7 +63,7 @@ export const winesQuery = selector({
       ...winePage,
       searchParameters,
     }
-    console.log('body - ', body)
+
     const response = await fetch(
       'http://77.234.215.138:48080/catalog-service/position/true/',
       {
