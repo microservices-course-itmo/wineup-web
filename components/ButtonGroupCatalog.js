@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ButtonGroup from './ButtonGroup'
 
-const Catalog = ({ children }) => {
+const ButtonGroupCatalog = () => {
   const [sortingBy, setSortingBy] = useState('recommendations')
   const sortingByObj = {
     title: 'Сортировать по',
@@ -44,29 +44,12 @@ const Catalog = ({ children }) => {
         buttons={sortingByObj.inputList}
         onChange={sortingByObj.onChange}
       />
-      <div className='grid'>{children}</div>
       <style jsx>{`
         .catalog {
           width: 100%;
-          margin-left: 35px;
-        }
-
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, 300px);
-          justify-content: center;
-          gap: 45px;
-        }
-
-        .sorting {
-          width: 100%;
-          height: 77px;
-          margin-bottom: 30px;
-          background-color: lightgray;
         }
       `}</style>
     </div>
   )
 }
-
-export default Catalog
+export default ButtonGroupCatalog
