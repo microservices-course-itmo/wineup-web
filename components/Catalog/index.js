@@ -176,4 +176,5 @@ const Catalog = () => {
   )
 }
 
+export * from './store'
 export default Catalog

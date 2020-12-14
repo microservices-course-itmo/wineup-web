@@ -19,11 +19,52 @@ export const winesPageState = atom({
   },
 })
 
+export const formFiltersState = atom({
+  key: 'formFilters',
+  default: {
+    priceFrom: 0,
+    priceTo: 100000,
+    volume: [],
+    color: [],
+    sugar: [],
+    sort: [],
+    country: [],
+    region: [],
+    sparkling: [],
+  },
+})
+
 export const winesQuery = selector({
   key: 'winesQuery',
   get: async ({ get }) => {
-    const body = get(winesPageState)
+    const winePage = get(winesPageState)
+    const wineFilter = get(formFiltersState)
+    console.log(wineFilter)
+    const searchParameters = Object.keys(wineFilter).reduce((acc, el) => {
+      if (wineFilter[el] !== 0 && wineFilter[el].length !== 0) {
+        if (el === 'priceFrom') {
+          return acc.concat(`price>${wineFilter[el]};`)
+        }
+        if (el === 'priceTo') {
+          return acc.concat(
+            `${acc.includes('price') ? '~' : ''}price<${wineFilter[el]};`
+          )
+        }
+        const filters = wineFilter[el].reduce((a, e) => {
+          return a.concat(`${a.includes(el) ? '~' : ''}${el}:${e};`)
+        }, '')
 
+        return acc.concat(filters)
+      }
+
+      return acc
+    }, '')
+
+    const body = {
+      ...winePage,
+      searchParameters,
+    }
+    console.log('body - ', body)
     const response = await fetch(
       'http://77.234.215.138:48080/catalog-service/position/true/',
       {
