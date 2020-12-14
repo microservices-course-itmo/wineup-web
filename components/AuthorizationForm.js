@@ -21,6 +21,7 @@ const AuthorizationForm = () => {
   const [calendarError, setCalendarError] = useState('')
   const [sendCode, setSendCode] = useState(null)
   const [uid, setUid] = useState(null)
+  const [message, setMessage] = useState(0)
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
@@ -201,7 +202,10 @@ const AuthorizationForm = () => {
               setAccessToken(json.accessToken)
               setRefreshToken(json.refreshToken)
             })
-            router.push('/')
+            setMessage(1)
+            setTimeout(() => {
+              router.push('/')
+            }, 2000)
           } else {
             setAuthForm(3)
           }
@@ -241,11 +245,19 @@ const AuthorizationForm = () => {
         setRefreshToken(json.refreshToken)
       })
     }
-    router.push('')
+    setMessage(1)
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
   }
 
   return (
     <div className='wrapper'>
+      <div className='finalMessage'>
+        <div className='messageText'>
+          Вы успешно зарегистрировались в системе
+        </div>
+      </div>
       <div className='authForm'>
         <div className='authForm1'>
           <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -368,6 +380,26 @@ const AuthorizationForm = () => {
       <div className='background' />
       <style jsx>
         {`
+        .finalMessage {
+          position: absolute;
+          top:100px;
+          right:200px;
+          width: 1364px;
+          height: 86px;
+          background: #B1E86B;
+          border: 1px solid #000000;
+          box-sizing: border-box;
+          border-radius: 5px;
+          font-family: Times New Roman;
+          z-index: 10;
+font-size: 28px;
+line-height: 33px;
+text-align: center;
+          display: ${message === 1 ? 'block' : 'none'};
+        }
+        .messageText {
+          margin: 24.17px 0;
+        }
         .wrapper {
           max-width: 1920px;
           padding: 0 0px;
@@ -377,7 +409,7 @@ const AuthorizationForm = () => {
            position:absolute;
            bottom: -300px;
            right: 0px;
-           z-index:5;
+           z-index: 10;
            width: 70%;
            height: 100%;
            display: "block"
@@ -390,6 +422,7 @@ const AuthorizationForm = () => {
             height: 100%;
             background-color: black;
             opacity: 0.5;
+            z-index: 8;
           }
           .authForm1 {
             position: absolute:
