@@ -1,8 +1,10 @@
 import { RecoilRoot } from 'recoil'
+import RecoilObserver from '../components/RecoilObserver'
 
 const App = ({ Component, pageProps }) => {
   return (
     <RecoilRoot>
+      {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
       <Component {...pageProps} />
       <style jsx global>
         {`
