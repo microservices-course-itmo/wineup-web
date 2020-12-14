@@ -19,6 +19,7 @@ const AuthorizationForm = () => {
   const [calendarError, setCalendarError] = useState('')
   const [sendCode, setSendCode] = useState(null)
   const [uid, setUid] = useState(null)
+  const [message, setMessage] = useState(0)
 
   const handleDate = useCallback(
     e => {
@@ -194,7 +195,10 @@ const AuthorizationForm = () => {
             response.json().then(json => {
               authorizeUser(json)
             })
-            router.push('/')
+            setMessage(1)
+            setTimeout(() => {
+              router.push('/')
+            }, 2000)
           } else {
             setAuthForm(3)
           }
@@ -232,11 +236,19 @@ const AuthorizationForm = () => {
         authorizeUser(json)
       })
     }
-    router.push('')
+    setMessage(1)
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
   }
 
   return (
     <div className='wrapper'>
+      <div className='finalMessage'>
+        <div className='messageText'>
+          Вы успешно зарегистрировались в системе
+        </div>
+      </div>
       <div className='authForm'>
         <div className='authForm1'>
           <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -359,6 +371,26 @@ const AuthorizationForm = () => {
       <div className='background' />
       <style jsx>
         {`
+        .finalMessage {
+          position: absolute;
+          top:100px;
+          right:200px;
+          width: 1364px;
+          height: 86px;
+          background: #B1E86B;
+          border: 1px solid #000000;
+          box-sizing: border-box;
+          border-radius: 5px;
+          font-family: Times New Roman;
+          z-index: 5;
+font-size: 28px;
+line-height: 33px;
+text-align: center;
+          display: ${message === 1 ? 'block' : 'none'};
+        }
+        .messageText {
+          margin: 24.17px 0;
+        }
         .wrapper {
           max-width: 1920px;
           padding: 0 0px;
