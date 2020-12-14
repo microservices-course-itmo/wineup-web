@@ -1,7 +1,9 @@
 import { useState, useCallback, useMemo } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
-import { authorizeUser } from '../utils/AuthorizationFormAtom'
+import { useRecoilState } from 'recoil'
+import { userState } from '../utils/AuthorizationFormAtom'
+import useLocalStorage from '../utils/useLocalStorage'
 
 const AuthorizationForm = () => {
   const router = useRouter()
@@ -20,6 +22,9 @@ const AuthorizationForm = () => {
   const [sendCode, setSendCode] = useState(null)
   const [uid, setUid] = useState(null)
   const [message, setMessage] = useState(0)
+  const [, setUser] = useRecoilState(userState)
+  const [, setAccessToken] = useLocalStorage('accessToken', '')
+  const [, setRefreshToken] = useLocalStorage('refreshToken', '')
 
   const handleDate = useCallback(
     e => {
@@ -193,7 +198,9 @@ const AuthorizationForm = () => {
           )
           if (response.status === 200) {
             response.json().then(json => {
-              authorizeUser(json)
+              setUser(json)
+              setAccessToken(json.accessToken)
+              setRefreshToken(json.refreshToken)
             })
             setMessage(1)
             setTimeout(() => {
@@ -233,7 +240,9 @@ const AuthorizationForm = () => {
     )
     if (response.status === 200) {
       response.json().then(json => {
-        authorizeUser(json)
+        setUser(json)
+        setAccessToken(json.accessToken)
+        setRefreshToken(json.refreshToken)
       })
     }
     setMessage(1)
@@ -383,9 +392,9 @@ const AuthorizationForm = () => {
           border-radius: 5px;
           font-family: Times New Roman;
           z-index: 10;
-font-size: 28px;
-line-height: 33px;
-text-align: center;
+          font-size: 28px;
+          line-height: 33px;
+          text-align: center;
           display: ${message === 1 ? 'block' : 'none'};
         }
         .messageText {
