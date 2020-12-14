@@ -1,10 +1,11 @@
 import { useState, useCallback, useMemo } from 'react'
 import firebase from 'firebase'
-import { atom } from 'recoil'
 import { useRouter } from 'next/router'
+import { authorizeUser } from '../utils/AuthorizationFormAtom'
 
 const AuthorizationForm = () => {
   const router = useRouter()
+
   const [authForm, setAuthForm] = useState(1)
   const [telephone, setTelephone] = useState('')
   const [telephoneError, setTelephoneError] = useState('')
@@ -165,7 +166,7 @@ const AuthorizationForm = () => {
     }
   }
   const tryHandleFirstFormAgain = async () => {
-    setAuthForm(2)
+    setAuthForm(1)
   }
   const handleSecondForm1 = async () => {
     if (telephoneError === '') {
@@ -191,21 +192,7 @@ const AuthorizationForm = () => {
           )
           if (response.status === 200) {
             response.json().then(json => {
-              atom({
-                key: 'currentUser',
-                default: {
-                  accessToken: json.accessToken,
-                  refreshToken: json.refreshToken,
-                  user: {
-                    id: json.user.id,
-                    phoneNumber: json.user.phoneNumber,
-                    role: json.user.role,
-                    name: json.user.name,
-                    cityId: json.user.cityId,
-                    birthdate: json.user.birthdate,
-                  },
-                },
-              })
+              authorizeUser(json)
             })
             router.push('/')
           } else {
@@ -242,21 +229,7 @@ const AuthorizationForm = () => {
     )
     if (response.status === 200) {
       response.json().then(json => {
-        atom({
-          key: 'currentUser',
-          default: {
-            accessToken: json.accessToken,
-            refreshToken: json.refreshToken,
-            user: {
-              id: json.user.id,
-              phoneNumber: json.user.phoneNumber,
-              role: json.user.role,
-              name: json.user.name,
-              cityId: json.user.cityId,
-              birthdate: json.user.birthdate,
-            },
-          },
-        })
+        authorizeUser(json)
       })
     }
     router.push('')
@@ -396,7 +369,7 @@ const AuthorizationForm = () => {
            bottom: -300px;
            right: 0px;
            z-index:5;
-           width: 75%;
+           width: 70%;
            height: 100%;
            display: "block"
           }
