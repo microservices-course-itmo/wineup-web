@@ -18,7 +18,7 @@ export const addWineQuery = selectorFamily({
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3NzgwOTk2LCJleHAiOjE2MDc3ODQ1OTZ9.T4IkPCv64bQtx4eniumc9-CDD1ecw44Ljm1VHa97uUY',
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
       },
     })
   },
@@ -32,7 +32,7 @@ export const deleteWineQuery = selectorFamily({
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3NzgwOTk2LCJleHAiOjE2MDc3ODQ1OTZ9.T4IkPCv64bQtx4eniumc9-CDD1ecw44Ljm1VHa97uUY',
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
       },
     })
   },
@@ -46,7 +46,7 @@ export const deleteQuery = selector({
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3NzgwOTk2LCJleHAiOjE2MDc3ODQ1OTZ9.T4IkPCv64bQtx4eniumc9-CDD1ecw44Ljm1VHa97uUY',
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
       },
     })
   },
@@ -62,7 +62,7 @@ export const favoritesQuery = selector({
         headers: {
           'Content-Type': 'application/json',
           Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3NzgwOTk2LCJleHAiOjE2MDc3ODQ1OTZ9.T4IkPCv64bQtx4eniumc9-CDD1ecw44Ljm1VHa97uUY',
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
         },
       }
     )
