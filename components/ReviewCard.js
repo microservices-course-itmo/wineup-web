@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 /**
  * @param {string} logDate
@@ -9,29 +9,33 @@ import { useState } from 'react'
 const ReviewCard = ({ logDate, logName, stars, review }) => {
   const [allText, setAllText] = useState(true)
   const [btnText, setBtnText] = useState('Читать полностью')
+
   const handleReview = () => {
-    return (
-      allText ? setAllText(false) : setAllText(true),
-      allText ? setBtnText('Меньше') : setBtnText('Читать полностью')
-    )
-  }
-  function split(string, length = 110) {
-    const words = string.split('')
-    const count = words.length
-    const elements = []
-    let position = 0
-    while (position < count) {
-      const text = words.slice(position, length).join('')
-      position += length
-      if (count < 110) {
-        elements.push(<p>{text}</p>)
-      } else {
-        elements.push(<text>{text}..</text>)
-      }
+    if (allText) {
+      setAllText(false)
+      setBtnText('Свернуть отзыв')
+    } else {
+      setAllText(true)
+      setBtnText('Читать полностью')
     }
-    return elements
   }
+
+  const split = (string, length = 120) => {
+    if (string.length <= length) {
+      return string
+    }
+
+    let newString = ''
+
+    while (newString.length < length && string.length > newString.length) {
+      newString += string[newString.length]
+    }
+
+    return `${newString}...`
+  }
+
   const firstPartText = split(review)
+
   return (
     <div className='container'>
       <div className='columnGap'>
@@ -42,7 +46,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
         <div className='stars'>
           {Array.from({ length: 5 }).map((star, index) => (
             <img
-              src={`assets/review/${
+              src={`/assets/review/${
                 index < stars ? 'filled' : 'empty'
               }-star.svg`}
               alt={`${index < stars ? 'filled' : 'empty'} star`}
@@ -50,80 +54,96 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
           ))}
         </div>
       </div>
+
       <div className='reviewContainer'>
         <div className='module'>
           <p>{allText ? firstPartText : review}</p>
+
+          {review.length > 120 ? (
+            <button
+              className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
+              onClick={() => handleReview()}
+              type='button'
+            >
+              {btnText}
+            </button>
+          ) : null}
         </div>
-        {review.length > 110 ? (
-          <button
-            className={`transparentBtn ${allText ? '' : 'hideBtn'}`}
-            onClick={() => handleReview()}
-            type='button'
-          >
-            <text className='textBtn'>{btnText}</text>
-          </button>
-        ) : (
-          ''
-        )}
       </div>
+
       <style jsx>
         {`
           .container {
             display: flex;
             flex-direction: column;
+            width: 100%;
+            margin: 20px 0;
           }
+
           .reviewContainer {
             display: flex;
             flex-direction: column;
-            width: 360px;
           }
+
           .columnGap {
             display: flex;
+            align-items: center;
             column-gap: 50px;
           }
+
           .logs {
             display: flex;
             column-gap: 5px;
-            font-size: 12px;
+            font-size: 16px;
             color: grey;
-            font-family: arial;
+            font-family: PT Sans, sans-serif;
           }
+
           .transparentBtn {
-            display: flex;
-            align-self: flex-end;
-            background: transparent;
-            border: none;
-            width: 160px;
-            outline: 0;
-            margin-top: -20px;
-          }
-          .hideBtn {
-            display: flex;
-            width: 100px;
-            align-self: flex-end;
+            display: block;
+            padding: 0;
+            margin: -25px 30px 0 auto;
+
             background: transparent;
             border: none;
             outline: 0;
-            margin-top: -5px;
-          }
-          .textBtn {
-            font-size: 10px;
-            color: grey;
-            font-family: arial;
+
+            font-size: 16px;
+            font-weight: 300;
+            font-family: 'Roboto', sans-serif;
             font-style: italic;
             text-decoration-line: underline;
-            padding-left: 40px;
+            color: #707070;
+
             cursor: pointer;
           }
+
+          .hideBtn {
+            margin-top: 0;
+          }
+
           .stars {
             width: 100px;
             display: flex;
             justify-content: space-between;
           }
+
           .module {
-            width: 340px;
+            position: relative;
+            margin-top: 10px;
+            padding-right: 0;
+
             overflow: hidden;
-            padding-right: 0rem;
+          }
+
+          .module p {
+            margin-right: 50px;
+
+            font-size: 18px;
+            font-weight: 300;
+            font-family: 'Roboto', sans-serif;
+
+            color: #000000;
           }
         `}
       </style>

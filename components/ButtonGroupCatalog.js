@@ -47,7 +47,6 @@ const ButtonGroupCatalog = () => {
       <style jsx>{`
         .catalog {
           width: 100%;
-          margin-left: 35px;
         }
       `}</style>
     </div>

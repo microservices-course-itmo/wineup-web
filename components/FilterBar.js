@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRecoilState } from 'recoil'
 import InputContainer from './InputContainer'
+import { formFiltersState } from './Catalog'
 
 const FilterBar = () => {
   const initialFormState = {
@@ -13,7 +14,7 @@ const FilterBar = () => {
     region: [],
     sparkling: [],
   }
-  const [formState, setFormState] = useState(initialFormState)
+  const [formState, setFormState] = useRecoilState(formFiltersState)
 
   const handleCheckoutChange = event => {
     const { name, value, checked } = event.target
@@ -98,23 +99,30 @@ const FilterBar = () => {
         {
           id: 'colorRed',
           name: 'color',
-          value: 'red',
+          value: 'RED',
           defaultChecked: formState.color.includes('red'),
           textLabel: 'Красный',
         },
         {
           id: 'colorWhite',
           name: 'color',
-          value: 'white',
+          value: 'WHITE',
           defaultChecked: formState.color.includes('white'),
           textLabel: 'Белый',
         },
         {
           id: 'colorPink',
           name: 'color',
-          value: 'pink',
-          defaultChecked: formState.color.includes('pink'),
+          value: 'ROSE',
+          defaultChecked: formState.color.includes('ROSE'),
           textLabel: 'Розовый',
+        },
+        {
+          id: 'colorOrange',
+          name: 'color',
+          value: 'ORANGE',
+          defaultChecked: formState.color.includes('ORANGE'),
+          textLabel: 'Оранжевый',
         },
       ],
     },
@@ -127,23 +135,30 @@ const FilterBar = () => {
         {
           id: 'sugarDry',
           name: 'sugar',
-          value: 'dry',
-          defaultChecked: formState.sugar.includes('dry'),
+          value: 'DRY',
+          defaultChecked: formState.sugar.includes('DRY'),
           textLabel: 'Сухое',
         },
         {
           id: 'sugarSemiDry',
           name: 'sugar',
-          value: 'semi_dry',
-          defaultChecked: formState.sugar.includes('semi_dry'),
+          value: 'MEDIUM',
+          defaultChecked: formState.sugar.includes('MEDIUM'),
           textLabel: 'Полусладкое',
         },
         {
           id: 'sugarSweet',
           name: 'sugar',
-          value: 'sweet',
-          defaultChecked: formState.sugar.includes('sweet'),
+          value: 'SWEET',
+          defaultChecked: formState.sugar.includes('SWEET'),
           textLabel: 'Сладкое',
+        },
+        {
+          id: 'sugarMediumDry',
+          name: 'sugar',
+          value: 'MEDIUM_DRY',
+          defaultChecked: formState.sugar.includes('MEDIUM_DRY'),
+          textLabel: 'Полусухое',
         },
       ],
     },
@@ -317,6 +332,7 @@ const FilterBar = () => {
           <img src='/assets/resetBtnIcon.svg' alt='reset' />
         </span>
       </button>
+
       <style jsx>
         {`
           .filter-list-container {
@@ -366,6 +382,19 @@ const FilterBar = () => {
           }
           button[type='submit'] {
             display: none;
+          }
+
+          @media all and (max-width: 767px) {
+            .filter-list-container {
+              //min-width: 375px;
+              width: 100%;
+              overflow: hidden;
+              height: 400px;
+            }
+
+            .filter-list {
+              height: calc(400px - 160px);
+            }
           }
         `}
       </style>

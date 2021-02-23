@@ -1,18 +1,23 @@
 import { RecoilRoot } from 'recoil'
+import 'reactjs-popup/dist/index.css'
+import { initFirebase } from '../utils/firebaseConfig'
+import RecoilObserver from '../components/RecoilObserver'
+
+initFirebase()
 
 const App = ({ Component, pageProps }) => {
   return (
-    <>
-      <RecoilRoot>
-        <Component {...pageProps} />
-        <style jsx global>
-          {`
-            /* Box sizing rules */
-            *,
-            *::before,
-            *::after {
-              box-sizing: border-box;
-            }
+    <RecoilRoot>
+      {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
+      <Component {...pageProps} />
+      <style jsx global>
+        {`
+          /* Box sizing rules */
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
 
             /* Remove default padding */
             ul[class],
@@ -64,17 +69,16 @@ const App = ({ Component, pageProps }) => {
               display: block;
             }
 
-            /* Inherit fonts for inputs and buttons */
-            input,
-            button,
-            textarea,
-            select {
-              font: inherit;
-            }
-          `}
-        </style>
-      </RecoilRoot>
-    </>
+          /* Inherit fonts for inputs and buttons */
+          input,
+          button,
+          textarea,
+          select {
+            font: inherit;
+          }
+        `}
+      </style>
+    </RecoilRoot>
   )
 }
 

@@ -27,6 +27,7 @@ const ButtonGroup = ({ title, buttons, onChange, activeButton }) => {
           .button-group-container {
             margin-bottom: 40px;
           }
+
           .buttons-list {
             display: flex;
             flex-direction: row;
@@ -35,6 +36,7 @@ const ButtonGroup = ({ title, buttons, onChange, activeButton }) => {
             row-gap: 10px;
             margin-top: 10px;
           }
+
           .title {
             font-size: 22px;
             font-weight: bold;
