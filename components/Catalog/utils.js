@@ -139,17 +139,11 @@ export const calculatePrice = wine => {
 }
 
 export const calculateDiscount = wine => {
-  if (wine.actual_price === 0 || wine.price === 0) {
-    return null
-  }
-
-  if (wine.actual_price === wine.price) {
-    return null
-  }
-
   if (
-    Math.round(((wine.actual_price - wine.price) / wine.actual_price) * 100) ===
-    0
+    wine.actual_price === 0 ||
+    wine.price === 0 ||
+    wine.actual_price === wine.price ||
+    !Math.round(((wine.actual_price - wine.price) / wine.actual_price) * 100)
   ) {
     return null
   }
