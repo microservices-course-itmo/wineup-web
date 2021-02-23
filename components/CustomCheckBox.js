@@ -48,6 +48,9 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
             opacity: 0;
             cursor: pointer;
             z-index: 999;
+            height: 20px;
+            width: 20px;
+            margin: 0;
           }
 
           .checkbox-custom {

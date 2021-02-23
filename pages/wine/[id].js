@@ -92,7 +92,7 @@ const Wine = () => {
           {state === 'loading' && (
             <div className='loading'>
               <Loader />
-              <p>Загружаем каталог...</p>
+              <p>Загружаем карточку вина...</p>
             </div>
           )}
         </div>
