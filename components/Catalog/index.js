@@ -74,28 +74,31 @@ const Catalog = () => {
         onChange={event => setWinesSort(event.currentTarget.value)}
       />
 
-      {state === 'hasValue' && wines.length > 0 && (
-        <>
-          <div className='grid'>
-            {sortedWine.map((wine, index) => (
-              <WineCard
-                key={wine.wine_position_id}
-                wineId={wine.wine_position_id}
-                imageSrc={parseImageSrc(wine.image)}
-                info={getWineInfo(wine)}
-                isLiked={Math.round(Math.random())}
-                color={index % 3}
-              />
-            ))}
-          </div>
+      {state === 'hasValue' &&
+        (wines.length > 0 ? (
+          <>
+            <div className='grid'>
+              {sortedWine.map((wine, index) => (
+                <WineCard
+                  key={wine.wine_position_id}
+                  wineId={wine.wine_position_id}
+                  imageSrc={parseImageSrc(wine.image)}
+                  info={getWineInfo(wine)}
+                  isLiked={Math.round(Math.random())}
+                  color={index % 3}
+                />
+              ))}
+            </div>
 
-          <ChangePageButtons
-            isPrev={winesPage.from !== 1}
-            previousPage={() => changePage()}
-            nextPage={() => changePage(1)}
-          />
-        </>
-      )}
+            <ChangePageButtons
+              isPrev={winesPage.from !== 1}
+              previousPage={() => changePage()}
+              nextPage={() => changePage(1)}
+            />
+          </>
+        ) : (
+          <p>Каталог пуст</p>
+        ))}
 
       {state !== 'hasValue' && (
         <div className='message'>

@@ -65,11 +65,11 @@ export const winesQuery = selector({
     }
 
     const response = await fetch(
-      `${process.env.api}/catalog-service/position/true/`,
+      `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/`,
       {
         method: 'POST',
         headers: {
-          accessToken: process.env.accessToken,
+          accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),

@@ -13,7 +13,7 @@ const Profile = () => {
   useEffect(() => {
     const getUser = async () => {
       const response = await fetch(
-        'http://77.234.215.138:48080/user-service/users/me',
+        `${process.env.NEXT_PUBLIC_API}/user-service/users/me`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
