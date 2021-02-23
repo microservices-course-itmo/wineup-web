@@ -26,16 +26,13 @@ const Profile = () => {
     if (!currentUser) {
       getUser().catch(console.log)
     }
-  }, [accessToken])
+  }, [accessToken, currentUser])
 
   const user = currentUser
     ? {
-        name: currentUser.user.name || currentUser.name || 'Не указано',
-        cityName: currentUser.user.cityId || currentUser.cityId || 'Не указано',
-        phoneNumber:
-          currentUser.user.phoneNumber ||
-          currentUser.phoneNumber ||
-          'Не указано',
+        name: currentUser.name || 'Не указано',
+        cityName: currentUser.cityId || 'Не указано',
+        phoneNumber: currentUser.phoneNumber || 'Не указано',
       }
     : null
 
