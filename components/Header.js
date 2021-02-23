@@ -1,35 +1,56 @@
 import Link from 'next/link'
+import React from 'react'
+import { useRecoilValue } from 'recoil'
+import { userState } from '../utils/AuthorizationFormAtom'
 
 const Header = () => {
+  const user = useRecoilValue(userState)
+
   return (
     <div className='header'>
-      <div className='menu-item city'>
-        <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
-        <p>Санкт-Петербург</p>
-      </div>
-      <div className='menu-item catalog'>
-        <img className='icon' src='/assets/header/catalog.svg' alt='catalog' />
-        <p>Каталог</p>
-      </div>
-      <div className='menu-item community'>
-        <img className='icon' src='/assets/header/community.svg' alt='city' />
-        <p>Сообщество</p>
-      </div>
+      <Link href='/'>
+        <div className='menu-item city'>
+          <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
+          <p>Санкт-Петербург</p>
+        </div>
+      </Link>
+      <Link href='/'>
+        <div className='menu-item catalog'>
+          <img
+            className='icon'
+            src='/assets/header/catalog.svg'
+            alt='catalog'
+          />
+          <p>Каталог</p>
+        </div>
+      </Link>
+      <Link href='/'>
+        <div className='menu-item community'>
+          <img className='icon' src='/assets/header/community.svg' alt='city' />
+          <p>Сообщество</p>
+        </div>
+      </Link>
       <Link href='/'>
         <p className='title'>WineUp</p>
       </Link>
-      <div className='menu-item likes'>
-        <img className='icon' src='/assets/header/likes.svg' alt='city' />
-        <p>Лайки</p>
-      </div>
-      <div className='menu-item heart'>
-        <img className='icon' src='/assets/header/heart.svg' alt='heart' />
-        <p>Избранное</p>
-      </div>
-      <div className='menu-item login'>
-        <img className='icon' src='/assets/header/man.svg' alt='profile' />
-        <p>Войти</p>
-      </div>
+      <Link href='/'>
+        <div className='menu-item likes'>
+          <img className='icon' src='/assets/header/likes.svg' alt='city' />
+          <p>Лайки</p>
+        </div>
+      </Link>
+      <Link href='/favorites'>
+        <div className='menu-item heart'>
+          <img className='icon' src='/assets/header/heart.svg' alt='heart' />
+          <p>Избранное</p>
+        </div>
+      </Link>
+      <Link href={`${user ? '/profile' : 'login'}`}>
+        <div className='menu-item login'>
+          <img className='icon' src='/assets/header/man.svg' alt='profile' />
+          {user ? <p>Профиль</p> : <p>Войти</p>}
+        </div>
+      </Link>
       <style jsx>
         {`
           .header {

@@ -2,6 +2,7 @@ export const colors = {
   RED: 'Красное',
   WHITE: 'Белое',
   ROSE: 'Розовое',
+  ORANGE: 'Оранжевое',
 }
 
 export const sugar = {
