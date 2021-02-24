@@ -1,5 +1,5 @@
 import React from 'react'
-import Profile from '../../pages/profile'
+import Profile from './profile'
 
 export default {
   title: 'Profile',

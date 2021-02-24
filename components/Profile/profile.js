@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import Header from '../components/Header'
-import Search from '../components/Search'
-import { userState } from '../utils/AuthorizationFormAtom'
-import useLocalStorage from '../utils/useLocalStorage'
+import Header from '../Header'
+import Search from '../Search'
+import { userState } from '../../utils/AuthorizationFormAtom'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const Profile = () => {
   const [accessToken] = useLocalStorage('accessToken')
