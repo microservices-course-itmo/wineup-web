@@ -47,7 +47,7 @@ const starsNumber = [1, 2, 3, 4, 5]
 const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const userExist = useRecoilValue(userState)
   if(userExist){
-    const accessToken = useLocalStorage('accessToken')
+    const [accessToken] = useLocalStorage('accessToken')
   } else {
 
   }

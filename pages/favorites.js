@@ -29,7 +29,7 @@ import { userState } from '../utils/AuthorizationFormAtom'
 const Favorite = () => {
   const userExist = useRecoilValue(userState)
   if(userExist){
-    const accessToken = useLocalStorage('accessToken')
+    const [accessToken] = useLocalStorage('accessToken')
   }
   const [favorites, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedWinesState)
