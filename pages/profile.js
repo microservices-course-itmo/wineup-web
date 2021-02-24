@@ -24,9 +24,9 @@ const Profile = () => {
       setCurrentUser(currentUser2)
     }
     if (!currentUser) {
-      getUser().catch(console.log)
+      getUser().catch()
     }
-  }, [accessToken])
+  }, [accessToken, currentUser])
 
   const user = currentUser
     ? {
