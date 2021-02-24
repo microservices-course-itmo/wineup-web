@@ -1,5 +1,5 @@
 import Home from '../index'
-import AuthorizationForm from '../../components/AuthorizationForm'
+import AuthorizationForm from '../../components/Authorization/AuthorizationForm'
 
 const Login = () => {
   return (
