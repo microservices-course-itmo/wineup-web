@@ -23,29 +23,23 @@ import {
   getWineInfo,
   sortingButtons,
 } from '../components/Favorites/utils'
+import useLocalStorage from '../utils/useLocalStorage'
+import { userState } from '../utils/AuthorizationFormAtom'
 
 const Favorite = () => {
-  // const [showResults, setShowResults] = useState('hidden')
-  // const [clicked, setClicked] = useState(false)
-
-  // const handleAllFavorites = () => {
-  //   return (
-  //     clicked ? setClicked(false) : setClicked(true),
-  //     clicked ? setShowResults('hidden') : setShowResults('')
-  //   )
-  // }
-  // eslint-disable-next-line
+  const userExist = useRecoilValue(userState)
+  if(userExist){
+    const accessToken = useLocalStorage('accessToken')
+  }
   const [favorites, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
-  const contentQueryLoadable = useRecoilValueLoadable(contentQuery)
-  const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
-    // eslint-disable-next-line
-    const deleteQueryLoadable = await snapshot.getPromise(deleteQuery)
+  const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
+  const clearFavorites = useRecoilCallback(({ snapshot, token }) => async () => {
+    const deleteQueryLoadable = await snapshot.getPromise(deleteQuery(token))
   })
   useEffect(() => {
     if (contentQueryLoadable.state === 'hasValue') {
-      // eslint-disable-next-line
       setFavorites(favorites => contentQueryLoadable.contents)
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])

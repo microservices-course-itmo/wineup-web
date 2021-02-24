@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
 import { addWineQuery, deleteWineQuery } from './Favorites/favoritesStore'
+import useLocalStorage from '../utils/useLocalStorage'
+import { userState } from '../utils/AuthorizationFormAtom'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -43,27 +45,30 @@ const starsNumber = [1, 2, 3, 4, 5]
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
 const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
+  const userExist = useRecoilValue(userState)
+  if(userExist){
+    const accessToken = useLocalStorage('accessToken')
+  } else {
+
+  }
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
-  const addFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
-    // inside the addWineQuery need to be wine_position_id for the pressed wine
-    // eslint-disable-next-line
+  const addFavorite = useRecoilCallback(({ snapshot, id, token }) => async () => {
     const addQueryLoadable = await snapshot.getPromise(
-      addWineQuery(id)
+      addWineQuery(id, token)
     )
   })
-  const deleteFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
-    // eslint-disable-next-line
+  const deleteFavorite = useRecoilCallback(({ snapshot, id, token }) => async () => {
     const deleteQueryLoadable = await snapshot.getPromise(
-      deleteWineQuery(id)
+      deleteWineQuery(id, token)
     )
   })
-  const clickHeart = (id) => {
+  const clickHeart = (id, token) => {
     if (!isHeartFilled) {
       setIsHeartFilled(true)
-      addFavorite(id)
+      addFavorite(id, token)
     } else {
       setIsHeartFilled(false)
-      deleteFavorite(id)
+      deleteFavorite(id, token)
     }
   }
 
@@ -73,7 +78,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
         <div className='top'>
           <button
             className='heart-button'
-            onClick={() => clickHeart(wineId)}
+            onClick={() => clickHeart(wineId, accessToken)}
             type='button'
           >
             <img

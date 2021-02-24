@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily, waitForAll } from 'recoil'
+import { atom, selector, selectorFamily, waitForAll, useRecoilValue } from 'recoil'
 import { sortAsc, sortDesc } from './utils'
 
 export const favoritesState = atom({
@@ -11,46 +11,46 @@ export const favoritesSortState = atom({
 })
 export const addWineQuery = selectorFamily({
   key: 'addWineQuery',
-  get: id => async ({ get }) => {
+  get: (id, token) => async ({ get }) => {
     await fetch(`http://77.234.215.138:48080/user-service/favorites/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
+        `Bearer ${token}`,
       },
     })
   },
 })
 export const deleteWineQuery = selectorFamily({
   key: 'deleteWineQuery',
-  get: id => async ({ get }) => {
+  get: (id, token) => async ({ get }) => {
     await fetch(`http://77.234.215.138:48080/user-service/favorites/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
+          `Bearer ${token}`,
       },
     })
   },
 })
 export const deleteQuery = selector({
   key: 'deleteQuery',
-  get: async ({ get }) => {
+  get: (token) => async ({ get }) => {
     await fetch('http://77.234.215.138:48080/user-service/favorites/clear', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
+        `Bearer ${token}`,
       },
     })
   },
 })
 export const favoritesQuery = selector({
   key: 'favoritesQuery',
-  get: async ({ get }) => {
+  get: (token) => async ({ get }) => {
     const response = await fetch(
       'http://77.234.215.138:48080/user-service/favorites/list',
       {
@@ -58,7 +58,8 @@ export const favoritesQuery = selector({
         headers: {
           'Content-Type': 'application/json',
           Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
+            // 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
+            `Bearer ${token}`,
         },
       }
     )
