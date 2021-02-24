@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ButtonGroup from '../ButtonGroup'
+import ButtonGroup from '../../Model/ButtonGroup'
 
 const ButtonGroupCatalog = () => {
   const [sortingBy, setSortingBy] = useState('recommendations')

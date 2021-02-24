@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import CustomCheckBox from '../CustomCheckBox'
-import InputPrice from '../InputPrice'
+import CustomCheckBox from '../../UI/CustomCheckBox'
+import InputPrice from '../../UI/InputPrice'
 import ButtonGroup from '../ButtonGroup'
 
 /**

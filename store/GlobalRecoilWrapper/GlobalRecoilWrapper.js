@@ -1,4 +1,4 @@
-const Wrapper = ({ children }) => (
+const GlobalRecoilWrapper = ({ children }) => (
   <div className='wrapper'>
     {children}
     <style jsx>{`
@@ -11,4 +11,4 @@ const Wrapper = ({ children }) => (
   </div>
 )
 
-export default Wrapper
+export default GlobalRecoilWrapper

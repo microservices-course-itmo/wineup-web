@@ -1,12 +1,12 @@
-import Header from '../components/Header/Header'
-import Search from '../components/Search/Search'
-import Catalog from '../components/Catalog'
-import FilterBar from '../components/FilterBar'
-import Wrapper from '../components/Wrapper/Wrapper'
+import Header from '../src/Model/Header/Header'
+import Search from '../src/UI/Search/Search'
+import Catalog from '../src/Modules/Catalog'
+import FilterBar from '../src/Modules/FilterBar'
+import GlobalRecoilWrapper from '../store/GlobalRecoilWrapper'
 
 const Home = () => {
   return (
-    <Wrapper>
+    <GlobalRecoilWrapper>
       <Header />
       <Search />
 
@@ -51,7 +51,7 @@ const Home = () => {
           }
         `}
       </style>
-    </Wrapper>
+    </GlobalRecoilWrapper>
   )
 }
 

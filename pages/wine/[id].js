@@ -2,15 +2,15 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { selectorFamily, useRecoilValueLoadable } from 'recoil'
 
-import WinePosition from '../../components/WinePosition/WinePosition'
-import ItemDescription from '../../components/ItemDescriptionCard/ItemDescriptionCard'
-import ReviewBox from '../../components/ReviewBox/ReviewBox'
-import Header from '../../components/Header/Header'
-import Search from '../../components/Search/Search'
-import Wrapper from '../../components/Wrapper/Wrapper'
-import SameWines from '../../components/SameWines/SameWines'
-import { getWinePositionInfo } from '../../components/Catalog/utils'
-import Loader from '../../components/Loader/Loader'
+import WinePosition from '../../src/Model/WinePosition'
+import ItemDescription from '../../src/Model/ItemDescriptionCard'
+import ReviewBox from '../../src/Modules/ReviewBox'
+import Header from '../../src/Model/Header'
+import Search from '../../src/UI/Search'
+import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+import SameWines from '../../src/Model/SameWines'
+import { getWinePositionInfo } from '../../src/Modules/Catalog/utils'
+import Loader from '../../src/UI/Loader'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
@@ -39,7 +39,7 @@ const Wine = () => {
   )
 
   return (
-    <Wrapper>
+    <GlobalRecoilWrapper>
       <Header />
       <Search />
 
@@ -163,7 +163,7 @@ const Wine = () => {
           height: auto;
         }
       `}</style>
-    </Wrapper>
+    </GlobalRecoilWrapper>
   )
 }
 
