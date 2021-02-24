@@ -11,7 +11,7 @@ import ButtonGroup from './ButtonGroup'
  * @returns {JSX.Element} InputGroup - Список кастомных полей ввода одной группы
  */
 
-const InputGroup = ({ type, inputList, onChange, ...props }) => {
+const InputGroup = ({ type, inputList, onChange,visible, ...props }) => {
   let customInputList
   switch (type) {
     case 'checkbox':
@@ -41,7 +41,7 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
   const fullWidth = type === 'number'
   return (
     <>
-      <ul className={`input-list ${fullWidth ? 'full-width' : ''}`}>
+      <ul className={`input-list${visible ? '' : '-invisible'} ${fullWidth ? 'full-width' : ''}`}>
         {customInputList}
       </ul>
       <style jsx>
@@ -67,14 +67,19 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
 
 const InputContainer = ({ title, type, inputList, onChange }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [visibleArrow, setVisibleArrow] = useState(true)
+  const handleClick= () => {
+    setIsOpen(!isOpen)
+    isOpen ? setVisibleArrow(true) : setVisibleArrow(false)
+  }
   return (
     <>
       <div className='criteria-title'>{title}</div>
       <div className='list-container'>
-        <InputGroup type={type} inputList={inputList} onChange={onChange} />
+        <InputGroup type={type} inputList={inputList} onChange={onChange} visible={visibleArrow} />
         <button
           className='arrow-btn'
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleClick}
           type='button'
         >
           <img
