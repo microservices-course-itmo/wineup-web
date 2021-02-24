@@ -1,5 +1,5 @@
 import React from 'react'
-import ReviewBox from '../ReviewBox'
+import ReviewBox from './ReviewBox'
 
 export default {
   title: 'ReviewBox',

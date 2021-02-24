@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil'
-import InputContainer from './InputContainer'
-import { formFiltersState } from './Catalog'
+import InputContainer from '../InputContainer/InputContainer'
+import { formFiltersState } from '../Catalog'
 
 const FilterBar = () => {
   const initialFormState = {

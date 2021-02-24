@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../utils/AuthorizationFormAtom'
+import { userState } from '../../utils/AuthorizationFormAtom'
 
 const Header = () => {
   const user = useRecoilValue(userState)

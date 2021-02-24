@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
 
 import ButtonGroup from '../ButtonGroup'
-import WineCard from '../WineCard'
-import Loader from '../Loader'
+import WineCard from '../WineCard/WineCard'
+import Loader from '../Loader/Loader'
 import ChangePageButtons from '../ChangePageButtons'
 
 import { parseImageSrc, getWineInfo, sortingButtons } from './utils'

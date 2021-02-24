@@ -1,5 +1,5 @@
 import React from 'react'
-import ItemDescription from '../ItemDescriptionCard'
+import ItemDescription from './index'
 
 export default {
   title: 'ItemDescription',

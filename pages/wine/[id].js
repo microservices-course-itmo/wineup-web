@@ -2,15 +2,15 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { selectorFamily, useRecoilValueLoadable } from 'recoil'
 
-import WinePosition from '../../components/WinePosition'
-import ItemDescription from '../../components/ItemDescriptionCard'
-import ReviewBox from '../../components/ReviewBox'
-import Header from '../../components/Header'
-import Search from '../../components/Search'
-import Wrapper from '../../components/Wrapper'
-import SameWines from '../../components/SameWines'
+import WinePosition from '../../components/WinePosition/WinePosition'
+import ItemDescription from '../../components/ItemDescriptionCard/ItemDescriptionCard'
+import ReviewBox from '../../components/ReviewBox/ReviewBox'
+import Header from '../../components/Header/Header'
+import Search from '../../components/Search/Search'
+import Wrapper from '../../components/Wrapper/Wrapper'
+import SameWines from '../../components/SameWines/SameWines'
 import { getWinePositionInfo } from '../../components/Catalog/utils'
-import Loader from '../../components/Loader'
+import Loader from '../../components/Loader/Loader'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',

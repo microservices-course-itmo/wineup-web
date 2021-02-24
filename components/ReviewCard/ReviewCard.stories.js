@@ -1,5 +1,5 @@
 import React from 'react'
-import ReviewCard from '../ReviewCard'
+import ReviewCard from './ReviewCard'
 
 export default {
   title: 'ReviewCard',

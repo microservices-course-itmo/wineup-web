@@ -1,5 +1,5 @@
 import React from 'react'
-import WinePosition from '../WinePosition'
+import WinePosition from './WinePosition'
 
 export default {
   title: 'WinePosition',

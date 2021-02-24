@@ -1,5 +1,5 @@
 import React from 'react'
-import SortButton from './SortButton'
+import SortButton from '../SortButton'
 
 /**
  * @param {string} title - Заголовок группы кнопок

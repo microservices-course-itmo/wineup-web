@@ -1,8 +1,8 @@
-import Header from '../components/Header'
-import Search from '../components/Search'
+import Header from '../components/Header/Header'
+import Search from '../components/Search/Search'
 import Catalog from '../components/Catalog'
 import FilterBar from '../components/FilterBar'
-import Wrapper from '../components/Wrapper'
+import Wrapper from '../components/Wrapper/Wrapper'
 
 const Home = () => {
   return (

@@ -1,7 +1,7 @@
 import { RecoilRoot } from 'recoil'
 import 'reactjs-popup/dist/index.css'
 import { initFirebase } from '../utils/firebaseConfig'
-import RecoilObserver from '../components/RecoilObserver'
+import RecoilObserver from '../components/RecoilObserver/'
 
 initFirebase()
 
