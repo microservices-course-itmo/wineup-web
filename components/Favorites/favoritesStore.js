@@ -11,7 +11,6 @@ export const favoritesSortState = atom({
 })
 export const addWineQuery = selectorFamily({
   key: 'addWineQuery',
-  // eslint-disable-next-line
   get: id => async ({ get }) => {
     await fetch(`http://77.234.215.138:48080/user-service/favorites/${id}`, {
       method: 'POST',
@@ -25,7 +24,6 @@ export const addWineQuery = selectorFamily({
 })
 export const deleteWineQuery = selectorFamily({
   key: 'deleteWineQuery',
-  // eslint-disable-next-line
   get: id => async ({ get }) => {
     await fetch(`http://77.234.215.138:48080/user-service/favorites/${id}`, {
       method: 'DELETE',
@@ -39,7 +37,6 @@ export const deleteWineQuery = selectorFamily({
 })
 export const deleteQuery = selector({
   key: 'deleteQuery',
-  // eslint-disable-next-line
   get: async ({ get }) => {
     await fetch('http://77.234.215.138:48080/user-service/favorites/clear', {
       method: 'DELETE',
@@ -53,7 +50,6 @@ export const deleteQuery = selector({
 })
 export const favoritesQuery = selector({
   key: 'favoritesQuery',
-  // eslint-disable-next-line
   get: async ({ get }) => {
     const response = await fetch(
       'http://77.234.215.138:48080/user-service/favorites/list',
@@ -74,7 +70,6 @@ export const favoritesQuery = selector({
 })
 export const winesQuery = selectorFamily({
   key: 'winesQuery',
-  // eslint-disable-next-line
   get: userID => async ({ get }) => {
     const response = await fetch(
       `http://77.234.215.138:48080/catalog-service/position/true/byId/${userID}`,
@@ -97,7 +92,6 @@ export const winesQuery = selectorFamily({
 })
 export const contentQuery = selector({
   key: 'contentQuery',
-  // eslint-disable-next-line
   get: ({ get }) => {
     const favoriteIds = get(favoritesQuery)
     const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
@@ -106,7 +100,6 @@ export const contentQuery = selector({
 })
 export const sortedWinesState = selector({
   key: 'filteredTodoListState',
-  // eslint-disable-next-line
   get: ({ get }) => {
     const list = get(favoritesState)
     const sort = get(favoritesSortState)
