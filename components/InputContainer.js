@@ -10,6 +10,7 @@ import ButtonGroup from './ButtonGroup'
  * @param props
  * @returns {JSX.Element} InputGroup - Список кастомных полей ввода одной группы
  */
+
 const InputGroup = ({ type, inputList, onChange, ...props }) => {
   let customInputList
   switch (type) {
@@ -51,6 +52,9 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
             align-items: baseline;
             margin: 0 auto;
             width: 165px;
+          }
+          .input-list-invisible {
+            display: none;
           }
           .full-width {
             width: 100%;

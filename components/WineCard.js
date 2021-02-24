@@ -44,26 +44,26 @@ const starsNumber = [1, 2, 3, 4, 5]
  */
 const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
-  const addFavorite = useRecoilCallback(({ snapshot }) => async () => {
+  const addFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
     // inside the addWineQuery need to be wine_position_id for the pressed wine
     // eslint-disable-next-line
     const addQueryLoadable = await snapshot.getPromise(
-      addWineQuery('f7b57f5b-d6bc-4abb-9f6b-b5bab74aa0a9')
+      addWineQuery(id)
     )
   })
-  const deleteFavorite = useRecoilCallback(({ snapshot }) => async () => {
+  const deleteFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
     // eslint-disable-next-line
     const deleteQueryLoadable = await snapshot.getPromise(
-      deleteWineQuery('f7b57f5b-d6bc-4abb-9f6b-b5bab74aa0a9')
+      deleteWineQuery(id)
     )
   })
-  const clickHeart = () => {
+  const clickHeart = (id) => {
     if (!isHeartFilled) {
       setIsHeartFilled(true)
-      addFavorite()
+      addFavorite(id)
     } else {
       setIsHeartFilled(false)
-      deleteFavorite()
+      deleteFavorite(id)
     }
   }
 
@@ -73,7 +73,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
         <div className='top'>
           <button
             className='heart-button'
-            onClick={() => clickHeart()}
+            onClick={() => clickHeart(wineId)}
             type='button'
           >
             <img
