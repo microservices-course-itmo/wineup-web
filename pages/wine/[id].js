@@ -9,26 +9,33 @@ import Header from '../../src/Model/Header'
 import Search from '../../src/UI/Search'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
 import SameWines from '../../src/Model/SameWines'
-import { getWinePositionInfo } from '../../src/Modules/Catalog/utils'
+import {
+  getWinePositionInfo,
+  parseImageSrc,
+} from '../../src/Modules/Catalog/utils'
 import Loader from '../../src/UI/Loader'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
   get: id => async () => {
-    const response = await fetch(
-      `http://77.234.215.138:48080/catalog-service/position/true/byId/${id}`,
-      {
-        headers: {
-          accessToken: '123',
-        },
-      }
-    )
+    if (id) {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/byId/${id}`,
+        {
+          headers: {
+            accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+          },
+        }
+      )
 
-    if (response.status !== 200) {
-      throw new Error('Server Error')
+      if (response.status !== 200) {
+        throw new Error('Server Error')
+      }
+
+      return response.json()
     }
 
-    return response.json()
+    throw new Error()
   },
 })
 
@@ -47,7 +54,7 @@ const Wine = () => {
         <>
           <div className='wine-position'>
             <WinePosition
-              imageSrc={contents.image}
+              imageSrc={parseImageSrc(contents.image)}
               info={getWinePositionInfo(contents)}
             />
           </div>
@@ -92,7 +99,7 @@ const Wine = () => {
           {state === 'loading' && (
             <div className='loading'>
               <Loader />
-              <p>Загружаем каталог...</p>
+              <p>Загружаем карточку вина...</p>
             </div>
           )}
         </div>

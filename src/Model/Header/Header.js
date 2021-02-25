@@ -83,6 +83,11 @@ const Header = () => {
             margin-right: 10px;
           }
 
+          .active-icon {
+            filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
+              brightness(60%) contrast(110%);
+          }
+
           .title {
             padding: 0 10px;
 

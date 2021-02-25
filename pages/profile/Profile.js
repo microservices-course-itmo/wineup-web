@@ -7,35 +7,54 @@ import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 
 const Profile = () => {
-  const [accessToken] = useLocalStorage('accessToken')
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken')
+  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
   const [currentUser, setCurrentUser] = useState(useRecoilValue(userState))
 
   useEffect(() => {
     const getUser = async () => {
       const response = await fetch(
-        'http://77.234.215.138:48080/user-service/users/me',
+        `${process.env.NEXT_PUBLIC_API}/user-service/users/me`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       )
+      if (response.status === 403) {
+        const responseToken = await fetch(
+          `${process.env.NEXT_PUBLIC_API}/user-service/refresh?refreshToken=${refreshToken}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              Authorization: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+            },
+          }
+        )
+        if (responseToken.status === 200) {
+          responseToken.json().then(json => {
+            setAccessToken(json.accessToken)
+            setRefreshToken(json.refreshToken)
+          })
+
+          await getUser()
+        }
+      }
+
       const currentUser2 = await response.json()
       setCurrentUser(currentUser2)
     }
     if (!currentUser) {
       getUser().catch(console.log)
     }
-  }, [accessToken])
+  }, [accessToken, currentUser, refreshToken, setAccessToken, setRefreshToken])
 
   const user = currentUser
     ? {
-        name: currentUser.user.name || currentUser.name || 'Не указано',
-        cityName: currentUser.user.cityId || currentUser.cityId || 'Не указано',
-        phoneNumber:
-          currentUser.user.phoneNumber ||
-          currentUser.phoneNumber ||
-          'Не указано',
+        name: currentUser.name || 'Не указано',
+        cityName: currentUser.cityId || 'Не указано',
+        phoneNumber: currentUser.phoneNumber || 'Не указано',
       }
     : null
 
