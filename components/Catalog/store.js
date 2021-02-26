@@ -65,11 +65,11 @@ export const winesQuery = selector({
     }
 
     const response = await fetch(
-      'http://77.234.215.138:48080/catalog-service/position/true/',
+      `${process.env.api}/catalog-service/position/true/`,
       {
         method: 'POST',
         headers: {
-          accessToken: '123',
+          accessToken: process.env.accessToken,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),

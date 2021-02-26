@@ -9,26 +9,33 @@ import Header from '../../components/Header'
 import Search from '../../components/Search'
 import Wrapper from '../../components/Wrapper'
 import SameWines from '../../components/SameWines'
-import { getWinePositionInfo } from '../../components/Catalog/utils'
+import {
+  getWinePositionInfo,
+  parseImageSrc,
+} from '../../components/Catalog/utils'
 import Loader from '../../components/Loader'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
   get: id => async () => {
-    const response = await fetch(
-      `http://77.234.215.138:48080/catalog-service/position/true/byId/${id}`,
-      {
-        headers: {
-          accessToken: '123',
-        },
-      }
-    )
+    if (id) {
+      const response = await fetch(
+        `${process.env.api}/catalog-service/position/true/byId/${id}`,
+        {
+          headers: {
+            accessToken: process.env.accessToken,
+          },
+        }
+      )
 
-    if (response.status !== 200) {
-      throw new Error('Server Error')
+      if (response.status !== 200) {
+        throw new Error('Server Error')
+      }
+
+      return response.json()
     }
 
-    return response.json()
+    throw new Error()
   },
 })
 
@@ -47,7 +54,7 @@ const Wine = () => {
         <>
           <div className='wine-position'>
             <WinePosition
-              imageSrc={contents.image}
+              imageSrc={parseImageSrc(contents.image)}
               info={getWinePositionInfo(contents)}
             />
           </div>
