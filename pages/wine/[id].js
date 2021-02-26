@@ -20,10 +20,10 @@ export const winesPositionState = selectorFamily({
   get: id => async () => {
     if (id) {
       const response = await fetch(
-        `${process.env.api}/catalog-service/position/true/byId/${id}`,
+        `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/byId/${id}`,
         {
           headers: {
-            accessToken: process.env.accessToken,
+            accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
           },
         }
       )
@@ -99,7 +99,7 @@ const Wine = () => {
           {state === 'loading' && (
             <div className='loading'>
               <Loader />
-              <p>Загружаем каталог...</p>
+              <p>Загружаем карточку вина...</p>
             </div>
           )}
         </div>

@@ -2,8 +2,8 @@ import { useState, useCallback, useMemo } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { userState } from '../utils/AuthorizationFormAtom'
-import useLocalStorage from '../utils/useLocalStorage'
+import { userState } from './state'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const AuthorizationForm = () => {
   const router = useRouter()
@@ -186,16 +186,17 @@ const AuthorizationForm = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8',
-              Authorization: 123,
+              Authorization: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
             },
             body: JSON.stringify({
               fireBaseToken: token,
             }),
           }
           const response = await fetch(
-            'http://77.234.215.138:48080/user-service/login',
+            `${process.env.NEXT_PUBLIC_API}/user-service/login`,
             data
           )
+          console.log('response login :>> ', response)
           if (response.status === 200) {
             response.json().then(json => {
               setUser(json)
@@ -225,7 +226,7 @@ const AuthorizationForm = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
-        Authorization: 123,
+        Authorization: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
       },
       body: JSON.stringify({
         birthday: date,
@@ -235,11 +236,13 @@ const AuthorizationForm = () => {
       }),
     }
     const response = await fetch(
-      'http://77.234.215.138:48080/user-service/registration',
+      `${process.env.NEXT_PUBLIC_API}/user-service/registration`,
       data
     )
+    console.log('response registration :>> ', response)
     if (response.status === 200) {
       response.json().then(json => {
+        console.log('json :>> ', json)
         setUser(json)
         setAccessToken(json.accessToken)
         setRefreshToken(json.refreshToken)
