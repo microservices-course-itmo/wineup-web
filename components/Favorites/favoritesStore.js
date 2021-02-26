@@ -50,7 +50,8 @@ export const deleteQuery = selector({
 })
 export const favoritesQuery = selector({
   key: 'favoritesQuery',
-  get: (token) => async ({ get }) => {
+  // get: (token) => async ({ get }) => {
+    get: async ({ get }) => {
     const response = await fetch(
       'http://77.234.215.138:48080/user-service/favorites/list',
       {
@@ -58,8 +59,8 @@ export const favoritesQuery = selector({
         headers: {
           'Content-Type': 'application/json',
           Authorization:
-            // 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
-            `Bearer ${token}`,
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM',
+            // `Bearer ${token}`,
         },
       }
     )
@@ -93,7 +94,9 @@ export const winesQuery = selectorFamily({
 })
 export const contentQuery = selector({
   key: 'contentQuery',
-  get: ({ get }) => {
+  // get:(token) => async ({ get }) => {
+    get: ({ get }) => {
+    // const favoriteIds = get(favoritesQuery(token))
     const favoriteIds = get(favoritesQuery)
     const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
     return wines

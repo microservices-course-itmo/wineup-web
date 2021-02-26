@@ -24,17 +24,18 @@ import {
   sortingButtons,
 } from '../components/Favorites/utils'
 import useLocalStorage from '../utils/useLocalStorage'
-import { userState } from '../utils/AuthorizationFormAtom'
+import { userState } from '../components/Authorization/state'
 
 const Favorite = () => {
   const userExist = useRecoilValue(userState)
   if(userExist){
-    const [accessToken] = useLocalStorage('accessToken')
+  const [accessToken] = useLocalStorage('accessToken')
   }
   const [favorites, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
-  const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
+  // const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
+  const contentQueryLoadable = useRecoilValueLoadable(contentQuery)
   const clearFavorites = useRecoilCallback(({ snapshot, token }) => async () => {
     const deleteQueryLoadable = await snapshot.getPromise(deleteQuery(token))
   })

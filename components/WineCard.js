@@ -4,7 +4,7 @@ import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
 import { addWineQuery, deleteWineQuery } from './Favorites/favoritesStore'
 import useLocalStorage from '../utils/useLocalStorage'
-import { userState } from '../utils/AuthorizationFormAtom'
+import { userState } from '../components/Authorization/state'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
