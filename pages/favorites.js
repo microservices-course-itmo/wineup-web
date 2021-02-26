@@ -1,199 +1,83 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
+import {
+  useRecoilValueLoadable,
+  useRecoilState,
+  useRecoilValue,
+  useRecoilCallback,
+} from 'recoil'
 import Link from 'next/link'
 import Header from '../components/Header'
 import Search from '../components/Search'
 import CatalogFavorite from '../components/CatalogFavorite'
 import WineCard from '../components/WineCard'
-import ButtonGroupCatalog from '../components/ButtonGroupCatalog'
+import ButtonGroup from '../components/ButtonGroup'
+import {
+  favoritesState,
+  contentQuery,
+  deleteQuery,
+  favoritesSortState,
+  sortedWinesState,
+} from '../components/Favorites/favoritesStore'
+import {
+  parseImageSrc,
+  getWineInfo,
+  sortingButtons,
+} from '../components/Favorites/utils'
+import useLocalStorage from '../utils/useLocalStorage'
+import { userState } from '../utils/AuthorizationFormAtom'
 
 const Favorite = () => {
-  // const [showResults, setShowResults] = useState('hidden')
-  // const [clicked, setClicked] = useState(false)
-  const [liked, setLiked] = useState(true)
-  // const handleAllFavorites = () => {
-  //   return (
-  //     clicked ? setClicked(false) : setClicked(true),
-  //     clicked ? setShowResults('hidden') : setShowResults('')
-  //   )
-  // }
-  const clearItem = () => {
-    setLiked(false)
+  const userExist = useRecoilValue(userState)
+  if(userExist){
+    const [accessToken] = useLocalStorage('accessToken')
   }
-  const favorites = [
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2011,
-        fitsPercent: 75,
-        stars: 1,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: liked,
-      color: '1',
-    },
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2012,
-        fitsPercent: 75,
-        stars: 2,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: false,
-      color: '2',
-    },
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2013,
-        fitsPercent: 75,
-        stars: 3,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: liked,
-      color: '3',
-    },
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2014,
-        fitsPercent: 75,
-        stars: 4,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: liked,
-      color: '3',
-    },
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2014,
-        fitsPercent: 75,
-        stars: 4,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: false,
-      color: '3',
-    },
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2014,
-        fitsPercent: 75,
-        stars: 4,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: false,
-      color: '3',
-    },
-    {
-      imageSrc:
-        'https://amwine.ru/upload/iblock/0b6/0b6011c5de672a90d00f16aa4a130449.png',
-      info: {
-        shop: 'Ароматный мир',
-        name: 'Estate Vineyards Sauvignon Blanc',
-        about: 'Красное, полусладкое',
-        country: { code: 'pt', name: 'Португалия' },
-        size: 0.75,
-        year: 2014,
-        fitsPercent: 75,
-        stars: 4,
-        price: '1200',
-        discount: {
-          price: '900',
-          percent: 12,
-        },
-      },
-      isLiked: false,
-      color: '3',
-    },
-  ]
+  const [favorites, setFavorites] = useRecoilState(favoritesState)
+  const sortedWine = useRecoilValue(sortedWinesState)
+  const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
+  const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
+  const clearFavorites = useRecoilCallback(({ snapshot, token }) => async () => {
+    const deleteQueryLoadable = await snapshot.getPromise(deleteQuery(token))
+  })
+  useEffect(() => {
+    if (contentQueryLoadable.state === 'hasValue') {
+      setFavorites(favorites => contentQueryLoadable.contents)
+    }
+  }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
+
   return (
     <div className='wrapper'>
       <Header />
       <Search />
       <div className='content'>
-        <ButtonGroupCatalog />
+        <ButtonGroup
+          title='Сортировать по'
+          activeButton={favoritesSort}
+          buttons={sortingButtons}
+          onChange={event => setFavoritesSort(event.currentTarget.value)}
+        />
         <div>
-          <button type='button' className='buttonClear' onClick={clearItem}>
+          <button
+            type='button'
+            className='buttonClear'
+            onClick={() => clearFavorites()}
+          >
             <text className='textBtn'>Очистить избранное?</text>
           </button>
           {/* <hr className='line' />
           <p className='textFavorite'>Найдено в избранном:</p> */}
         </div>
         <CatalogFavorite>
-          {favorites && favorites.filter(({ isLiked }) => isLiked).length ? (
-            favorites
-              .filter(({ isLiked }) => isLiked)
-              .map(item => (
-                <WineCard
-                  key={item.toString()}
-                  imageSrc={item.imageSrc}
-                  info={item.info}
-                  isLiked={item.isLiked}
-                  color={item.color}
-                />
-              ))
+          {sortedWine && sortedWine.length > 0 ? (
+            sortedWine.map(wine => (
+              <WineCard
+                key={wine.wine_position_id}
+                wineId={wine.wine_position_id}
+                imageSrc={parseImageSrc(wine.image)}
+                info={getWineInfo(wine)}
+                isLiked='true'
+                color='3'
+              />
+            ))
           ) : (
             <div className='emptyContainer'>
               <div className='emptyFavorite'>
@@ -209,7 +93,7 @@ const Favorite = () => {
             </div>
           )}
         </CatalogFavorite>
-        {/* {favorites && !favorites.filter(({ isLiked }) => isLiked).length ? (
+        {/* {favorites && !favorites.length ? (
           <div />
         ) : (
           <div>
@@ -222,11 +106,12 @@ const Favorite = () => {
                 favorites.map((item, index) => (
                   <div id={index} className={`${index > 3 ? showResults : ''}`}>
                     <WineCard
-                      key={item.toString()}
-                      imageSrc={item.imageSrc}
-                      info={item.info}
-                      isLiked={item.isLiked}
-                      color={item.color}
+                      key={wine.wine_position_id}
+                      wineId={wine.wine_position_id}
+                      imageSrc={parseImageSrc(wine.image)}
+                      info={getWineInfo(wine)}
+                      isLiked={Math.round(Math.random())}
+                      color="3"
                     />
                   </div>
                 ))}
