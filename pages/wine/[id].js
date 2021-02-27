@@ -7,7 +7,7 @@ import ItemDescription from '../../components/ItemDescriptionCard'
 import ReviewBox from '../../components/ReviewBox'
 import Header from '../../components/Header'
 import Search from '../../components/Search'
-import Wrapper from '../../components/Wrapper'
+import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
 import SameWines from '../../components/SameWines'
 import {
   getWinePositionInfo,
@@ -46,7 +46,7 @@ const Wine = () => {
   )
 
   return (
-    <Wrapper>
+    <GlobalRecoilWrapper>
       <Header />
       <Search />
 
@@ -170,7 +170,7 @@ const Wine = () => {
           height: auto;
         }
       `}</style>
-    </Wrapper>
+    </GlobalRecoilWrapper>
   )
 }
 

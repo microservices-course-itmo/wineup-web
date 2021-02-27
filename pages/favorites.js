@@ -33,11 +33,11 @@ const Favorite = () => {
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
-  const [accessToken] = useLocalStorage('accessToken')
-  const deleteQueryLoadable = await snapshot.getPromise(
-    deleteQuery(accessToken)
-  )
-})
+    const [accessToken] = useLocalStorage('accessToken')
+    const deleteQueryLoadable = await snapshot.getPromise(
+      deleteQuery(accessToken)
+    )
+  })
   useEffect(() => {
     if (contentQueryLoadable.state === 'hasValue') {
       setFavorites(favorites => contentQueryLoadable.contents)
