@@ -22,22 +22,25 @@ import {
   parseImageSrc,
   getWineInfo,
   sortingButtons,
-} from '../components/Favorites/utils'
+} from '../components/Catalog/utils'
 import useLocalStorage from '../utils/useLocalStorage'
 import { userState } from '../components/Authorization/state'
 
 const Favorite = () => {
+  // const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM'
   const userExist = useRecoilValue(userState)
-  if(userExist){
-  const [accessToken] = useLocalStorage('accessToken')
+  if (userExist) {
+    const [accessToken] = useLocalStorage('accessToken')
   }
   const [favorites, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
-  // const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
-  const contentQueryLoadable = useRecoilValueLoadable(contentQuery)
-  const clearFavorites = useRecoilCallback(({ snapshot, token }) => async () => {
-    const deleteQueryLoadable = await snapshot.getPromise(deleteQuery(token))
+  const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
+  const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
+    const [accessToken] = useLocalStorage('accessToken')
+    const deleteQueryLoadable = await snapshot.getPromise(
+      deleteQuery(accessToken)
+    )
   })
   useEffect(() => {
     if (contentQueryLoadable.state === 'hasValue') {

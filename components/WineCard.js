@@ -46,22 +46,24 @@ const starsNumber = [1, 2, 3, 4, 5]
  */
 const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const userExist = useRecoilValue(userState)
-  if(userExist){
+  if (userExist) {
     const [accessToken] = useLocalStorage('accessToken')
-  } else {
-
   }
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
-  const addFavorite = useRecoilCallback(({ snapshot, id, token }) => async () => {
-    const addQueryLoadable = await snapshot.getPromise(
-      addWineQuery(id, token)
-    )
-  })
-  const deleteFavorite = useRecoilCallback(({ snapshot, id, token }) => async () => {
-    const deleteQueryLoadable = await snapshot.getPromise(
-      deleteWineQuery(id, token)
-    )
-  })
+  const addFavorite = useRecoilCallback(
+    ({ snapshot, id, token }) => async () => {
+      const addQueryLoadable = await snapshot.getPromise(
+        addWineQuery(id, token)
+      )
+    }
+  )
+  const deleteFavorite = useRecoilCallback(
+    ({ snapshot, id, token }) => async () => {
+      const deleteQueryLoadable = await snapshot.getPromise(
+        deleteWineQuery(id, token)
+      )
+    }
+  )
   const clickHeart = (id, token) => {
     if (!isHeartFilled) {
       setIsHeartFilled(true)
