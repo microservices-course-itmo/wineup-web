@@ -1,10 +1,4 @@
-import {
-  atom,
-  selector,
-  selectorFamily,
-  waitForAll,
-  useRecoilValue,
-} from 'recoil'
+import { atom, selector, selectorFamily, waitForAll } from 'recoil'
 import { sortAsc, sortDesc } from '../Catalog/utils'
 
 export const favoritesState = atom({
@@ -17,7 +11,7 @@ export const favoritesSortState = atom({
 })
 export const addWineQuery = selectorFamily({
   key: 'addWineQuery',
-  get: (id, token) => async ({ get }) => {
+  get: (id, token) => async () => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/user-service/favorites/${id}`, {
       method: 'POST',
       headers: {
@@ -29,7 +23,7 @@ export const addWineQuery = selectorFamily({
 })
 export const deleteWineQuery = selectorFamily({
   key: 'deleteWineQuery',
-  get: (id, token) => async ({ get }) => {
+  get: (id, token) => async () => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/user-service/favorites/${id}`, {
       method: 'DELETE',
       headers: {
@@ -41,7 +35,7 @@ export const deleteWineQuery = selectorFamily({
 })
 export const deleteQuery = selectorFamily({
   key: 'deleteQuery',
-  get: token => async ({ get }) => {
+  get: token => async () => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/user-service/favorites/clear`, {
       method: 'DELETE',
       headers: {
@@ -53,7 +47,7 @@ export const deleteQuery = selectorFamily({
 })
 export const favoritesQuery = selectorFamily({
   key: 'favoritesQuery',
-  get: token => async ({ get }) => {
+  get: token => async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API}/user-service/favorites/list`,
       {
@@ -72,7 +66,7 @@ export const favoritesQuery = selectorFamily({
 })
 export const winesQuery = selectorFamily({
   key: 'winesQuery',
-  get: userID => async ({ get }) => {
+  get: userID => async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/byId/${userID}`,
       {

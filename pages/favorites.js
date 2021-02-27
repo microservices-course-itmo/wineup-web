@@ -24,23 +24,19 @@ import {
   sortingButtons,
 } from '../components/Catalog/utils'
 import useLocalStorage from '../utils/useLocalStorage'
-import { userState } from '../components/Authorization/state'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
-  const [favorites, setFavorites] = useRecoilState(favoritesState)
+  const [, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
-    const [accessToken] = useLocalStorage('accessToken')
-    const deleteQueryLoadable = await snapshot.getPromise(
-      deleteQuery(accessToken)
-    )
+    await snapshot.getPromise(deleteQuery(accessToken))
   })
   useEffect(() => {
     if (contentQueryLoadable.state === 'hasValue') {
-      setFavorites(favorites => contentQueryLoadable.contents)
+      setFavorites(() => contentQueryLoadable.contents)
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
 
