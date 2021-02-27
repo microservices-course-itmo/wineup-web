@@ -253,16 +253,24 @@ const AuthorizationForm = () => {
       router.push('/')
     }, 2000)
   }
-
+  const handleClose = () => {
+    router.back()
+  }
+  const handleLockPropagination = e => {
+    e.stopPropagation()
+  }
   return (
-    <div className='wrapper'>
+    <div className='wrapper' onClick={handleClose}>
       <div className='finalMessage'>
         <div className='messageText'>
           Вы успешно зарегистрировались в системе
         </div>
       </div>
       <div className='authForm'>
-        <div className='authForm1'>
+        <div className='authForm1' onClick={e => handleLockPropagination(e)}>
+          <button className='closeButton' onClick={handleClose}>
+            X
+          </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
           <div className='inputForm'>
             <div className='formName'>Введите номер телефона</div>
@@ -279,7 +287,10 @@ const AuthorizationForm = () => {
           </div>
           <div id='recaptcha' />
         </div>
-        <div className='authForm2'>
+        <div className='authForm2' onClick={e => handleLockPropagination(e)}>
+          <button className='closeButton' onClick={handleClose}>
+            X
+          </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
           <div className='inputForm'>
             <div className='formName'>Введите номер телефона</div>
@@ -312,7 +323,10 @@ const AuthorizationForm = () => {
             </div>
           </div>
         </div>
-        <div className='authForm3'>
+        <div className='authForm3' onClick={e => handleLockPropagination(e)}>
+          <button className='closeButton' onClick={handleClose}>
+            X
+          </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
           <div className='inputForm'>
             <div className='formName'>Введите имя</div>
@@ -644,6 +658,14 @@ text-align: center;
           .inputField:active {
             border: 0px;
             border-bottom: 2px solid red;
+          }
+          .closeButton {
+            position: relative;
+            float: right;
+            margin-right: 5px;
+            font-size: 18px;
+            background-color: transparent;
+            border: none;
           }
         `}
       </style>
