@@ -27,21 +27,17 @@ import useLocalStorage from '../utils/useLocalStorage'
 import { userState } from '../components/Authorization/state'
 
 const Favorite = () => {
-  // const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZV9udW1iZXIiOiIrNzEyMzMyMTEyMTIiLCJyb2xlIjoiVVNFUiIsImlkIjoiMTQiLCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNjA3OTYwNzIwLCJleHAiOjE2MDc5NjQzMjB9.3tFEtvfBR33cWJSka3ID0XuCw2ItdvX8gjbkWZEt7xM'
-  const userExist = useRecoilValue(userState)
-  if (userExist) {
-    const [accessToken] = useLocalStorage('accessToken')
-  }
+  const [accessToken] = useLocalStorage('accessToken')
   const [favorites, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
-    const [accessToken] = useLocalStorage('accessToken')
-    const deleteQueryLoadable = await snapshot.getPromise(
-      deleteQuery(accessToken)
-    )
-  })
+  const [accessToken] = useLocalStorage('accessToken')
+  const deleteQueryLoadable = await snapshot.getPromise(
+    deleteQuery(accessToken)
+  )
+})
   useEffect(() => {
     if (contentQueryLoadable.state === 'hasValue') {
       setFavorites(favorites => contentQueryLoadable.contents)
@@ -67,8 +63,6 @@ const Favorite = () => {
           >
             <text className='textBtn'>Очистить избранное?</text>
           </button>
-          {/* <hr className='line' />
-          <p className='textFavorite'>Найдено в избранном:</p> */}
         </div>
         <CatalogFavorite>
           {sortedWine && sortedWine.length > 0 ? (

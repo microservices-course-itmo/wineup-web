@@ -65,12 +65,14 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
     }
   )
   const clickHeart = (id, token) => {
-    if (!isHeartFilled) {
-      setIsHeartFilled(true)
-      addFavorite(id, token)
-    } else {
-      setIsHeartFilled(false)
-      deleteFavorite(id, token)
+    if(userExist){
+      if (!isHeartFilled) {
+        setIsHeartFilled(true)
+        addFavorite(id, token)
+      } else {
+        setIsHeartFilled(false)
+        deleteFavorite(id, token)
+      }
     }
   }
 
