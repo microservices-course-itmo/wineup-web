@@ -39,7 +39,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href='/favorites'>
+      <Link href={`${user ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img className='icon' src='/assets/header/heart.svg' alt='heart' />
           <p>Избранное</p>
