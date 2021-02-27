@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import Header from '../src/Header'
-import Search from '../src/Search'
-import CatalogFavorite from '../src/CatalogFavorite'
-import WineCard from '../src/WineCard'
-import ButtonGroupCatalog from '../src/ButtonGroupCatalog'
+import Header from '../components/Header'
+import Search from '../components/Search'
+import CatalogFavorite from '../components/CatalogFavorite'
+import WineCard from '../components/WineCard'
+import ButtonGroupCatalog from '../components/ButtonGroupCatalog'
 
 const Favorite = () => {
   // const [showResults, setShowResults] = useState('hidden')
