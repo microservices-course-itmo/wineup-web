@@ -70,11 +70,9 @@ const InputGroup = ({ type, inputList, onChange, visible, ...props }) => {
 }
 
 const InputContainer = ({ title, type, inputList, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [visibleArrow, setVisibleArrow] = useState(true)
+  const [isOpen, setIsOpen] = useState(true)
   const handleClick = () => {
     setIsOpen(!isOpen)
-    isOpen ? setVisibleArrow(true) : setVisibleArrow(false)
   }
   return (
     <>
@@ -84,12 +82,12 @@ const InputContainer = ({ title, type, inputList, onChange }) => {
           type={type}
           inputList={inputList}
           onChange={onChange}
-          visible={visibleArrow}
+          visible={isOpen}
         />
         <button className='arrow-btn' onClick={handleClick} type='button'>
           <img
-            className={` arrow-${isOpen ? 'down' : 'up'}`}
-            src={`assets/arrow${isOpen ? 'Down' : 'Up'}.svg`}
+            className={` arrow-${isOpen ? 'up' : 'down'}`}
+            src={`assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
             alt='arrow'
           />
         </button>

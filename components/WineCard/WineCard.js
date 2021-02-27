@@ -1,10 +1,10 @@
-import { useRecoilCallback } from 'recoil'
+import { useRecoilCallback, useRecoilValue } from 'recoil'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
-import { addWineQuery, deleteWineQuery } from './Favorites/favoritesStore'
-import useLocalStorage from '../utils/useLocalStorage'
-import { userState } from '../components/Authorization/state'
+import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
+import useLocalStorage from '../../utils/useLocalStorage'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -46,32 +46,22 @@ const starsNumber = [1, 2, 3, 4, 5]
  */
 const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const userExist = useRecoilValue(userState)
-  if (userExist) {
-    const [accessToken] = useLocalStorage('accessToken')
-  }
+  const [accessToken] = useLocalStorage('accessToken')
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
-  const addFavorite = useRecoilCallback(
-    ({ snapshot, id, token }) => async () => {
-      const addQueryLoadable = await snapshot.getPromise(
-        addWineQuery(id, token)
-      )
-    }
-  )
-  const deleteFavorite = useRecoilCallback(
-    ({ snapshot, id, token }) => async () => {
-      const deleteQueryLoadable = await snapshot.getPromise(
-        deleteWineQuery(id, token)
-      )
-    }
-  )
-  const clickHeart = (id, token) => {
+  const addFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
+    await snapshot.getPromise(addWineQuery(id, accessToken))
+  })
+  const deleteFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
+    await snapshot.getPromise(deleteWineQuery(id, accessToken))
+  })
+  const clickHeart = id => {
     if (userExist) {
       if (!isHeartFilled) {
         setIsHeartFilled(true)
-        addFavorite(id, token)
+        addFavorite(id)
       } else {
         setIsHeartFilled(false)
-        deleteFavorite(id, token)
+        deleteFavorite(id)
       }
     }
   }
@@ -82,7 +72,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
         <div className='top'>
           <button
             className='heart-button'
-            onClick={() => clickHeart(wineId, accessToken)}
+            onClick={() => clickHeart(wineId)}
             type='button'
           >
             <img
