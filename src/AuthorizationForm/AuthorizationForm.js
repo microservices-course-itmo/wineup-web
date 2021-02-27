@@ -2,8 +2,8 @@ import { useState, useCallback, useMemo } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { userState } from '../../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../../utils/useLocalStorage'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const AuthorizationForm = () => {
   const router = useRouter()

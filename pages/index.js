@@ -1,7 +1,7 @@
-import Header from '../src/Model/Header/Header'
-import Search from '../src/UI/Search/Search'
-import Catalog from '../src/Modules/Catalog'
-import FilterBar from '../src/Modules/FilterBar'
+import Header from '../src/Header/Header'
+import Search from '../src/Search/Search'
+import Catalog from '../src/Catalog'
+import FilterBar from '../src/FilterBar'
 import GlobalRecoilWrapper from '../store/GlobalRecoilWrapper'
 
 const Home = () => {

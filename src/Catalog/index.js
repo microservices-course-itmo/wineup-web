@@ -3,10 +3,10 @@ import { animateScroll } from 'react-scroll'
 import { useRouter } from 'next/router'
 import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
 
-import ButtonGroup from '../../Model/ButtonGroup'
+import ButtonGroup from '../ButtonGroup'
 import WineCard from '../WineCard'
-import Loader from '../../UI/Loader'
-import ChangePageButtons from '../../UI/ChangePageButtons'
+import Loader from '../Loader'
+import ChangePageButtons from '../ChangePageButtons'
 
 import { parseImageSrc, getWineInfo, sortingButtons } from './utils'
 import {

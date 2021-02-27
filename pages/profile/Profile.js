@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import Header from '../../src/Model/Header'
-import Search from '../../src/UI/Search'
+import Header from '../../src/Header'
+import Search from '../../src/Search'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 

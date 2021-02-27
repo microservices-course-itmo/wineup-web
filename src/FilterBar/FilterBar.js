@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil'
-import InputContainer from '../../Model/InputContainer'
+import InputContainer from '../InputContainer'
 import { formFiltersState } from '../Catalog'
 
 const FilterBar = () => {

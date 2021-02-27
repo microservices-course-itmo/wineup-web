@@ -1,5 +1,5 @@
 import React from 'react'
-import WineCard from '../../Modules/WineCard'
+import WineCard from '../WineCard'
 
 const SameWines = () => (
   <>
