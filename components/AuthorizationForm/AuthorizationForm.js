@@ -1,224 +1,257 @@
-import { useState, useCallback, useMemo } from 'react'
+/* eslint-disable */
+import { useCallback } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
-import { useRecoilState } from 'recoil'
-import { userState } from '../../utils/AuthorizationFormAtom'
-import useLocalStorage from '../../utils/useLocalStorage'
+import { LocalStatesHandler } from './LocalStatesHandler'
+
+const pI = value => {
+  return parseInt(value, 10)
+}
 
 const AuthorizationForm = () => {
+  const DATE_MAX_LENGTH = 11
+  const CURRENT_YEAR = 2021
+  const CONSENT_YEAR = 18
+  const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
+  const DAY_LIMIT = 31
+  const MONTH_LIMIT = 12
+  const YEAR_LIMIT = 4
+  const DAY_MAX_LENGTH = 2
+  const DAY_PLUS_MONTH_MAX_LENGTH = 5
+  const USERNAME_MAX_LENGTH = 15
+  const USERNAME_MIN_LENGTH = 2
+  const TELEPHONE_MAX_SIZE = 12
+  const OK_CODE = 200
   const router = useRouter()
-
-  const [authForm, setAuthForm] = useState(1)
-  const [telephone, setTelephone] = useState('')
-  const [telephoneError, setTelephoneError] = useState('')
-  const [telCode, setTelCode] = useState('')
-  const [telCodeError, setTelCodeError] = useState('')
-  const [date, setDate] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
-  const [day, month, year] = useMemo(() => date.split('.'), [date])
-  const [username, setUserName] = useState('')
-  const [nameError, setNameError] = useState('')
-  const [calendarError, setCalendarError] = useState('')
-  const [sendCode, setSendCode] = useState(null)
-  const [uid, setUid] = useState(null)
-  const [message, setMessage] = useState(0)
-  const [, setUser] = useRecoilState(userState)
-  const [, setAccessToken] = useLocalStorage('accessToken', '')
-  const [, setRefreshToken] = useLocalStorage('refreshToken', '')
-
+  const localStatesHandler = LocalStatesHandler()
   const handleDate = useCallback(
     e => {
-      if (e.target.value.length < 11) {
-        setDate(e.target.value)
-        if (parseInt(e.target.value.split('.')[2], 10) > 2020) {
-          setCalendarError('Приветствую тебя, гость из будущего!')
-        } else if (parseInt(e.target.value.split('.')[2], 10) > 2012) {
-          setCalendarError('Ошибка: не достигли 18 лет')
-        } else if (parseInt(e.target.value.split('.')[0], 10) > 31) {
-          setCalendarError('Ошибка: дней не может быть больше 31')
-        } else if (parseInt(e.target.value.split('.')[1], 10) > 12) {
-          setCalendarError('Ошибка: месяцев всего 12')
-        } else {
-          setCalendarError('')
+      const date = e.target.value
+      const dateParts = date.split('.')
+      if (date < DATE_MAX_LENGTH) {
+        localStatesHandler.setDate(date)
+        if (pI(dateParts[0]) > DAY_LIMIT)
+          localStatesHandler.calendarError[1](
+            'Ошибка: дней не может быть больше ${DAY_LIMIT}'
+          )
+        if (pI(dateParts[1]) > MONTH_LIMIT)
+          localStatesHandler.calendarError[1](
+            'Ошибка: месяцев всего ${MONTH_LIMIT}'
+          )
+        if (pI(dateParts[2]) > CURRENT_YEAR)
+          localStatesHandler.calendarError[1](
+            'Приветствую тебя, гость из будущего!'
+          )
+        if (pI(dateParts[2]) > TOO_YOUNG)
+          localStatesHandler.calendarError[1](
+            'Ошибка: не достигли ${CONSENT_YEAR} лет'
+          )
+        else {
+          localStatesHandler.calendarError[1]('')
+          if (!(date.charAt(date.length - 1) === '.'))
+            if (
+              date.length === DAY_MAX_LENGTH ||
+              date.length === DAY_PLUS_MONTH_MAX_LENGTH
+            )
+              if (dateParts[0].length === 2)
+                localStatesHandler.date[1](`${date}.`)
         }
-        if (calendarError === '') {
-          if (!(e.target.value.charAt(e.target.value.length - 1) === '.')) {
-            if (e.target.value.length === 2) {
-              if (e.target.value.split('.')[0].length === 2)
-                setDate(`${e.target.value}.`)
-            } else if (e.target.value.length === 5)
-              if (e.target.value.split('.')[1].length === 2)
-                setDate(`${e.target.value}.`)
-          }
-        }
-      } else {
-        setCalendarError(
+      } else
+        localStatesHandler.calendarError[1](
           'Предупреждение: вы пытаетесь ввести слишком длинную строку'
         )
-      }
     },
-    [setDate, calendarError]
+    [localStatesHandler]
   )
 
   const handleDay = useCallback(
     e => {
-      if (e.target.value.length <= 2) {
-        if (parseInt(e.target.value, 10) < 32) {
-          setDate([e.target.value, month, year].join('.'))
-          setCalendarError('')
-        } else setCalendarError('Ошибка: дней не может быть больше 31')
+      const day = e.target.value
+      if (day.length <= DAY_MAX_LENGTH) {
+        if (pI(day) <= DAY_LIMIT) {
+          localStatesHandler.date[1](
+            [day, localStatesHandler.month[0], localStatesHandler.year[0]].join(
+              '.'
+            )
+          )
+          localStatesHandler.calendarError[1]('')
+        } else
+          localStatesHandler.calendarError[1](
+            'Ошибка: дней не может быть больше ${DAY_LIMIT}'
+          )
       }
     },
-    [month, year, setDate]
+    [localStatesHandler]
   )
   const handleMonth = useCallback(
     e => {
-      if (e.target.value.length <= 2) {
-        if (parseInt(e.target.value, 10) < 13) {
-          setDate([day, e.target.value, year].join('.'))
-          setCalendarError('')
-        } else setCalendarError('Ошибка: месяцев всего 12')
+      const month = e.target.value
+      if (month.length <= MONTH_LIMIT) {
+        if (pI(month) <= MONTH_LIMIT) {
+          localStatesHandler.date[1](
+            [localStatesHandler.day[0], month, localStatesHandler.year[0]].join(
+              '.'
+            )
+          )
+          localStatesHandler.calendarError[1]('')
+        } else
+          localStatesHandler.calendarError[1](
+            'Ошибка: месяцев всего ${MONTH_LIMIT}'
+          )
       }
     },
-    [day, year, setDate]
+    [localStatesHandler]
   )
   const handleYear = useCallback(
     e => {
-      if (e.target.value.length <= 4) {
-        setDate([day, month, e.target.value].join('.'))
-        if (parseInt(e.target.value, 10) > 2020) {
-          setCalendarError('Приветствую тебя, гость из будущего!')
-        } else if (parseInt(e.target.value, 10) > 2012) {
-          setCalendarError('Ошибка: не достигли 18 лет')
-        } else {
-          setCalendarError('')
-        }
+      const year = e.target.value
+      if (year.length <= YEAR_LIMIT) {
+        localStatesHandler.date[1](
+          [localStatesHandler.day[0], localStatesHandler.month[0], year].join(
+            '.'
+          )
+        )
+        if (pI(year) > YEAR_LIMIT)
+          localStatesHandler.calendarError[1](
+            'Приветствую тебя, гость из будущего!'
+          )
+        if (pI(year) >= TOO_YOUNG)
+          localStatesHandler.calendarError[1](
+            'Ошибка: не достигли ${CONSENT_YEAR} лет'
+          )
+        else localStatesHandler.calendarError[1]('')
       }
     },
-    [day, month, setDate]
+    [localStatesHandler]
   )
   const handleClickCalendar = useCallback(() => {
-    setIsOpen(!isOpen)
-  }, [isOpen])
+    localStatesHandler.isOpen[1](!localStatesHandler.isOpen[0])
+  }, [localStatesHandler.isOpen])
 
   const handleUserName = useCallback(
     e => {
-      setUserName(e.target.value)
-      if (e.target.value.length < 2) {
-        setNameError(
-          'Ошибка: слишком короткое значение. Допустимая длина 2-15 символов'
+      const username = e.target.value
+      localStatesHandler.username(username)
+      if (
+        username.length < USERNAME_MIN_LENGTH ||
+        username.length > USERNAME_MAX_LENGTH
+      )
+        localStatesHandler.nameError[1](
+          'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов'
         )
-      } else if (e.target.value.length > 15) {
-        setNameError(
-          'Ошибка: слишком длинное значение. Допустимая длина 2-15 символов'
-        )
-      } else {
+      else {
         const format = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
-        if (format.test(e.target.value)) {
-          setNameError('Ошибка: недопустимые символы')
-        } else {
-          setNameError('')
-        }
+        if (format.test(username))
+          localStatesHandler.nameError[1]('Ошибка: недопустимые символы')
+        else localStatesHandler.nameError[1]('')
       }
     },
-    [setNameError]
+    [localStatesHandler]
   )
+
   const handleTelephone = useCallback(
     e => {
+      const telephone = e.target.value
       const format = /[ `№!@#$%^&*()_\-=[\]{};':"\\|,.<>/?~a-zA-Zа-яА-Я]/
-      if (format.test(e.target.value))
-        setTelephoneError('Ошибка: недопустимые символы')
-      else if (
-        e.target.value.charAt(0) === '+' &&
-        e.target.value.charAt(1) === '7' &&
-        e.target.value.length <= 12
+      if (format.test(telephone))
+        localStatesHandler.telephoneError[1]('Ошибка: недопустимые символы')
+      if (
+        telephone.charAt(0) === '+' &&
+        localStatesHandler.charAt(1) === '7' &&
+        localStatesHandler.length <= TELEPHONE_MAX_SIZE
       )
-        setTelephoneError('')
+        localStatesHandler.telephoneError[1]('')
       else
-        setTelephoneError(
+        localStatesHandler.telephoneError[1](
           'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
         )
-      setTelephone(e.target.value)
+      localStatesHandler.telephone[1](e.target.value)
     },
-    [setTelephoneError]
+    [localStatesHandler]
   )
+
   const handleTelCode = useCallback(e => {
-    if (e.target.value.length <= 6) setTelCode(e.target.value)
+    const telcode = e.target.value
+    if (telcode.length <= 6) localStatesHandler.telCode(telcode)
   }, [])
+
   const handleFirstForm = async () => {
-    if (telephoneError === '') {
-      if (telephone.length === 12) {
-        const applicationVerifier = new firebase.auth.RecaptchaVerifier(
-          'recaptcha',
-          { size: 'invisible' }
+    if (
+      localStatesHandler.telephoneError[0] === '' &&
+      localStatesHandler.telephone[0].length === TELEPHONE_MAX_SIZE
+    ) {
+      const applicationVerifier = new firebase.auth.RecaptchaVerifier(
+        'recaptcha',
+        { size: 'invisible' }
+      )
+      try {
+        localStatesHandler.sendCode[1](
+          await firebase
+            .auth()
+            .signInWithPhoneNumber(
+              localStatesHandler.telephone[0],
+              applicationVerifier
+            )
         )
-        try {
-          setSendCode(
-            await firebase
-              .auth()
-              .signInWithPhoneNumber(telephone, applicationVerifier)
-          )
-        } catch (err) {
-          throw new Error(
-            `Error occurred during singing in with phone number: ${err}`
-          )
-        }
-        setAuthForm(2)
-      } else {
-        setTelephoneError(
-          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
+      } catch (err) {
+        throw new Error(
+          `Error occurred during singing in with phone number: ${err}`
         )
       }
-    }
+      localStatesHandler.authForm[1](2)
+    } else
+      localStatesHandler.telephoneError(
+        'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
+      )
   }
+
   const tryHandleFirstFormAgain = async () => {
-    setAuthForm(1)
+    localStatesHandler.authForm[0](1)
   }
+
   const handleSecondForm1 = async () => {
-    if (telephoneError === '') {
-      if (telephone.length === 12) {
-        try {
-          const token = await sendCode
-            .confirm(telCode)
-            .then(({ user: { ya } }) => ya)
-          setUid(token)
-          const data = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-              Authorization: 123,
-            },
-            body: JSON.stringify({
-              fireBaseToken: token,
-            }),
-          }
-          const response = await fetch(
-            'http://77.234.215.138:48080/user-service/login',
-            data
-          )
-          if (response.status === 200) {
-            response.json().then(json => {
-              setUser(json)
-              setAccessToken(json.accessToken)
-              setRefreshToken(json.refreshToken)
-            })
-            setMessage(1)
-            setTimeout(() => {
-              router.push('/')
-            }, 2000)
-          } else {
-            setAuthForm(3)
-          }
-          setTelCodeError('')
-        } catch (err) {
-          setTelCodeError('Ошибка: неправильный код')
+    if (
+      localStatesHandler.telephoneError[0] === '' &&
+      localStatesHandler.telephone[0].length === TELEPHONE_MAX_SIZE
+    ) {
+      try {
+        const token = await localStatesHandler.sendCode[0]
+          .confirm(localStatesHandler.telCode[0])
+          .then(({ user: { ya } }) => ya)
+        localStatesHandler.uid[1](token)
+        const data = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            Authorization: 123,
+          },
+          body: JSON.stringify({
+            fireBaseToken: token,
+          }),
         }
-      } else {
-        setTelephoneError(
-          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
+        const response = await fetch(
+          'http://77.234.215.138:48080/user-service/login',
+          data
         )
+        if (response.status === OK_CODE) {
+          response.json().then(json => {
+            localStatesHandler.user[1](json)
+            localStatesHandler.accessToken[1](json.accessToken)
+            localStatesHandler.refreshToken[1](json.refreshToken)
+          })
+          localStatesHandler.message[1](1)
+          setTimeout(() => {
+            router.push('/')
+          }, 2000)
+        } else localStatesHandler.authForm[1](3)
+        localStatesHandler.telCodeError[1]('')
+      } catch (err) {
+        localStatesHandler.telCodeError[1]('Ошибка: неправильный код')
       }
-    }
+    } else
+      localStatesHandler.telephoneError(
+        'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
+      )
   }
   const registration = async () => {
     const data = {
@@ -228,10 +261,10 @@ const AuthorizationForm = () => {
         Authorization: 123,
       },
       body: JSON.stringify({
-        birthday: date,
+        birthday: localStatesHandler.date[0],
         cityId: 1,
-        fireBaseToken: uid,
-        name: username,
+        fireBaseToken: localStatesHandler.uid[0],
+        name: localStatesHandler.username[0],
       }),
     }
     const response = await fetch(
@@ -240,12 +273,12 @@ const AuthorizationForm = () => {
     )
     if (response.status === 200) {
       response.json().then(json => {
-        setUser(json)
-        setAccessToken(json.accessToken)
-        setRefreshToken(json.refreshToken)
+        localStatesHandler.user[1](json)
+        localStatesHandler.accessToken[1](json.accessToken)
+        localStatesHandler.refreshToken[1](json.refreshToken)
       })
     }
-    setMessage(1)
+    localStatesHandler.message[1](1)
     setTimeout(() => {
       router.push('/')
     }, 2000)
@@ -266,10 +299,14 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
-              value={telephone}
+              value={localStatesHandler.telephone[0]}
               onChange={handleTelephone}
             />
-            <input className='errorMessage' value={telephoneError} disabled />
+            <input
+              className='errorMessage'
+              value={localStatesHandler.telephoneError[0]}
+              disabled
+            />
           </div>
           <div id='telButton1' className='telButton1' onClick={handleFirstForm}>
             Запросить код подтверждения
@@ -283,20 +320,28 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
-              value={telephone}
+              value={localStatesHandler.telephone[0]}
               onChange={handleTelephone}
             />
-            <input className='errorMessage' value={telephoneError} disabled />
+            <input
+              className='errorMessage'
+              value={localStatesHandler.telephoneError[0]}
+              disabled
+            />
           </div>
           <div className='inputForm'>
             <div className='formName'>Введите код</div>
             <input
               className='inputField'
               placeholder='_ _ _ _ _ _'
-              value={telCode}
+              value={localStatesHandler.telCode[0]}
               onChange={handleTelCode}
             />
-            <input className='errorMessage' value={telCodeError} disabled />
+            <input
+              className='errorMessage'
+              value={localStatesHandler.telCodeError[0]}
+              disabled
+            />
           </div>
           <div className='telButton21'>
             <div className='telButton2Inner' onClick={handleSecondForm1}>
@@ -316,20 +361,28 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='Иван'
-              value={username}
+              value={localStatesHandler.username[0]}
               onChange={handleUserName}
             />
-            <input className='errorMessage' value={nameError} disabled />
+            <input
+              className='errorMessage'
+              value={localStatesHandler.nameError[0]}
+              disabled
+            />
           </div>
           <div className='inputForm'>
             <div className='formName'>Дата рождения</div>
             <input
               className='inputField'
               placeholder='ДД.ММ.ГГГГ'
-              value={date}
+              value={localStatesHandler.date[0]}
               onChange={handleDate}
             />
-            <input className='errorMessage' value={calendarError} disabled />
+            <input
+              className='errorMessage'
+              value={localStatesHandler.calendarError[0]}
+              disabled
+            />
             <div onClick={handleClickCalendar}>
               <img
                 className='icon1'
@@ -341,19 +394,19 @@ const AuthorizationForm = () => {
               <input
                 className='day'
                 placeholder='ДД'
-                value={day}
+                value={localStatesHandler.day[0]}
                 onChange={handleDay}
               />
               <input
                 className='month'
                 placeholder='ММ'
-                value={month}
+                value={localStatesHandler.month[0]}
                 onChange={handleMonth}
               />
               <input
                 className='year'
                 placeholder='ГГГГ'
-                value={year}
+                value={localStatesHandler.year[0]}
                 onChange={handleYear}
               />
             </div>
@@ -392,10 +445,10 @@ const AuthorizationForm = () => {
           border-radius: 5px;
           font-family: Times New Roman;
           z-index: 10;
-font-size: 28px;
-line-height: 33px;
-text-align: center;
-          display: ${message === 1 ? 'block' : 'none'};
+          font-size: 28px;
+          line-height: 33px;
+          text-align: center;
+          display: ${localStatesHandler.message[0] === 1 ? 'block' : 'none'};
         }
         .messageText {
           margin: 24.17px 0;
@@ -429,7 +482,7 @@ text-align: center;
             right:0px;
             bottom:0px;
             background: white;
-            display: ${authForm === 1 ? 'block' : 'none'};
+            display: ${localStatesHandler.authForm[0] === 1 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
@@ -438,7 +491,7 @@ text-align: center;
           }
           .authForm2 {
             background: white;
-            display: ${authForm === 2 ? 'block' : 'none'};
+            display: ${localStatesHandler.authForm[0] === 2 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
@@ -486,7 +539,7 @@ text-align: center;
             text-indent: 10px;
           }
           .calendar {
-            visibility: ${isOpen ? 'visible' : 'hidden'};
+            visibility: ${localStatesHandler.isOpen[0] ? 'visible' : 'hidden'};
             width: 201px;
             height: 91px;
             border: 1px solid #9e9e9e;
@@ -602,7 +655,7 @@ text-align: center;
           }
           .authForm3 {
             background: white;
-            display: ${authForm === 3 ? 'block' : 'none'};
+            display: ${localStatesHandler.authForm[0] === 3 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
