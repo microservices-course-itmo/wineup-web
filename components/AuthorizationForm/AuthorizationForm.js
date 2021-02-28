@@ -246,7 +246,7 @@ const AuthorizationForm = () => {
       </div>
       <div className='authForm'>
         <div className='authForm1' onClick={e => handleLockPropagination(e)}>
-          <button className='closeButton' onClick={handleClose}>
+          <button type='button' className='closeButton' onClick={handleClose}>
             X
           </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -266,7 +266,7 @@ const AuthorizationForm = () => {
           <div id='recaptcha' />
         </div>
         <div className='authForm2' onClick={e => handleLockPropagination(e)}>
-          <button className='closeButton' onClick={handleClose}>
+          <button type='button' className='closeButton' onClick={handleClose}>
             X
           </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -302,7 +302,7 @@ const AuthorizationForm = () => {
           </div>
         </div>
         <div className='authForm3' onClick={e => handleLockPropagination(e)}>
-          <button className='closeButton' onClick={handleClose}>
+          <button type='button' className='closeButton' onClick={handleClose}>
             X
           </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
