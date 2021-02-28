@@ -67,7 +67,7 @@ export const winesQuery = selector({
 
     const response = await api.getAllWines(body)
 
-    return response.wines
+    return response
   },
 })
 

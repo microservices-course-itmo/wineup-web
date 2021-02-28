@@ -27,7 +27,7 @@ class Api {
 
     return {
       error: false,
-      user: response,
+      user: response.data,
     }
   }
 
@@ -51,7 +51,7 @@ class Api {
 
     return {
       error: false,
-      user: response,
+      user: response.data,
     }
   }
 
@@ -70,7 +70,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return [response.accessToken, response.refreshToken]
+    return [response.data.accessToken, response.data.refreshToken]
   }
 
   async getAllWines(data) {
@@ -88,7 +88,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async getWineById(id) {
@@ -105,7 +105,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async addWineToFavorites(id, token) {
@@ -123,7 +123,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async deleteWineFromFavorites(id, token) {
@@ -141,7 +141,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async deleteAllWinesFromFavorites(token) {
@@ -159,7 +159,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async getFavoritesWines(token) {
@@ -177,7 +177,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async getFavoritesWinesByUserId(userId) {
@@ -195,7 +195,7 @@ class Api {
       throw new Error('Server Error')
     }
 
-    return response
+    return response.data
   }
 
   async getProfile(accessToken) {
@@ -217,14 +217,14 @@ class Api {
 
     return {
       error: false,
-      profile: response,
+      profile: response.data,
     }
   }
 
   async sendRequest({ url, method, data, headers }) {
     console.log(url, method, data)
     try {
-      const { data: response } = await this.request({
+      const response = await this.request({
         url,
         method,
         data,

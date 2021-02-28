@@ -191,7 +191,7 @@ const AuthorizationForm = () => {
           const response = await api.login(data)
 
           if (!response.error) {
-            setUser(response.user)
+            setUser(response.user.user)
             setAccessToken(response.user.accessToken)
             setRefreshToken(response.user.refreshToken)
             setMessage(1)
@@ -222,7 +222,7 @@ const AuthorizationForm = () => {
     const response = await api.registration(data)
 
     if (!response.error) {
-      setUser(response.user)
+      setUser(response.user.user)
       setAccessToken(response.user.accessToken)
       setRefreshToken(response.user.refreshToken)
     }
