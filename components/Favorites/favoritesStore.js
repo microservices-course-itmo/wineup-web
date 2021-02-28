@@ -6,6 +6,7 @@ import {
   useRecoilValue,
 } from 'recoil'
 import { sortAsc, sortDesc } from '../Catalog/utils'
+import api from '../../api'
 
 export const favoritesState = atom({
   key: 'favorites',
@@ -18,78 +19,35 @@ export const favoritesSortState = atom({
 export const addWineQuery = selectorFamily({
   key: 'addWineQuery',
   get: (id, token) => async ({ get }) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API}/user-service/favorites/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    await api.addWineToFavorites(id, token)
   },
 })
 export const deleteWineQuery = selectorFamily({
   key: 'deleteWineQuery',
   get: (id, token) => async ({ get }) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API}/user-service/favorites/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    await api.deleteWineFromFavorites(id, token)
   },
 })
 export const deleteQuery = selectorFamily({
   key: 'deleteQuery',
   get: token => async ({ get }) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API}/user-service/favorites/clear`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    await api.deleteAllWinesFromFavorites(token)
   },
 })
 export const favoritesQuery = selectorFamily({
   key: 'favoritesQuery',
   get: token => async ({ get }) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/user-service/favorites/list`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    if (response.status !== 200) {
-      throw new Error('Server error')
-    }
-    return response.json()
+    const response = await api.getFavoritesWines(token)
+
+    return response
   },
 })
 export const winesQuery = selectorFamily({
   key: 'winesQuery',
-  get: userID => async ({ get }) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/byId/${userID}`,
-      {
-        method: 'GET',
-        headers: {
-          accessToken: '123',
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    if (response.status !== 200) {
-      throw new Error('Server error')
-    }
-    if (response.status === 500) {
-      return 'fail'
-    }
-    return response.json()
+  get: userId => async ({ get }) => {
+    const response = await api.getFavoritesWinesByUserId(userId)
+
+    return response
   },
 })
 export const contentQuery = selectorFamily({

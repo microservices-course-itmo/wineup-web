@@ -5,6 +5,7 @@ import Header from '../../components/Header'
 import Search from '../../components/Search'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
+import api from '../../api'
 
 const Profile = () => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
@@ -13,36 +14,19 @@ const Profile = () => {
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/user-service/users/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      if (response.status === 403) {
-        const responseToken = await fetch(
-          `${process.env.NEXT_PUBLIC_API}/user-service/refresh?refreshToken=${refreshToken}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-              Authorization: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-            },
-          }
-        )
-        if (responseToken.status === 200) {
-          responseToken.json().then(json => {
-            setAccessToken(json.accessToken)
-            setRefreshToken(json.refreshToken)
-          })
+      const response = await api.getProfile(accessToken)
 
-          await getUser()
-        }
+      if (response.error === true) {
+        const [newAccessToken, newRefreshToken] = await api.refreshToken(
+          refreshToken
+        )
+
+        setAccessToken(newAccessToken)
+        setRefreshToken(newRefreshToken)
       }
 
-      const currentUser2 = await response.json()
+      const currentUser2 = await response.profile
+
       setCurrentUser(currentUser2)
     }
     if (!currentUser) {

@@ -14,25 +14,15 @@ import {
   parseImageSrc,
 } from '../../components/Catalog/utils'
 import Loader from '../../components/Loader'
+import api from '../../api'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
   get: id => async () => {
     if (id) {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/byId/${id}`,
-        {
-          headers: {
-            accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-          },
-        }
-      )
+      const response = await api.getWineById(id)
 
-      if (response.status !== 200) {
-        throw new Error('Server Error')
-      }
-
-      return response.json()
+      return response
     }
 
     throw new Error()
