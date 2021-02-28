@@ -222,7 +222,6 @@ class Api {
   }
 
   async sendRequest({ url, method, data, headers }) {
-    console.log(url, method, data)
     try {
       const response = await this.request({
         url,
@@ -230,8 +229,6 @@ class Api {
         data,
         headers,
       })
-
-      console.log('response :>> ', response)
 
       return response
     } catch (err) {

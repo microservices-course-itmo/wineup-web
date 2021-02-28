@@ -64,7 +64,7 @@ const Catalog = () => {
       })
     }
   }
-  console.log('state :>> ', state)
+
   return (
     <div className='catalog'>
       <ButtonGroup
