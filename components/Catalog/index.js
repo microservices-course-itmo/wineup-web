@@ -107,7 +107,7 @@ const Catalog = () => {
             <div className='loading'>
               <img
                 className='error-icon'
-                src={`${prefix}assets/error.svg`}
+                src={`${prefix}/assets/error.svg`}
                 alt='error icon'
               />
               <p>
