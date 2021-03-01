@@ -8,41 +8,42 @@ const pI = value => {
   return parseInt(value, 10)
 }
 
+const DATE_MAX_LENGTH = 11
+const CURRENT_YEAR = 2021
+const CONSENT_YEAR = 18
+const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
+const DAY_LIMIT = 31
+const MONTH_LIMIT = 12
+const YEAR_LIMIT = 4
+const DAY_MAX_LENGTH = 2
+const DAY_PLUS_MONTH_MAX_LENGTH = 5
+const USERNAME_MAX_LENGTH = 15
+const USERNAME_MIN_LENGTH = 2
+const TELEPHONE_MAX_SIZE = 12
+const OK_CODE = 200
+
 const AuthorizationForm = () => {
-  const DATE_MAX_LENGTH = 11
-  const CURRENT_YEAR = 2021
-  const CONSENT_YEAR = 18
-  const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
-  const DAY_LIMIT = 31
-  const MONTH_LIMIT = 12
-  const YEAR_LIMIT = 4
-  const DAY_MAX_LENGTH = 2
-  const DAY_PLUS_MONTH_MAX_LENGTH = 5
-  const USERNAME_MAX_LENGTH = 15
-  const USERNAME_MIN_LENGTH = 2
-  const TELEPHONE_MAX_SIZE = 12
-  const OK_CODE = 200
   const router = useRouter()
   const localStatesHandler = LocalStatesHandler()
   const handleDate = useCallback(
     e => {
       const date = e.target.value
-      const dateParts = date.split('.')
+      const [day, month, year] = date.split('.')
       if (date < DATE_MAX_LENGTH) {
         localStatesHandler.setDate(date)
-        if (pI(dateParts[0]) > DAY_LIMIT)
+        if (pI(day) > DAY_LIMIT)
           localStatesHandler.calendarError[1](
-            'Ошибка: дней не может быть больше ${DAY_LIMIT}'
+            'Ошибка: дней не может быть больше `${DAY_LIMIT}`'
           )
-        if (pI(dateParts[1]) > MONTH_LIMIT)
+        if (pI(month) > MONTH_LIMIT)
           localStatesHandler.calendarError[1](
             'Ошибка: месяцев всего ${MONTH_LIMIT}'
           )
-        if (pI(dateParts[2]) > CURRENT_YEAR)
+        if (pI(year) > CURRENT_YEAR)
           localStatesHandler.calendarError[1](
             'Приветствую тебя, гость из будущего!'
           )
-        if (pI(dateParts[2]) > TOO_YOUNG)
+        if (pI(year) > TOO_YOUNG)
           localStatesHandler.calendarError[1](
             'Ошибка: не достигли ${CONSENT_YEAR} лет'
           )
@@ -53,8 +54,7 @@ const AuthorizationForm = () => {
               date.length === DAY_MAX_LENGTH ||
               date.length === DAY_PLUS_MONTH_MAX_LENGTH
             )
-              if (dateParts[0].length === 2)
-                localStatesHandler.date[1](`${date}.`)
+              if (day.length === 2) localStatesHandler.date[1](`${date}.`)
         }
       } else
         localStatesHandler.calendarError[1](
@@ -132,10 +132,7 @@ const AuthorizationForm = () => {
     e => {
       const username = e.target.value
       localStatesHandler.username(username)
-      if (
-        username.length < USERNAME_MIN_LENGTH ||
-        username.length > USERNAME_MAX_LENGTH
-      )
+      if (USERNAME_MIN_LENGTH < username.length < USERNAME_MAX_LENGTH)
         localStatesHandler.nameError[1](
           'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов'
         )
