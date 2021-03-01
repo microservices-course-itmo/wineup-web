@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil'
 import { sortAsc, sortDesc } from './utils'
+import api from '../../api'
 
 export const winesState = atom({
   key: 'wines',
@@ -64,23 +65,9 @@ export const winesQuery = selector({
       searchParameters,
     }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/catalog-service/position/true/`,
-      {
-        method: 'POST',
-        headers: {
-          accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      }
-    )
+    const response = await api.getAllWines(body)
 
-    if (response.status !== 200) {
-      throw new Error('Server Error')
-    }
-
-    return response.json()
+    return response
   },
 })
 
