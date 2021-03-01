@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
+import PrefixedLink from '../PrefixedLink/PrefixedLink'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Header = () => {
@@ -52,7 +53,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link
+      {/* <Link
         href={`${user ? '/favorites' : 'login'}`}
         as={`${process.env.ASSET_PREFIX}/favorites`}
       >
@@ -64,7 +65,20 @@ const Header = () => {
           />
           <p>Избранное</p>
         </div>
-      </Link>
+      </Link> */}
+      <PrefixedLink
+        href={`${user ? '/favorites' : 'login'}`}
+        as={`${process.env.ASSET_PREFIX}/favorites`}
+      >
+        <div className='menu-item heart'>
+          <img
+            className='icon'
+            src={`${prefix}/assets/header/heart.svg`}
+            alt='heart'
+          />
+          <p>Избранное</p>
+        </div>
+      </PrefixedLink>
       <Link href={`${user ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
           <img
