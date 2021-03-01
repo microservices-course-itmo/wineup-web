@@ -430,44 +430,44 @@ const AuthorizationForm = () => {
       <div className='background' />
       <style jsx>
         {`
-        .finalMessage {
-          position: absolute;
-          top:100px;
-          right:200px;
-          width: 1364px;
-          height: 86px;
-          background: #B1E86B;
-          border: 1px solid #000000;
-          box-sizing: border-box;
-          border-radius: 5px;
-          font-family: Times New Roman;
-          z-index: 10;
-          font-size: 28px;
-          line-height: 33px;
-          text-align: center;
-          display: ${localStatesHandler.message[0] === 1 ? 'block' : 'none'};
-        }
-        .messageText {
-          margin: 24.17px 0;
-        }
-        .wrapper {
-          max-width: 1920px;
-          padding: 0 0px;
-          margin: 0 auto;
-        }
-        .authForm {
-           position:absolute;
-           bottom: -300px;
-           right: 0px;
-           z-index: 10;
-           width: 70%;
-           height: 100%;
-           display: "block"
+          .finalMessage {
+            position: absolute;
+            top: 100px;
+            right: 200px;
+            width: 1364px;
+            height: 86px;
+            background: #b1e86b;
+            border: 1px solid #000000;
+            box-sizing: border-box;
+            border-radius: 5px;
+            font-family: Times New Roman;
+            z-index: 10;
+            font-size: 28px;
+            line-height: 33px;
+            text-align: center;
+            display: ${localStatesHandler.message[0] === 1 ? 'block' : 'none'};
+          }
+          .messageText {
+            margin: 24.17px 0;
+          }
+          .wrapper {
+            max-width: 1920px;
+            padding: 0 0;
+            margin: 0 auto;
+          }
+          .authForm {
+            position: absolute;
+            bottom: -300px;
+            right: 0px;
+            z-index: 10;
+            width: 70%;
+            height: 100%;
+            display: 'block';
           }
           .background {
-            position:fixed;
-            right:0px;
-            bottom:0px;
+            position: fixed;
+            right: 0px;
+            bottom: 0px;
             width: 100%;
             height: 100%;
             background-color: black;
@@ -475,9 +475,9 @@ const AuthorizationForm = () => {
             z-index: 8;
           }
           .authForm1 {
-            position: absolute:
-            right:0px;
-            bottom:0px;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
             background: white;
             display: ${localStatesHandler.authForm[0] === 1 ? 'block' : 'none'};
             border: 2px solid black;
