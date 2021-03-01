@@ -52,7 +52,10 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href={`${user ? '/favorites' : 'login'}`}>
+      <Link
+        href={`${user ? '/favorites' : 'login'}`}
+        as={`${process.env.ASSET_PREFIX}/favorites`}
+      >
         <div className='menu-item heart'>
           <img
             className='icon'
