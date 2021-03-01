@@ -68,7 +68,7 @@ const Header = () => {
       </Link> */}
       <PrefixedLink
         href={`${user ? '/favorites' : 'login'}`}
-        as={`${process.env.ASSET_PREFIX}/favorites`}
+        as={`${process.env.pathPrefix}/favorites`}
       >
         <div className='menu-item heart'>
           <img
