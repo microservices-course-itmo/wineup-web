@@ -87,7 +87,7 @@ const InputContainer = ({ title, type, inputList, onChange }) => {
         <button className='arrow-btn' onClick={handleClick} type='button'>
           <img
             className={` arrow-${isOpen ? 'up' : 'down'}`}
-            src={`${prefix}assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
+            src={`${prefix}/assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
             alt='arrow'
           />
         </button>

@@ -89,7 +89,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             <div className='stars'>
               {starsNumber.map((star, index) => (
                 <img
-                  src={`${prefix}assets/card/${
+                  src={`${prefix}/assets/card/${
                     index < info.stars ? 'filled' : 'empty'
                   }-star.svg`}
                   alt={`${index < info.stars ? 'filled' : 'empty'} star`}
