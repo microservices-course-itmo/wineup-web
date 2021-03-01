@@ -78,7 +78,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
           >
             <img
               className={`heart ${isHeartFilled ? 'filled' : ''}`}
-              src={`${prefix}assets/card/heart-${
+              src={`${prefix}/assets/card/heart-${
                 isHeartFilled ? 'filled' : 'empty'
               }.svg`}
               alt='heart'
