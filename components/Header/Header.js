@@ -13,7 +13,7 @@ const Header = () => {
         <div className='menu-item city'>
           <img
             className='icon'
-            src={`${prefix}'/assets/header/city-icon.svg'`}
+            src={`${prefix}/assets/header/city-icon.svg`}
             alt='city'
           />
           <p>Санкт-Петербург</p>
@@ -23,7 +23,7 @@ const Header = () => {
         <div className='menu-item catalog'>
           <img
             className='icon'
-            src={`${prefix}'/assets/header/catalog.svg'`}
+            src={`${prefix}/assets/header/catalog.svg`}
             alt='catalog'
           />
           <p>Каталог</p>
@@ -33,7 +33,7 @@ const Header = () => {
         <div className='menu-item community'>
           <img
             className='icon'
-            src={`${prefix}'/assets/header/community.svg'`}
+            src={`${prefix}/assets/header/community.svg`}
             alt='city'
           />
           <p>Сообщество</p>
@@ -46,7 +46,7 @@ const Header = () => {
         <div className='menu-item likes'>
           <img
             className='icon'
-            src={`${prefix}'/assets/header/likes.svg'`}
+            src={`${prefix}/assets/header/likes.svg`}
             alt='city'
           />
           <p>Лайки</p>
@@ -56,7 +56,7 @@ const Header = () => {
         <div className='menu-item heart'>
           <img
             className='icon'
-            src={`${prefix}'/assets/header/heart.svg'`}
+            src={`${prefix}/assets/header/heart.svg`}
             alt='heart'
           />
           <p>Избранное</p>
@@ -66,7 +66,7 @@ const Header = () => {
         <div className='menu-item login'>
           <img
             className='icon'
-            src={`${prefix}'/assets/header/man.svg'`}
+            src={`${prefix}/assets/header/man.svg`}
             alt='profile'
           />
           {user ? <p>Профиль</p> : <p>Войти</p>}
