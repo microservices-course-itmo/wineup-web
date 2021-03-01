@@ -79,7 +79,8 @@ const WinePosition = ({ imageSrc, info, color = 0 }) => (
         {info.discount ? (
           <>
             <p>
-              <span className='previous-price'>{info.price}</span> -20%
+              <span className='previous-price'>{info.price}</span> -
+              {info.discount.percent}%
             </p>
             <p className='current-price'>{formatPrice(info.discount.price)}</p>
           </>

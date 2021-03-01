@@ -7,28 +7,25 @@ import ItemDescription from '../../components/ItemDescriptionCard'
 import ReviewBox from '../../components/ReviewBox'
 import Header from '../../components/Header'
 import Search from '../../components/Search'
-import Wrapper from '../../components/Wrapper'
+import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
 import SameWines from '../../components/SameWines'
-import { getWinePositionInfo } from '../../components/Catalog/utils'
+import {
+  getWinePositionInfo,
+  parseImageSrc,
+} from '../../components/Catalog/utils'
 import Loader from '../../components/Loader'
+import api from '../../api'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
   get: id => async () => {
-    const response = await fetch(
-      `http://77.234.215.138:48080/catalog-service/position/true/byId/${id}`,
-      {
-        headers: {
-          accessToken: '123',
-        },
-      }
-    )
+    if (id) {
+      const response = await api.getWineById(id)
 
-    if (response.status !== 200) {
-      throw new Error('Server Error')
+      return response
     }
 
-    return response.json()
+    throw new Error()
   },
 })
 
@@ -39,7 +36,7 @@ const Wine = () => {
   )
 
   return (
-    <Wrapper>
+    <GlobalRecoilWrapper>
       <Header />
       <Search />
 
@@ -47,7 +44,7 @@ const Wine = () => {
         <>
           <div className='wine-position'>
             <WinePosition
-              imageSrc={contents.image}
+              imageSrc={parseImageSrc(contents.image)}
               info={getWinePositionInfo(contents)}
             />
           </div>
@@ -92,7 +89,7 @@ const Wine = () => {
           {state === 'loading' && (
             <div className='loading'>
               <Loader />
-              <p>Загружаем каталог...</p>
+              <p>Загружаем карточку вина...</p>
             </div>
           )}
         </div>
@@ -163,7 +160,7 @@ const Wine = () => {
           height: auto;
         }
       `}</style>
-    </Wrapper>
+    </GlobalRecoilWrapper>
   )
 }
 

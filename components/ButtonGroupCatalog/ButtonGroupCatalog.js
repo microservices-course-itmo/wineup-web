@@ -41,6 +41,7 @@ const ButtonGroupCatalog = () => {
     <div className='catalog'>
       <ButtonGroup
         title={sortingByObj.title}
+        activeButton={sortingBy}
         buttons={sortingByObj.inputList}
         onChange={sortingByObj.onChange}
       />
