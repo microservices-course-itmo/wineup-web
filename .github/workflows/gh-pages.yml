@@ -28,7 +28,7 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: '/wineup-web'
           CI: true
           DEPLOY_TARGET: gh-pages
-      - run: touch ./out/.nojekyll
+      - run: touch ./.nojekyll
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
