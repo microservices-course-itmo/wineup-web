@@ -1,67 +1,81 @@
 /* eslint-disable */
-import { useCallback } from 'react'
+import { useCallback, useReducer } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
-import { LocalStatesHandler } from './LocalStatesHandler'
+import { initialState, reducer, ReducerType } from './store'
+import { useRecoilState } from 'recoil'
+import { userState } from '../../utils/AuthorizationFormAtom'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const pI = value => {
   return parseInt(value, 10)
 }
 
+const DATE_MAX_LENGTH = 11
+const CURRENT_YEAR = 2021
+const CONSENT_YEAR = 18
+const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
+const DAY_LIMIT = 31
+const MONTH_LIMIT = 12
+const YEAR_LIMIT = 4
+const DAY_MAX_LENGTH = 2
+const DAY_PLUS_MONTH_MAX_LENGTH = 5
+const USERNAME_MAX_LENGTH = 15
+const USERNAME_MIN_LENGTH = 2
+const TELEPHONE_MAX_SIZE = 12
+const OK_CODE = 200
+
 const AuthorizationForm = () => {
-  const DATE_MAX_LENGTH = 11
-  const CURRENT_YEAR = 2021
-  const CONSENT_YEAR = 18
-  const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
-  const DAY_LIMIT = 31
-  const MONTH_LIMIT = 12
-  const YEAR_LIMIT = 4
-  const DAY_MAX_LENGTH = 2
-  const DAY_PLUS_MONTH_MAX_LENGTH = 5
-  const USERNAME_MAX_LENGTH = 15
-  const USERNAME_MIN_LENGTH = 2
-  const TELEPHONE_MAX_SIZE = 12
-  const OK_CODE = 200
+  const [formState, dispatch] = useReducer(reducer, initialState, reducer)
+  const [user, setUser] = useRecoilState(userState)
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken', '')
+  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
-  const localStatesHandler = LocalStatesHandler()
+
   const handleDate = useCallback(
     e => {
       const date = e.target.value
       const dateParts = date.split('.')
       if (date < DATE_MAX_LENGTH) {
-        localStatesHandler.setDate(date)
+        dispatch({ type: ReducerType.setDate, payload: date })
         if (pI(dateParts[0]) > DAY_LIMIT)
-          localStatesHandler.calendarError[1](
-            'Ошибка: дней не может быть больше ${DAY_LIMIT}'
-          )
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
+          })
         if (pI(dateParts[1]) > MONTH_LIMIT)
-          localStatesHandler.calendarError[1](
-            'Ошибка: месяцев всего ${MONTH_LIMIT}'
-          )
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Ошибка: месяцев всего ${MONTH_LIMIT}',
+          })
         if (pI(dateParts[2]) > CURRENT_YEAR)
-          localStatesHandler.calendarError[1](
-            'Приветствую тебя, гость из будущего!'
-          )
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Приветствую тебя, гость из будущего!',
+          })
         if (pI(dateParts[2]) > TOO_YOUNG)
-          localStatesHandler.calendarError[1](
-            'Ошибка: не достигли ${CONSENT_YEAR} лет'
-          )
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Ошибка: не достигли ${CONSENT_YEAR} лет',
+          })
         else {
-          localStatesHandler.calendarError[1]('')
+          dispatch({ type: ReducerType.clearCalendarError })
           if (!(date.charAt(date.length - 1) === '.'))
             if (
               date.length === DAY_MAX_LENGTH ||
               date.length === DAY_PLUS_MONTH_MAX_LENGTH
             )
               if (dateParts[0].length === 2)
-                localStatesHandler.date[1](`${date}.`)
+                dispatch({ type: ReducerType.setDate, payload: `${date}.` })
         }
-      } else
-        localStatesHandler.calendarError[1](
-          'Предупреждение: вы пытаетесь ввести слишком длинную строку'
-        )
+      } else {
+        dispatch({
+          type: ReducerType.setCalendarError,
+          payload: 'Предупреждение: вы пытаетесь ввести слишком длинную строку',
+        })
+      }
     },
-    [localStatesHandler]
+    [formState]
   )
 
   const handleDay = useCallback(
@@ -69,84 +83,100 @@ const AuthorizationForm = () => {
       const day = e.target.value
       if (day.length <= DAY_MAX_LENGTH) {
         if (pI(day) <= DAY_LIMIT) {
-          localStatesHandler.date[1](
-            [day, localStatesHandler.month[0], localStatesHandler.year[0]].join(
-              '.'
-            )
-          )
-          localStatesHandler.calendarError[1]('')
-        } else
-          localStatesHandler.calendarError[1](
-            'Ошибка: дней не может быть больше ${DAY_LIMIT}'
-          )
+          const [oldDay, month, year] = formState.dateParts
+          dispatch({
+            type: ReducerType.setDate,
+            payload: `${day}.${month}.${year}`,
+          })
+          dispatch({ type: ReducerType.clearCalendarError })
+        } else {
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Ошибка: дней не может быть больше ${DAY_LIMIT}',
+          })
+        }
       }
     },
-    [localStatesHandler]
+    [formState]
   )
   const handleMonth = useCallback(
     e => {
       const month = e.target.value
       if (month.length <= MONTH_LIMIT) {
         if (pI(month) <= MONTH_LIMIT) {
-          localStatesHandler.date[1](
-            [localStatesHandler.day[0], month, localStatesHandler.year[0]].join(
-              '.'
-            )
-          )
-          localStatesHandler.calendarError[1]('')
-        } else
-          localStatesHandler.calendarError[1](
-            'Ошибка: месяцев всего ${MONTH_LIMIT}'
-          )
+          const [day, oldMonth, year] = formState.dateParts
+          dispatch({
+            type: ReducerType.setDate,
+            payload: `${day}.${month}.${year}`,
+          })
+          dispatch({ type: ReducerType.clearCalendarError })
+        } else {
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Ошибка: месяцев всего ${MONTH_LIMIT}',
+          })
+        }
       }
     },
-    [localStatesHandler]
+    [formState]
   )
   const handleYear = useCallback(
     e => {
       const year = e.target.value
       if (year.length <= YEAR_LIMIT) {
-        localStatesHandler.date[1](
-          [localStatesHandler.day[0], localStatesHandler.month[0], year].join(
-            '.'
-          )
-        )
+        const [day, oldMonth, year] = formState.dateParts
+        dispatch({
+          type: ReducerType.setDate,
+          payload: `${day}.${month}.${year}`,
+        })
         if (pI(year) > YEAR_LIMIT)
-          localStatesHandler.calendarError[1](
-            'Приветствую тебя, гость из будущего!'
-          )
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Приветствую тебя, гость из будущего!',
+          })
         if (pI(year) >= TOO_YOUNG)
-          localStatesHandler.calendarError[1](
-            'Ошибка: не достигли ${CONSENT_YEAR} лет'
-          )
-        else localStatesHandler.calendarError[1]('')
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: 'Ошибка: не достигли ${CONSENT_YEAR} лет',
+          })
+        else {
+          dispatch({ type: ReducerType.clearCalendarError })
+        }
       }
     },
-    [localStatesHandler]
+    [formState]
   )
-  const handleClickCalendar = useCallback(() => {
-    localStatesHandler.isOpen[1](!localStatesHandler.isOpen[0])
-  }, [localStatesHandler.isOpen])
+  const toggleIsCalendarOpen = useCallback(() => {
+    dispatch({
+      type: ReducerType.setIsCalendarOpen,
+      payload: !formState.isCalendarOpen,
+    })
+  }, [formState.isCalendarOpen])
 
   const handleUserName = useCallback(
     e => {
       const username = e.target.value
-      localStatesHandler.username(username)
+      dispatch({ type: ReducerType.setUserName, payload: username })
       if (
         username.length < USERNAME_MIN_LENGTH ||
         username.length > USERNAME_MAX_LENGTH
       )
-        localStatesHandler.nameError[1](
-          'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов'
-        )
+        dispatch({
+          type: ReducerType.setUsernameError,
+          payload:
+            'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов',
+        })
       else {
         const format = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
         if (format.test(username))
-          localStatesHandler.nameError[1]('Ошибка: недопустимые символы')
-        else localStatesHandler.nameError[1]('')
+          dispatch({
+            type: ReducerType.setUsernameError,
+            payload: 'Ошибка: недопустимые символы',
+          })
+        else dispatch({ type: ReducerType.clearUsernameError })
       }
     },
-    [localStatesHandler]
+    [formState]
   )
 
   const handleTelephone = useCallback(
@@ -154,71 +184,83 @@ const AuthorizationForm = () => {
       const telephone = e.target.value
       const format = /[ `№!@#$%^&*()_\-=[\]{};':"\\|,.<>/?~a-zA-Zа-яА-Я]/
       if (format.test(telephone))
-        localStatesHandler.telephoneError[1]('Ошибка: недопустимые символы')
+        dispatch({
+          type: ReducerType.setTelephoneError,
+          payload: 'Ошибка: недопустимые символы',
+        })
       if (
         telephone.charAt(0) === '+' &&
-        localStatesHandler.charAt(1) === '7' &&
-        localStatesHandler.length <= TELEPHONE_MAX_SIZE
+        telephone.charAt(1) === '7' &&
+        telephone.length <= TELEPHONE_MAX_SIZE
       )
-        localStatesHandler.telephoneError[1]('')
-      else
-        localStatesHandler.telephoneError[1](
-          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
-        )
-      localStatesHandler.telephone[1](e.target.value)
+        dispatch({ type: ReducerType.clearTelephoneError })
+      else {
+        dispatch({
+          type: ReducerType.setTelephoneError,
+          payload:
+            'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX',
+        })
+      }
+      dispatch({ type: ReducerType.setTelephone, payload: telephone })
     },
-    [localStatesHandler]
+    [formState]
   )
 
   const handleTelCode = useCallback(e => {
     const telcode = e.target.value
-    if (telcode.length <= 6) localStatesHandler.telCode(telcode)
+    if (telcode.length <= 6)
+      dispatch({ type: ReducerType.setTelCode, payload: telcode })
   }, [])
 
   const handleFirstForm = async () => {
     if (
-      localStatesHandler.telephoneError[0] === '' &&
-      localStatesHandler.telephone[0].length === TELEPHONE_MAX_SIZE
+      formState.telephoneError[0] === '' &&
+      formState.telephone[0].length === TELEPHONE_MAX_SIZE
     ) {
       const applicationVerifier = new firebase.auth.RecaptchaVerifier(
         'recaptcha',
         { size: 'invisible' }
       )
       try {
-        localStatesHandler.sendCode[1](
-          await firebase
-            .auth()
-            .signInWithPhoneNumber(
-              localStatesHandler.telephone[0],
-              applicationVerifier
-            )
-        )
+        dispatch({
+          type: ReducerType.setSendCode,
+          payload: async () =>
+            await firebase
+              .auth()
+              .signInWithPhoneNumber(
+                localStatesHandler.telephone[0],
+                applicationVerifier
+              ),
+        })
       } catch (err) {
         throw new Error(
           `Error occurred during singing in with phone number: ${err}`
         )
       }
-      localStatesHandler.authForm[1](2)
+      dispatch({ type: ReducerType.setAuthForm, payload: 2 })
     } else
-      localStatesHandler.telephoneError(
-        'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
-      )
+      dispatch({
+        type: ReducerType.setTelephoneError,
+        payload:
+          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX',
+      })
   }
 
   const tryHandleFirstFormAgain = async () => {
-    localStatesHandler.authForm[0](1)
+    dispatch({ type: ReducerType.setAuthForm, payload: 1 })
   }
 
   const handleSecondForm1 = async () => {
     if (
-      localStatesHandler.telephoneError[0] === '' &&
-      localStatesHandler.telephone[0].length === TELEPHONE_MAX_SIZE
+      formState.telephoneError[0] === '' &&
+      formState.telephone[0].length === TELEPHONE_MAX_SIZE
     ) {
       try {
-        const token = await localStatesHandler.sendCode[0]
-          .confirm(localStatesHandler.telCode[0])
+        const token = await formState
+          .sendCode()
+          .confirm(formState.telCode)
           .then(({ user: { ya } }) => ya)
-        localStatesHandler.uid[1](token)
+        dispatch({ type: ReducerType.setUid, payload: token })
         const data = {
           method: 'POST',
           headers: {
@@ -235,23 +277,31 @@ const AuthorizationForm = () => {
         )
         if (response.status === OK_CODE) {
           response.json().then(json => {
-            localStatesHandler.user[1](json)
-            localStatesHandler.accessToken[1](json.accessToken)
-            localStatesHandler.refreshToken[1](json.refreshToken)
+            dispatch({ type: ReducerType.setUser })
+            setUser(json)
+            setAccessToken[1](json.accessToken)
+            setRefreshToken[1](json.refreshToken)
           })
-          localStatesHandler.message[1](1)
+          dispatch({ type: ReducerType.showMessage })
           setTimeout(() => {
             router.push('/')
           }, 2000)
-        } else localStatesHandler.authForm[1](3)
-        localStatesHandler.telCodeError[1]('')
+        } else {
+          dispatch({ type: ReducerType.setAuthForm, payload: 3 })
+        }
+        dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
-        localStatesHandler.telCodeError[1]('Ошибка: неправильный код')
+        dispatch({
+          type: ReducerType.setTelCodeError,
+          payload: 'Ошибка: неправильный код',
+        })
       }
     } else
-      localStatesHandler.telephoneError(
-        'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX'
-      )
+      dispatch({
+        type: ReducerType.setTelephoneError,
+        payload:
+          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX',
+      })
   }
   const registration = async () => {
     const data = {
@@ -261,10 +311,10 @@ const AuthorizationForm = () => {
         Authorization: 123,
       },
       body: JSON.stringify({
-        birthday: localStatesHandler.date[0],
+        birthday: formState.date,
         cityId: 1,
-        fireBaseToken: localStatesHandler.uid[0],
-        name: localStatesHandler.username[0],
+        fireBaseToken: formState.uid,
+        name: formState.username,
       }),
     }
     const response = await fetch(
@@ -273,12 +323,12 @@ const AuthorizationForm = () => {
     )
     if (response.status === 200) {
       response.json().then(json => {
-        localStatesHandler.user[1](json)
-        localStatesHandler.accessToken[1](json.accessToken)
-        localStatesHandler.refreshToken[1](json.refreshToken)
+        setUser(json)
+        setAccessToken(json.accessToken)
+        setRefreshToken(json.refreshToken)
       })
     }
-    localStatesHandler.message[1](1)
+    dispatch({ type: ReducerType.showMessage })
     setTimeout(() => {
       router.push('/')
     }, 2000)
@@ -299,12 +349,12 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
-              value={localStatesHandler.telephone[0]}
+              value={formState.telephone}
               onChange={handleTelephone}
             />
             <input
               className='errorMessage'
-              value={localStatesHandler.telephoneError[0]}
+              value={formState.telephoneError}
               disabled
             />
           </div>
@@ -320,12 +370,12 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
-              value={localStatesHandler.telephone[0]}
+              value={formState.telephone}
               onChange={handleTelephone}
             />
             <input
               className='errorMessage'
-              value={localStatesHandler.telephoneError[0]}
+              value={formState.telephoneError}
               disabled
             />
           </div>
@@ -334,12 +384,12 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='_ _ _ _ _ _'
-              value={localStatesHandler.telCode[0]}
+              value={formState.telCode}
               onChange={handleTelCode}
             />
             <input
               className='errorMessage'
-              value={localStatesHandler.telCodeError[0]}
+              value={formState.telCodeError}
               disabled
             />
           </div>
@@ -361,12 +411,12 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='Иван'
-              value={localStatesHandler.username[0]}
+              value={formState.username}
               onChange={handleUserName}
             />
             <input
               className='errorMessage'
-              value={localStatesHandler.nameError[0]}
+              value={formState.usernameError[0]}
               disabled
             />
           </div>
@@ -375,15 +425,15 @@ const AuthorizationForm = () => {
             <input
               className='inputField'
               placeholder='ДД.ММ.ГГГГ'
-              value={localStatesHandler.date[0]}
+              value={formState.date}
               onChange={handleDate}
             />
             <input
               className='errorMessage'
-              value={localStatesHandler.calendarError[0]}
+              value={formState.calendarError}
               disabled
             />
-            <div onClick={handleClickCalendar}>
+            <div onClick={toggleIsCalendarOpen}>
               <img
                 className='icon1'
                 src='assets/authorization/calendar.svg'
@@ -394,19 +444,19 @@ const AuthorizationForm = () => {
               <input
                 className='day'
                 placeholder='ДД'
-                value={localStatesHandler.day[0]}
+                value={formState.dateParts[0]}
                 onChange={handleDay}
               />
               <input
                 className='month'
                 placeholder='ММ'
-                value={localStatesHandler.month[0]}
+                value={formState.dateParts[1]}
                 onChange={handleMonth}
               />
               <input
                 className='year'
                 placeholder='ГГГГ'
-                value={localStatesHandler.year[0]}
+                value={formState.dateParts[2]}
                 onChange={handleYear}
               />
             </div>
@@ -433,44 +483,44 @@ const AuthorizationForm = () => {
       <div className='background' />
       <style jsx>
         {`
-        .finalMessage {
-          position: absolute;
-          top:100px;
-          right:200px;
-          width: 1364px;
-          height: 86px;
-          background: #B1E86B;
-          border: 1px solid #000000;
-          box-sizing: border-box;
-          border-radius: 5px;
-          font-family: Times New Roman;
-          z-index: 10;
-          font-size: 28px;
-          line-height: 33px;
-          text-align: center;
-          display: ${localStatesHandler.message[0] === 1 ? 'block' : 'none'};
-        }
-        .messageText {
-          margin: 24.17px 0;
-        }
-        .wrapper {
-          max-width: 1920px;
-          padding: 0 0px;
-          margin: 0 auto;
-        }
-        .authForm {
-           position:absolute;
-           bottom: -300px;
-           right: 0px;
-           z-index: 10;
-           width: 70%;
-           height: 100%;
-           display: "block"
+          .finalMessage {
+            position: absolute;
+            top: 100px;
+            right: 200px;
+            width: 1364px;
+            height: 86px;
+            background: #b1e86b;
+            border: 1px solid #000000;
+            box-sizing: border-box;
+            border-radius: 5px;
+            font-family: Times New Roman;
+            z-index: 10;
+            font-size: 28px;
+            line-height: 33px;
+            text-align: center;
+            display: ${formState.isMessageVisible ? 'block' : 'none'};
+          }
+          .messageText {
+            margin: 24.17px 0;
+          }
+          .wrapper {
+            max-width: 1920px;
+            padding: 0 0px;
+            margin: 0 auto;
+          }
+          .authForm {
+            position: absolute;
+            bottom: -300px;
+            right: 0px;
+            z-index: 10;
+            width: 70%;
+            height: 100%;
+            display: 'block';
           }
           .background {
-            position:fixed;
-            right:0px;
-            bottom:0px;
+            position: fixed;
+            right: 0px;
+            bottom: 0px;
             width: 100%;
             height: 100%;
             background-color: black;
@@ -478,11 +528,11 @@ const AuthorizationForm = () => {
             z-index: 8;
           }
           .authForm1 {
-            position: absolute:
-            right:0px;
-            bottom:0px;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
             background: white;
-            display: ${localStatesHandler.authForm[0] === 1 ? 'block' : 'none'};
+            display: ${formState.authForm === 1 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
@@ -491,7 +541,7 @@ const AuthorizationForm = () => {
           }
           .authForm2 {
             background: white;
-            display: ${localStatesHandler.authForm[0] === 2 ? 'block' : 'none'};
+            display: ${formState.authForm === 2 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
@@ -539,7 +589,7 @@ const AuthorizationForm = () => {
             text-indent: 10px;
           }
           .calendar {
-            visibility: ${localStatesHandler.isOpen[0] ? 'visible' : 'hidden'};
+            visibility: ${formState.isCalendarOpen ? 'visible' : 'hidden'};
             width: 201px;
             height: 91px;
             border: 1px solid #9e9e9e;
@@ -655,7 +705,7 @@ const AuthorizationForm = () => {
           }
           .authForm3 {
             background: white;
-            display: ${localStatesHandler.authForm[0] === 3 ? 'block' : 'none'};
+            display: ${formState.authForm === 3 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
