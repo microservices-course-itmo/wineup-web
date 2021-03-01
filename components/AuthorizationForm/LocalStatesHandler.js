@@ -1,6 +1,4 @@
 import { useMemo, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import { userState } from '../../utils/AuthorizationFormAtom'
 import useLocalStorage from '../../utils/useLocalStorage'
 
 export function LocalStatesHandler() {
@@ -18,7 +16,6 @@ export function LocalStatesHandler() {
   const [sendCode, setSendCode] = useState(null)
   const [uid, setUid] = useState(null)
   const [message, setMessage] = useState(0)
-  const [user, setUser] = useRecoilState(userState)
   const [accessToken, setAccessToken] = useLocalStorage('accessToken', '')
   const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken', '')
   return {
@@ -36,7 +33,6 @@ export function LocalStatesHandler() {
     sendCode: [sendCode, setSendCode],
     uid: [uid, setUid],
     message: [message, setMessage],
-    user: [user, setUser],
     accessToken: [accessToken, setAccessToken],
     refreshToken: [refreshToken, setRefreshToken],
   }

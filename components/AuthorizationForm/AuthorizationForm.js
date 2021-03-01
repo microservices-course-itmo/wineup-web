@@ -2,6 +2,10 @@
 import { useCallback } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
+import { useRecoilState } from 'recoil'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
+import useLocalStorage from '../../utils/useLocalStorage'
+import api from '../../api'
 import { LocalStatesHandler } from './LocalStatesHandler'
 
 const pI = value => {
@@ -226,16 +230,12 @@ const AuthorizationForm = () => {
             fireBaseToken: token,
           }),
         }
-        const response = await fetch(
-          'http://77.234.215.138:48080/user-service/login',
-          data
-        )
-        if (response.status === OK_CODE) {
-          response.json().then(json => {
-            localStatesHandler.user[1](json)
-            localStatesHandler.accessToken[1](json.accessToken)
-            localStatesHandler.refreshToken[1](json.refreshToken)
-          })
+        const response = await api.login(data)
+
+        if (!response.error) {
+          localStatesHandler.user[1](response.user.user)
+          localStatesHandler.accessToken[1](response.user.accessToken)
+          localStatesHandler.refreshToken[1](response.user.refreshToken)
           localStatesHandler.message[1](1)
           setTimeout(() => {
             router.push('/')
@@ -252,44 +252,41 @@ const AuthorizationForm = () => {
   }
   const registration = async () => {
     const data = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: 123,
-      },
-      body: JSON.stringify({
-        birthday: localStatesHandler.date[0],
-        cityId: 1,
-        fireBaseToken: localStatesHandler.uid[0],
-        name: localStatesHandler.username[0],
-      }),
+      birthday: date,
+      cityId: 1,
+      fireBaseToken: uid,
+      name: username,
     }
-    const response = await fetch(
-      'http://77.234.215.138:48080/user-service/registration',
-      data
-    )
-    if (response.status === 200) {
-      response.json().then(json => {
-        localStatesHandler.user[1](json)
-        localStatesHandler.accessToken[1](json.accessToken)
-        localStatesHandler.refreshToken[1](json.refreshToken)
-      })
+    const response = await api.registration(data)
+
+    if (!response.error) {
+      localStatesHandler.user[1](response.user.user)
+      localStatesHandler.accessToken[1](response.user.accessToken)
+      localStatesHandler.refreshToken[1](response.user.refreshToken)
     }
     localStatesHandler.message[1](1)
     setTimeout(() => {
       router.push('/')
     }, 2000)
   }
-
+  const handleClose = () => {
+    router.back()
+  }
+  const handleLockPropagination = e => {
+    e.stopPropagation()
+  }
   return (
-    <div className='wrapper'>
+    <div className='wrapper' onClick={handleClose}>
       <div className='finalMessage'>
         <div className='messageText'>
           Вы успешно зарегистрировались в системе
         </div>
       </div>
       <div className='authForm'>
-        <div className='authForm1'>
+        <div className='authForm1' onClick={e => handleLockPropagination(e)}>
+          <button type='button' className='closeButton' onClick={handleClose}>
+            X
+          </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
           <div className='inputForm'>
             <div className='formName'>Введите номер телефона</div>
@@ -310,7 +307,10 @@ const AuthorizationForm = () => {
           </div>
           <div id='recaptcha' />
         </div>
-        <div className='authForm2'>
+        <div className='authForm2' onClick={e => handleLockPropagination(e)}>
+          <button type='button' className='closeButton' onClick={handleClose}>
+            X
+          </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
           <div className='inputForm'>
             <div className='formName'>Введите номер телефона</div>
@@ -351,7 +351,10 @@ const AuthorizationForm = () => {
             </div>
           </div>
         </div>
-        <div className='authForm3'>
+        <div className='authForm3' onClick={e => handleLockPropagination(e)}>
+          <button type='button' className='closeButton' onClick={handleClose}>
+            X
+          </button>
           <div className='header'>Войдите или зарегистрируйтесь</div>
           <div className='inputForm'>
             <div className='formName'>Введите имя</div>
@@ -430,39 +433,39 @@ const AuthorizationForm = () => {
       <div className='background' />
       <style jsx>
         {`
-          .finalMessage {
-            position: absolute;
-            top: 100px;
-            right: 200px;
-            width: 1364px;
-            height: 86px;
-            background: #b1e86b;
-            border: 1px solid #000000;
-            box-sizing: border-box;
-            border-radius: 5px;
-            font-family: Times New Roman;
-            z-index: 10;
-            font-size: 28px;
-            line-height: 33px;
-            text-align: center;
-            display: ${localStatesHandler.message[0] === 1 ? 'block' : 'none'};
-          }
-          .messageText {
-            margin: 24.17px 0;
-          }
-          .wrapper {
-            max-width: 1920px;
-            padding: 0 0;
-            margin: 0 auto;
-          }
-          .authForm {
-            position: absolute;
-            bottom: -300px;
-            right: 0;
-            z-index: 10;
-            width: 70%;
-            height: 100%;
-            display: 'block';
+        .finalMessage {
+          position: absolute;
+          top:100px;
+          right:200px;
+          width: 1364px;
+          height: 86px;
+          background: #B1E86B;
+          border: 1px solid #000000;
+          box-sizing: border-box;
+          border-radius: 5px;
+          font-family: Times New Roman;
+          z-index: 10;
+          font-size: 28px;
+          line-height: 33px;
+          text-align: center;
+          display: ${message === 1 ? 'block' : 'none'};
+        }
+        .messageText {
+          margin: 24.17px 0;
+        }
+        .wrapper {
+          max-width: 1920px;
+          padding: 0 0px;
+          margin: 0 auto;
+        }
+        .authForm {
+           position:absolute;
+           bottom: -300px;
+           right: 0px;
+           z-index: 10;
+           width: 70%;
+           height: 100%;
+           display: "block"
           }
           .background {
             position: fixed;
@@ -475,7 +478,7 @@ const AuthorizationForm = () => {
             z-index: 8;
           }
           .authForm1 {
-            position: absolute;
+            position: absolute:
             right: 0;
             bottom: 0;
             background: white;
@@ -691,6 +694,14 @@ const AuthorizationForm = () => {
           .inputField:active {
             border: 0;
             border-bottom: 2px solid red;
+          }
+          .closeButton {
+            position: relative;
+            float: right;
+            margin-right: 5px;
+            font-size: 18px;
+            background-color: transparent;
+            border: none;
           }
         `}
       </style>

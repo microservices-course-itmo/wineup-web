@@ -10,7 +10,8 @@ import ButtonGroup from '../ButtonGroup'
  * @param props
  * @returns {JSX.Element} InputGroup - Список кастомных полей ввода одной группы
  */
-const InputGroup = ({ type, inputList, onChange, ...props }) => {
+
+const InputGroup = ({ type, inputList, onChange, visible, ...props }) => {
   let customInputList
   switch (type) {
     case 'checkbox':
@@ -40,7 +41,11 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
   const fullWidth = type === 'number'
   return (
     <>
-      <ul className={`input-list ${fullWidth ? 'full-width' : ''}`}>
+      <ul
+        className={`input-list${visible ? '' : '-invisible'} ${
+          fullWidth ? 'full-width' : ''
+        }`}
+      >
         {customInputList}
       </ul>
       <style jsx>
@@ -52,6 +57,9 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
             margin: 0 auto;
             width: 165px;
           }
+          .input-list-invisible {
+            display: none;
+          }
           .full-width {
             width: 100%;
           }
@@ -62,20 +70,24 @@ const InputGroup = ({ type, inputList, onChange, ...props }) => {
 }
 
 const InputContainer = ({ title, type, inputList, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
+  const handleClick = () => {
+    setIsOpen(!isOpen)
+  }
   return (
     <>
       <div className='criteria-title'>{title}</div>
       <div className='list-container'>
-        <InputGroup type={type} inputList={inputList} onChange={onChange} />
-        <button
-          className='arrow-btn'
-          onClick={() => setIsOpen(!isOpen)}
-          type='button'
-        >
+        <InputGroup
+          type={type}
+          inputList={inputList}
+          onChange={onChange}
+          visible={isOpen}
+        />
+        <button className='arrow-btn' onClick={handleClick} type='button'>
           <img
-            className={` arrow-${isOpen ? 'down' : 'up'}`}
-            src={`assets/arrow${isOpen ? 'Down' : 'Up'}.svg`}
+            className={` arrow-${isOpen ? 'up' : 'down'}`}
+            src={`assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
             alt='arrow'
           />
         </button>

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../../utils/AuthorizationFormAtom'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 const Header = () => {
   const user = useRecoilValue(userState)
@@ -39,7 +39,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href='/favorites'>
+      <Link href={`${user ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img className='icon' src='/assets/header/heart.svg' alt='heart' />
           <p>Избранное</p>
@@ -81,6 +81,11 @@ const Header = () => {
 
           .icon {
             margin-right: 10px;
+          }
+
+          .active-icon {
+            filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
+              brightness(60%) contrast(110%);
           }
 
           .title {
