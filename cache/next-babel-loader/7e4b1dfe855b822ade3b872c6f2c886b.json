@@ -1,1 +1,0 @@
-{"ast":null,"code":"import Api from './Api';\nexport default new Api();","map":null,"metadata":{},"sourceType":"module"}
