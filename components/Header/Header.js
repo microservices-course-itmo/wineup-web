@@ -12,7 +12,11 @@ const Header = () => {
     <div className='header'>
       <Link href='/'>
         <div className='menu-item city'>
-          <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
+          <img
+            className='icon'
+            src={`${prefix}/assets/header/city-icon.svg`}
+            alt='city'
+          />
           <p>Санкт-Петербург</p>
         </div>
       </Link>
@@ -20,7 +24,7 @@ const Header = () => {
         <div className='menu-item catalog'>
           <img
             className='icon'
-            src='/assets/header/catalog.svg'
+            src={`${prefix}/assets/header/catalog.svg`}
             alt='catalog'
           />
           <p>Каталог</p>
