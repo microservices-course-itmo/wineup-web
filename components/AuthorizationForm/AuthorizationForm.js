@@ -27,9 +27,9 @@ const OK_CODE = 200
 
 const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
-  const [user, setUser] = useRecoilState(userState)
-  const [accessToken, setAccessToken] = useLocalStorage('accessToken', '')
-  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken', '')
+  const [, setUser] = useRecoilState(userState)
+  const [, setAccessToken] = useLocalStorage('accessToken', '')
+  const [, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
 
   const handleDate = useCallback(
@@ -83,7 +83,7 @@ const AuthorizationForm = () => {
       const day = e.target.value
       if (day.length <= DAY_MAX_LENGTH) {
         if (pI(day) <= DAY_LIMIT) {
-          const [oldDay, month, year] = formState.dateParts
+          const [, month, year] = formState.dateParts
           dispatch({
             type: ReducerType.setDate,
             payload: `${day}.${month}.${year}`,
@@ -104,7 +104,7 @@ const AuthorizationForm = () => {
       const month = e.target.value
       if (month.length <= MONTH_LIMIT) {
         if (pI(month) <= MONTH_LIMIT) {
-          const [day, oldMonth, year] = formState.dateParts
+          const [day, , year] = formState.dateParts
           dispatch({
             type: ReducerType.setDate,
             payload: `${day}.${month}.${year}`,
@@ -124,7 +124,7 @@ const AuthorizationForm = () => {
     e => {
       const year = e.target.value
       if (year.length <= YEAR_LIMIT) {
-        const [day, oldMonth, year] = formState.dateParts
+        const [day, month] = formState.dateParts
         dispatch({
           type: ReducerType.setDate,
           payload: `${day}.${month}.${year}`,
