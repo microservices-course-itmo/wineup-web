@@ -4,7 +4,7 @@ import firebase from 'firebase'
 import { useRouter } from 'next/router'
 import { initialState, reducer, ReducerType } from './store'
 import { useRecoilState } from 'recoil'
-import { userState } from '../../utils/AuthorizationFormAtom'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 
 const pI = value => {

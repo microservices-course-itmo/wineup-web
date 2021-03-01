@@ -36,19 +36,20 @@ export const ReducerType = {
 }
 
 export const reducer = (state, action) => {
-  switch (action.type) {
+  const { type, payload } = action || {}
+  switch (type) {
     case ReducerType.setAuthForm:
-      return { ...state, authForm: action.payload }
+      return { ...state, authForm: payload }
     case ReducerType.setTelephone:
-      return { ...state, telephone: action.payload }
+      return { ...state, telephone: payload }
     case ReducerType.setTelephoneError:
-      return { ...state, telephoneError: action.payload }
+      return { ...state, telephoneError: payload }
     case ReducerType.clearTelephoneError:
       return { ...state, telephoneError: initialState.telephoneError }
     case ReducerType.setTelCode:
-      return { ...state, telCode: action.payload }
+      return { ...state, telCode: payload }
     case ReducerType.setTelCodeError:
-      return { ...state, telCodeError: action.payload }
+      return { ...state, telCodeError: payload }
     case ReducerType.clearTelCodeError:
       return { ...state, telCodeError: initialState.telCodeError }
     case ReducerType.setDate:
@@ -58,15 +59,15 @@ export const reducer = (state, action) => {
         dateParts: action.payload.split('.'),
       }
     case ReducerType.setIsCalendarOpen:
-      return { ...state, isCalendarOpen: action.payload }
+      return { ...state, isCalendarOpen: payload }
     case ReducerType.setUserName:
-      return { ...state, username: action.payload }
+      return { ...state, username: payload }
     case ReducerType.setUsernameError:
-      return { ...state, usernameError: action.payload }
+      return { ...state, usernameError: payload }
     case ReducerType.clearUsernameError:
       return { ...state, usernameError: initialState.usernameError }
     case ReducerType.setCalendarError:
-      return { ...state, calendarError: action.payload }
+      return { ...state, calendarError: payload }
     case ReducerType.clearCalendarError:
       return { ...state, calendarError: initialState.calendarError }
     case ReducerType.showMessage:
