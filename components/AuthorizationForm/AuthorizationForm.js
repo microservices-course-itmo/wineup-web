@@ -33,11 +33,11 @@ const AuthorizationForm = () => {
         localStatesHandler.setDate(date)
         if (pI(day) > DAY_LIMIT)
           localStatesHandler.calendarError[1](
-            'Ошибка: дней не может быть больше `${DAY_LIMIT}`'
+            `'Ошибка: дней не может быть больше ${DAY_LIMIT}'`
           )
         if (pI(month) > MONTH_LIMIT)
           localStatesHandler.calendarError[1](
-            'Ошибка: месяцев всего ${MONTH_LIMIT}'
+            `'Ошибка: месяцев всего ${MONTH_LIMIT}'`
           )
         if (pI(year) > CURRENT_YEAR)
           localStatesHandler.calendarError[1](
@@ -45,7 +45,7 @@ const AuthorizationForm = () => {
           )
         if (pI(year) > TOO_YOUNG)
           localStatesHandler.calendarError[1](
-            'Ошибка: не достигли ${CONSENT_YEAR} лет'
+            `'Ошибка: не достигли ${CONSENT_YEAR} лет'`
           )
         else {
           localStatesHandler.calendarError[1]('')
@@ -77,7 +77,7 @@ const AuthorizationForm = () => {
           localStatesHandler.calendarError[1]('')
         } else
           localStatesHandler.calendarError[1](
-            'Ошибка: дней не может быть больше ${DAY_LIMIT}'
+            `'Ошибка: дней не может быть больше ${DAY_LIMIT}'`
           )
       }
     },
@@ -96,7 +96,7 @@ const AuthorizationForm = () => {
           localStatesHandler.calendarError[1]('')
         } else
           localStatesHandler.calendarError[1](
-            'Ошибка: месяцев всего ${MONTH_LIMIT}'
+            `'Ошибка: месяцев всего ${MONTH_LIMIT}'`
           )
       }
     },
@@ -117,7 +117,7 @@ const AuthorizationForm = () => {
           )
         if (pI(year) >= TOO_YOUNG)
           localStatesHandler.calendarError[1](
-            'Ошибка: не достигли ${CONSENT_YEAR} лет'
+            `'Ошибка: не достигли ${CONSENT_YEAR} лет'`
           )
         else localStatesHandler.calendarError[1]('')
       }
@@ -134,7 +134,7 @@ const AuthorizationForm = () => {
       localStatesHandler.username(username)
       if (USERNAME_MIN_LENGTH < username.length < USERNAME_MAX_LENGTH)
         localStatesHandler.nameError[1](
-          'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов'
+          `'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов'`
         )
       else {
         const format = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
@@ -458,7 +458,7 @@ const AuthorizationForm = () => {
           .authForm {
             position: absolute;
             bottom: -300px;
-            right: 0px;
+            right: 0;
             z-index: 10;
             width: 70%;
             height: 100%;
@@ -466,8 +466,8 @@ const AuthorizationForm = () => {
           }
           .background {
             position: fixed;
-            right: 0px;
-            bottom: 0px;
+            right: 0;
+            bottom: 0;
             width: 100%;
             height: 100%;
             background-color: black;
@@ -476,15 +476,15 @@ const AuthorizationForm = () => {
           }
           .authForm1 {
             position: absolute;
-            right: 0px;
-            bottom: 0px;
+            right: 0;
+            bottom: 0;
             background: white;
             display: ${localStatesHandler.authForm[0] === 1 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
             height: 512px;
-            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
           .authForm2 {
             background: white;
@@ -493,7 +493,7 @@ const AuthorizationForm = () => {
             border-radius: 10px;
             width: 685px;
             height: 630px;
-            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
           .errorMessage {
             color: #cf3737;
@@ -504,8 +504,8 @@ const AuthorizationForm = () => {
             line-height: 18px;
             height: 18px;
             width: 499px;
-            border: 0px;
-            padding: 0px;
+            border: 0;
+            padding: 0;
             background: inherit;
           }
           .day {
@@ -514,25 +514,25 @@ const AuthorizationForm = () => {
             height: 41px;
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
-            border-radius: 5px 0px 0px 5px;
+            border-radius: 5px 0 0 5px;
             text-indent: 10px;
           }
           .month {
             width: 41px;
             height: 41px;
-            margin: 25px 4px 25px 0px;
+            margin: 25px 4px 25px 0;
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
-            border-radius: 0px;
+            border-radius: 0;
             text-indent: 5px;
           }
           .year {
-            margin: 25px 25px 25px 0px;
+            margin: 25px 25px 25px 0;
             width: 56px;
             height: 41px;
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
-            border-radius: 0px 5px 5px 0px;
+            border-radius: 0 5px 5px 0;
             text-indent: 10px;
           }
           .calendar {
@@ -541,7 +541,7 @@ const AuthorizationForm = () => {
             height: 91px;
             border: 1px solid #9e9e9e;
             box-sizing: border-box;
-            box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.11);
+            box-shadow: 0 0 11px rgba(0, 0, 0, 0.11);
             border-radius: 5px;
             position: relative;
             left: 510px;
@@ -582,10 +582,10 @@ const AuthorizationForm = () => {
             margin: 50px 120px 5px 119px;
             font: 22px Sans;
             color: white;
-            border: 0px;
+            border: 0;
           }
           .telButton1:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);
             background: #af2f4e;
             outline: none;
           }
@@ -593,7 +593,7 @@ const AuthorizationForm = () => {
             background: #232323;
             font: 22px Sans;
             color: white;
-            border: 0px;
+            border: 0;
             display: inline-block;
             border-radius: 50px;
             width: 274px;
@@ -604,20 +604,20 @@ const AuthorizationForm = () => {
             background: #232323;
             font: 22px Sans;
             color: white;
-            border: 0px;
+            border: 0;
             display: inline-block;
             border-radius: 50px;
             width: 274px;
             height: 58px;
-            margin: 58px 0px 140px 0px;
+            margin: 58px 0 140px 0;
           }
           .telButton21:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);
             background: #af2f4e;
             outline: none;
           }
           .telButton22:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);
             background: #af2f4e;
             outline: none;
           }
@@ -638,15 +638,15 @@ const AuthorizationForm = () => {
             margin: 50px 206px 5px 205px;
             font: 22px Sans;
             color: white;
-            border: 0px;
+            border: 0;
           }
           .authButton:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);
             background: #af2f4e;
             outline: none;
           }
           a.authButton:focus {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
+            box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);
             background: #af2f4e;
             outline: none;
           }
@@ -657,7 +657,7 @@ const AuthorizationForm = () => {
             border-radius: 10px;
             width: 685px;
             height: 797px;
-            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
           .header {
             width: 453px;
@@ -689,7 +689,7 @@ const AuthorizationForm = () => {
             border-radius: 5px;
           }
           .inputField:active {
-            border: 0px;
+            border: 0;
             border-bottom: 2px solid red;
           }
         `}
