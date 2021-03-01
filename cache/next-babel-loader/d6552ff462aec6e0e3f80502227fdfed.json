@@ -1,0 +1,1 @@
+{"ast":null,"code":"import ReviewCard from './ReviewCard';\nexport default ReviewCard;","map":null,"metadata":{},"sourceType":"module"}

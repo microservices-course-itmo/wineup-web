@@ -1,0 +1,1 @@
+{"ast":null,"code":"import AuthorizationForm from './AuthorizationForm';\nexport default AuthorizationForm;","map":null,"metadata":{},"sourceType":"module"}
