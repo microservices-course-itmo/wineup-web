@@ -14,7 +14,6 @@ const SameWines = () => (
       spaceBetween={50}
       slidesPerView={4}
       pagination={{ clickable: true }}
-      style={{ paddingBottom: 90 }}
     >
       <SwiperSlide>
         <WineCard

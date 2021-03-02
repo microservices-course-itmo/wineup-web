@@ -96,6 +96,10 @@ const App = ({ Component, pageProps }) => {
             .swiper-pagination-bullet {
             margin: 0 10px;
           }
+
+          .swiper-wrapper {
+            padding-bottom: 90px;
+          }
         `}
       </style>
     </RecoilRoot>
