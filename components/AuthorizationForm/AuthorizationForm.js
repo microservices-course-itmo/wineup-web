@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 
-const pI = value => {
+const parseIntToDecimal = value => {
   return parseInt(value, 10)
 }
 
@@ -25,6 +25,9 @@ const USERNAME_MIN_LENGTH = 2
 const TELEPHONE_MAX_SIZE = 12
 const OK_CODE = 200
 
+const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+const usernameReges = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+
 const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
   const [, setUser] = useRecoilState(userState)
@@ -35,38 +38,38 @@ const AuthorizationForm = () => {
   const handleDate = useCallback(
     e => {
       const date = e.target.value
-      const dateParts = date.split('.')
+      const [day, month, year] = date.split('.')
       if (date < DATE_MAX_LENGTH) {
         dispatch({ type: ReducerType.setDate, payload: date })
-        if (pI(dateParts[0]) > DAY_LIMIT)
+        if (parseIntToDecimal(day) > DAY_LIMIT)
           dispatch({
             type: ReducerType.setCalendarError,
             payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
           })
-        if (pI(dateParts[1]) > MONTH_LIMIT)
+        if (parseIntToDecimal(month) > MONTH_LIMIT)
           dispatch({
             type: ReducerType.setCalendarError,
             payload: 'Ошибка: месяцев всего ${MONTH_LIMIT}',
           })
-        if (pI(dateParts[2]) > CURRENT_YEAR)
+        if (parseIntToDecimal(year) > CURRENT_YEAR)
           dispatch({
             type: ReducerType.setCalendarError,
             payload: 'Приветствую тебя, гость из будущего!',
           })
-        if (pI(dateParts[2]) > TOO_YOUNG)
+        if (parseIntToDecimal(year) > TOO_YOUNG)
           dispatch({
             type: ReducerType.setCalendarError,
             payload: 'Ошибка: не достигли ${CONSENT_YEAR} лет',
           })
         else {
           dispatch({ type: ReducerType.clearCalendarError })
-          if (!(date.charAt(date.length - 1) === '.'))
-            if (
-              date.length === DAY_MAX_LENGTH ||
-              date.length === DAY_PLUS_MONTH_MAX_LENGTH
-            )
-              if (dateParts[0].length === 2)
-                dispatch({ type: ReducerType.setDate, payload: `${date}.` })
+          const isLastCharValid = date.charAt(date.length - 1) !== '.'
+          const isDateValid =
+            date.length === DAY_MAX_LENGTH ||
+            date.length === DAY_PLUS_MONTH_MAX_LENGTH // тут посмотри почему ты сравниваешь DAY_max_length с DATE.length -- так и задумано, это нужно чтобы точку доставлять
+          const isDayValid = day.length === 2 // тут, было бы круто поменять на day.length === 2 -- круто
+          if (isLastCharValid && isDateValid && isDayValid)
+            dispatch({ type: ReducerType.setDate, payload: `${date}.` })
         }
       } else {
         dispatch({
@@ -82,7 +85,7 @@ const AuthorizationForm = () => {
     e => {
       const day = e.target.value
       if (day.length <= DAY_MAX_LENGTH) {
-        if (pI(day) <= DAY_LIMIT) {
+        if (parseIntToDecimal(day) <= DAY_LIMIT) {
           const [, month, year] = formState.dateParts
           dispatch({
             type: ReducerType.setDate,
@@ -103,7 +106,7 @@ const AuthorizationForm = () => {
     e => {
       const month = e.target.value
       if (month.length <= MONTH_LIMIT) {
-        if (pI(month) <= MONTH_LIMIT) {
+        if (parseIntToDecimal(month) <= MONTH_LIMIT) {
           const [day, , year] = formState.dateParts
           dispatch({
             type: ReducerType.setDate,
@@ -129,12 +132,12 @@ const AuthorizationForm = () => {
           type: ReducerType.setDate,
           payload: `${day}.${month}.${year}`,
         })
-        if (pI(year) > YEAR_LIMIT)
+        if (parseIntToDecimal(year) > YEAR_LIMIT)
           dispatch({
             type: ReducerType.setCalendarError,
             payload: 'Приветствую тебя, гость из будущего!',
           })
-        if (pI(year) >= TOO_YOUNG)
+        if (parseIntToDecimal(year) >= TOO_YOUNG)
           dispatch({
             type: ReducerType.setCalendarError,
             payload: 'Ошибка: не достигли ${CONSENT_YEAR} лет',
@@ -167,8 +170,7 @@ const AuthorizationForm = () => {
             'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов',
         })
       else {
-        const format = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
-        if (format.test(username))
+        if (username.test(username))
           dispatch({
             type: ReducerType.setUsernameError,
             payload: 'Ошибка: недопустимые символы',
@@ -182,8 +184,7 @@ const AuthorizationForm = () => {
   const handleTelephone = useCallback(
     e => {
       const telephone = e.target.value
-      const format = /[ `№!@#$%^&*()_\-=[\]{};':"\\|,.<>/?~a-zA-Zа-яА-Я]/
-      if (format.test(telephone))
+      if (phoneRegex.test(telephone))
         dispatch({
           type: ReducerType.setTelephoneError,
           payload: 'Ошибка: недопустимые символы',
@@ -214,8 +215,8 @@ const AuthorizationForm = () => {
 
   const handleFirstForm = async () => {
     if (
-      formState.telephoneError[0] === '' &&
-      formState.telephone[0].length === TELEPHONE_MAX_SIZE
+      formState.telephoneError === '' &&
+      formState.telephone.length === TELEPHONE_MAX_SIZE
     ) {
       const applicationVerifier = new firebase.auth.RecaptchaVerifier(
         'recaptcha',
@@ -227,15 +228,10 @@ const AuthorizationForm = () => {
           payload: async () =>
             await firebase
               .auth()
-              .signInWithPhoneNumber(
-                localStatesHandler.telephone[0],
-                applicationVerifier
-              ),
+              .signInWithPhoneNumber(formState.telephone, applicationVerifier),
         })
       } catch (err) {
-        throw new Error(
-          `Error occurred during singing in with phone number: ${err}`
-        )
+        throw new Error(`Возникла ошибка при авторизации по телефону: ${err}`)
       }
       dispatch({ type: ReducerType.setAuthForm, payload: 2 })
     } else
@@ -250,10 +246,10 @@ const AuthorizationForm = () => {
     dispatch({ type: ReducerType.setAuthForm, payload: 1 })
   }
 
-  const handleSecondForm1 = async () => {
+  const handleSecondForm = async () => {
     if (
-      formState.telephoneError[0] === '' &&
-      formState.telephone[0].length === TELEPHONE_MAX_SIZE
+      formState.telephoneError === '' &&
+      formState.telephone.length === TELEPHONE_MAX_SIZE
     ) {
       try {
         const token = await formState
@@ -262,25 +258,16 @@ const AuthorizationForm = () => {
           .then(({ user: { ya } }) => ya)
         dispatch({ type: ReducerType.setUid, payload: token })
         const data = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: 123,
-          },
-          body: JSON.stringify({
-            fireBaseToken: token,
-          }),
+          fireBaseToken: token,
         }
-        const response = await fetch(
-          'http://77.234.215.138:48080/user-service/login',
-          data
-        )
+        const response = await api.login(data)
+
         if (response.status === OK_CODE) {
           response.json().then(json => {
             dispatch({ type: ReducerType.setUser })
             setUser(json)
-            setAccessToken[1](json.accessToken)
-            setRefreshToken[1](json.refreshToken)
+            setAccessToken(json.accessToken)
+            setRefreshToken(json.refreshToken)
           })
           dispatch({ type: ReducerType.showMessage })
           setTimeout(() => {
@@ -291,6 +278,8 @@ const AuthorizationForm = () => {
         }
         dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
+        console.log(err)
+        console.log(formState.telCode)
         dispatch({
           type: ReducerType.setTelCodeError,
           payload: 'Ошибка: неправильный код',
@@ -305,22 +294,14 @@ const AuthorizationForm = () => {
   }
   const registration = async () => {
     const data = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: 123,
-      },
-      body: JSON.stringify({
-        birthday: formState.date,
-        cityId: 1,
-        fireBaseToken: formState.uid,
-        name: formState.username,
-      }),
+      birthday: formState.date,
+      cityId: 1,
+      fireBaseToken: formState.uid,
+      name: formState.username,
     }
-    const response = await fetch(
-      'http://77.234.215.138:48080/user-service/registration',
-      data
-    )
+
+    const response = await api.registration(data)
+
     if (response.status === 200) {
       response.json().then(json => {
         setUser(json)
@@ -394,7 +375,7 @@ const AuthorizationForm = () => {
             />
           </div>
           <div className='telButton21'>
-            <div className='telButton2Inner' onClick={handleSecondForm1}>
+            <div className='telButton2Inner' onClick={handleSecondForm}>
               Подтвердить
             </div>
           </div>
@@ -510,8 +491,8 @@ const AuthorizationForm = () => {
           }
           .authForm {
             position: absolute;
-            bottom: -300px;
-            right: 0px;
+            bottom: 0px;
+            right: 600px;
             z-index: 10;
             width: 70%;
             height: 100%;
@@ -540,6 +521,9 @@ const AuthorizationForm = () => {
             box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
           }
           .authForm2 {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
             background: white;
             display: ${formState.authForm === 2 ? 'block' : 'none'};
             border: 2px solid black;
