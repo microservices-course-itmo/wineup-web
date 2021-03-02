@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
+import api from '../../api'
 
 const AuthorizationForm = () => {
   const router = useRouter()
@@ -181,27 +182,18 @@ const AuthorizationForm = () => {
           const token = await sendCode
             .confirm(telCode)
             .then(({ user: { ya } }) => ya)
+
           setUid(token)
+
           const data = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-              Authorization: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-            },
-            body: JSON.stringify({
-              fireBaseToken: token,
-            }),
+            fireBaseToken: token,
           }
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API}/user-service/login`,
-            data
-          )
-          if (response.status === 200) {
-            response.json().then(json => {
-              setUser(json)
-              setAccessToken(json.accessToken)
-              setRefreshToken(json.refreshToken)
-            })
+          const response = await api.login(data)
+
+          if (!response.error) {
+            setUser(response.user.user)
+            setAccessToken(response.user.accessToken)
+            setRefreshToken(response.user.refreshToken)
             setMessage(1)
             setTimeout(() => {
               router.push('/')
@@ -222,28 +214,17 @@ const AuthorizationForm = () => {
   }
   const registration = async () => {
     const data = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-      },
-      body: JSON.stringify({
-        birthday: date,
-        cityId: 1,
-        fireBaseToken: uid,
-        name: username,
-      }),
+      birthday: date,
+      cityId: 1,
+      fireBaseToken: uid,
+      name: username,
     }
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/user-service/registration`,
-      data
-    )
-    if (response.status === 200) {
-      response.json().then(json => {
-        setUser(json)
-        setAccessToken(json.accessToken)
-        setRefreshToken(json.refreshToken)
-      })
+    const response = await api.registration(data)
+
+    if (!response.error) {
+      setUser(response.user.user)
+      setAccessToken(response.user.accessToken)
+      setRefreshToken(response.user.refreshToken)
     }
     setMessage(1)
     setTimeout(() => {
@@ -406,9 +387,9 @@ const AuthorizationForm = () => {
           border-radius: 5px;
           font-family: Times New Roman;
           z-index: 10;
-font-size: 28px;
-line-height: 33px;
-text-align: center;
+          font-size: 28px;
+          line-height: 33px;
+          text-align: center;
           display: ${message === 1 ? 'block' : 'none'};
         }
         .messageText {
