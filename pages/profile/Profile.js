@@ -72,6 +72,9 @@ const Profile = () => {
       .then(() => window.location.reload())
       .catch(alert)
   }
+
+  const { name, cityName, phoneNumber } = user
+
   return (
     <div className='wrapper'>
       <Header />
@@ -111,7 +114,7 @@ const Profile = () => {
                 <CustomInput
                   id='name-input'
                   label='Ваше имя'
-                  defaultValue={user.name}
+                  defaultValue={name}
                   onChange={evt =>
                     onInputChange('name', evt.currentTarget.value)
                   }
@@ -119,7 +122,7 @@ const Profile = () => {
                 <CustomInput
                   id='city-input'
                   label='Город'
-                  defaultValue={user.cityName}
+                  defaultValue={cityName}
                   onChange={evt =>
                     onInputChange(
                       'cityId',
@@ -130,7 +133,7 @@ const Profile = () => {
                 <CustomInput
                   id='phone-input'
                   label='Телефон'
-                  defaultValue={user.phoneNumber}
+                  defaultValue={phoneNumber}
                   onChange={evt =>
                     onInputChange('phoneNumber', evt.currentTarget.value)
                   }
