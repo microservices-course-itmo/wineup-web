@@ -24,7 +24,8 @@
   },
   "plugins": [
     "react",
-    "prettier"
+    "prettier",
+    "jest"
   ],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
@@ -42,6 +43,11 @@
     "react/button-has-type": [1, { "reset": true }],
     "prettier/prettier": ["error", {
      "endOfLine":"auto"
-   }]
+   }],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   }
 }
