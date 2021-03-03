@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
-import Search from '../../components/Search'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
@@ -21,17 +20,14 @@ const Profile = () => {
         const [newAccessToken, newRefreshToken] = await api.refreshToken(
           refreshToken
         )
-
         setAccessToken(newAccessToken)
         setRefreshToken(newRefreshToken)
       }
-
       const currentUser2 = await response.profile
-
       setCurrentUser(currentUser2)
     }
     if (!currentUser) {
-      getUser().catch(console.log)
+      getUser().catch(alert)
     }
   }, [accessToken, currentUser, refreshToken, setAccessToken, setRefreshToken])
 
@@ -69,18 +65,21 @@ const Profile = () => {
   return (
     <div className='wrapper'>
       <Header />
-      <Search />
       <div className='content'>
         <header className='main-header'>Личный кабинет</header>
         {user && (
           <div className='profile'>
             <nav className='container'>
               <div className='user-avatar'>
-                <img className='avatar' src='/assets/user.svg' alt='user-pic' />
+                <img
+                  className='avatar'
+                  src='/assets/user.svg'
+                  alt='User Avatar'
+                />
                 <img
                   className='edit-btn'
                   src='/assets/edit-icon.svg'
-                  alt='edit'
+                  alt='Edit'
                 />
               </div>
               <ul className='nav-list'>
@@ -102,7 +101,7 @@ const Profile = () => {
                 <CustomInput
                   id='name-input'
                   label='Ваше имя'
-                  text={user.name}
+                  defaultValue={user.name}
                   onChange={evt =>
                     onInputChange('name', evt.currentTarget.value)
                   }
@@ -110,7 +109,7 @@ const Profile = () => {
                 <CustomInput
                   id='city-input'
                   label='Город'
-                  text={user.cityName}
+                  defaultValue={user.cityName}
                   onChange={evt =>
                     onInputChange('cityName', evt.currentTarget.value)
                   }
@@ -118,7 +117,7 @@ const Profile = () => {
                 <CustomInput
                   id='phone-input'
                   label='Телефон'
-                  text={user.phoneNumber}
+                  defaultValue={user.phoneNumber}
                   onChange={evt =>
                     onInputChange('phoneNumber', evt.currentTarget.value)
                   }
@@ -145,12 +144,12 @@ const Profile = () => {
         {`
           .wrapper {
             max-width: 1440px;
-            padding: 0 20px;
             margin: 0 auto;
           }
           .content {
             display: flex;
             margin-top: 40px;
+            padding: 0 20px;
             flex-direction: column;
             background-color: #f5f5f5;
           }
