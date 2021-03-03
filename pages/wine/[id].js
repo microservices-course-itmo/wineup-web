@@ -29,6 +29,7 @@ export const winesPositionState = selectorFamily({
   },
 })
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Wine = () => {
   const router = useRouter()
   const { state, contents } = useRecoilValueLoadable(
@@ -76,7 +77,7 @@ const Wine = () => {
             <div className='loading'>
               <img
                 className='error-icon'
-                src='/assets/error.svg'
+                src={`${prefix}/assets/error.svg`}
                 alt='error icon'
               />
               <p>

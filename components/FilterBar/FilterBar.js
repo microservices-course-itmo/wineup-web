@@ -2,6 +2,7 @@ import { useRecoilState } from 'recoil'
 import InputContainer from '../InputContainer'
 import { formFiltersState } from '../Catalog'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const FilterBar = () => {
   const initialFormState = {
     priceFrom: 0,
@@ -329,7 +330,7 @@ const FilterBar = () => {
       <button type='reset' className='clear-filter-button'>
         <span className='btn-text'>
           <span>Очистить фильтр</span>
-          <img src='/assets/resetBtnIcon.svg' alt='reset' />
+          <img src={`${prefix}/assets/resetBtnIcon.svg`} alt='reset' />
         </span>
       </button>
 

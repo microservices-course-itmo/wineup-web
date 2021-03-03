@@ -6,18 +6,26 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
-
-      - name: Install and Build
+      - name: Use Node.js ${{ matrix.node-version}}
         uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: npm ci
       - run: npm install
       - run: npm run build # runs `next build`
+        env:
+          NEXT_PUBLIC_BASE_PATH: /wineup-web
       - run: npm run export # runs `next export`
         env:
+          NEXT_PUBLIC_BASE_PATH: /wineup-web
           CI: true
           DEPLOY_TARGET: gh-pages
       - run: touch out/.nojekyll
