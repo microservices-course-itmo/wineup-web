@@ -1,11 +1,11 @@
-/* eslint-disable */
 import { useCallback, useReducer } from 'react'
 import firebase from 'firebase'
 import { useRouter } from 'next/router'
-import { initialState, reducer, ReducerType } from './store'
 import { useRecoilState } from 'recoil'
+import { initialState, reducer, ReducerType } from './store'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
+import api from '../../api'
 
 const parseIntToDecimal = value => {
   return parseInt(value, 10)
@@ -26,7 +26,7 @@ const TELEPHONE_MAX_SIZE = 12
 const OK_CODE = 200
 
 const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
-const usernameReges = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 
 const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
@@ -35,51 +35,48 @@ const AuthorizationForm = () => {
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
 
-  const handleDate = useCallback(
-    e => {
-      const date = e.target.value
-      const [day, month, year] = date.split('.')
-      if (date < DATE_MAX_LENGTH) {
-        dispatch({ type: ReducerType.setDate, payload: date })
-        if (parseIntToDecimal(day) > DAY_LIMIT)
-          dispatch({
-            type: ReducerType.setCalendarError,
-            payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
-          })
-        if (parseIntToDecimal(month) > MONTH_LIMIT)
-          dispatch({
-            type: ReducerType.setCalendarError,
-            payload: 'Ошибка: месяцев всего ${MONTH_LIMIT}',
-          })
-        if (parseIntToDecimal(year) > CURRENT_YEAR)
-          dispatch({
-            type: ReducerType.setCalendarError,
-            payload: 'Приветствую тебя, гость из будущего!',
-          })
-        if (parseIntToDecimal(year) > TOO_YOUNG)
-          dispatch({
-            type: ReducerType.setCalendarError,
-            payload: 'Ошибка: не достигли ${CONSENT_YEAR} лет',
-          })
-        else {
-          dispatch({ type: ReducerType.clearCalendarError })
-          const isLastCharValid = date.charAt(date.length - 1) !== '.'
-          const isDateValid =
-            date.length === DAY_MAX_LENGTH ||
-            date.length === DAY_PLUS_MONTH_MAX_LENGTH // тут посмотри почему ты сравниваешь DAY_max_length с DATE.length -- так и задумано, это нужно чтобы точку доставлять
-          const isDayValid = day.length === 2 // тут, было бы круто поменять на day.length === 2 -- круто
-          if (isLastCharValid && isDateValid && isDayValid)
-            dispatch({ type: ReducerType.setDate, payload: `${date}.` })
-        }
-      } else {
+  const handleDate = useCallback(e => {
+    const date = e.target.value
+    const [day, month, year] = date.split('.')
+    if (date < DATE_MAX_LENGTH) {
+      dispatch({ type: ReducerType.setDate, payload: date })
+      if (parseIntToDecimal(day) > DAY_LIMIT)
         dispatch({
           type: ReducerType.setCalendarError,
-          payload: 'Предупреждение: вы пытаетесь ввести слишком длинную строку',
+          payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
         })
+      if (parseIntToDecimal(month) > MONTH_LIMIT)
+        dispatch({
+          type: ReducerType.setCalendarError,
+          payload: `Ошибка: месяцев всего ${MONTH_LIMIT}`,
+        })
+      if (parseIntToDecimal(year) > CURRENT_YEAR)
+        dispatch({
+          type: ReducerType.setCalendarError,
+          payload: 'Приветствую тебя, гость из будущего!',
+        })
+      if (parseIntToDecimal(year) > TOO_YOUNG)
+        dispatch({
+          type: ReducerType.setCalendarError,
+          payload: `Ошибка: не достигли ${CONSENT_YEAR} лет`,
+        })
+      else {
+        dispatch({ type: ReducerType.clearCalendarError })
+        const isLastCharValid = date.charAt(date.length - 1) !== '.'
+        const isDateValid =
+          date.length === DAY_MAX_LENGTH ||
+          date.length === DAY_PLUS_MONTH_MAX_LENGTH // тут посмотри почему ты сравниваешь DAY_max_length с DATE.length -- так и задумано, это нужно чтобы точку доставлять
+        const isDayValid = day.length === 2 // тут, было бы круто поменять на day.length === 2 -- круто
+        if (isLastCharValid && isDateValid && isDayValid)
+          dispatch({ type: ReducerType.setDate, payload: `${date}.` })
       }
-    },
-    [formState]
-  )
+    } else {
+      dispatch({
+        type: ReducerType.setCalendarError,
+        payload: 'Предупреждение: вы пытаетесь ввести слишком длинную строку',
+      })
+    }
+  }, [])
 
   const handleDay = useCallback(
     e => {
@@ -95,12 +92,12 @@ const AuthorizationForm = () => {
         } else {
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: 'Ошибка: дней не может быть больше ${DAY_LIMIT}',
+            payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
           })
         }
       }
     },
-    [formState]
+    [formState.dateParts]
   )
   const handleMonth = useCallback(
     e => {
@@ -116,7 +113,7 @@ const AuthorizationForm = () => {
         } else {
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: 'Ошибка: месяцев всего ${MONTH_LIMIT}',
+            payload: `Ошибка: месяцев всего ${MONTH_LIMIT}`,
           })
         }
       }
@@ -140,7 +137,7 @@ const AuthorizationForm = () => {
         if (parseIntToDecimal(year) >= TOO_YOUNG)
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: 'Ошибка: не достигли ${CONSENT_YEAR} лет',
+            payload: `Ошибка: не достигли ${CONSENT_YEAR} лет`,
           })
         else {
           dispatch({ type: ReducerType.clearCalendarError })
@@ -156,56 +153,47 @@ const AuthorizationForm = () => {
     })
   }, [formState.isCalendarOpen])
 
-  const handleUserName = useCallback(
-    e => {
-      const username = e.target.value
-      dispatch({ type: ReducerType.setUserName, payload: username })
-      if (
-        username.length < USERNAME_MIN_LENGTH ||
-        username.length > USERNAME_MAX_LENGTH
-      )
-        dispatch({
-          type: ReducerType.setUsernameError,
-          payload:
-            'Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов',
-        })
-      else {
-        if (username.test(username))
-          dispatch({
-            type: ReducerType.setUsernameError,
-            payload: 'Ошибка: недопустимые символы',
-          })
-        else dispatch({ type: ReducerType.clearUsernameError })
-      }
-    },
-    [formState]
-  )
+  const handleUserName = useCallback(e => {
+    const username = e.target.value
+    dispatch({ type: ReducerType.setUserName, payload: username })
+    if (
+      username.length < USERNAME_MIN_LENGTH ||
+      username.length > USERNAME_MAX_LENGTH
+    )
+      dispatch({
+        type: ReducerType.setUsernameError,
+        payload: `Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов`,
+      })
+    if (usernameRegex.test(username))
+      dispatch({
+        type: ReducerType.setUsernameError,
+        payload: 'Ошибка: недопустимые символы',
+      })
+    else dispatch({ type: ReducerType.clearUsernameError })
+  }, [])
 
-  const handleTelephone = useCallback(
-    e => {
-      const telephone = e.target.value
-      if (phoneRegex.test(telephone))
-        dispatch({
-          type: ReducerType.setTelephoneError,
-          payload: 'Ошибка: недопустимые символы',
-        })
-      if (
-        telephone.charAt(0) === '+' &&
-        telephone.charAt(1) === '7' &&
-        telephone.length <= TELEPHONE_MAX_SIZE
-      )
-        dispatch({ type: ReducerType.clearTelephoneError })
-      else {
-        dispatch({
-          type: ReducerType.setTelephoneError,
-          payload:
-            'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX',
-        })
-      }
-      dispatch({ type: ReducerType.setTelephone, payload: telephone })
-    },
-    [formState]
-  )
+  const handleTelephone = useCallback(e => {
+    const telephone = e.target.value
+    if (phoneRegex.test(telephone))
+      dispatch({
+        type: ReducerType.setTelephoneError,
+        payload: 'Ошибка: недопустимые символы',
+      })
+    if (
+      telephone.charAt(0) === '+' &&
+      telephone.charAt(1) === '7' &&
+      telephone.length <= TELEPHONE_MAX_SIZE
+    )
+      dispatch({ type: ReducerType.clearTelephoneError })
+    else {
+      dispatch({
+        type: ReducerType.setTelephoneError,
+        payload:
+          'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX',
+      })
+    }
+    dispatch({ type: ReducerType.setTelephone, payload: telephone })
+  }, [])
 
   const handleTelCode = useCallback(e => {
     const telcode = e.target.value
@@ -218,21 +206,6 @@ const AuthorizationForm = () => {
       formState.telephoneError === '' &&
       formState.telephone.length === TELEPHONE_MAX_SIZE
     ) {
-      const applicationVerifier = new firebase.auth.RecaptchaVerifier(
-        'recaptcha',
-        { size: 'invisible' }
-      )
-      try {
-        dispatch({
-          type: ReducerType.setSendCode,
-          payload: async () =>
-            await firebase
-              .auth()
-              .signInWithPhoneNumber(formState.telephone, applicationVerifier),
-        })
-      } catch (err) {
-        throw new Error(`Возникла ошибка при авторизации по телефону: ${err}`)
-      }
       dispatch({ type: ReducerType.setAuthForm, payload: 2 })
     } else
       dispatch({
@@ -251,9 +224,15 @@ const AuthorizationForm = () => {
       formState.telephoneError === '' &&
       formState.telephone.length === TELEPHONE_MAX_SIZE
     ) {
+      const applicationVerifier = new firebase.auth.RecaptchaVerifier(
+        'recaptcha',
+        { size: 'invisible' }
+      )
       try {
-        const token = await formState
-          .sendCode()
+        const fb = await firebase
+          .auth()
+          .signInWithPhoneNumber(formState.telephone, applicationVerifier)
+        const token = fb
           .confirm(formState.telCode)
           .then(({ user: { ya } }) => ya)
         dispatch({ type: ReducerType.setUid, payload: token })
@@ -278,8 +257,6 @@ const AuthorizationForm = () => {
         }
         dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
-        console.log(err)
-        console.log(formState.telCode)
         dispatch({
           type: ReducerType.setTelCodeError,
           payload: 'Ошибка: неправильный код',
