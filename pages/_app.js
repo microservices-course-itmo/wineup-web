@@ -1,5 +1,7 @@
 import { RecoilRoot } from 'recoil'
 import 'reactjs-popup/dist/index.css'
+import 'swiper/swiper-bundle.min.css'
+
 import { initFirebase } from '../utils/firebaseConfig'
 import RecoilObserver from '../store/RecoilObserver'
 
@@ -75,6 +77,28 @@ const App = ({ Component, pageProps }) => {
           textarea,
           select {
             font: inherit;
+          }
+
+          .swiper-pagination-bullet {
+            width: 15px;
+            height: 15px;
+            border: 1px solid #931332;
+            opacity: 1;
+            background: white;
+          }
+
+          .swiper-pagination-bullet-active {
+            background: #931332;
+          }
+
+          .swiper-container-horizontal
+            > .swiper-pagination-bullets
+            .swiper-pagination-bullet {
+            margin: 0 10px;
+          }
+
+          .swiper-wrapper {
+            padding-bottom: 90px;
           }
         `}
       </style>

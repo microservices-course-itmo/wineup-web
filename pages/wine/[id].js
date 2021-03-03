@@ -3,8 +3,6 @@ import { useRouter } from 'next/router'
 import { selectorFamily, useRecoilValueLoadable } from 'recoil'
 
 import WinePosition from '../../components/WinePosition'
-import ItemDescription from '../../components/ItemDescriptionCard'
-import ReviewBox from '../../components/ReviewBox'
 import Header from '../../components/Header'
 import Search from '../../components/Search'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
@@ -50,23 +48,6 @@ const Wine = () => {
             />
           </div>
 
-          <div className='line' />
-
-          <div className='container'>
-            <ItemDescription
-              color='Вино элегантного розового цвета.'
-              scent='Свежий аромат вина наполнен оттенками полевых цветов.'
-              gastro='Вино является идеальным аперитивом, хорошо сочетается со свежими фруктами и десертами.'
-              taste='Изысканный вкус вина характеризуется ягодными тонами, легкой кислинкой и богатыми оттенками малины в долгом послевкусии.'
-            />
-
-            <div className='line-vertical' />
-
-            <ReviewBox />
-          </div>
-
-          <div className='line' />
-
           <SameWines />
         </>
       )}
@@ -111,25 +92,6 @@ const Wine = () => {
           padding-top: 20px;
           display: flex;
           justify-content: space-between;
-        }
-
-        .line {
-          width: calc(100% - 120px);
-          height: 2px;
-
-          margin: 60px auto;
-          padding: 0 60px;
-
-          background-color: rgba(196, 196, 196, 0.5);
-        }
-
-        .line-vertical {
-          width: 2px;
-          min-height: 100%;
-
-          margin: 90px auto 30px auto;
-
-          background-color: rgba(196, 196, 196, 0.5);
         }
 
         .message {
