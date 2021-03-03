@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Header from '../../components/Header'
 import Search from '../../components/Search'
 
@@ -15,7 +16,12 @@ const Custom404 = () => {
           <div className='description'>
             <p>Страница не найдена. </p>
             <p>
-              Попробуйте найти на <a href='/'>главной странице</a>
+              Попробуйте найти на{' '}
+              <Link href='/'>
+                <a href='/' className='link'>
+                  главной странице
+                </a>
+              </Link>
             </p>
           </div>
         </div>
@@ -47,8 +53,11 @@ const Custom404 = () => {
             font-size: 32px;
             font-weight: 700;
           }
-          .description > p > a {
+          .link {
             text-decoration: none;
+          }
+          .link:hover {
+            text-decoration: underline;
           }
         `}
       </style>
