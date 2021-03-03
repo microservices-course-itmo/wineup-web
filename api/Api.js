@@ -232,11 +232,8 @@ class Api {
 
       return response
     } catch (err) {
-      return {
-        error: true,
-        message: err.message,
-        data: err.response.data,
-      }
+      console.error(err)
+      throw new Error(`Error occured during request sending: ${err}`)
     }
   }
 }
