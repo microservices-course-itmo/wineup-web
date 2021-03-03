@@ -11,6 +11,17 @@ const Profile = () => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
   const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
   const [currentUser, setCurrentUser] = useState(useRecoilValue(userState))
+  const [editedUser, setEditedUser] = useState({})
+  const cityNameById = id => {
+    if (id === 1) return 'Москва'
+    if (id === 2) return 'Санкт-Петербург'
+    return null
+  }
+  const cityIdByName = cityName => {
+    if (cityName === 'Москва') return 1
+    if (cityName === 'Санкт-Петербург') return 2
+    return null
+  }
 
   useEffect(() => {
     const getUser = async () => {
@@ -34,33 +45,32 @@ const Profile = () => {
   const user = currentUser
     ? {
         name: currentUser.name || 'Не указано',
-        cityName: currentUser.cityId || 'Не указано',
+        cityName: cityNameById(currentUser.cityId) || 'Не указано',
         phoneNumber: currentUser.phoneNumber || 'Не указано',
       }
     : null
-  const editedUser = {}
   const onInputChange = (field, newValue) => {
-    editedUser[field] = newValue
+    setEditedUser(prevState => ({ ...prevState, [field]: newValue }))
   }
   const onSubmit = async () => {
     Object.keys(editedUser).forEach(key => {
-      if (user[key] === editedUser[key]) {
-        editedUser[key] = null
+      if (!editedUser[key] || user[key] === editedUser[key]) {
+        delete editedUser[key]
       }
     })
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/user-service/users/me`,
-      {
+    api
+      .sendRequest({
+        url: '/user-service/users/me',
         method: 'PATCH',
+        data: editedUser,
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json;charset=utf-8',
           accept: '*/*',
         },
-        body: JSON.stringify(editedUser),
-      }
-    )
-    console.log(res.json())
+      })
+      .then(() => window.location.reload())
+      .catch(alert)
   }
   return (
     <div className='wrapper'>
@@ -111,7 +121,10 @@ const Profile = () => {
                   label='Город'
                   defaultValue={user.cityName}
                   onChange={evt =>
-                    onInputChange('cityName', evt.currentTarget.value)
+                    onInputChange(
+                      'cityId',
+                      cityIdByName(evt.currentTarget.value)
+                    )
                   }
                 />
                 <CustomInput
