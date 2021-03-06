@@ -13,6 +13,12 @@
  * @param {function} onChange - Функция-обработчик изменений для контролируемого поля
  */
 const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
+  const onKeyPress = event => {
+    if (event.key === '+'  || event.key === '-') {
+      event.preventDefault()
+    }
+  }
+
   return (
     <>
       <div className='row-direction item-gap'>
@@ -28,6 +34,8 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
               type='number'
               placeholder={inputFrom.defaultValue}
               onChange={onChange}
+              min='0'
+              onKeyPress={onKeyPress}
             />
             <label className='symbol color' htmlFor={inputFrom.id}>
               {currency}
