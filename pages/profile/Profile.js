@@ -88,11 +88,6 @@ const Profile = () => {
                   src='/assets/user.svg'
                   alt='User Avatar'
                 />
-                <img
-                  className='edit-btn'
-                  src='/assets/edit-icon.svg'
-                  alt='Edit'
-                />
               </div>
 
               <footer className='button-footer'>
