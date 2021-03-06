@@ -1,11 +1,34 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
+import api from '../../api'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Header = () => {
-  const user = useRecoilValue(userState)
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken')
+  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
+  const [currentUser, setCurrentUser] = useState(useRecoilValue(userState))
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await api.getProfile(accessToken)
+
+      if (response.error) {
+        const [newAccessToken, newRefreshToken] = await api.refreshToken(
+          refreshToken
+        )
+        setAccessToken(newAccessToken)
+        setRefreshToken(newRefreshToken)
+      }
+      const newCurrentUser = await response.profile
+      setCurrentUser(newCurrentUser)
+    }
+    if (!currentUser) {
+      getUser().catch(alert)
+    }
+  }, [accessToken, currentUser, refreshToken, setAccessToken, setRefreshToken])
 
   return (
     <div className='header'>
@@ -52,7 +75,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href={`${user ? '/favorites' : 'login'}`}>
+      <Link href={`${currentUser ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img
             className='icon'
@@ -62,14 +85,14 @@ const Header = () => {
           <p>Избранное</p>
         </div>
       </Link>
-      <Link href={`${user ? '/profile' : 'login'}`}>
+      <Link href={`${currentUser ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
           <img
             className='icon'
             src={`${prefix}/assets/header/man.svg`}
             alt='profile'
           />
-          {user ? <p>Профиль</p> : <p>Войти</p>}
+          {currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
         </div>
       </Link>
       <style jsx>
@@ -81,7 +104,7 @@ const Header = () => {
             align-items: center;
             margin: 10px;
 
-            font-family: Arial;
+            font-family: Arial, serif;
             font-style: normal;
             font-weight: normal;
 
