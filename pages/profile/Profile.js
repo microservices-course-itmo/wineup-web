@@ -85,7 +85,7 @@ const Profile = () => {
               <div className='user-avatar'>
                 <img
                   className='avatar'
-                  src='/assets/user.svg'
+                  src='/assets/wineup-avatar-default.svg'
                   alt='User Avatar'
                 />
               </div>
@@ -217,6 +217,7 @@ const Profile = () => {
             height: 210px;
             width: 210px;
             border-radius: 50%;
+            background-image: url('/assets/user-avatar-background.svg');
           }
           .btn {
             border: 1px solid;
