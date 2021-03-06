@@ -94,11 +94,7 @@ const Profile = () => {
                   alt='Edit'
                 />
               </div>
-              <ul className='nav-list'>
-                <li className='nav-item'>Профиль</li>
-                <li className='nav-item'>Предпочтения</li>
-                <li className='nav-item'>Вопросы</li>
-              </ul>
+
               <footer className='button-footer'>
                 <Link href='/'>
                   <button type='button' className='btn logout-btn'>
@@ -184,19 +180,12 @@ const Profile = () => {
             flex-grow: 1;
             display: flex;
             flex-flow: column nowrap;
-            justify-content: stretch;
+            justify-content: space-between;
             background-color: white;
             padding: 40px;
             margin-bottom: 40px;
           }
-          .nav-list {
-            padding: 50px 0;
-          }
-          .nav-item {
-            font-weight: bold;
-            font-size: 22px;
-            margin: 20px;
-          }
+
           .info-container {
             display: flex;
             flex-direction: column;
