@@ -39,10 +39,14 @@ const TelephoneAndCodeForm = props => {
 
   const handleSecondForm = async () => {
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
-      const applicationVerifier = new firebase.auth.RecaptchaVerifier(
-        'recaptcha',
-        { size: 'invisible' }
-      )
+      let applicationVerifier
+      try {
+        applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+          size: 'invisible',
+        })
+      } catch (e) {
+        applicationVerifier = document.getElementById('recaptcha')
+      }
       try {
         const fb = await firebase
           .auth()
@@ -50,7 +54,7 @@ const TelephoneAndCodeForm = props => {
         const token = fb.confirm(telCode).then(({ user: { ya } }) => ya)
         dispatch({ type: ReducerType.setUid, payload: token })
         const data = {
-          fireBaseToken: token,
+          fireBaseToken: token.i,
         }
         const response = await api.login(data)
 
@@ -70,6 +74,7 @@ const TelephoneAndCodeForm = props => {
         }
         dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
+        console.log(err)
         dispatch({
           type: ReducerType.setTelCodeError,
           payload: 'Ошибка: неправильный код',

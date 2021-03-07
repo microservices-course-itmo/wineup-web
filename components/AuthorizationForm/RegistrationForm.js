@@ -176,6 +176,9 @@ const RegistrationForm = props => {
       <style jsx>
         {`
           .authForm3 {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
             background: white;
             display: ${authForm === 3 ? 'block' : 'none'};
             border: 2px solid black;
