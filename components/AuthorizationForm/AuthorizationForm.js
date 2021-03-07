@@ -1,4 +1,5 @@
 import { useReducer } from 'react'
+
 import { initialState, reducer } from './store'
 import TelephoneForm from './TelephoneForm'
 import TelephoneAndCodeForm from './TelephoneAndCodeForm'
@@ -6,85 +7,70 @@ import RegistrationForm from './RegistrationForm'
 
 const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
+
   return (
-    <div className='wrapper'>
+    <div className='authForm'>
+      <TelephoneForm
+        telephone={formState.telephone}
+        telephoneError={formState.telephoneError}
+        authForm={formState.authForm}
+        dispatch={dispatch}
+      />
+
+      <TelephoneAndCodeForm
+        authForm={formState.authForm}
+        telephone={formState.telephone}
+        telephoneError={formState.telephoneError}
+        telCode={formState.telCode}
+        telCodeError={formState.telCodeError}
+        dispatch={dispatch}
+      />
+
+      <RegistrationForm
+        authForm={formState.authForm}
+        dispatch={dispatch}
+        dateParts={formState.dateParts}
+        isCalendarOpen={formState.isCalendarOpen}
+        date={formState.date}
+        uid={formState.uid}
+        username={formState.username}
+        usernameError={formState.usernameError}
+      />
+
       <div className='finalMessage'>
-        <div className='messageText'>
-          Вы успешно зарегистрировались в системе
-        </div>
+        Вы успешно зарегистрировались в системе
       </div>
-      <div className='authForm'>
-        <TelephoneForm
-          telephone={formState.telephone}
-          telephoneError={formState.telephoneError}
-          authForm={formState.authForm}
-          dispatch={dispatch}
-        />
-        <TelephoneAndCodeForm
-          authForm={formState.authForm}
-          telephone={formState.telephone}
-          telephoneError={formState.telephoneError}
-          telCode={formState.telCode}
-          telCodeError={formState.telCodeError}
-          dispatch={dispatch}
-        />
-        <RegistrationForm
-          authForm={formState.authForm}
-          dispatch={dispatch}
-          dateParts={formState.dateParts}
-          isCalendarOpen={formState.isCalendarOpen}
-          date={formState.date}
-          uid={formState.uid}
-          username={formState.username}
-          usernameError={formState.usernameError}
-        />
-      </div>
-      <div className='background' />
+
       <style jsx>
         {`
           .finalMessage {
-            position: absolute;
-            top: 100px;
-            right: 200px;
             width: 1364px;
             height: 86px;
+            padding: 24px 0;
+            display: ${formState.isMessageVisible ? 'block' : 'none'};
+
             background: #b1e86b;
             border: 1px solid #000000;
             box-sizing: border-box;
             border-radius: 5px;
-            font-family: Times New Roman;
-            z-index: 10;
+            font-family: 'Playfair Display', serif;
             font-size: 28px;
-            line-height: 33px;
             text-align: center;
-            display: ${formState.isMessageVisible ? 'block' : 'none'};
           }
-          .messageText {
-            margin: 24.17px 0;
-          }
-          .wrapper {
-            max-width: 1920px;
-            padding: 0 0px;
-            margin: 0 auto;
-          }
+
           .authForm {
-            position: absolute;
-            bottom: 0px;
-            right: 600px;
-            z-index: 10;
-            width: 70%;
-            height: 100%;
-            display: 'block';
-          }
-          .background {
-            position: fixed;
-            right: 0px;
-            bottom: 0px;
             width: 100%;
             height: 100%;
-            background-color: black;
-            opacity: 0.5;
-            z-index: 8;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            background-color: rgba(0, 0, 0, 0.5);
           }
         `}
       </style>
