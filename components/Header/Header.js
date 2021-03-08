@@ -3,7 +3,6 @@ import React from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Header = () => {
   const user = useRecoilValue(userState)
 
@@ -19,7 +18,7 @@ const Header = () => {
         <div className='menu-item catalog'>
           <img
             className='icon'
-            src={`${prefix}/assets/header/catalog.svg`}
+            src='/assets/header/catalog.svg'
             alt='catalog'
           />
           <p>Каталог</p>
@@ -27,11 +26,7 @@ const Header = () => {
       </Link>
       <Link href='/'>
         <div className='menu-item community'>
-          <img
-            className='icon'
-            src={`${prefix}/assets/header/community.svg`}
-            alt='city'
-          />
+          <img className='icon' src='/assets/header/community.svg' alt='city' />
           <p>Сообщество</p>
         </div>
       </Link>
@@ -40,31 +35,19 @@ const Header = () => {
       </Link>
       <Link href='/'>
         <div className='menu-item likes'>
-          <img
-            className='icon'
-            src={`${prefix}/assets/header/likes.svg`}
-            alt='city'
-          />
+          <img className='icon' src='/assets/header/likes.svg' alt='city' />
           <p>Лайки</p>
         </div>
       </Link>
       <Link href={`${user ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
-          <img
-            className='icon'
-            src={`${prefix}/assets/header/heart.svg`}
-            alt='heart'
-          />
+          <img className='icon' src='/assets/header/heart.svg' alt='heart' />
           <p>Избранное</p>
         </div>
       </Link>
       <Link href={`${user ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
-          <img
-            className='icon'
-            src={`${prefix}/assets/header/man.svg`}
-            alt='profile'
-          />
+          <img className='icon' src='/assets/header/man.svg' alt='profile' />
           {user ? <p>Профиль</p> : <p>Войти</p>}
         </div>
       </Link>
