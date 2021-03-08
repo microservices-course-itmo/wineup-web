@@ -4,7 +4,7 @@ import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
 import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
 import useLocalStorage from '../../utils/useLocalStorage'
-import { userState } from '../../store/GlobalRecoilWrapper/store';
+import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 // Форматирует цены
