@@ -36,13 +36,19 @@ const Header = () => {
       <Link href='/'>
         <div className='menu-item likes'>
           <img className='icon' src='/assets/header/likes.svg' alt='city' />
-          <p>kak</p>
+          <p>Лайки</p>
         </div>
       </Link>
       <Link href={`${user ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img className='icon' src='/assets/header/heart.svg' alt='heart' />
           <p>Избранное</p>
+        </div>
+      </Link>
+      <Link href={`${user ? '/profile' : 'login'}`}>
+        <div className='menu-item login'>
+          <img className='icon' src='/assets/header/man.svg' alt='profile' />
+          {user ? <p>Профиль</p> : <p>Войти</p>}
         </div>
       </Link>
       <style jsx>
