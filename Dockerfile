@@ -7,7 +7,7 @@ COPY . /out
 
 RUN npm install
 
-COPY _next /out
+COPY . /out
 
 RUN npm run build
 RUN npm run export

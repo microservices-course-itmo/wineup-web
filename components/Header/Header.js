@@ -45,12 +45,6 @@ const Header = () => {
           <p>Избранное</p>
         </div>
       </Link>
-      <Link href={`${user ? '/profile' : 'login'}`}>
-        <div className='menu-item login'>
-          <img className='icon' src='/assets/header/man.svg' alt='profile' />
-          {user ? <p>Профиль</p> : <p>Войти</p>}
-        </div>
-      </Link>
       <style jsx>
         {`
           .header {
