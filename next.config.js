@@ -1,8 +1,8 @@
-// const pathPrefix = process.env.NODE_ENV === 'production' ? '/wineup-web' : ''
+const pathPrefix = process.env.NODE_ENV === 'production' ? '' : ''
 
-// module.exports = {
-//   assetPrefix: pathPrefix,
-//   env: {
-//     pathPrefix,
-//   },
-// }
+module.exports = {
+  assetPrefix: pathPrefix,
+  env: {
+    pathPrefix,
+  },
+}
