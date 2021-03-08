@@ -52,7 +52,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href={`${user ? '/favorites' : 'login'}`} as='/favorites'>
+      <a href={`${user ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img
             className='icon'
@@ -61,7 +61,7 @@ const Header = () => {
           />
           <p>Избранное</p>
         </div>
-      </Link>
+      </a>
       <Link href={`${user ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
           <img
