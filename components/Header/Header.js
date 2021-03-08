@@ -36,7 +36,7 @@ const Header = () => {
       <Link href='/'>
         <div className='menu-item likes'>
           <img className='icon' src='/assets/header/likes.svg' alt='city' />
-          <p>Лайки</p>
+          <p>kak</p>
         </div>
       </Link>
       <Link href={`${user ? '/favorites' : 'login'}`}>
