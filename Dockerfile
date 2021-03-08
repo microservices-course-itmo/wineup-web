@@ -6,7 +6,8 @@ WORKDIR /out
 COPY . /out
 
 RUN npm install
-COPY . /out
+
+COPY _next /out
+
 RUN npm run build
-COPY . /out
 CMD [ "npm", "run", "start" ]
