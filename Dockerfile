@@ -10,5 +10,9 @@ RUN npm install
 COPY . /out
 
 RUN npm run build
+COPY . /out
+
 RUN npm run export
+COPY . /out
+
 CMD [ "npm", "run", "start" ]
