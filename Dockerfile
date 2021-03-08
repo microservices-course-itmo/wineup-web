@@ -7,8 +7,10 @@ COPY . /out
 
 RUN npm install
 
+RUN npm ci
+
 RUN npm run build
 
-COPY /out/.next ./.next
+COPY ./.next ./.next
 
 CMD [ "npm", "run", "start" ]
