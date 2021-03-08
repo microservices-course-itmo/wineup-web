@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <div className='header'>
-      <Link href='/'>
+      <Link href='/' as='/'>
         <div className='menu-item city'>
           <img
             className='icon'
@@ -52,7 +52,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href={`${user ? '/favorites' : 'login'}`}>
+      <Link href={`${user ? '/favorites' : 'login'}`} as='/favorites'>
         <div className='menu-item heart'>
           <img
             className='icon'
