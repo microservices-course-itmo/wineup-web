@@ -10,7 +10,7 @@ import ButtonGroup from '../ButtonGroup'
  * @param props
  * @returns {JSX.Element} InputGroup - Список кастомных полей ввода одной группы
  */
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 const InputGroup = ({ type, inputList, onChange, visible, ...props }) => {
   let customInputList
   switch (type) {
@@ -87,7 +87,7 @@ const InputContainer = ({ title, type, inputList, onChange }) => {
         <button className='arrow-btn' onClick={handleClick} type='button'>
           <img
             className={` arrow-${isOpen ? 'up' : 'down'}`}
-            src={`${prefix}/assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
+            src={`/assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
             alt='arrow'
           />
         </button>

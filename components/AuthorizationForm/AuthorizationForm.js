@@ -6,7 +6,6 @@ import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 import api from '../../api'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const AuthorizationForm = () => {
   const router = useRouter()
 
@@ -329,7 +328,7 @@ const AuthorizationForm = () => {
             <div onClick={handleClickCalendar}>
               <img
                 className='icon1'
-                src={`${prefix}assets/authorization/calendar.svg`}
+                src='assets/authorization/calendar.svg'
                 alt=''
               />
             </div>
@@ -360,7 +359,7 @@ const AuthorizationForm = () => {
             <input className='errorMessage' disabled />
             <img
               className='icon2'
-              src={`${prefix}assets/authorization/arrow.svg`}
+              src='assets/authorization/arrow.svg'
               alt=''
             />
           </div>

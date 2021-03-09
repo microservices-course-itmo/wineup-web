@@ -17,7 +17,6 @@ import {
   winesPageState,
 } from './store'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Catalog = () => {
   const [wines, setWines] = useRecoilState(winesState)
   const sortedWine = useRecoilValue(sortedWinesState)
@@ -107,7 +106,7 @@ const Catalog = () => {
             <div className='loading'>
               <img
                 className='error-icon'
-                src={`${prefix}/assets/error.svg`}
+                src='/assets/error.svg'
                 alt='error icon'
               />
               <p>

@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Search = () => {
   const [input, setInput] = useState('')
   const handleClickButton = useCallback(e => {
@@ -26,7 +25,7 @@ const Search = () => {
       >
         <img
           className='loop'
-          src={`${prefix}/assets/search/search-icon.svg`}
+          src='/assets/search/search-icon.svg'
           alt='search icon'
         />
         Найти

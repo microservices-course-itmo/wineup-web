@@ -7,7 +7,6 @@ import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 import api from '../../api'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Profile = () => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
   const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
@@ -55,12 +54,12 @@ const Profile = () => {
                 <div className='user-avatar'>
                   <img
                     className='avatar'
-                    src={`${prefix}/assets/user.svg`}
+                    src='/assets/user.svg'
                     alt='user-pic'
                   />
                   <img
                     className='edit-btn'
-                    src={`${prefix}/assets/edit-icon.svg`}
+                    src='/assets/edit-icon.svg'
                     alt='edit'
                   />
                 </div>

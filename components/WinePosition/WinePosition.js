@@ -39,7 +39,7 @@ const starsNumber = [1, 2, 3, 4, 5]
  * @param {number} info.discount.price - Цена со скидкой
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 const WinePosition = ({ imageSrc, info, color = 0 }) => (
   <>
     <h2 className='name'>{info.name}</h2>
@@ -95,7 +95,7 @@ const WinePosition = ({ imageSrc, info, color = 0 }) => (
           <div className='stars'>
             {starsNumber.map((star, index) => (
               <img
-                src={`${prefix}/assets/card/${
+                src={`/assets/card/${
                   index < info.stars ? 'filled' : 'empty'
                 }-star.svg`}
                 alt={`${index < info.stars ? 'filled' : 'empty'} star`}
