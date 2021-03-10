@@ -49,7 +49,7 @@ const AuthorizationForm = () => {
             height: 86px;
             padding: 24px 0;
             position: relative;
-            display: ${!formState.isMessageVisible ? 'block' : 'none'};
+            display: ${formState.isMessageVisible ? 'block' : 'none'};
             background: #b1e86b;
             border: 1px solid #000000;
             box-sizing: border-box;
