@@ -1,10 +1,45 @@
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
-import React from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
+
+
+const imagePaths = {
+  city: '/assets/header/city-icon',
+  home: '/assets/header/catalog',
+  community: '/assets/header/community',
+  likes: '/assets/header/likes',
+  favorites: '/assets/header/heart',
+  login: '/assets/header/login',
+}
+
 const Header = () => {
+  const [activeImage, setActiveImage] = useState('')
   const user = useRecoilValue(userState)
+  const { asPath } = useRouter()
+
+  useEffect(() => {
+    switch (asPath) {
+      case '/':
+        setActiveImage('home')
+        break
+      case '/favorites':
+        setActiveImage('favorites')
+        break
+      case '/login':
+        setActiveImage('login')
+        break
+      case '/profile':
+        setActiveImage('login')
+        break
+      default:
+        setActiveImage('')
+        break
+    }
+  }, [asPath])
 
   return (
     <div className='header'>
@@ -18,7 +53,9 @@ const Header = () => {
         <div className='menu-item catalog'>
           <img
             className='icon'
-            src='/assets/header/catalog.svg'
+            src={`${imagePaths.home}${
+              activeImage === 'home' ? '-active' : ''
+            }.svg`}
             alt='catalog'
           />
           <p>Каталог</p>
@@ -26,7 +63,13 @@ const Header = () => {
       </Link>
       <Link href='/'>
         <div className='menu-item community'>
-          <img className='icon' src='/assets/header/community.svg' alt='city' />
+          <img
+            className='icon'
+            src={`${imagePaths.community}${
+              activeImage === 'community' ? '-active' : ''
+            }.svg`}
+            alt='city'
+          />
           <p>Сообщество</p>
         </div>
       </Link>
@@ -35,22 +78,41 @@ const Header = () => {
       </Link>
       <Link href='/'>
         <div className='menu-item likes'>
-          <img className='icon' src='/assets/header/likes.svg' alt='city' />
+          <img
+            className='icon'
+            src={`${imagePaths.likes}${
+              activeImage === 'likes' ? '-active' : ''
+            }.svg`}
+            alt='city'
+          />
           <p>Лайки</p>
         </div>
       </Link>
       <Link href={`${user ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
-          <img className='icon' src='/assets/header/heart.svg' alt='heart' />
+          <img
+            className='icon'
+            src={`${imagePaths.favorites}${
+              activeImage === 'favorites' ? '-active' : ''
+            }.svg`}
+            alt='heart'
+          />
           <p>Избранное</p>
         </div>
       </Link>
       <Link href={`${user ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
-          <img className='icon' src='/assets/header/man.svg' alt='profile' />
+          <img
+            className='icon'
+            src={`${imagePaths.login}${
+              activeImage === 'login' ? '-active' : ''
+            }.svg`}
+            alt='profile'
+          />
           {user ? <p>Профиль</p> : <p>Войти</p>}
         </div>
       </Link>
+
       <style jsx>
         {`
           .header {
