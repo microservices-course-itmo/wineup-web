@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 /**
  * @param{string} id - id поля
  * @param{string} label - label для поля
- * @param{string} defaultValue - Значение поля по умолчанию
+ * @param{string} value - Значение поля
  * @param{function} onChange - Функция-обработчик изменений поля
  */
-const CustomInput = ({ id, label, defaultValue, onChange }) => {
+const CustomInput = ({ id, label, value, onChange }) => {
   const [isReadOnly, setReadOnly] = useState(true)
   return (
     <div className='container'>
@@ -17,7 +17,7 @@ const CustomInput = ({ id, label, defaultValue, onChange }) => {
             id={id}
             readOnly={isReadOnly}
             disabled={isReadOnly}
-            defaultValue={defaultValue}
+            defaultValue={value}
             onChange={onChange}
           />
           <div

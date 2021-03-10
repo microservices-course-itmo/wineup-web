@@ -5,7 +5,7 @@ import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Header = () => {
-  const user = useRecoilValue(userState)
+  const currentUser = useRecoilValue(userState)
 
   return (
     <div className='header'>
@@ -52,7 +52,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href={`${user ? '/favorites' : 'login'}`}>
+      <Link href={`${currentUser ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img
             className='icon'
@@ -62,14 +62,14 @@ const Header = () => {
           <p>Избранное</p>
         </div>
       </Link>
-      <Link href={`${user ? '/profile' : 'login'}`}>
+      <Link href={`${currentUser ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
           <img
             className='icon'
             src={`${prefix}/assets/header/man.svg`}
             alt='profile'
           />
-          {user ? <p>Профиль</p> : <p>Войти</p>}
+          {currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
         </div>
       </Link>
       <style jsx>
@@ -81,7 +81,7 @@ const Header = () => {
             align-items: center;
             margin: 10px;
 
-            font-family: Arial;
+            font-family: Arial, serif;
             font-style: normal;
             font-weight: normal;
 
