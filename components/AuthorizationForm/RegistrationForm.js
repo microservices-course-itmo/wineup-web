@@ -256,7 +256,6 @@ const RegistrationForm = props => {
             text-align: center;
             color: #9e9e9e;
           }
-
           .authButton {
             width: 274px;
             height: 58px;

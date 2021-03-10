@@ -48,7 +48,6 @@ const AuthorizationForm = () => {
             height: 86px;
             padding: 24px 0;
             display: ${formState.isMessageVisible ? 'block' : 'none'};
-
             background: #b1e86b;
             border: 1px solid #000000;
             box-sizing: border-box;
@@ -57,19 +56,15 @@ const AuthorizationForm = () => {
             font-size: 28px;
             text-align: center;
           }
-
           .authForm {
             width: 100%;
             height: 100%;
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             position: fixed;
             top: 0;
             left: 0;
-
             background-color: rgba(0, 0, 0, 0.5);
           }
         `}

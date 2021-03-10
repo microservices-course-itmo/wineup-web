@@ -135,7 +135,6 @@ const TelephoneAndCodeForm = props => {
             height: 630px;
             box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
-
           .header {
             width: 453px;
             height: 35px;
@@ -146,13 +145,11 @@ const TelephoneAndCodeForm = props => {
             text-align: center;
             font-weight: bold;
           }
-
           .inputForm {
             margin: 2px 93px 22px 93px;
             width: 499px;
             height: 103px;
           }
-
           .formName {
             height: 22px;
             margin-bottom: 10px;
@@ -160,7 +157,6 @@ const TelephoneAndCodeForm = props => {
             font-family: 'PT Sans', sans-serif;
             color: black;
           }
-
           .inputField {
             height: 53px;
             margin-top: 10px;
@@ -171,12 +167,10 @@ const TelephoneAndCodeForm = props => {
             border: 1px solid #9e9e9e;
             border-radius: 5px;
           }
-
           .inputField:active {
             border: 0;
             border-bottom: 2px solid red;
           }
-
           .errorMessage {
             color: #cf3737;
             font-family: 'PT Sans', sans-serif;
@@ -190,7 +184,6 @@ const TelephoneAndCodeForm = props => {
             padding: 0;
             background: inherit;
           }
-
           .buttonGroup {
             margin: 40px 60px;
             display: flex;
