@@ -69,6 +69,12 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
             border: 1px solid #9e9e9e;
             cursor: pointer;
           }
+          input:hover ~ .checkbox-custom {
+            background: #af2f4e;
+          }
+          input:active ~ .checkbox-custom {
+            background: #680019;
+          }
 
           input:checked ~ .checkbox-custom {
             background-color: #931332;
