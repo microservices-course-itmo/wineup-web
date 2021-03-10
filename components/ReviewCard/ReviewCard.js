@@ -6,7 +6,7 @@ import React, { useState } from 'react'
  * @param {string} review
  * @param {number} stars
  */
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 const ReviewCard = ({ logDate, logName, stars, review }) => {
   const [allText, setAllText] = useState(true)
   const [btnText, setBtnText] = useState('Читать полностью')
@@ -47,7 +47,7 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
         <div className='stars'>
           {Array.from({ length: 5 }).map((star, index) => (
             <img
-              src={`${prefix}/assets/review/${
+              src={`/assets/review/${
                 index < stars ? 'filled' : 'empty'
               }-star.svg`}
               alt={`${index < stars ? 'filled' : 'empty'} star`}

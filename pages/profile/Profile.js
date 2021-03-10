@@ -25,7 +25,6 @@ const InputTypes = {
   phone: 'phone-input',
 }
 
-// const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Profile = () => {
   /* ESLint error: 'setAccessToken' is assigned a value but never used  no-unused-vars
   const [accessToken, setAccessToken] = useLocalStorage('accessToken') */

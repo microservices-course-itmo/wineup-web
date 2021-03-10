@@ -6,7 +6,6 @@ import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
 import useLocalStorage from '../../utils/useLocalStorage'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
@@ -141,12 +140,9 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
               countryCode={info.country.code}
               svg
             />
-            <img
-              src={`${prefix}/assets/card/bottle-icon.svg`}
-              alt='bottle icon'
-            />
-            <img src={`${prefix}/assets/card/fits-icon.svg`} alt='fits icon' />
-            <img src={`${prefix}/assets/card/shop-icon.svg`} alt='shop icon' />
+            <img src='/assets/card/bottle-icon.svg' alt='bottle icon' />
+            <img src='/assets/card/fits-icon.svg' alt='fits icon' />
+            <img src='/assets/card/shop-icon.svg' alt='shop icon' />
           </div>
 
           <div className='info'>

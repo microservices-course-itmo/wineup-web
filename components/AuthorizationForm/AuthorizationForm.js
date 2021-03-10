@@ -40,7 +40,6 @@ const AuthorizationForm = () => {
       <div className='finalMessage'>
         Вы успешно зарегистрировались в системе
       </div>
-
       <style jsx>
         {`
           .finalMessage {

@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
-
 const imagePaths = {
-  city: `${prefix}/assets/header/city-icon`,
-  home: `${prefix}/assets/header/catalog`,
-  community: `${prefix}/assets/header/community`,
-  likes: `${prefix}/assets/header/likes`,
-  favorites: `${prefix}/assets/header/heart`,
-  login: `${prefix}/assets/header/login`,
+  city: '/assets/header/city-icon',
+  home: '/assets/header/catalog',
+  community: '/assets/header/community',
+  likes: '/assets/header/likes',
+  favorites: '/assets/header/heart',
+  login: '/assets/header/login',
 }
 
 const Header = () => {
@@ -45,11 +42,7 @@ const Header = () => {
     <div className='header'>
       <Link href='/'>
         <div className='menu-item city'>
-          <img
-            className='icon'
-            src={`${prefix}/assets/header/city-icon.svg`}
-            alt='city'
-          />
+          <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
           <p>Санкт-Петербург</p>
         </div>
       </Link>
