@@ -16,7 +16,7 @@ const SortButton = ({ btn, onBtnClick, active }) => {
       <button
         type='button'
         value={btn.value}
-        className={`${active ? 'active ' : ''}btn`}
+        className={`${active ? 'activeButton ' : ''}btn`}
         onClick={onBtnClick}
       >
         {btn.textLabel}
@@ -45,14 +45,20 @@ const SortButton = ({ btn, onBtnClick, active }) => {
             box-shadow: 0 0 2px #931332;
           }
 
-          .active {
+          .activeButton {
             background-color: #931332;
             color: white;
             border: none;
           }
 
-          .active:hover {
-            box-shadow: unset;
+          .activeButton:hover {
+            background-color: #af2f4e;
+            box-shadow: rgba(253, 0, 0, 0.5);
+          }
+
+          .activeButton:active {
+            background-color: #680019;
+            box-shadow: none;
           }
         `}
       </style>

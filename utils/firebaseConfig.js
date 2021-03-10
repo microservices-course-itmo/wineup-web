@@ -15,8 +15,3 @@ export const initFirebase = () => {
     firebase.initializeApp(firebaseConfig)
   }
 }
-
-export default {
-  initFirebase,
-  firebase,
-}
