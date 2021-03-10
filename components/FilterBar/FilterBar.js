@@ -30,12 +30,13 @@ const FilterBar = () => {
     setFormState({ ...formState, [name]: newGroup })
   }
   const handleInputChange = event => {
-    if (!event.target.value) {
-      setFormState({ ...formState, [event.target.name]: event.target.name === 'priceFrom'
-          ? initialFormState.priceFrom : initialFormState.priceTo })
-    } else {
-      setFormState({ ...formState, [event.target.name]: event.target.value })
-    }
+    const { value, name } = event.target
+    const { priceFrom, priceTo} = initialFormState
+    const updatedFormName = (function() {
+      if (value) return value
+      return name === 'priceFrom' ? priceFrom : priceTo
+    })()
+    setFormState({ ...formState, [name]: updatedFormName })
   }
   const inputGroupMap = {
     price: {
