@@ -18,6 +18,12 @@ const cityIdByName = cityName => {
   if (cityName === 'Санкт-Петербург') return 2
   return null
 }
+const emptyInputValue = 'Не указано'
+const InputTypes = {
+  name: 'name-input',
+  cityName: 'city-input',
+  phone: 'phone-input',
+}
 
 // const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Profile = () => {
@@ -29,22 +35,22 @@ const Profile = () => {
   const [phoneInputState, setPhoneInputState] = useState()
   useEffect(() => {
     if (currentUser) {
-      setNameInputState(currentUser.name || 'Не указано')
-      setCityInputState(cityNameById(currentUser.cityId) || 'Не указано')
-      setPhoneInputState(currentUser.phoneNumber || 'Не указано')
+      setNameInputState(currentUser.name || emptyInputValue)
+      setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
+      setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
     }
   }, [currentUser])
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
     switch (evt.currentTarget.id) {
-      case 'name-input':
+      case InputTypes.name:
         setNameInputState(newValue)
         break
-      case 'city-input':
+      case InputTypes.cityName:
         setCityInputState(newValue)
         break
-      case 'phone-input':
+      case InputTypes.phone:
         setPhoneInputState(newValue)
         break
       default:
@@ -112,19 +118,19 @@ const Profile = () => {
               <header className='info-header'>Профиль</header>
               <div className='info-list'>
                 <CustomInput
-                  id='name-input'
+                  id={InputTypes.name}
                   label='Ваше имя'
                   value={nameInputState}
                   onChange={onInputChange}
                 />
                 <CustomInput
-                  id='city-input'
+                  id={InputTypes.cityName}
                   label='Город'
                   value={cityInputState}
                   onChange={onInputChange}
                 />
                 <CustomInput
-                  id='phone-input'
+                  id={InputTypes.phone}
                   label='Телефон'
                   value={phoneInputState}
                   onChange={onInputChange}
