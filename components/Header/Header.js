@@ -18,7 +18,7 @@ const imagePaths = {
 
 const Header = () => {
   const [activeImage, setActiveImage] = useState('')
-  const user = useRecoilValue(userState)
+  const currentUser = useRecoilValue(userState)
   const { asPath } = useRouter()
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const Header = () => {
           <p>Лайки</p>
         </div>
       </Link>
-      <Link href={`${user ? '/favorites' : 'login'}`}>
+      <Link href={`${currentUser ? '/favorites' : 'login'}`}>
         <div className='menu-item heart'>
           <img
             className='icon'
@@ -104,7 +104,7 @@ const Header = () => {
           <p>Избранное</p>
         </div>
       </Link>
-      <Link href={`${user ? '/profile' : 'login'}`}>
+      <Link href={`${currentUser ? '/profile' : 'login'}`}>
         <div className='menu-item login'>
           <img
             className='icon'
@@ -113,7 +113,7 @@ const Header = () => {
             }.svg`}
             alt='profile'
           />
-          {user ? <p>Профиль</p> : <p>Войти</p>}
+          {currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
         </div>
       </Link>
 
@@ -126,7 +126,7 @@ const Header = () => {
             align-items: center;
             margin: 10px;
 
-            font-family: Arial;
+            font-family: Arial, serif;
             font-style: normal;
             font-weight: normal;
 
