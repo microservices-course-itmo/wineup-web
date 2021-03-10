@@ -167,6 +167,7 @@ const RegistrationForm = props => {
               className='icon1'
               src={`${prefix}assets/authorization/calendar.svg`}
               alt=''
+              onClick={toggleIsCalendarOpen}
             />
           </div>
           <input className='errorMessage' value={calendarError} disabled />
@@ -226,6 +227,7 @@ const RegistrationForm = props => {
           }
           .icon1 {
             position: relative;
+            cursor: pointer;
             bottom: 36px;
             margin: 0 0 0 auto;
             right: 16px;
