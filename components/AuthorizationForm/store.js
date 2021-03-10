@@ -1,5 +1,5 @@
 export const initialState = {
-  authForm: 1,
+  authForm: 3,
   telephone: '',
   telephoneError: '',
   telCode: '',

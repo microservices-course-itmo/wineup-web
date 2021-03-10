@@ -6,6 +6,7 @@ import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 import Calendar from './Calendar'
+import Button from './Button'
 
 const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const CURRENT_YEAR = 2021
@@ -165,9 +166,14 @@ const RegistrationForm = props => {
           <input className='errorMessage' disabled />
           <img className='icon2' src='assets/authorization/arrow.svg' alt='' />
         </div>
-        <div className='authButton' onClick={registration}>
-          Зарегистрироваться
-        </div>
+
+        <Button
+          width='274px'
+          margin='50px 206px 5px 205px'
+          onClick={registration}
+          text='Зарегистрироваться'
+        />
+
         <div className='soulContract'>
           Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с политикой
           конфиденциальности
@@ -176,35 +182,34 @@ const RegistrationForm = props => {
       <style jsx>
         {`
           .authForm3 {
-            position: absolute;
-            right: 0px;
-            bottom: 0px;
             background: white;
             display: ${authForm === 3 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
             height: 797px;
-            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
           .header {
             width: 453px;
             height: 35px;
             margin: 45px 116px 60px 116px;
-            font-family: Times New Roman;
+            font-family: 'Playfair Display', serif;
             font-size: 28px;
             line-height: 33px;
             text-align: center;
             font-weight: bold;
           }
           .inputForm {
-            margin: 2px 93px 2px 93px;
+            margin: 2px 93px 12px 93px;
             width: 499px;
             height: 103px;
           }
           .formName {
             height: 22px;
-            font: 22px Sans;
+            margin-bottom: 10px;
+            font-size: 22px;
+            font-family: 'PT Sans', sans-serif;
             color: black;
           }
           .inputField {
@@ -212,25 +217,26 @@ const RegistrationForm = props => {
             margin-top: 10px;
             text-indent: 25px;
             width: 499px;
-            font: 18px Sans;
+            font-size: 18px;
+            font-family: 'PT Sans', sans-serif;
             border: 1px solid #9e9e9e;
             border-radius: 5px;
           }
           .inputField:active {
-            border: 0px;
+            border: 0;
             border-bottom: 2px solid red;
           }
           .errorMessage {
             color: #cf3737;
-            font-family: PT Sans;
+            font-family: 'PT Sans', sans-serif;
             font-style: normal;
             font-weight: normal;
             font-size: 14px;
             line-height: 18px;
             height: 18px;
             width: 499px;
-            border: 0px;
-            padding: 0px;
+            border: 0;
+            padding: 0;
             background: inherit;
           }
           .icon2 {
@@ -242,7 +248,7 @@ const RegistrationForm = props => {
             margin: 5px 185px 5px 185px;
             width: 315px;
             height: 36px;
-            font-family: PT Sans;
+            font-family: 'PT Sans', sans-serif;
             font-style: normal;
             font-weight: normal;
             font-size: 14px;
@@ -250,7 +256,6 @@ const RegistrationForm = props => {
             text-align: center;
             color: #9e9e9e;
           }
-
           .authButton {
             width: 274px;
             height: 58px;
@@ -260,19 +265,10 @@ const RegistrationForm = props => {
             justify-content: center;
             border-radius: 50px;
             margin: 50px 206px 5px 205px;
-            font: 22px Sans;
+            font-size: 22px;
+            font-family: 'PT Sans', sans-serif;
             color: white;
-            border: 0px;
-          }
-          .authButton:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
-            background: #af2f4e;
-            outline: none;
-          }
-          a.authButton:focus {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
-            background: #af2f4e;
-            outline: none;
+            border: 0;
           }
         `}
       </style>

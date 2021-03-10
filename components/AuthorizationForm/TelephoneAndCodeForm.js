@@ -2,10 +2,12 @@ import { useCallback } from 'react'
 import firebase from 'firebase'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
+
 import useLocalStorage from '../../utils/useLocalStorage'
 import { ReducerType } from './store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
+import Button from './Button'
 
 const TELEPHONE_MAX_SIZE = 12
 const OK_CODE = 200
@@ -111,49 +113,48 @@ const TelephoneAndCodeForm = props => {
           />
           <input className='errorMessage' value={telCodeError} disabled />
         </div>
-        <div className='telButton21'>
-          <div className='telButton2Inner' onClick={handleSecondForm}>
-            Подтвердить
-          </div>
-        </div>
-        <div className='telButton22'>
-          <div className='telButton2Inner' onClick={tryHandleFirstFormAgain}>
-            Отправить повторно
-          </div>
+        <div className='buttonGroup'>
+          <Button width='49%' onClick={handleSecondForm} text='Подтвердить' />
+
+          <Button
+            width='49%'
+            onClick={tryHandleFirstFormAgain}
+            text='Отправить повторно'
+          />
         </div>
       </div>
+
       <style jsx>
         {`
           .authForm2 {
-            position: absolute;
-            right: 0px;
-            bottom: 0px;
             background: white;
             display: ${authForm === 2 ? 'block' : 'none'};
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
             height: 630px;
-            box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.48);
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
           .header {
             width: 453px;
             height: 35px;
             margin: 45px 116px 60px 116px;
-            font-family: Times New Roman;
+            font-family: 'Playfair Display', serif;
             font-size: 28px;
             line-height: 33px;
             text-align: center;
             font-weight: bold;
           }
           .inputForm {
-            margin: 2px 93px 2px 93px;
+            margin: 2px 93px 22px 93px;
             width: 499px;
             height: 103px;
           }
           .formName {
             height: 22px;
-            font: 22px Sans;
+            margin-bottom: 10px;
+            font-size: 22px;
+            font-family: 'PT Sans', sans-serif;
             color: black;
           }
           .inputField {
@@ -161,64 +162,32 @@ const TelephoneAndCodeForm = props => {
             margin-top: 10px;
             text-indent: 25px;
             width: 499px;
-            font: 18px Sans;
+            font-size: 18px;
+            font-family: 'PT Sans', sans-serif;
             border: 1px solid #9e9e9e;
             border-radius: 5px;
           }
           .inputField:active {
-            border: 0px;
+            border: 0;
             border-bottom: 2px solid red;
           }
           .errorMessage {
             color: #cf3737;
-            font-family: PT Sans;
+            font-family: 'PT Sans', sans-serif;
             font-style: normal;
             font-weight: normal;
             font-size: 14px;
             line-height: 18px;
             height: 18px;
             width: 499px;
-            border: 0px;
-            padding: 0px;
+            border: 0;
+            padding: 0;
             background: inherit;
           }
-          .telButton21 {
-            background: #232323;
-            font: 22px Sans;
-            color: white;
-            border: 0px;
-            display: inline-block;
-            border-radius: 50px;
-            width: 274px;
-            height: 58px;
-            margin: 58px 39px 140px 49px;
-          }
-          .telButton22 {
-            background: #232323;
-            font: 22px Sans;
-            color: white;
-            border: 0px;
-            display: inline-block;
-            border-radius: 50px;
-            width: 274px;
-            height: 58px;
-            margin: 58px 0px 140px 0px;
-          }
-          .telButton21:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
-            background: #af2f4e;
-            outline: none;
-          }
-          .telButton22:active {
-            box-shadow: 0px 0px 8px rgba(253, 0, 0, 0.5);
-            background: #af2f4e;
-            outline: none;
-          }
-          .telButton2Inner {
+          .buttonGroup {
+            margin: 40px 60px;
             display: flex;
-            height: 58px;
-            align-items: center;
-            justify-content: center;
+            justify-content: space-between;
           }
         `}
       </style>
