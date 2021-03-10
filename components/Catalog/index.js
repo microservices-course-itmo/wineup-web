@@ -17,6 +17,7 @@ import {
   winesPageState,
 } from './store'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Catalog = () => {
   const [wines, setWines] = useRecoilState(winesState)
   const sortedWine = useRecoilValue(sortedWinesState)
@@ -73,7 +74,6 @@ const Catalog = () => {
         buttons={sortingButtons}
         onChange={event => setWinesSort(event.currentTarget.value)}
       />
-
       {state === 'hasValue' &&
         (wines.length > 0 ? (
           <>
@@ -106,7 +106,7 @@ const Catalog = () => {
             <div className='loading'>
               <img
                 className='error-icon'
-                src='assets/error.svg'
+                src={`${prefix}/assets/error.svg`}
                 alt='error icon'
               />
               <p>
