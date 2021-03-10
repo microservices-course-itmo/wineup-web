@@ -163,12 +163,11 @@ const RegistrationForm = props => {
               value={date}
               onChange={handleDate}
             />
-            <span>
+            <span onClick={toggleIsCalendarOpen}>
               <img
                 className='icon1'
                 src={`${prefix}assets/authorization/calendar.svg`}
                 alt=''
-                onClick={toggleIsCalendarOpen}
               />
             </span>
           </div>
