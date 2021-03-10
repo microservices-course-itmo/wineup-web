@@ -4,6 +4,7 @@
  */
 import React, { useState } from 'react'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Toast = ({ show = true, message }) => {
   const [showToast, setShowToast] = useState(show)
   return (
@@ -17,7 +18,7 @@ const Toast = ({ show = true, message }) => {
         >
           <img
             className='close-btn-img'
-            src='assets/toast/close.svg'
+            src={`${prefix}assets/toast/close.svg`}
             alt='close'
           />
         </button>

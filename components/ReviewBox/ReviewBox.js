@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReviewCard from '../ReviewCard'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const ReviewBox = ({ reviews = [] }) => {
   const [showResults, setShowResults] = useState('hidden')
   const [clicked, setClicked] = useState(false)
@@ -35,7 +36,7 @@ const ReviewBox = ({ reviews = [] }) => {
         ) : (
           <div className='marginEmptyReview'>
             <p>Здесь пока нет отзывов, но скоро появятся!</p>
-            <img src='/assets/review/emptyReview.jpg' alt=';)' />
+            <img src={`${prefix}/assets/review/emptyReview.jpg`} alt=';)' />
           </div>
         )}
         <div>
