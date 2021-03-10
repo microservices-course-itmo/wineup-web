@@ -27,7 +27,9 @@ const InputTypes = {
 
 // const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Profile = () => {
-  const [accessToken, setAccessToken] = useLocalStorage('accessToken')
+  /* ESLint error: 'setAccessToken' is assigned a value but never used  no-unused-vars
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken') */
+  const [accessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
 
   const [nameInputState, setNameInputState] = useState()
