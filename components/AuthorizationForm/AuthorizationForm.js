@@ -4,6 +4,7 @@ import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
+import CloseButton from '../CloseButton'
 
 const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
@@ -38,6 +39,7 @@ const AuthorizationForm = () => {
       />
 
       <div className='finalMessage'>
+        <CloseButton />
         Вы успешно зарегистрировались в системе
       </div>
       <style jsx>
@@ -46,7 +48,8 @@ const AuthorizationForm = () => {
             width: 1364px;
             height: 86px;
             padding: 24px 0;
-            display: ${formState.isMessageVisible ? 'block' : 'none'};
+            position: relative;
+            display: ${!formState.isMessageVisible ? 'block' : 'none'};
             background: #b1e86b;
             border: 1px solid #000000;
             box-sizing: border-box;

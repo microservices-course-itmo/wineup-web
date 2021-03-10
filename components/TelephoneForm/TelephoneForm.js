@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { ReducerType } from '../AuthorizationForm/store'
-import CustomFormButton from '../CustomFormButton/CustomFormButton'
+import CustomFormButton from '../CustomFormButton'
+import CloseButton from '../CloseButton'
 
 const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const TELEPHONE_MAX_SIZE = 12
@@ -46,6 +47,8 @@ const TelephoneForm = props => {
 
   return (
     <div className='authForm1'>
+      <CloseButton />
+
       <div className='header'>Войдите или зарегистрируйтесь</div>
 
       <div className='inputForm'>
@@ -73,6 +76,7 @@ const TelephoneForm = props => {
       <style jsx>
         {`
           .authForm1 {
+            position: relative;
             background: white;
             display: ${authForm === 1 ? 'block' : 'none'};
             border: 2px solid black;

@@ -8,6 +8,7 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
+import CloseButton from '../CloseButton'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
@@ -143,6 +144,7 @@ const RegistrationForm = props => {
   return (
     <div>
       <div className='authForm3'>
+        <CloseButton />
         <div className='header'>Войдите или зарегистрируйтесь</div>
         <div className='inputForm'>
           <div className='formName'>Введите имя</div>
@@ -203,6 +205,7 @@ const RegistrationForm = props => {
       <style jsx>
         {`
           .authForm3 {
+            position: relative;
             background: white;
             display: ${authForm === 3 ? 'block' : 'none'};
             border: 2px solid black;

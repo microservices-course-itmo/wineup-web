@@ -8,6 +8,7 @@ import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import CustomFormButton from '../CustomFormButton/CustomFormButton'
+import CloseButton from '../CloseButton'
 
 const TELEPHONE_MAX_SIZE = 12
 const OK_CODE = 200
@@ -92,6 +93,8 @@ const TelephoneAndCodeForm = props => {
   return (
     <div>
       <div className='authForm2'>
+        <CloseButton />
+
         <div className='header'>Войдите или зарегистрируйтесь</div>
         <div className='inputForm'>
           <div className='formName'>Введите номер телефона</div>
@@ -130,6 +133,7 @@ const TelephoneAndCodeForm = props => {
       <style jsx>
         {`
           .authForm2 {
+            position: relative;
             background: white;
             display: ${authForm === 2 ? 'block' : 'none'};
             border: 2px solid black;
