@@ -17,7 +17,7 @@ const CustomInput = ({ id, label, value, onChange }) => {
             id={id}
             readOnly={isReadOnly}
             disabled={isReadOnly}
-            defaultValue={value}
+            value={value}
             onChange={onChange}
           />
           <div

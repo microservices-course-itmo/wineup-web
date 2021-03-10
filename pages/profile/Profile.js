@@ -23,45 +23,46 @@ const cityIdByName = cityName => {
 const Profile = () => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
-  const [userFormState, setUserFormState] = useState({})
+
+  const [nameInputState, setNameInputState] = useState()
+  const [cityInputState, setCityInputState] = useState()
+  const [phoneInputState, setPhoneInputState] = useState()
   useEffect(() => {
-    setUserFormState(
-      currentUser
-        ? {
-            name: currentUser.name || 'Не указано',
-            cityName: cityNameById(currentUser.cityId) || 'Не указано',
-            phoneNumber: currentUser.phoneNumber || 'Не указано',
-          }
-        : null
-    )
+    if (currentUser) {
+      setNameInputState(currentUser.name || 'Не указано')
+      setCityInputState(cityNameById(currentUser.cityId) || 'Не указано')
+      setPhoneInputState(currentUser.phoneNumber || 'Не указано')
+    }
   }, [currentUser])
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
     switch (evt.currentTarget.id) {
       case 'name-input':
-        setUserFormState(prevState => ({ ...prevState, name: newValue }))
+        setNameInputState(newValue)
         break
       case 'city-input':
-        setUserFormState(prevState => ({ ...prevState, cityName: newValue }))
+        setCityInputState(newValue)
         break
       case 'phone-input':
-        setUserFormState(prevState => ({ ...prevState, phoneNumber: newValue }))
+        setPhoneInputState(newValue)
         break
       default:
         break
     }
   }
   const onSubmit = async () => {
-    const { name, city, phone } = userFormState
     const userToPatch = {
-      name: name === currentUser.name ? name : null,
+      name: nameInputState !== currentUser.name ? nameInputState : null,
       cityId:
-        cityIdByName(city) === currentUser.cityId ? cityIdByName(city) : null,
-      phoneNumber: phone === currentUser.phoneNumber ? phone : null,
+        cityIdByName(cityInputState) !== currentUser.cityId
+          ? cityIdByName(cityInputState)
+          : null,
+      phoneNumber:
+        phoneInputState !== currentUser.phoneNumber ? phoneInputState : null,
     }
-    Object.entries(userToPatch).forEach((key, value) => {
-      if (!value) delete userToPatch[key]
+    Object.keys(userToPatch).forEach(key => {
+      if (!userToPatch[key]) delete userToPatch[key]
     })
     api
       .sendRequest({
@@ -78,15 +79,9 @@ const Profile = () => {
       .catch(alert)
   }
   const onCancel = () => {
-    setUserFormState(
-      currentUser
-        ? {
-            name: currentUser.name || 'Не указано',
-            cityName: cityNameById(currentUser.cityId) || 'Не указано',
-            phoneNumber: currentUser.phoneNumber || 'Не указано',
-          }
-        : null
-    )
+    setNameInputState(currentUser.name || 'Не указано')
+    setCityInputState(cityNameById(currentUser.cityId) || 'Не указано')
+    setPhoneInputState(currentUser.phoneNumber || 'Не указано')
   }
 
   return (
@@ -94,7 +89,7 @@ const Profile = () => {
       <Header />
       <div className='content'>
         <header className='main-header'>Личный кабинет</header>
-        {currentUser && userFormState && (
+        {currentUser && (
           <div className='profile'>
             <nav className='container'>
               <div className='user-avatar'>
@@ -119,19 +114,19 @@ const Profile = () => {
                 <CustomInput
                   id='name-input'
                   label='Ваше имя'
-                  value={userFormState.name}
+                  value={nameInputState}
                   onChange={onInputChange}
                 />
                 <CustomInput
                   id='city-input'
                   label='Город'
-                  value={userFormState.cityName}
+                  value={cityInputState}
                   onChange={onInputChange}
                 />
                 <CustomInput
                   id='phone-input'
                   label='Телефон'
-                  value={userFormState.phoneNumber}
+                  value={phoneInputState}
                   onChange={onInputChange}
                 />
               </div>
