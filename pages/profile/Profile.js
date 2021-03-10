@@ -6,63 +6,74 @@ import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
+import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+
+const cityNameById = id => {
+  if (id === 1) return 'Москва'
+  if (id === 2) return 'Санкт-Петербург'
+  return null
+}
+const cityIdByName = cityName => {
+  if (cityName === 'Москва') return 1
+  if (cityName === 'Санкт-Петербург') return 2
+  return null
+}
+const emptyInputValue = 'Не указано'
+const InputTypes = {
+  name: 'name-input',
+  cityName: 'city-input',
+  phone: 'phone-input',
+}
 
 const Profile = () => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
-  const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
-  const [currentUser, setCurrentUser] = useState(useRecoilValue(userState))
-  const [editedUser, setEditedUser] = useState({})
-  const cityNameById = id => {
-    if (id === 1) return 'Москва'
-    if (id === 2) return 'Санкт-Петербург'
-    return null
-  }
-  const cityIdByName = cityName => {
-    if (cityName === 'Москва') return 1
-    if (cityName === 'Санкт-Петербург') return 2
-    return null
-  }
+  const currentUser = useRecoilValue(userState)
 
+  const [nameInputState, setNameInputState] = useState()
+  const [cityInputState, setCityInputState] = useState()
+  const [phoneInputState, setPhoneInputState] = useState()
   useEffect(() => {
-    const getUser = async () => {
-      const response = await api.getProfile(accessToken)
-
-      if (response.error === true) {
-        const [newAccessToken, newRefreshToken] = await api.refreshToken(
-          refreshToken
-        )
-        setAccessToken(newAccessToken)
-        setRefreshToken(newRefreshToken)
-      }
-      const currentUser2 = await response.profile
-      setCurrentUser(currentUser2)
+    if (currentUser) {
+      setNameInputState(currentUser.name || emptyInputValue)
+      setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
+      setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
     }
-    if (!currentUser) {
-      getUser().catch(alert)
-    }
-  }, [accessToken, currentUser, refreshToken, setAccessToken, setRefreshToken])
+  }, [currentUser])
 
-  const user = currentUser
-    ? {
-        name: currentUser.name || 'Не указано',
-        cityName: cityNameById(currentUser.cityId) || 'Не указано',
-        phoneNumber: currentUser.phoneNumber || 'Не указано',
-      }
-    : null
-  const onInputChange = (field, newValue) => {
-    setEditedUser(prevState => ({ ...prevState, [field]: newValue }))
+  const onInputChange = evt => {
+    const newValue = evt.currentTarget.value
+    switch (evt.currentTarget.id) {
+      case InputTypes.name:
+        setNameInputState(newValue)
+        break
+      case InputTypes.cityName:
+        setCityInputState(newValue)
+        break
+      case InputTypes.phone:
+        setPhoneInputState(newValue)
+        break
+      default:
+        break
+    }
   }
   const onSubmit = async () => {
-    Object.keys(editedUser).forEach(key => {
-      if (!editedUser[key] || user[key] === editedUser[key]) {
-        delete editedUser[key]
-      }
+    const userToPatch = {
+      name: nameInputState !== currentUser.name ? nameInputState : null,
+      cityId:
+        cityIdByName(cityInputState) !== currentUser.cityId
+          ? cityIdByName(cityInputState)
+          : null,
+      phoneNumber:
+        phoneInputState !== currentUser.phoneNumber ? phoneInputState : null,
+    }
+    Object.keys(userToPatch).forEach(key => {
+      if (!userToPatch[key]) delete userToPatch[key]
     })
     api
       .sendRequest({
         url: '/user-service/users/me',
         method: 'PATCH',
-        data: editedUser,
+        data: userToPatch,
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json;charset=utf-8',
@@ -72,32 +83,28 @@ const Profile = () => {
       .then(() => window.location.reload())
       .catch(alert)
   }
+  const onCancel = () => {
+    setNameInputState(currentUser.name || 'Не указано')
+    setCityInputState(cityNameById(currentUser.cityId) || 'Не указано')
+    setPhoneInputState(currentUser.phoneNumber || 'Не указано')
+  }
 
   return (
-    <div className='wrapper'>
+    <GlobalRecoilWrapper>
       <Header />
       <div className='content'>
         <header className='main-header'>Личный кабинет</header>
-        {user && (
+        {currentUser && (
           <div className='profile'>
             <nav className='container'>
               <div className='user-avatar'>
                 <img
                   className='avatar'
-                  src='/assets/user.svg'
+                  src='/assets/wineup-avatar-default.svg'
                   alt='User Avatar'
                 />
-                <img
-                  className='edit-btn'
-                  src='/assets/edit-icon.svg'
-                  alt='Edit'
-                />
               </div>
-              <ul className='nav-list'>
-                <li className='nav-item'>Профиль</li>
-                <li className='nav-item'>Предпочтения</li>
-                <li className='nav-item'>Вопросы</li>
-              </ul>
+
               <footer className='button-footer'>
                 <Link href='/'>
                   <button type='button' className='btn logout-btn'>
@@ -110,35 +117,30 @@ const Profile = () => {
               <header className='info-header'>Профиль</header>
               <div className='info-list'>
                 <CustomInput
-                  id='name-input'
+                  id={InputTypes.name}
                   label='Ваше имя'
-                  defaultValue={user.name}
-                  onChange={evt =>
-                    onInputChange('name', evt.currentTarget.value)
-                  }
+                  value={nameInputState}
+                  onChange={onInputChange}
                 />
                 <CustomInput
-                  id='city-input'
+                  id={InputTypes.cityName}
                   label='Город'
-                  defaultValue={user.cityName}
-                  onChange={evt =>
-                    onInputChange(
-                      'cityId',
-                      cityIdByName(evt.currentTarget.value)
-                    )
-                  }
+                  value={cityInputState}
+                  onChange={onInputChange}
                 />
                 <CustomInput
-                  id='phone-input'
+                  id={InputTypes.phone}
                   label='Телефон'
-                  defaultValue={user.phoneNumber}
-                  onChange={evt =>
-                    onInputChange('phoneNumber', evt.currentTarget.value)
-                  }
+                  value={phoneInputState}
+                  onChange={onInputChange}
                 />
               </div>
               <footer className='button-footer'>
-                <button type='button' className='btn cancel-btn'>
+                <button
+                  type='reset'
+                  className='btn cancel-btn'
+                  onClick={onCancel}
+                >
                   Отменить
                 </button>
                 <button
@@ -156,10 +158,6 @@ const Profile = () => {
       </div>
       <style jsx>
         {`
-          .wrapper {
-            max-width: 1440px;
-            margin: 0 auto;
-          }
           .content {
             display: flex;
             margin-top: 40px;
@@ -167,35 +165,31 @@ const Profile = () => {
             flex-direction: column;
             background-color: #f5f5f5;
           }
+
           .main-header {
             font-size: 32px;
             font-weight: bold;
             padding: 30px;
           }
+
           .profile {
             display: flex;
             flex-flow: row nowrap;
             justify-content: space-between;
             width: 100%;
           }
+
           nav.container {
             flex-basis: 25%;
             flex-grow: 1;
             display: flex;
             flex-flow: column nowrap;
-            justify-content: stretch;
+            justify-content: space-between;
             background-color: white;
             padding: 40px;
             margin-bottom: 40px;
           }
-          .nav-list {
-            padding: 50px 0;
-          }
-          .nav-item {
-            font-weight: bold;
-            font-size: 22px;
-            margin: 20px;
-          }
+
           .info-container {
             display: flex;
             flex-direction: column;
@@ -207,32 +201,38 @@ const Profile = () => {
             margin-left: 80px;
             margin-bottom: 40px;
           }
+
           .info-header {
             background-color: #b65f74;
             color: white;
             font-size: 28px;
             padding: 20px;
           }
+
           .user-avatar {
             display: flex;
             flex-flow: row nowrap;
             align-items: flex-end;
           }
+
           .button-footer {
             display: flex;
             justify-content: space-around;
             margin-top: 150px;
           }
+
           .info-list {
             display: flex;
             flex-flow: column nowrap;
             padding: 0 20px;
           }
+
           nav.container .avatar {
             height: 210px;
             width: 210px;
             border-radius: 50%;
           }
+
           .btn {
             border: 1px solid;
             border-radius: 50px;
@@ -240,12 +240,14 @@ const Profile = () => {
             padding: 5px 60px;
             cursor: pointer;
           }
+
           .logout-btn,
           .cancel-btn {
             background-color: #931332;
             border-color: #931332;
             color: white;
           }
+
           .submit-btn {
             background-color: transparent;
             border-color: #717171;
@@ -253,7 +255,7 @@ const Profile = () => {
           }
         `}
       </style>
-    </div>
+    </GlobalRecoilWrapper>
   )
 }
 

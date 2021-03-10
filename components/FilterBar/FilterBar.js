@@ -1,19 +1,22 @@
+import React from 'react'
 import { useRecoilState } from 'recoil'
 import InputContainer from '../InputContainer'
 import { formFiltersState } from '../Catalog'
+import { InputGroupType } from '../InputContainer/InputContainer'
+
+const initialFormState = {
+  priceFrom: 0,
+  priceTo: 100000,
+  volume: [],
+  color: [],
+  sugar: [],
+  sort: [],
+  country: [],
+  region: [],
+  sparkling: [],
+}
 
 const FilterBar = () => {
-  const initialFormState = {
-    priceFrom: 0,
-    priceTo: 100000,
-    volume: [],
-    color: [],
-    sugar: [],
-    sort: [],
-    country: [],
-    region: [],
-    sparkling: [],
-  }
   const [formState, setFormState] = useRecoilState(formFiltersState)
 
   const handleCheckoutChange = event => {
@@ -30,13 +33,19 @@ const FilterBar = () => {
     setFormState({ ...formState, [name]: newGroup })
   }
   const handleInputChange = event => {
-    setFormState({ ...formState, [event.target.name]: event.target.value })
+    const { value, name } = event.target
+    const { priceFrom, priceTo } = initialFormState
+    const updatedFormName = (function () {
+      if (value) return value
+      return name === 'priceFrom' ? priceFrom : priceTo
+    })()
+    setFormState({ ...formState, [name]: updatedFormName })
   }
   const inputGroupMap = {
     price: {
       id: 'price',
       title: 'Цена',
-      type: 'number',
+      type: InputGroupType.number,
       currency: 'RUB',
       onChange: handleInputChange,
       inputList: [
@@ -57,7 +66,7 @@ const FilterBar = () => {
     volume: {
       id: 'volume',
       title: 'Объём',
-      type: 'checkbox',
+      type: InputGroupType.checkbox,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -93,7 +102,7 @@ const FilterBar = () => {
     color: {
       id: 'color',
       title: 'Цвет',
-      type: 'checkbox',
+      type: InputGroupType.checkbox,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -129,7 +138,7 @@ const FilterBar = () => {
     sugar: {
       id: 'sugar',
       title: 'Содержание сахара',
-      type: 'checkbox',
+      type: InputGroupType.checkbox,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -165,7 +174,7 @@ const FilterBar = () => {
     wineSort: {
       id: 'wineSort',
       title: 'Сорт',
-      type: 'checkbox',
+      type: InputGroupType.checkboxWithInput,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -201,7 +210,7 @@ const FilterBar = () => {
     countryFrom: {
       id: 'countryFrom',
       title: 'Страна',
-      type: 'checkbox',
+      type: InputGroupType.checkboxWithInput,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -237,7 +246,7 @@ const FilterBar = () => {
     regionFrom: {
       id: 'regionFrom',
       title: 'Регион',
-      type: 'checkbox',
+      type: InputGroupType.checkbox,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -273,7 +282,7 @@ const FilterBar = () => {
     sparkling: {
       id: 'sparkling',
       title: 'Игристость',
-      type: 'checkbox',
+      type: InputGroupType.checkbox,
       onChange: handleCheckoutChange,
       inputList: [
         {
@@ -298,6 +307,7 @@ const FilterBar = () => {
     return (
       <li key={id}>
         <InputContainer
+          id={id}
           title={title}
           type={type}
           inputList={inputList}
@@ -343,7 +353,7 @@ const FilterBar = () => {
             height: 100vh;
           }
           .filter-list {
-            margin-left: 20px;
+            padding-left: 20px;
             overflow-y: auto;
             height: calc(100vh - 160px);
             width: 100%;

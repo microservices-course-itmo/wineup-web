@@ -73,7 +73,6 @@ const Catalog = () => {
         buttons={sortingButtons}
         onChange={event => setWinesSort(event.currentTarget.value)}
       />
-
       {state === 'hasValue' &&
         (wines.length > 0 ? (
           <>
