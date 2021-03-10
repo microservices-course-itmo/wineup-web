@@ -1,11 +1,45 @@
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
-import React from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
+const imagePaths = {
+  city: `${prefix}/assets/header/city-icon`,
+  home: `${prefix}/assets/header/catalog`,
+  community: `${prefix}/assets/header/community`,
+  likes: `${prefix}/assets/header/likes`,
+  favorites: `${prefix}/assets/header/heart`,
+  login: `${prefix}/assets/header/login`,
+}
+
 const Header = () => {
+  const [activeImage, setActiveImage] = useState('')
   const currentUser = useRecoilValue(userState)
+  const { asPath } = useRouter()
+
+  useEffect(() => {
+    switch (asPath) {
+      case '/':
+        setActiveImage('home')
+        break
+      case '/favorites':
+        setActiveImage('favorites')
+        break
+      case '/login':
+        setActiveImage('login')
+        break
+      case '/profile':
+        setActiveImage('login')
+        break
+      default:
+        setActiveImage('')
+        break
+    }
+  }, [asPath])
 
   return (
     <div className='header'>
@@ -23,7 +57,9 @@ const Header = () => {
         <div className='menu-item catalog'>
           <img
             className='icon'
-            src={`${prefix}/assets/header/catalog.svg`}
+            src={`${imagePaths.home}${
+              activeImage === 'home' ? '-active' : ''
+            }.svg`}
             alt='catalog'
           />
           <p>Каталог</p>
@@ -33,7 +69,9 @@ const Header = () => {
         <div className='menu-item community'>
           <img
             className='icon'
-            src={`${prefix}/assets/header/community.svg`}
+            src={`${imagePaths.community}${
+              activeImage === 'community' ? '-active' : ''
+            }.svg`}
             alt='city'
           />
           <p>Сообщество</p>
@@ -46,7 +84,9 @@ const Header = () => {
         <div className='menu-item likes'>
           <img
             className='icon'
-            src={`${prefix}/assets/header/likes.svg`}
+            src={`${imagePaths.likes}${
+              activeImage === 'likes' ? '-active' : ''
+            }.svg`}
             alt='city'
           />
           <p>Лайки</p>
@@ -56,7 +96,9 @@ const Header = () => {
         <div className='menu-item heart'>
           <img
             className='icon'
-            src={`${prefix}/assets/header/heart.svg`}
+            src={`${imagePaths.favorites}${
+              activeImage === 'favorites' ? '-active' : ''
+            }.svg`}
             alt='heart'
           />
           <p>Избранное</p>
@@ -66,12 +108,15 @@ const Header = () => {
         <div className='menu-item login'>
           <img
             className='icon'
-            src={`${prefix}/assets/header/man.svg`}
+            src={`${imagePaths.login}${
+              activeImage === 'login' ? '-active' : ''
+            }.svg`}
             alt='profile'
           />
           {currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
         </div>
       </Link>
+
       <style jsx>
         {`
           .header {
