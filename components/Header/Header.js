@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-
-
 
 const imagePaths = {
   city: '/assets/header/city-icon',
