@@ -1,9 +1,9 @@
 import { useReducer } from 'react'
 
 import { initialState, reducer } from './store'
-import TelephoneForm from './TelephoneForm'
-import TelephoneAndCodeForm from './TelephoneAndCodeForm'
-import RegistrationForm from './RegistrationForm'
+import TelephoneForm from '../TelephoneForm'
+import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
+import RegistrationForm from '../RegistrationForm'
 
 const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)

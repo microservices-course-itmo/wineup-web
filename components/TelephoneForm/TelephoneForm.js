@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { ReducerType } from './store'
-import Button from './Button'
+import { ReducerType } from '../AuthorizationForm/store'
+import CustomFormButton from '../CustomFormButton/CustomFormButton'
 
 const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const TELEPHONE_MAX_SIZE = 12
@@ -61,7 +61,7 @@ const TelephoneForm = props => {
         <input className='errorMessage' value={telephoneError} disabled />
       </div>
 
-      <Button
+      <CustomFormButton
         width='464px'
         margin='50px 120px 5px 119px'
         onClick={handleFirstForm}

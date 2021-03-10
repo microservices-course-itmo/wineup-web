@@ -4,10 +4,10 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 
 import useLocalStorage from '../../utils/useLocalStorage'
-import { ReducerType } from './store'
+import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import Button from './Button'
+import CustomFormButton from '../CustomFormButton/CustomFormButton'
 
 const TELEPHONE_MAX_SIZE = 12
 const OK_CODE = 200
@@ -113,9 +113,13 @@ const TelephoneAndCodeForm = props => {
           <input className='errorMessage' value={telCodeError} disabled />
         </div>
         <div className='buttonGroup'>
-          <Button width='49%' onClick={handleSecondForm} text='Подтвердить' />
+          <CustomFormButton
+            width='49%'
+            onClick={handleSecondForm}
+            text='Подтвердить'
+          />
 
-          <Button
+          <CustomFormButton
             width='49%'
             onClick={tryHandleFirstFormAgain}
             text='Отправить повторно'

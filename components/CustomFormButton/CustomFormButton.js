@@ -1,6 +1,11 @@
 import React from 'react'
 
-const Button = ({ width = '100%', margin = 0, onClick = () => {}, text }) => (
+const CustomFormButton = ({
+  width = '100%',
+  margin = 0,
+  onClick = () => {},
+  text,
+}) => (
   <button type='button' className='button' onClick={onClick}>
     {text}
     <style jsx>
@@ -29,4 +34,4 @@ const Button = ({ width = '100%', margin = 0, onClick = () => {}, text }) => (
   </button>
 )
 
-export default Button
+export default CustomFormButton

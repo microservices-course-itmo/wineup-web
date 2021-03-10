@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
-import { ReducerType } from './store'
+import { ReducerType } from '../AuthorizationForm/store'
 
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
 const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
@@ -9,11 +8,19 @@ const DAY_LIMIT = 31
 const MONTH_LIMIT = 12
 const DAY_MAX_LENGTH = 2
 
+export const CalendarErrors = {
+  dayLimit: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
+  monthLimit: `Ошибка: месяцев всего ${MONTH_LIMIT}`,
+  yearExceeded: 'Приветствую тебя, гость из будущего!',
+  userYoungAge: `Ошибка: не достигли ${CONSENT_YEAR} лет`,
+  sizeExceeded: 'Предупреждение: вы пытаетесь ввести слишком длинную строку',
+}
+
 const parseIntToDecimal = value => {
   return parseInt(value, 10)
 }
 
-const Calendar = props => {
+const FormCalendar = props => {
   const { dateParts, isCalendarOpen, dispatch } = props
 
   const handleDay = useCallback(
@@ -30,7 +37,7 @@ const Calendar = props => {
         } else {
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
+            payload: CalendarErrors.dayLimit,
           })
         }
       }
@@ -51,7 +58,7 @@ const Calendar = props => {
         } else {
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: `Ошибка: месяцев всего ${MONTH_LIMIT}`,
+            payload: CalendarErrors.monthLimit,
           })
         }
       }
@@ -64,7 +71,7 @@ const Calendar = props => {
       if (parseIntToDecimal(year) > CURRENT_YEAR)
         dispatch({
           type: ReducerType.setCalendarError,
-          payload: 'Приветствую тебя, гость из будущего!',
+          payload: CalendarErrors.yearExceeded,
         })
       if (year.length <= CURRENT_YEAR) {
         const [day, month] = dateParts
@@ -75,7 +82,7 @@ const Calendar = props => {
         if (parseIntToDecimal(year) >= TOO_YOUNG)
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: `Ошибка: не достигли ${CONSENT_YEAR} лет`,
+            payload: CalendarErrors.userYoungAge,
           })
         else {
           dispatch({ type: ReducerType.clearCalendarError })
@@ -85,22 +92,8 @@ const Calendar = props => {
     [dateParts, dispatch]
   )
 
-  const toggleIsCalendarOpen = useCallback(() => {
-    dispatch({
-      type: ReducerType.setIsCalendarOpen,
-      payload: !isCalendarOpen,
-    })
-  }, [dispatch, isCalendarOpen])
-
   return (
     <div>
-      <div onClick={toggleIsCalendarOpen}>
-        <img
-          className='icon1'
-          src={`${prefix}assets/authorization/calendar.svg`}
-          alt=''
-        />
-      </div>
       <div className='calendar' id='calendar'>
         <input
           className='day'
@@ -123,11 +116,6 @@ const Calendar = props => {
       </div>
       <style jsx>
         {`
-          .icon1 {
-            position: relative;
-            top: -55px;
-            left: 463px;
-          }
           .day {
             margin: 25px 4px 25px 25px;
             width: 46px;
@@ -156,7 +144,7 @@ const Calendar = props => {
             text-indent: 10px;
           }
           .calendar {
-            visibility: ${isCalendarOpen ? 'visible' : 'hidden'};
+            display: ${isCalendarOpen ? 'flex' : 'none'};
             width: 201px;
             height: 91px;
             border: 1px solid #9e9e9e;
@@ -167,7 +155,6 @@ const Calendar = props => {
             left: 510px;
             top: -110px;
             background: white;
-            display: flex;
           }
         `}
       </style>
@@ -175,4 +162,4 @@ const Calendar = props => {
   )
 }
 
-export default Calendar
+export default FormCalendar

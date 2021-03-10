@@ -1,12 +1,13 @@
 import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
-import { ReducerType } from './store'
+import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
-import Calendar from './Calendar'
-import Button from './Button'
+import FormCalendar from '../FormCalendar'
+import CustomFormButton from '../CustomFormButton'
+import { CalendarErrors } from '../FormCalendar/FormCalendar'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
@@ -41,6 +42,13 @@ const RegistrationForm = props => {
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
 
+  const toggleIsCalendarOpen = useCallback(() => {
+    dispatch({
+      type: ReducerType.setIsCalendarOpen,
+      payload: !isCalendarOpen,
+    })
+  }, [dispatch, isCalendarOpen])
+
   const handleDate = useCallback(
     e => {
       const date = e.target.value
@@ -50,22 +58,22 @@ const RegistrationForm = props => {
         if (parseIntToDecimal(day) > DAY_LIMIT)
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: `Ошибка: дней не может быть больше ${DAY_LIMIT}`,
+            payload: CalendarErrors.dayLimit,
           })
         if (parseIntToDecimal(month) > MONTH_LIMIT)
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: `Ошибка: месяцев всего ${MONTH_LIMIT}`,
+            payload: CalendarErrors.monthLimit,
           })
         if (parseIntToDecimal(year) > CURRENT_YEAR)
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: 'Приветствую тебя, гость из будущего!',
+            payload: CalendarErrors.yearExceeded,
           })
         if (parseIntToDecimal(year) > TOO_YOUNG)
           dispatch({
             type: ReducerType.setCalendarError,
-            payload: `Ошибка: не достигли ${CONSENT_YEAR} лет`,
+            payload: CalendarErrors.userYoungAge,
           })
         else {
           dispatch({ type: ReducerType.clearCalendarError })
@@ -80,7 +88,7 @@ const RegistrationForm = props => {
       } else {
         dispatch({
           type: ReducerType.setCalendarError,
-          payload: 'Предупреждение: вы пытаетесь ввести слишком длинную строку',
+          payload: CalendarErrors.sizeExceeded,
         })
       }
     },
@@ -148,14 +156,21 @@ const RegistrationForm = props => {
         </div>
         <div className='inputForm'>
           <div className='formName'>Дата рождения</div>
-          <input
-            className='inputField'
-            placeholder='ДД.ММ.ГГГГ'
-            value={date}
-            onChange={handleDate}
-          />
+          <div className='calendarInputWrapper'>
+            <input
+              className='inputField'
+              placeholder='ДД.ММ.ГГГГ'
+              value={date}
+              onChange={handleDate}
+            />
+            <img
+              className='icon1'
+              src={`${prefix}assets/authorization/calendar.svg`}
+              alt=''
+            />
+          </div>
           <input className='errorMessage' value={calendarError} disabled />
-          <Calendar
+          <FormCalendar
             dateParts={dateParts}
             isCalendarOpen={isCalendarOpen}
             dispatch={dispatch}
@@ -171,8 +186,7 @@ const RegistrationForm = props => {
             alt=''
           />
         </div>
-
-        <Button
+        <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'
           onClick={registration}
@@ -210,6 +224,12 @@ const RegistrationForm = props => {
             width: 499px;
             height: 103px;
           }
+          .icon1 {
+            position: relative;
+            bottom: 36px;
+            margin: 0 0 0 auto;
+            right: 16px;
+          }
           .formName {
             height: 22px;
             margin-bottom: 10px;
@@ -217,9 +237,11 @@ const RegistrationForm = props => {
             font-family: 'PT Sans', sans-serif;
             color: black;
           }
+          .calendarInputWrapper {
+            margin-top: 10px;
+          }
           .inputField {
             height: 53px;
-            margin-top: 10px;
             text-indent: 25px;
             width: 499px;
             font-size: 18px;
