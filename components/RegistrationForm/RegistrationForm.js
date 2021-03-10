@@ -163,12 +163,14 @@ const RegistrationForm = props => {
               value={date}
               onChange={handleDate}
             />
-            <img
-              className='icon1'
-              src={`${prefix}assets/authorization/calendar.svg`}
-              alt=''
-              onClick={toggleIsCalendarOpen}
-            />
+            <span>
+              <img
+                className='icon1'
+                src={`${prefix}assets/authorization/calendar.svg`}
+                alt=''
+                onClick={toggleIsCalendarOpen}
+              />
+            </span>
           </div>
           <input className='errorMessage' value={calendarError} disabled />
           <FormCalendar
