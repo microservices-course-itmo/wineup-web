@@ -7,7 +7,6 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 
-// const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const Profile = () => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
   const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
