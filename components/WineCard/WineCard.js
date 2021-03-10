@@ -6,6 +6,7 @@ import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
 import useLocalStorage from '../../utils/useLocalStorage'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
@@ -67,55 +68,61 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   }
 
   return (
-    <Link href={`/wine/${wineId}`}>
-      <div className='card'>
-        <div className='top'>
-          <button
-            className='heart-button'
-            onClick={() => clickHeart(wineId)}
-            type='button'
-          >
-            <img
-              className={`heart ${isHeartFilled ? 'filled' : ''}`}
-              src={`assets/card/heart-${
-                isHeartFilled ? 'filled' : 'empty'
-              }.svg`}
-              alt='heart'
-            />
-          </button>
+    <>
+      <Link href={`/wine/${wineId}`}>
+        <div className='card'>
+          <div className='top'>
+            <button
+              className='heart-button'
+              onClick={() => clickHeart(wineId)}
+              type='button'
+            >
+              <img
+                className={`heart ${isHeartFilled ? 'filled' : ''}`}
+                src={`/assets/card/heart-${
+                  isHeartFilled ? 'filled' : 'empty'
+                }.svg`}
+                alt='heart'
+              />
+            </button>
 
-          <div className='score'>
-            <div className='stars'>
-              {starsNumber.map((star, index) => (
-                <img
-                  src={`assets/card/${
-                    index < info.stars ? 'filled' : 'empty'
-                  }-star.svg`}
-                  alt={`${index < info.stars ? 'filled' : 'empty'} star`}
-                  key={star.toString()}
-                />
-              ))}
-            </div>
-
-            {imageSrc ? (
-              <div className='img-container'>
-                <img className='wine-img' src={imageSrc} alt={info.name} />
+            <div className='score'>
+              <div className='stars'>
+                {starsNumber.map((star, index) => (
+                  <img
+                    src={`/assets/card/${
+                      index < info.stars ? 'filled' : 'empty'
+                    }-star.svg`}
+                    alt={`${index < info.stars ? 'filled' : 'empty'} star`}
+                    key={star.toString()}
+                  />
+                ))}
               </div>
-            ) : null}
 
-            <div className='wine-bg'>
-              <h2 className='price'>
-                {formatPrice(info.discount ? info.discount.price : info.price)}
-              </h2>
-              <h4 className='size'>{formatNumber(info.size)} л.</h4>
-            </div>
+              {imageSrc ? (
+                <div className='img-container'>
+                  <img className='wine-img' src={imageSrc} alt={info.name} />
+                </div>
+              ) : null}
 
-            {info.discount ? (
-              <div className='discount'>
-                <h2 className='discount-percent'>-{info.discount.percent}%</h2>
-                <h4 className='old-price'>{formatPrice(info.price)}</h4>
+              <div className='wine-bg'>
+                <h2 className='price'>
+                  {formatPrice(
+                    info.discount ? info.discount.price : info.price
+                  )}
+                </h2>
+                <h4 className='size'>{formatNumber(info.size)} л.</h4>
               </div>
-            ) : null}
+
+              {info.discount ? (
+                <div className='discount'>
+                  <h2 className='discount-percent'>
+                    -{info.discount.percent}%
+                  </h2>
+                  <h4 className='old-price'>{formatPrice(info.price)}</h4>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <h2 className='name'>{info.name}</h2>
@@ -134,9 +141,12 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
               countryCode={info.country.code}
               svg
             />
-            <img src='/assets/card/bottle-icon.svg' alt='bottle icon' />
-            <img src='/assets/card/fits-icon.svg' alt='fits icon' />
-            <img src='/assets/card/shop-icon.svg' alt='shop icon' />
+            <img
+              src={`${prefix}/assets/card/bottle-icon.svg`}
+              alt='bottle icon'
+            />
+            <img src={`${prefix}/assets/card/fits-icon.svg`} alt='fits icon' />
+            <img src={`${prefix}/assets/card/shop-icon.svg`} alt='shop icon' />
           </div>
 
           <div className='info'>
@@ -145,212 +155,211 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             <p>Подходит вам на {info.fitsPercent}%</p>
             <p>{info.shop}</p>
           </div>
-
-          <style jsx>
-            {`
-              .flag-icon {
-                background-size: contain;
-                background-position: 50%;
-                background-repeat: no-repeat;
-              }
-
-              .card {
-                width: 300px;
-                height: 587px;
-                position: relative;
-
-                background-color: #ffffff;
-                cursor: pointer;
-              }
-
-              .top {
-                height: 340px;
-                position: relative;
-              }
-
-              .heart-button {
-                padding: 10px;
-                border: none;
-                background-color: #ffffff;
-                outline: none;
-                cursor: pointer;
-              }
-
-              .heart {
-                fill: transparent;
-                stroke: #931332;
-                transition: fill 0.3s;
-              }
-
-              .heart.filled {
-                fill: #931332;
-              }
-
-              .stars {
-                width: 137px;
-                display: flex;
-                justify-content: space-between;
-              }
-
-              .score {
-                padding-left: 10px;
-                padding-top: 52px;
-              }
-
-              .score-caption {
-                padding-top: 4px;
-
-                font-family: PT Sans, sans-serif;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 14px;
-                line-height: 18px;
-                color: #9e9e9e;
-              }
-
-              .wine-img {
-                width: auto;
-                height: 270px;
-
-                position: absolute;
-                top: 50px;
-                right: 65px;
-
-                z-index: 2;
-              }
-
-              .wine-bg {
-                width: 100%;
-                height: 122px;
-
-                position: absolute;
-                top: 152px;
-
-                background-color: ${colors[color] || '#931332'};
-              }
-
-              .discount {
-                position: absolute;
-                top: 60px;
-                right: 5px;
-              }
-
-              .discount-percent {
-                font-family: Playfair Display, serif;
-                font-style: normal;
-                font-weight: 900;
-                font-size: 30px;
-                line-height: 40px;
-                color: #931332;
-              }
-
-              .old-price {
-                position: relative;
-                font-family: Playfair Display, serif;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 20px;
-                line-height: 27px;
-                text-decoration-line: line-through;
-                color: #c4c4c4;
-              }
-
-              .price {
-                position: absolute;
-                top: 40px;
-                left: 20px;
-
-                font-family: Playfair Display, serif;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 28px;
-                line-height: 37px;
-
-                color: #ffffff;
-              }
-
-              .size {
-                position: absolute;
-                bottom: 5px;
-                right: 5px;
-
-                font-family: Playfair Display, serif;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 18px;
-                line-height: 24px;
-                color: #ffffff;
-              }
-
-              .name {
-                max-height: 75px;
-                padding-left: 10px;
-
-                font-family: Playfair Display, serif;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 28px;
-                line-height: 37px;
-
-                color: #000000;
-                overflow: hidden;
-              }
-
-              .line {
-                width: 165px;
-
-                position: absolute;
-                bottom: 155px;
-                left: 10px;
-
-                border-bottom: 2px solid #9e9e9e;
-              }
-
-              .year {
-                position: absolute;
-                bottom: 5px;
-                right: 5px;
-
-                font-family: Playfair Display, serif;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 30px;
-                line-height: 40px;
-
-                color: #000000;
-              }
-
-              .icons {
-                width: 25px;
-                height: 108px;
-
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                align-items: center;
-
-                position: absolute;
-                bottom: 20px;
-                left: 10px;
-              }
-
-              .info {
-                position: absolute;
-                bottom: 11px;
-                left: 45px;
-
-                font-family: PT Sans, sans-serif;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 18px;
-                line-height: 31px;
-                color: #9e9e9e;
-              }
-            `}
-          </style>
         </div>
-      </div>
-    </Link>
+      </Link>
+      <style jsx>
+        {`
+          .flag-icon {
+            background-size: contain;
+            background-position: 50%;
+            background-repeat: no-repeat;
+          }
+
+          .card {
+            width: 300px;
+            height: 587px;
+            position: relative;
+
+            background-color: #ffffff;
+            cursor: pointer;
+          }
+
+          .top {
+            height: 340px;
+            position: relative;
+          }
+
+          .heart-button {
+            padding: 10px;
+            border: none;
+            background-color: #ffffff;
+            outline: none;
+            cursor: pointer;
+          }
+
+          .heart {
+            fill: transparent;
+            stroke: #931332;
+            transition: fill 0.3s;
+          }
+
+          .heart.filled {
+            fill: #931332;
+          }
+
+          .stars {
+            width: 137px;
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .score {
+            padding-left: 10px;
+            padding-top: 52px;
+          }
+
+          .score-caption {
+            padding-top: 4px;
+
+            font-family: PT Sans, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 18px;
+            color: #9e9e9e;
+          }
+
+          .wine-img {
+            width: auto;
+            height: 270px;
+
+            position: absolute;
+            top: 50px;
+            right: 65px;
+
+            z-index: 2;
+          }
+
+          .wine-bg {
+            width: 100%;
+            height: 122px;
+
+            position: absolute;
+            top: 152px;
+
+            background-color: ${colors[color] || '#931332'};
+          }
+
+          .discount {
+            position: absolute;
+            top: 60px;
+            right: 5px;
+          }
+
+          .discount-percent {
+            font-family: Playfair Display, serif;
+            font-style: normal;
+            font-weight: 900;
+            font-size: 30px;
+            line-height: 40px;
+            color: #931332;
+          }
+
+          .old-price {
+            position: relative;
+            font-family: Playfair Display, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 27px;
+            text-decoration-line: line-through;
+            color: #c4c4c4;
+          }
+
+          .price {
+            position: absolute;
+            top: 40px;
+            left: 20px;
+
+            font-family: Playfair Display, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 28px;
+            line-height: 37px;
+
+            color: #ffffff;
+          }
+
+          .size {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+
+            font-family: Playfair Display, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 24px;
+            color: #ffffff;
+          }
+
+          .name {
+            max-height: 75px;
+            padding-left: 10px;
+
+            font-family: Playfair Display, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 28px;
+            line-height: 37px;
+
+            color: #000000;
+            overflow: hidden;
+          }
+
+          .line {
+            width: 165px;
+
+            position: absolute;
+            bottom: 155px;
+            left: 10px;
+
+            border-bottom: 2px solid #9e9e9e;
+          }
+
+          .year {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+
+            font-family: Playfair Display, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 40px;
+
+            color: #000000;
+          }
+
+          .icons {
+            width: 25px;
+            height: 108px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+          }
+
+          .info {
+            position: absolute;
+            bottom: 11px;
+            left: 45px;
+
+            font-family: PT Sans, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 31px;
+            color: #9e9e9e;
+          }
+        `}
+      </style>
+    </>
   )
 }
 

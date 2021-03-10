@@ -76,7 +76,6 @@ const TelephoneAndCodeForm = props => {
         }
         dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
-        console.log(err)
         dispatch({
           type: ReducerType.setTelCodeError,
           payload: 'Ошибка: неправильный код',

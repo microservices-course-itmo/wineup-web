@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { ReducerType } from './store'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
 const TOO_YOUNG = CURRENT_YEAR - CONSENT_YEAR
@@ -94,7 +95,11 @@ const Calendar = props => {
   return (
     <div>
       <div onClick={toggleIsCalendarOpen}>
-        <img className='icon1' src='assets/authorization/calendar.svg' alt='' />
+        <img
+          className='icon1'
+          src={`${prefix}assets/authorization/calendar.svg`}
+          alt=''
+        />
       </div>
       <div className='calendar' id='calendar'>
         <input

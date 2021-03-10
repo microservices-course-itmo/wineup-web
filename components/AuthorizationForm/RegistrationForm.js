@@ -8,6 +8,7 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import Calendar from './Calendar'
 import Button from './Button'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
@@ -164,7 +165,11 @@ const RegistrationForm = props => {
           <div className='formName'>Город</div>
           <input className='inputField' placeholder='Москва' />
           <input className='errorMessage' disabled />
-          <img className='icon2' src='assets/authorization/arrow.svg' alt='' />
+          <img
+            className='icon2'
+            src={`${prefix}assets/authorization/arrow.svg`}
+            alt=''
+          />
         </div>
 
         <Button
