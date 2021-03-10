@@ -44,6 +44,5 @@
     "prettier/prettier": ["error", {
      "endOfLine":"auto"
    }],
-    "no-undef": "warn"
   }
 }
