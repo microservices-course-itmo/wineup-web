@@ -232,16 +232,10 @@ class Api {
 
       return response
     } catch (err) {
-      let responseData
-      if (err.response === undefined) {
-        responseData = undefined
-      } else {
-        responseData = err.response.data
-      }
       return {
         error: true,
         message: err.message,
-        data: responseData,
+        data: err.response.data,
       }
     }
   }
