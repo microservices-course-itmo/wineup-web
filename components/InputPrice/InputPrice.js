@@ -14,7 +14,7 @@
  */
 const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
   const onKeyPress = event => {
-    if (event.key === '+'  || event.key === '-') {
+    if (event.key === '+' || event.key === '-') {
       event.preventDefault()
     }
   }

@@ -31,8 +31,8 @@ const FilterBar = () => {
   }
   const handleInputChange = event => {
     const { value, name } = event.target
-    const { priceFrom, priceTo} = initialFormState
-    const updatedFormName = (function() {
+    const { priceFrom, priceTo } = initialFormState
+    const updatedFormName = (function () {
       if (value) return value
       return name === 'priceFrom' ? priceFrom : priceTo
     })()
