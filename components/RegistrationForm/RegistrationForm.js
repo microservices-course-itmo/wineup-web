@@ -51,31 +51,40 @@ const RegistrationForm = props => {
 
   const handleDate = useCallback(
     e => {
+      let validConditions = true
       const date = e.target.value
       const [day, month, year] = date.split('.')
-      if (date < DATE_MAX_LENGTH) {
+      if (date.length < DATE_MAX_LENGTH) {
         dispatch({ type: ReducerType.setDate, payload: date })
-        if (parseIntToDecimal(day) > DAY_LIMIT)
+        if (parseIntToDecimal(day) > DAY_LIMIT) {
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.dayLimit,
           })
-        if (parseIntToDecimal(month) > MONTH_LIMIT)
+        }
+        if (parseIntToDecimal(month) > MONTH_LIMIT) {
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.monthLimit,
           })
-        if (parseIntToDecimal(year) > CURRENT_YEAR)
+        }
+        if (parseIntToDecimal(year) > CURRENT_YEAR) {
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.yearExceeded,
           })
-        if (parseIntToDecimal(year) > TOO_YOUNG)
+        }
+        if (parseIntToDecimal(year) > TOO_YOUNG) {
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.userYoungAge,
           })
-        else {
+        }
+        if (validConditions) {
           dispatch({ type: ReducerType.clearCalendarError })
           const isLastCharValid = date.charAt(date.length - 1) !== '.'
           const isDateValid =
@@ -85,11 +94,6 @@ const RegistrationForm = props => {
           if (isLastCharValid && isDateValid && isDayValid)
             dispatch({ type: ReducerType.setDate, payload: `${date}.` })
         }
-      } else {
-        dispatch({
-          type: ReducerType.setCalendarError,
-          payload: CalendarErrors.sizeExceeded,
-        })
       }
     },
     [dispatch]
@@ -98,46 +102,52 @@ const RegistrationForm = props => {
   const handleUserName = useCallback(
     e => {
       const username = e.target.value
-      dispatch({ type: ReducerType.setUserName, payload: username })
-      if (
+      const invalidUsername =
         username.length < USERNAME_MIN_LENGTH ||
         username.length > USERNAME_MAX_LENGTH
-      )
+      const invalidRegex = usernameRegex.test(username)
+      dispatch({ type: ReducerType.setUserName, payload: username })
+      if (invalidUsername) {
         dispatch({
           type: ReducerType.setUsernameError,
           payload: `Ошибка: слишком короткое значение. Допустимая длина ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} символов`,
         })
-      if (usernameRegex.test(username))
+      }
+      if (invalidRegex) {
         dispatch({
           type: ReducerType.setUsernameError,
           payload: 'Ошибка: недопустимые символы',
         })
-      else dispatch({ type: ReducerType.clearUsernameError })
+      }
+      if (!(invalidUsername || invalidRegex))
+        dispatch({ type: ReducerType.clearUsernameError })
     },
     [dispatch]
   )
 
   const registration = async () => {
-    const data = {
-      birthday: date,
-      cityId: 1,
-      fireBaseToken: uid,
-      name: username,
-    }
+    if (username.length > 0 && usernameError === '' && calendarError === '') {
+      const data = {
+        birthday: date,
+        cityId: 1,
+        fireBaseToken: uid,
+        name: username,
+      }
 
-    const response = await api.registration(data)
+      const response = await api.registration(data)
 
-    if (response.status === 200) {
-      response.json().then(json => {
-        setUser(json)
-        setAccessToken(json.accessToken)
-        setRefreshToken(json.refreshToken)
-      })
+      if (response.status === 200) {
+        response.json().then(json => {
+          setUser(json)
+          setAccessToken(json.accessToken)
+          setRefreshToken(json.refreshToken)
+        })
+      }
+      dispatch({ type: ReducerType.showMessage })
+      setTimeout(() => {
+        router.push('/')
+      }, 2000)
     }
-    dispatch({ type: ReducerType.showMessage })
-    setTimeout(() => {
-      router.push('/')
-    }, 2000)
   }
 
   return (
@@ -224,7 +234,7 @@ const RegistrationForm = props => {
           .inputForm {
             margin: 2px 93px 12px 93px;
             width: 499px;
-            height: 103px;
+            height: 110px;
           }
           .icon1 {
             position: relative;
@@ -266,7 +276,7 @@ const RegistrationForm = props => {
             height: 18px;
             width: 499px;
             border: 0;
-            padding: 0;
+            padding: 0 0 2px;
             background: inherit;
           }
           .icon2 {
