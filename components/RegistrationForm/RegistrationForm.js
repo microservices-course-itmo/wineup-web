@@ -51,40 +51,40 @@ const RegistrationForm = props => {
 
   const handleDate = useCallback(
     e => {
-      let flag = true
+      let validConditions = true
       const date = e.target.value
       const [day, month, year] = date.split('.')
       if (date.length < DATE_MAX_LENGTH) {
         dispatch({ type: ReducerType.setDate, payload: date })
         if (parseIntToDecimal(day) > DAY_LIMIT) {
-          flag = false
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.dayLimit,
           })
         }
         if (parseIntToDecimal(month) > MONTH_LIMIT) {
-          flag = false
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.monthLimit,
           })
         }
         if (parseIntToDecimal(year) > CURRENT_YEAR) {
-          flag = false
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.yearExceeded,
           })
         }
         if (parseIntToDecimal(year) > TOO_YOUNG) {
-          flag = false
+          validConditions = false
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.userYoungAge,
           })
         }
-        if (flag) {
+        if (validConditions) {
           dispatch({ type: ReducerType.clearCalendarError })
           const isLastCharValid = date.charAt(date.length - 1) !== '.'
           const isDateValid =
