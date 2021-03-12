@@ -9,51 +9,57 @@ const AuthorizationForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
 
   return (
-    <div className='authForm'>
-      <TelephoneForm
-        telephone={formState.telephone}
-        telephoneError={formState.telephoneError}
-        authForm={formState.authForm}
-        dispatch={dispatch}
-      />
+    <div>
+      <div className='authForm'>
+        <TelephoneForm
+          telephone={formState.telephone}
+          telephoneError={formState.telephoneError}
+          authForm={formState.authForm}
+          dispatch={dispatch}
+        />
 
-      <TelephoneAndCodeForm
-        authForm={formState.authForm}
-        telephone={formState.telephone}
-        telephoneError={formState.telephoneError}
-        telCode={formState.telCode}
-        telCodeError={formState.telCodeError}
-        dispatch={dispatch}
-      />
+        <TelephoneAndCodeForm
+          authForm={formState.authForm}
+          telephone={formState.telephone}
+          telephoneError={formState.telephoneError}
+          telCode={formState.telCode}
+          telCodeError={formState.telCodeError}
+          dispatch={dispatch}
+        />
 
-      <RegistrationForm
-        authForm={formState.authForm}
-        dispatch={dispatch}
-        dateParts={formState.dateParts}
-        isCalendarOpen={formState.isCalendarOpen}
-        date={formState.date}
-        uid={formState.uid}
-        username={formState.username}
-        usernameError={formState.usernameError}
-      />
-
+        <RegistrationForm
+          authForm={formState.authForm}
+          dispatch={dispatch}
+          dateParts={formState.dateParts}
+          isCalendarOpen={formState.isCalendarOpen}
+          date={formState.date}
+          uid={formState.uid}
+          username={formState.username}
+          usernameError={formState.usernameError}
+          calendarError={formState.calendarError}
+        />
+      </div>
       <div className='finalMessage'>
         Вы успешно зарегистрировались в системе
       </div>
       <style jsx>
         {`
           .finalMessage {
-            width: 1364px;
-            height: 86px;
-            padding: 24px 0;
-            display: ${formState.isMessageVisible ? 'block' : 'none'};
+            width: 40%;
+            height: 66px;
+            padding: 12px 0;
+            display: ${formState.isMessageVisible ? 'inline-block' : 'none'};
             background: #b1e86b;
             border: 1px solid #000000;
             box-sizing: border-box;
             border-radius: 5px;
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
+            font-size: 20px;
             text-align: center;
+            position: fixed;
+            top: 92.9%;
+            left: 30%;
+            z-index: 1000;
           }
           .authForm {
             width: 100%;
