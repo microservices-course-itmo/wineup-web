@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
@@ -8,6 +8,7 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
+import Dropdown from '../Dropdown'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
@@ -24,6 +25,19 @@ const USERNAME_MIN_LENGTH = 2
 const parseIntToDecimal = value => {
   return parseInt(value, 10)
 }
+
+const options = [
+  {
+    id: 1,
+    value: 'Москва',
+    selected: true,
+  },
+  {
+    id: 2,
+    value: 'Санкт-Петербург',
+    selected: false,
+  },
+]
 
 const RegistrationForm = props => {
   const {
@@ -188,16 +202,7 @@ const RegistrationForm = props => {
             dispatch={dispatch}
           />
         </div>
-        <div className='inputForm'>
-          <div className='formName'>Город</div>
-          <input className='inputField' placeholder='Москва' />
-          <input className='errorMessage' disabled />
-          <img
-            className='icon2'
-            src={`${prefix}assets/authorization/arrow.svg`}
-            alt=''
-          />
-        </div>
+        <Dropdown options={options} />
         <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'
