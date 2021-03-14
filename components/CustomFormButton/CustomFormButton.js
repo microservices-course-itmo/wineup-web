@@ -25,6 +25,7 @@ const CustomFormButton = ({
           outline: none;
           transition: 0.2s;
         }
+
         .button:hover {
           background: #af2f4e;
           box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);

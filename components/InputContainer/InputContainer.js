@@ -55,25 +55,27 @@ const InputGroup = ({ type, inputList, onChange, visible, ...props }) => {
   return (
     <>
       <ul
-        className={`input-list${visible ? '' : '-invisible'} ${
-          fullWidth ? 'full-width' : ''
+        className={`inputList${visible ? '' : 'Invisible'} ${
+          fullWidth ? 'fullWidth' : ''
         }`}
       >
         {customInputList}
       </ul>
       <style jsx>
         {`
-          .input-list {
+          .inputList {
             display: flex;
             flex-direction: column;
             align-items: baseline;
             margin: 0 auto;
             width: 165px;
           }
-          .input-list-invisible {
+
+          .inputListInvisible {
             display: none;
           }
-          .full-width {
+
+          .fullWidth {
             width: 100%;
           }
         `}
@@ -107,7 +109,7 @@ const InputContainer = ({ id, title, type, inputList, onChange }) => {
 
   return (
     <>
-      <div className='criteria-title'>{title}</div>
+      <div className='criteriaTitle'>{title}</div>
       {type === InputGroupType.checkboxWithInput && (
         <input
           type='text'
@@ -117,7 +119,7 @@ const InputContainer = ({ id, title, type, inputList, onChange }) => {
           onChange={handleInputChange}
         />
       )}
-      <div className='list-container'>
+      <div className='listContainer'>
         {filteredList && filteredList.length !== 0 ? (
           <>
             <InputGroup
@@ -126,37 +128,40 @@ const InputContainer = ({ id, title, type, inputList, onChange }) => {
               onChange={onChange}
               visible={isOpen}
             />
-            <button className='arrow-btn' onClick={handleClick} type='button'>
+            <button className='arrowBtn' onClick={handleClick} type='button'>
               <img
-                className={`arrow-${isOpen ? 'up' : 'down'}`}
+                className={`arrow${isOpen ? 'Up' : 'Down'}`}
                 src={`/assets/arrow${isOpen ? 'Up' : 'Down'}.svg`}
                 alt='arrow'
               />
             </button>
           </>
         ) : (
-          <span className='empty-filter-message'>Нет данных по фильтру</span>
+          <span className='emptyFilterMessage'>Нет данных по фильтру</span>
         )}
       </div>
       <style jsx>
         {`
-          .list-container {
+          .listContainer {
             display: flex;
             flex-direction: column;
             align-items: center;
           }
-          .criteria-title {
+
+          .criteriaTitle {
             color: white;
             font-size: 22px;
             font-weight: bold;
           }
-          .arrow-btn {
+
+          .arrowBtn {
             background-color: transparent;
             border: none;
             outline: none;
             cursor: pointer;
             padding: 10px;
           }
+
           .inputField {
             display: flex;
             margin: 22px auto 10px auto;
@@ -169,10 +174,12 @@ const InputContainer = ({ id, title, type, inputList, onChange }) => {
             border: 1px solid #9e9e9e;
             border-radius: 50px;
           }
+
           .inputField:focus {
             outline: none;
           }
-          .empty-filter-message {
+
+          .emptyFilterMessage {
             color: #fff;
           }
         `}

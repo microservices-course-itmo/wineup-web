@@ -125,6 +125,7 @@ const FormCalendar = props => {
             border-radius: 5px 0px 0px 5px;
             text-indent: 10px;
           }
+
           .month {
             width: 41px;
             height: 41px;
@@ -134,6 +135,7 @@ const FormCalendar = props => {
             border-radius: 0px;
             text-indent: 5px;
           }
+
           .year {
             margin: 25px 25px 25px 0px;
             width: 56px;
@@ -143,6 +145,7 @@ const FormCalendar = props => {
             border-radius: 0px 5px 5px 0px;
             text-indent: 10px;
           }
+
           .calendar {
             display: ${isCalendarOpen ? 'flex' : 'none'};
             width: 201px;

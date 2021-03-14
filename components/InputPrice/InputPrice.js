@@ -21,16 +21,16 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
 
   return (
     <>
-      <div className='row-direction item-gap'>
-        <div className='column-direction'>
+      <div className='rowDirection itemGap'>
+        <div className='columnDirection'>
           <label htmlFor={inputFrom.id} className='color'>
             {inputFrom.textLabel}
           </label>
-          <div className='row-direction'>
+          <div className='rowDirection'>
             <input
               id={inputFrom.id}
               name={inputFrom.name}
-              className='input-price color'
+              className='inputPrice color'
               type='number'
               placeholder={inputFrom.defaultValue}
               onChange={onChange}
@@ -42,15 +42,15 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
             </label>
           </div>
         </div>
-        <div className='column-direction'>
+        <div className='columnDirection'>
           <label htmlFor='inputTo' className='color'>
             {inputTo.textLabel}
           </label>
-          <div className='row-direction'>
+          <div className='rowDirection'>
             <input
               id={inputTo.id}
               name={inputTo.name}
-              className='input-price color'
+              className='inputPrice color'
               type='number'
               placeholder={inputTo.defaultValue}
               onChange={onChange}
@@ -63,17 +63,20 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
       </div>
       <style jsx>
         {`
-          .column-direction {
+          .columnDirection {
             display: inline-flex;
             flex-direction: column;
           }
-          .row-direction {
+
+          .rowDirection {
             display: inline-flex;
             flex-direction: row;
           }
-          .item-gap {
+
+          .itemGap {
             column-gap: 40px;
           }
+
           .symbol {
             position: relative;
             right: 15px;
@@ -81,14 +84,17 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
             font-size: 24px;
             background: none;
           }
-          .column-direction .color {
+
+          .columnDirection .color {
             color: #9e9e9e;
           }
-          .column-direction:focus .color,
-          .column-direction:hover .color {
+
+          .columnDirection:focus .color,
+          .columnDirection:hover .color {
             color: white;
           }
-          .input-price {
+
+          .inputPrice {
             -moz-appearance: textfield;
             border: none;
             background: none;
@@ -97,12 +103,14 @@ const InputPrice = ({ inputFrom, inputTo, currency = '₽', onChange }) => {
             border-bottom: 2px #9e9e9e solid;
             color: white;
           }
-          .input-price:hover,
-          .input-price:focus {
+
+          .inputPrice:hover,
+          .inputPrice:focus {
             -moz-appearance: number-input;
           }
-          .input-price::-webkit-inner-spin-button,
-          .input-price::-webkit-outer-spin-button {
+
+          .inputPrice::-webkit-inner-spin-button,
+          .inputPrice::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
           }

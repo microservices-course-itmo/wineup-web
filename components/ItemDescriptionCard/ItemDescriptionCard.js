@@ -50,14 +50,12 @@ const ItemDescription = ({ color, scent, gastro, taste }) => {
 
           h2 {
             margin-bottom: 45px;
-
             font-size: 28px;
             font-family: 'Playfair Display', serif;
           }
 
           h3 {
             margin-bottom: 10px;
-
             font-size: 24px;
             font-family: 'Playfair Display', serif;
           }
