@@ -16,7 +16,7 @@ import {
   contentQuery,
   deleteQuery,
   favoritesSortState,
-  sortedWinesState,
+  sortedFavoritesWinesState,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -28,7 +28,7 @@ import useLocalStorage from '../utils/useLocalStorage'
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const [, setFavorites] = useRecoilState(favoritesState)
-  const sortedWine = useRecoilValue(sortedWinesState)
+  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
@@ -73,6 +73,7 @@ const Favorite = () => {
               />
             ))
           ) : (
+            // console.log(favorites)
             <div className='emptyContainer'>
               <div className='emptyFavorite'>
                 <p className='emptyContainerText'>

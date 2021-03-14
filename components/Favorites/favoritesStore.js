@@ -12,13 +12,13 @@ export const favoritesSortState = atom({
 })
 export const addWineQuery = selectorFamily({
   key: 'addWineQuery',
-  get: (id, token) => async () => {
+  get: ([id, token]) => async () => {
     await api.addWineToFavorites(id, token)
   },
 })
 export const deleteWineQuery = selectorFamily({
   key: 'deleteWineQuery',
-  get: (id, token) => async () => {
+  get: ([id, token]) => async () => {
     await api.deleteWineFromFavorites(id, token)
   },
 })
@@ -52,8 +52,8 @@ export const contentQuery = selectorFamily({
     return wines
   },
 })
-export const sortedWinesState = selector({
-  key: 'filteredTodoListState',
+export const sortedFavoritesWinesState = selector({
+  key: 'filteredFavoritesListState',
   get: ({ get }) => {
     const list = get(favoritesState)
     const sort = get(favoritesSortState)
@@ -68,6 +68,6 @@ export const sortedWinesState = selector({
   },
 })
 export const sorts = atom({
-  key: 'sorts',
+  key: 'sortsFavorites',
   default: [],
 })

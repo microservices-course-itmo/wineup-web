@@ -1,4 +1,8 @@
 import React, { useState } from 'react'
+import { useRecoilCallback, useRecoilValue } from 'recoil'
+import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -37,8 +41,27 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
 const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
+  const userExist = useRecoilValue(userState)
+  const [accessToken] = useLocalStorage('accessToken')
   const [isFavorite, setIsFavorite] = useState(favorite)
 
+  const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
+    await snapshot.getPromise(addWineQuery([id, accessToken]))
+  })
+  const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
+    await snapshot.getPromise(deleteWineQuery([id, accessToken]))
+  })
+  const clickHeart = (id, token) => {
+    if (userExist) {
+      if (!isFavorite) {
+        setIsFavorite(true)
+        addFavorite(id, token)
+      } else {
+        setIsFavorite(false)
+        deleteFavorite(id, token)
+      }
+    }
+  }
   return (
     <>
       <h2 className='name'>{info.name}</h2>
@@ -104,7 +127,9 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
           <button
             type='button'
             className='favorite'
-            onClick={() => setIsFavorite(!isFavorite)}
+            onClick={() =>
+              clickHeart(window.location.pathname.substring(6), accessToken)
+            }
           >
             {isFavorite ? (
               <>

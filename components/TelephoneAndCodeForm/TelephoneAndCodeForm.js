@@ -10,7 +10,6 @@ import { userState } from '../../store/GlobalRecoilWrapper/store'
 import CustomFormButton from '../CustomFormButton/CustomFormButton'
 
 const TELEPHONE_MAX_SIZE = 12
-const OK_CODE = 200
 
 const TelephoneAndCodeForm = props => {
   const {
@@ -53,20 +52,18 @@ const TelephoneAndCodeForm = props => {
         const fb = await firebase
           .auth()
           .signInWithPhoneNumber(telephone, applicationVerifier)
-        const token = fb.confirm(telCode).then(({ user: { ya } }) => ya)
+        const token = await fb.confirm(telCode).then(({ user: { za } }) => za)
         dispatch({ type: ReducerType.setUid, payload: token })
         const data = {
-          fireBaseToken: token.i,
+          fireBaseToken: token,
         }
         const response = await api.login(data)
 
-        if (response.status === OK_CODE) {
-          response.json().then(json => {
-            dispatch({ type: ReducerType.setUser })
-            setUser(json)
-            setAccessToken(json.accessToken)
-            setRefreshToken(json.refreshToken)
-          })
+        if (!response.error) {
+          dispatch({ type: ReducerType.setUser })
+          setUser(response.user)
+          setAccessToken(response.user.accessToken)
+          setRefreshToken(response.user.refreshToken)
           dispatch({ type: ReducerType.showMessage })
           setTimeout(() => {
             router.push('/')
