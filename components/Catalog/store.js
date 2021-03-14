@@ -67,7 +67,7 @@ export const winesQuery = selector({
     }
 
     if (['priceAsc', 'priceDesc'].includes(winesSort)) {
-      params.sortedByPair = `price&${
+      params.sortByPair = `actual_price&${
         winesSort.includes('Asc') ? 'asc' : 'desc'
       }`
     }
