@@ -7,6 +7,8 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+import Badge from '../../components/Badge'
+import ProfileSectionMenuItem from '../../components/ProfileSectionMenuItem'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -106,6 +108,13 @@ const Profile = () => {
                   alt='User Avatar'
                 />
               </div>
+              <ul className='nav-list'>
+                <ProfileSectionMenuItem>Профиль</ProfileSectionMenuItem>
+                <ProfileSectionMenuItem active>
+                  <div>Уведомления</div>
+                  <Badge count={2} />
+                </ProfileSectionMenuItem>
+              </ul>
 
               <footer className='button-footer'>
                 <Link href='/'>
@@ -190,6 +199,10 @@ const Profile = () => {
             background-color: white;
             padding: 40px;
             margin-bottom: 40px;
+          }
+
+          .nav-list {
+            padding: 50px 0;
           }
 
           .info-container {
