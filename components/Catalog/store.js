@@ -1,5 +1,4 @@
 import { atom, selector } from 'recoil'
-import { sortAsc, sortDesc } from './utils'
 import api from '../../api'
 
 export const winesState = atom({
@@ -40,6 +39,8 @@ export const winesQuery = selector({
   get: async ({ get }) => {
     const winePage = get(winesPageState)
     const wineFilter = get(formFiltersState)
+    const winesSort = get(winesSortState)
+
     const filterBy = Object.keys(wineFilter).reduce((acc, el) => {
       if (wineFilter[el] !== 0 && wineFilter[el].length !== 0) {
         if (el === 'priceFrom') {
@@ -65,26 +66,15 @@ export const winesQuery = selector({
       filterBy,
     }
 
+    if (['priceAsc', 'priceDesc'].includes(winesSort)) {
+      params.sortedByPair = `price&${
+        winesSort.includes('Asc') ? 'asc' : 'desc'
+      }`
+    }
+
     const response = await api.getAllWines(params)
 
     return response
-  },
-})
-
-export const sortedWinesState = selector({
-  key: 'filteredTodoListState',
-  get: ({ get }) => {
-    const list = get(winesState)
-    const sort = get(winesSortState)
-
-    switch (sort) {
-      case 'priceAsc':
-        return sortAsc(list)
-      case 'priceDesc':
-        return sortDesc(list)
-      default:
-        return list
-    }
   },
 })
 
