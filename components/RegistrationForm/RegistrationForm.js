@@ -136,12 +136,10 @@ const RegistrationForm = props => {
 
       const response = await api.registration(data)
 
-      if (response.status === 200) {
-        response.json().then(json => {
-          setUser(json)
-          setAccessToken(json.accessToken)
-          setRefreshToken(json.refreshToken)
-        })
+      if (!response.error) {
+        setUser(response.user)
+        setAccessToken(response.user.accessToken)
+        setRefreshToken(response.user.refreshToken)
       }
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
