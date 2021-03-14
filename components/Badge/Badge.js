@@ -12,13 +12,15 @@ const Badge = ({ count }) => {
         {`
           .container {
             position: relative;
+            top: -7px;
+            left: -10px;
+            align-self: flex-start;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #931332;
             border-radius: 9px;
             height: 18px;
-            margin: 0 12px;
             padding: 1px 5px;
           }
 

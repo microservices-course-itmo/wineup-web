@@ -109,9 +109,8 @@ const Profile = () => {
                 />
               </div>
               <ul className='nav-list'>
-                <ProfileSectionMenuItem>Профиль</ProfileSectionMenuItem>
-                <ProfileSectionMenuItem active>
-                  <div>Уведомления</div>
+                <ProfileSectionMenuItem labelText='Профиль' />
+                <ProfileSectionMenuItem active labelText='Уведомления'>
                   <Badge count={2} />
                 </ProfileSectionMenuItem>
               </ul>

@@ -1,8 +1,9 @@
 import React from 'react'
 
-const ProfileSectionMenuItem = ({ active, children }) => {
+const ProfileSectionMenuItem = ({ active, labelText, children }) => {
   return (
     <div className={`${active ? 'active ' : ''}item`}>
+      <div className='menu-item-title'>{labelText}</div>
       {children}
       <style jsx>
         {`
@@ -16,6 +17,13 @@ const ProfileSectionMenuItem = ({ active, children }) => {
           }
           .active {
             font-size: 28px;
+          }
+          .menu-item-title {
+            margin-right: 22px;
+            cursor: pointer;
+          }
+          .menu-item-title:hover {
+            text-decoration: underline;
           }
         `}
       </style>

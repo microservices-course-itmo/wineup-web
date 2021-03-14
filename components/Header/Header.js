@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
+import HeaderMenuItem from '../HeaderMenuItem'
 
 const imagePaths = {
   city: '/assets/header/city-icon',
@@ -41,73 +42,50 @@ const Header = () => {
   return (
     <div className='header'>
       <Link href='/'>
-        <div className='menu-item city'>
-          <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
-          <p>Санкт-Петербург</p>
-        </div>
+        <HeaderMenuItem
+          iconSrc={imagePaths.city}
+          isActive={activeImage === 'city'}
+          labelText='Избранное'
+        />
       </Link>
       <Link href='/'>
-        <div className='menu-item catalog'>
-          <img
-            className='icon'
-            src={`${imagePaths.home}${
-              activeImage === 'home' ? '-active' : ''
-            }.svg`}
-            alt='catalog'
-          />
-          <p>Каталог</p>
-        </div>
+        <HeaderMenuItem
+          iconSrc={imagePaths.home}
+          isActive={activeImage === 'home'}
+          labelText='Каталог'
+        />
       </Link>
       <Link href='/'>
-        <div className='menu-item community'>
-          <img
-            className='icon'
-            src={`${imagePaths.community}${
-              activeImage === 'community' ? '-active' : ''
-            }.svg`}
-            alt='city'
-          />
-          <p>Сообщество</p>
-        </div>
+        <HeaderMenuItem
+          iconSrc={imagePaths.community}
+          isActive={activeImage === 'community'}
+          labelText='Сообщество'
+        />
       </Link>
       <Link href='/'>
         <p className='title'>WineUp</p>
       </Link>
       <Link href='/'>
-        <div className='menu-item likes'>
-          <img
-            className='icon'
-            src={`${imagePaths.likes}${
-              activeImage === 'likes' ? '-active' : ''
-            }.svg`}
-            alt='city'
-          />
-          <p>Лайки</p>
-        </div>
+        <HeaderMenuItem
+          iconSrc={imagePaths.likes}
+          isActive={activeImage === 'likes'}
+          labelText='Лайки'
+        />
       </Link>
       <Link href={`${currentUser ? '/favorites' : 'login'}`}>
-        <div className='menu-item heart'>
-          <img
-            className='icon'
-            src={`${imagePaths.favorites}${
-              activeImage === 'favorites' ? '-active' : ''
-            }.svg`}
-            alt='heart'
-          />
-          <p>Избранное</p>
-        </div>
+        <HeaderMenuItem
+          iconSrc={imagePaths.favorites}
+          isActive={activeImage === 'favorites'}
+          labelText='Избранное'
+        />
       </Link>
       <Link href={`${currentUser ? '/profile' : 'login'}`}>
-        <div className='menu-item login'>
-          <img
-            className='icon'
-            src={`${imagePaths.login}${
-              activeImage === 'login' ? '-active' : ''
-            }.svg`}
-            alt='profile'
-          />
-          {currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
-        </div>
+        <HeaderMenuItem
+          iconSrc={imagePaths.login}
+          isActive={activeImage === 'login'}
+          labelText={currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
+          badgeCount={2}
+        />
       </Link>
 
       <style jsx>
@@ -126,27 +104,6 @@ const Header = () => {
             color: #000000;
           }
 
-          .menu-item {
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-            font-size: 16px;
-            min-width: max-content;
-            line-height: 18px;
-            margin: 0 8px;
-            white-space: nowrap;
-            cursor: pointer;
-          }
-
-          .icon {
-            margin-right: 10px;
-          }
-
-          .active-icon {
-            filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
-              brightness(60%) contrast(110%);
-          }
-
           .title {
             padding: 0 10px;
 
@@ -158,18 +115,6 @@ const Header = () => {
             color: #000000;
 
             cursor: pointer;
-          }
-
-          @media screen and (max-width: 1200px) {
-            .menu-item p {
-              display: none;
-            }
-          }
-
-          @media screen and (max-width: 767px) {
-            .menu-item {
-              display: none;
-            }
           }
         `}
       </style>
