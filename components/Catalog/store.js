@@ -15,8 +15,8 @@ export const winesSortState = atom({
 export const winesPageState = atom({
   key: 'winesPage',
   default: {
-    from: 1,
-    to: 12,
+    page: 1,
+    amount: 12,
   },
 })
 
@@ -40,7 +40,7 @@ export const winesQuery = selector({
   get: async ({ get }) => {
     const winePage = get(winesPageState)
     const wineFilter = get(formFiltersState)
-    const searchParameters = Object.keys(wineFilter).reduce((acc, el) => {
+    const filterBy = Object.keys(wineFilter).reduce((acc, el) => {
       if (wineFilter[el] !== 0 && wineFilter[el].length !== 0) {
         if (el === 'priceFrom') {
           return acc.concat(`price>${wineFilter[el]};`)
@@ -60,12 +60,12 @@ export const winesQuery = selector({
       return acc
     }, '')
 
-    const body = {
+    const params = {
       ...winePage,
-      searchParameters,
+      filterBy,
     }
 
-    const response = await api.getAllWines(body)
+    const response = await api.getAllWines(params)
 
     return response
   },
