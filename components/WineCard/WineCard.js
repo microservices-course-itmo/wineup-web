@@ -1,10 +1,5 @@
-import { useRecoilCallback, useRecoilValue } from 'recoil'
-import React, { useState } from 'react'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
-import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
-import useLocalStorage from '../../utils/useLocalStorage'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -45,42 +40,15 @@ const starsNumber = [1, 2, 3, 4, 5]
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
 const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
-  const userExist = useRecoilValue(userState)
-  const [accessToken] = useLocalStorage('accessToken')
-  const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
-  const addFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
-    await snapshot.getPromise(addWineQuery(id, accessToken))
-  })
-  const deleteFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
-    await snapshot.getPromise(deleteWineQuery(id, accessToken))
-  })
-  const clickHeart = id => {
-    if (userExist) {
-      if (!isHeartFilled) {
-        setIsHeartFilled(true)
-        addFavorite(id)
-      } else {
-        setIsHeartFilled(false)
-        deleteFavorite(id)
-      }
-    }
-  }
-
   return (
     <>
       <Link href={`/wine/${wineId}`}>
         <div className='card'>
           <div className='top'>
-            <button
-              className='heart-button'
-              onClick={() => clickHeart(wineId)}
-              type='button'
-            >
+            <button className='heart-button' type='button'>
               <img
-                className={`heart ${isHeartFilled ? 'filled' : ''}`}
-                src={`/assets/card/heart-${
-                  isHeartFilled ? 'filled' : 'empty'
-                }.svg`}
+                className={`heart ${isLiked ? 'filled' : ''}`}
+                src={`/assets/card/heart-${isLiked ? 'filled' : 'empty'}.svg`}
                 alt='heart'
               />
             </button>

@@ -73,7 +73,6 @@ const Favorite = () => {
               />
             ))
           ) : (
-            // console.log(favorites)
             <div className='emptyContainer'>
               <div className='emptyFavorite'>
                 <p className='emptyContainerText'>
