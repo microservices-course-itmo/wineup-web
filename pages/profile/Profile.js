@@ -9,6 +9,7 @@ import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
 import Badge from '../../components/Badge'
 import ProfileSectionMenuItem from '../../components/ProfileSectionMenuItem'
+import Toast from '../../components/Toast'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -36,6 +37,9 @@ const Profile = () => {
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
+
+  const [toastVisibility, setToastVisibility] = useState(false)
+
   useEffect(() => {
     if (currentUser) {
       setNameInputState(currentUser.name || emptyInputValue)
@@ -43,6 +47,11 @@ const Profile = () => {
       setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
     }
   }, [currentUser])
+
+  const showToast = () => {
+    setToastVisibility(true)
+    setTimeout(() => setToastVisibility(false), 5000)
+  }
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
@@ -84,7 +93,7 @@ const Profile = () => {
           accept: '*/*',
         },
       })
-      .then(() => window.location.reload())
+      .then(() => showToast())
       .catch(alert)
   }
   const onCancel = () => {
@@ -95,6 +104,12 @@ const Profile = () => {
 
   return (
     <GlobalRecoilWrapper>
+      {toastVisibility ? (
+        <Toast
+          message='Пользователь успешно изменен'
+          onClose={() => setToastVisibility(false)}
+        />
+      ) : null}
       <Header />
       <div className='content'>
         <header className='main-header'>Личный кабинет</header>

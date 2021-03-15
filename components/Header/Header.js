@@ -41,52 +41,46 @@ const Header = () => {
 
   return (
     <div className='header'>
-      <Link href='/'>
-        <HeaderMenuItem
-          iconSrc={imagePaths.city}
-          isActive={activeImage === 'city'}
-          labelText='Избранное'
-        />
-      </Link>
-      <Link href='/'>
-        <HeaderMenuItem
-          iconSrc={imagePaths.home}
-          isActive={activeImage === 'home'}
-          labelText='Каталог'
-        />
-      </Link>
-      <Link href='/'>
-        <HeaderMenuItem
-          iconSrc={imagePaths.community}
-          isActive={activeImage === 'community'}
-          labelText='Сообщество'
-        />
-      </Link>
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.city}
+        isActive={activeImage === 'city'}
+        labelText='Санкт-Петербург'
+      />
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.home}
+        isActive={activeImage === 'home'}
+        labelText='Каталог'
+      />
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.community}
+        isActive={activeImage === 'community'}
+        labelText='Сообщество'
+      />
       <Link href='/'>
         <p className='title'>WineUp</p>
       </Link>
-      <Link href='/'>
-        <HeaderMenuItem
-          iconSrc={imagePaths.likes}
-          isActive={activeImage === 'likes'}
-          labelText='Лайки'
-        />
-      </Link>
-      <Link href={`${currentUser ? '/favorites' : 'login'}`}>
-        <HeaderMenuItem
-          iconSrc={imagePaths.favorites}
-          isActive={activeImage === 'favorites'}
-          labelText='Избранное'
-        />
-      </Link>
-      <Link href={`${currentUser ? '/profile' : 'login'}`}>
-        <HeaderMenuItem
-          iconSrc={imagePaths.login}
-          isActive={activeImage === 'login'}
-          labelText={currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
-          badgeCount={2}
-        />
-      </Link>
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.likes}
+        isActive={activeImage === 'likes'}
+        labelText='Лайки'
+      />
+      <HeaderMenuItem
+        href={`${currentUser ? '/favorites' : 'login'}`}
+        iconSrc={imagePaths.favorites}
+        isActive={activeImage === 'favorites'}
+        labelText='Избранное'
+      />
+      <HeaderMenuItem
+        href={`${currentUser ? '/profile' : 'login'}`}
+        iconSrc={imagePaths.login}
+        isActive={activeImage === 'login'}
+        labelText={currentUser ? currentUser.name : 'Войти'}
+        badgeCount={2}
+      />
 
       <style jsx>
         {`

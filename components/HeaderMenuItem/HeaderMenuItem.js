@@ -1,23 +1,29 @@
 import React from 'react'
+import Link from 'next/link'
 import Badge from '../Badge'
 
 const HeaderMenuItem = ({
+  href,
   iconSrc,
   isActive = false,
   labelText,
   badgeCount,
 }) => {
   return (
-    <div className='menu-item login'>
-      <div className='badge-icon-container'>
-        <img
-          className='icon'
-          src={`${iconSrc}${isActive ? '-active' : ''}.svg`}
-          alt={labelText}
-        />
-        {badgeCount ? <Badge count={badgeCount} /> : null}
-      </div>
-      <p>{labelText}</p>
+    <>
+      <Link href={href}>
+        <div className='menu-item'>
+          <div className='badge-icon-container'>
+            <img
+              className='icon'
+              src={`${iconSrc}${isActive ? '-active' : ''}.svg`}
+              alt={labelText}
+            />
+            {badgeCount ? <Badge count={badgeCount} /> : null}
+          </div>
+          <p>{labelText}</p>
+        </div>
+      </Link>
       <style jsx>
         {`
           .menu-item {
@@ -37,7 +43,6 @@ const HeaderMenuItem = ({
             margin-right: 10px;
             max-width: 30px;
           }
-
           .active-icon {
             filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
               brightness(60%) contrast(110%);
@@ -55,7 +60,7 @@ const HeaderMenuItem = ({
           }
         `}
       </style>
-    </div>
+    </>
   )
 }
 
