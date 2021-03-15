@@ -4,7 +4,7 @@ import NotificationsContainer from './index'
 import NotificationsBox from '../NotificationsBox'
 
 export default {
-  title: 'NotificationsContainer',
+  title: '/Notifications/NotificationsContainer',
   component: NotificationsContainer,
   argTypes: {
     type: {
@@ -50,3 +50,5 @@ notifications.args = {
     },
   ],
 }
+
+notifications.storyName = 'NotificationsContainer'

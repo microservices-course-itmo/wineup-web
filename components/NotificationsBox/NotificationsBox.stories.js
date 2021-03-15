@@ -3,7 +3,7 @@ import React from 'react'
 import NotificationsBox from './NotificationsBox'
 
 export default {
-  title: 'NotificationsBox',
+  title: '/Notifications/NotificationsBox',
   component: NotificationsBox,
   argTypes: {
     type: {
@@ -45,3 +45,5 @@ notifications.args = {
     },
   ],
 }
+
+notifications.storyName = 'NotificationsBox'

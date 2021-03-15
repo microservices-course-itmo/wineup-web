@@ -3,7 +3,7 @@ import React from 'react'
 import Notification from './Notification'
 
 export default {
-  title: 'Notification',
+  title: '/Notifications/Notification',
   component: Notification,
   argTypes: {
     type: {
@@ -32,3 +32,5 @@ notifications.args = {
     'WineUp поздровляет Вас с днем рождения! Порадуйте себя мпецаильно подобранными внами по вашим предпочтениям!',
   time: '19:01',
 }
+
+notifications.storyName = 'Notification'
