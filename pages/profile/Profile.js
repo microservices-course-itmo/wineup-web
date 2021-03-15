@@ -7,7 +7,6 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
-// import logout from '../logout'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -109,12 +108,8 @@ const Profile = () => {
               </div>
 
               <footer className='button-footer'>
-                <Link href='/'>
-                  <button
-                    type='button'
-                    className='btn logout-btn'
-                    onClick='/logout'
-                  >
+                <Link href='logout'>
+                  <button type='button' className='btn logout-btn'>
                     Выйти
                   </button>
                 </Link>

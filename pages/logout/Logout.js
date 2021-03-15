@@ -1,11 +1,11 @@
-import Home from '../index'
-import AuthorizationForm from '../../components/AuthorizationForm'
+import ConfirmLogout from '../../components/ConfirmLogout'
+import Profile from '../profile'
 
 const Logout = () => {
   return (
     <>
-      <Home />
-      <AuthorizationForm />
+      <Profile />
+      <ConfirmLogout />
     </>
   )
 }
