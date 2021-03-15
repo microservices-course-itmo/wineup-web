@@ -14,7 +14,7 @@ const Dropdown = ({ options }) => {
     <div>
       <div className='inputForm'>
         <div className='formName'>Город</div>
-        <select className='custom-select'>
+        <select className='customSelect'>
           {options.map(option => (
             <option key={option.id} selected={option.selected}>
               {option.value}
@@ -30,6 +30,7 @@ const Dropdown = ({ options }) => {
             width: 499px;
             height: 110px;
           }
+
           .formName {
             height: 22px;
             margin-bottom: 10px;
@@ -37,6 +38,7 @@ const Dropdown = ({ options }) => {
             font-family: 'PT Sans', sans-serif;
             color: black;
           }
+
           select {
             height: 53px;
             text-indent: 25px;
@@ -55,10 +57,12 @@ const Dropdown = ({ options }) => {
             background-position-y: 50%;
             cursor: pointer;
           }
-          .custom-select:active {
+
+          .customSelect:active {
             border: 0;
             border-bottom: 2px solid red;
           }
+
           .errorMessage {
             color: #cf3737;
             font-family: 'PT Sans', sans-serif;
