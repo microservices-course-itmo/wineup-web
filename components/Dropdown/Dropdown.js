@@ -1,5 +1,12 @@
 import React from 'react'
 
+/**
+ * @param {Object} options - массив городов
+ * @param {number} id - уникальный номер города
+ * @param {string} value - имя города
+ * @param {boolean} selected - устанавливает какой пункт списка выбрант
+ */
+
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 const Dropdown = ({ options }) => {
@@ -9,7 +16,9 @@ const Dropdown = ({ options }) => {
         <div className='formName'>Город</div>
         <select className='custom-select'>
           {options.map(option => (
-            <option selected={option.selected}>{option.value}</option>
+            <option key={option.id} selected={option.selected}>
+              {option.value}
+            </option>
           ))}
         </select>
         <input className='errorMessage' disabled />
