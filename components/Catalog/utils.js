@@ -125,7 +125,7 @@ export const countries = regions => {
 
 export const calculatePrice = wine => {
   if (wine.actual_price === 0 && wine.price === 0) {
-    return Math.round(Math.random() * (2500 - 400) + 400)
+    return 0
   }
 
   if (wine.actual_price === 0) {
