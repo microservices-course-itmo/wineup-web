@@ -1,4 +1,7 @@
 module.exports = {
-  stories: ['../src/**/**/*.stories.@(js)', '../pages/**/*.stories.@(js)'],
+  stories: [
+    '../components/**/**/*.stories.@(js)',
+    '../pages/**/*.stories.@(js)',
+  ],
   addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
 }
