@@ -2,6 +2,13 @@ import React from 'react'
 import Link from 'next/link'
 import Badge from '../Badge'
 
+/**
+ * @param{string} href - link
+ * @param{string} iconSrc - path to icon
+ * @param{boolean} isActive - is menu item active
+ * @param{string} labelText - text label around icon
+ * @param{number} badgeCount - value for badge (if necessary)
+ */
 const HeaderMenuItem = ({
   href,
   iconSrc,

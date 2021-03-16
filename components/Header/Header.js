@@ -13,6 +13,14 @@ const imagePaths = {
   favorites: '/assets/header/heart',
   login: '/assets/header/login',
 }
+const MenuItemKeys = {
+  city: 'city',
+  home: 'home',
+  community: 'community',
+  likes: 'likes',
+  favorites: 'favorites',
+  login: 'login',
+}
 
 const Header = () => {
   const [activeImage, setActiveImage] = useState('')
@@ -22,16 +30,16 @@ const Header = () => {
   useEffect(() => {
     switch (asPath) {
       case '/':
-        setActiveImage('home')
+        setActiveImage(MenuItemKeys.home)
         break
       case '/favorites':
-        setActiveImage('favorites')
+        setActiveImage(MenuItemKeys.favorites)
         break
       case '/login':
-        setActiveImage('login')
+        setActiveImage(MenuItemKeys.login)
         break
       case '/profile':
-        setActiveImage('login')
+        setActiveImage(MenuItemKeys.login)
         break
       default:
         setActiveImage('')
@@ -44,19 +52,19 @@ const Header = () => {
       <HeaderMenuItem
         href='/'
         iconSrc={imagePaths.city}
-        isActive={activeImage === 'city'}
+        isActive={activeImage === MenuItemKeys.city}
         labelText='Санкт-Петербург'
       />
       <HeaderMenuItem
         href='/'
         iconSrc={imagePaths.home}
-        isActive={activeImage === 'home'}
+        isActive={activeImage === MenuItemKeys.home}
         labelText='Каталог'
       />
       <HeaderMenuItem
         href='/'
         iconSrc={imagePaths.community}
-        isActive={activeImage === 'community'}
+        isActive={activeImage === MenuItemKeys.community}
         labelText='Сообщество'
       />
       <Link href='/'>
@@ -65,19 +73,19 @@ const Header = () => {
       <HeaderMenuItem
         href='/'
         iconSrc={imagePaths.likes}
-        isActive={activeImage === 'likes'}
+        isActive={activeImage === MenuItemKeys.likes}
         labelText='Лайки'
       />
       <HeaderMenuItem
         href={`${currentUser ? '/favorites' : 'login'}`}
         iconSrc={imagePaths.favorites}
-        isActive={activeImage === 'favorites'}
+        isActive={activeImage === MenuItemKeys.favorites}
         labelText='Избранное'
       />
       <HeaderMenuItem
         href={`${currentUser ? '/profile' : 'login'}`}
         iconSrc={imagePaths.login}
-        isActive={activeImage === 'login'}
+        isActive={activeImage === MenuItemKeys.login}
         labelText={currentUser ? currentUser.name : 'Войти'}
         badgeCount={2}
       />

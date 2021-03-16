@@ -1,5 +1,8 @@
 import React from 'react'
 
+/**
+ * @param{number} count - value for badge
+ */
 const Badge = ({ count }) => {
   return (
     <>
