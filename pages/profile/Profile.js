@@ -26,20 +26,22 @@ const InputTypes = {
 }
 
 const Profile = () => {
-  /* ESLint error: 'setAccessToken' is assigned a value but never used  no-unused-vars
-  const [accessToken, setAccessToken] = useLocalStorage('accessToken') */
   const [accessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
 
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
+  // const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+
+  const resetFields = () => {
+    setNameInputState(currentUser.name || emptyInputValue)
+    setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
+    setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
+  }
+
   useEffect(() => {
-    if (currentUser) {
-      setNameInputState(currentUser.name || emptyInputValue)
-      setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
-      setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
-    }
+    if (currentUser) resetFields()
   }, [currentUser])
 
   const onInputChange = evt => {
@@ -58,37 +60,22 @@ const Profile = () => {
         break
     }
   }
+
   const onSubmit = async () => {
+    const updatedCity = cityIdByName(cityInputState)
     const userToPatch = {
       name: nameInputState !== currentUser.name ? nameInputState : null,
-      cityId:
-        cityIdByName(cityInputState) !== currentUser.cityId
-          ? cityIdByName(cityInputState)
-          : null,
+      cityId: updatedCity !== currentUser.cityId ? updatedCity : null,
       phoneNumber:
         phoneInputState !== currentUser.phoneNumber ? phoneInputState : null,
     }
-    Object.keys(userToPatch).forEach(key => {
-      if (!userToPatch[key]) delete userToPatch[key]
-    })
+    const preparedData = Object.values(userToPatch).filter(
+      field => field !== null
+    )
     api
-      .sendRequest({
-        url: '/user-service/users/me',
-        method: 'PATCH',
-        data: userToPatch,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json;charset=utf-8',
-          accept: '*/*',
-        },
-      })
+      .patchProfile(accessToken, preparedData)
       .then(() => window.location.reload())
       .catch(alert)
-  }
-  const onCancel = () => {
-    setNameInputState(currentUser.name || 'Не указано')
-    setCityInputState(cityNameById(currentUser.cityId) || 'Не указано')
-    setPhoneInputState(currentUser.phoneNumber || 'Не указано')
   }
 
   return (
@@ -141,7 +128,7 @@ const Profile = () => {
                 <button
                   type='reset'
                   className='btn cancel-btn'
-                  onClick={onCancel}
+                  onClick={resetFields}
                 >
                   Отменить
                 </button>

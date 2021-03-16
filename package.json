@@ -55,6 +55,7 @@
     "recoil": "^0.1.2",
     "storybook-addon-jsx": "^7.3.4",
     "storybook-addon-prettier-source": "^2.1.2",
+    "styled-jsx": "^3.4.4",
     "ts-jest": "^26.5.2"
   },
   "husky": {
