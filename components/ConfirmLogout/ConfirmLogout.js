@@ -1,9 +1,23 @@
 import React from 'react'
+import { useRecoilState } from 'recoil'
+import Link from 'next/link'
 import CustomFormButton from '../CustomFormButton'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const imagePath = '/assets/confirmLogoutWavingHand.svg'
 
 const ConfirmLogout = () => {
+  const [, setUser] = useRecoilState(userState)
+  const [, setAccessToken] = useLocalStorage('accessToken')
+  const [, setRefreshToken] = useLocalStorage('refreshToken')
+
+  const logout = () => {
+    setUser('')
+    setAccessToken('')
+    setRefreshToken('')
+  }
+
   return (
     <div>
       <div className='shadow'>
@@ -11,31 +25,36 @@ const ConfirmLogout = () => {
           <div className='confirmationText'>Вы уверены, что хотите выйти?</div>
           <img className='icon' src={imagePath} alt='confirmLogoutWavingHand' />
           <div className='buttonsContainer'>
-            <CustomFormButton
-              width='230px'
-              height='33px'
-              margin='0 40px 0 0'
-              background='white'
-              color='#931332'
-              fontSize='18px'
-              fontWeight='normal'
-              backgroundOnHover='#931332'
-              colorOnHover='white'
-              border='1px solid #931332'
-              text='Отменить'
-            />
-            <CustomFormButton
-              width='230px'
-              height='33px'
-              background='white'
-              color='#931332'
-              fontSize='18px'
-              fontWeight='normal'
-              backgroundOnHover='#931332'
-              colorOnHover='white'
-              border='1px solid #931332'
-              text='Подтвердить'
-            />
+            <Link href='profile'>
+              <CustomFormButton
+                width='230px'
+                height='33px'
+                margin='0 40px 0 0'
+                background='white'
+                color='#931332'
+                fontSize='18px'
+                fontWeight='normal'
+                backgroundOnHover='#931332'
+                colorOnHover='white'
+                border='1px solid #931332'
+                text='Отменить'
+              />
+            </Link>
+            <Link href='home'>
+              <CustomFormButton
+                width='230px'
+                height='33px'
+                background='white'
+                color='#931332'
+                fontSize='18px'
+                fontWeight='normal'
+                backgroundOnHover='#931332'
+                colorOnHover='white'
+                border='1px solid #931332'
+                text='Подтвердить'
+                onClick={logout}
+              />
+            </Link>
           </div>
         </div>
       </div>
