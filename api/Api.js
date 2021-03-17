@@ -75,12 +75,10 @@ class Api {
 
   async getAllWines(data) {
     const response = await this.sendRequest({
-      url: '/catalog-service/position/true/',
-      method: 'POST',
-      data,
+      url: '/catalog-service/position/true/trueSettings',
+      params: data,
       headers: {
         accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-        'Content-Type': 'application/json',
       },
     })
 
@@ -247,6 +245,7 @@ class Api {
         method,
         data,
         headers,
+        params,
       })
 
       return response
