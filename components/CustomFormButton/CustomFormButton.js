@@ -39,6 +39,7 @@ const CustomFormButton = ({
           outline: none;
           transition: 0.2s;
         }
+
         .button:hover {
           background: ${backgroundOnHover};
           background-color: ${!disabled ? colorOnHover : '#e9e9e9'};

@@ -72,7 +72,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
         <div className='card'>
           <div className='top'>
             <button
-              className='heart-button'
+              className='heartButton'
               onClick={() => clickHeart(wineId)}
               type='button'
             >
@@ -99,12 +99,12 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
               </div>
 
               {imageSrc ? (
-                <div className='img-container'>
-                  <img className='wine-img' src={imageSrc} alt={info.name} />
+                <div className='imgContainer'>
+                  <img className='wineImg' src={imageSrc} alt={info.name} />
                 </div>
               ) : null}
 
-              <div className='wine-bg'>
+              <div className='wineBg'>
                 <h2 className='price'>
                   {formatPrice(
                     info.discount ? info.discount.price : info.price
@@ -115,10 +115,8 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
 
               {info.discount ? (
                 <div className='discount'>
-                  <h2 className='discount-percent'>
-                    -{info.discount.percent}%
-                  </h2>
-                  <h4 className='old-price'>{formatPrice(info.price)}</h4>
+                  <h2 className='discountPercent'>-{info.discount.percent}%</h2>
+                  <h4 className='oldPrice'>{formatPrice(info.price)}</h4>
                 </div>
               ) : null}
             </div>
@@ -155,7 +153,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
       </Link>
       <style jsx>
         {`
-          .flag-icon {
+          .flagIcon {
             background-size: contain;
             background-position: 50%;
             background-repeat: no-repeat;
@@ -165,7 +163,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             width: 300px;
             height: 587px;
             position: relative;
-
             background-color: #ffffff;
             cursor: pointer;
           }
@@ -175,7 +172,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             position: relative;
           }
 
-          .heart-button {
+          .heartButton {
             padding: 10px;
             border: none;
             background-color: #ffffff;
@@ -204,9 +201,8 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             padding-top: 52px;
           }
 
-          .score-caption {
+          .scoreCaption {
             padding-top: 4px;
-
             font-family: PT Sans, sans-serif;
             font-style: normal;
             font-weight: normal;
@@ -215,24 +211,20 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             color: #9e9e9e;
           }
 
-          .wine-img {
+          .wineImg {
             width: auto;
             height: 270px;
-
             position: absolute;
             top: 50px;
             right: 65px;
-
             z-index: 2;
           }
 
-          .wine-bg {
+          .wineBg {
             width: 100%;
             height: 122px;
-
             position: absolute;
             top: 152px;
-
             background-color: ${colors[color] || '#931332'};
           }
 
@@ -242,7 +234,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             right: 5px;
           }
 
-          .discount-percent {
+          .discountPercent {
             font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: 900;
@@ -251,7 +243,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             color: #931332;
           }
 
-          .old-price {
+          .oldPrice {
             position: relative;
             font-family: Playfair Display, serif;
             font-style: normal;
@@ -266,13 +258,11 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             position: absolute;
             top: 40px;
             left: 20px;
-
             font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
             line-height: 37px;
-
             color: #ffffff;
           }
 
@@ -280,7 +270,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             position: absolute;
             bottom: 5px;
             right: 5px;
-
             font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
@@ -292,24 +281,20 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
           .name {
             max-height: 75px;
             padding-left: 10px;
-
             font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 28px;
             line-height: 37px;
-
             color: #000000;
             overflow: hidden;
           }
 
           .line {
             width: 165px;
-
             position: absolute;
             bottom: 155px;
             left: 10px;
-
             border-bottom: 2px solid #9e9e9e;
           }
 
@@ -317,25 +302,21 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             position: absolute;
             bottom: 5px;
             right: 5px;
-
             font-family: Playfair Display, serif;
             font-style: normal;
             font-weight: bold;
             font-size: 30px;
             line-height: 40px;
-
             color: #000000;
           }
 
           .icons {
             width: 25px;
             height: 108px;
-
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-
             position: absolute;
             bottom: 20px;
             left: 10px;
@@ -345,7 +326,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             position: absolute;
             bottom: 11px;
             left: 45px;
-
             font-family: PT Sans, sans-serif;
             font-style: normal;
             font-weight: normal;

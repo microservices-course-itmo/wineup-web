@@ -9,7 +9,7 @@
  */
 const CustomCheckBox = ({ checkbox, onChange }) => {
   return (
-    <div className='checkbox-container'>
+    <div className='checkboxContainer'>
       <input
         id={checkbox.id}
         type='checkbox'
@@ -18,20 +18,21 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
         defaultChecked={checkbox.defaultChecked}
         onChange={onChange}
       />
-      <span className='checkbox-custom' />
-      <label htmlFor={checkbox.id} className='checkbox-label'>
+      <span className='checkboxCustom' />
+      <label htmlFor={checkbox.id} className='checkboxLabel'>
         {checkbox.textLabel}
       </label>
       <style jsx>
         {`
-          .checkbox-container {
+          .checkboxContainer {
             display: block;
             position: relative;
             height: 20px;
             margin: 10px 0;
             width: fit-content;
           }
-          .checkbox-label {
+
+          .checkboxLabel {
             position: relative;
             left: 30px;
             font-size: 18px;
@@ -39,7 +40,8 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
             line-height: 20px;
             color: #9e9e9e;
           }
-          input:checked ~ .checkbox-label {
+
+          input:checked ~ .checkboxLabel {
             color: white;
           }
 
@@ -53,7 +55,7 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
             margin: 0;
           }
 
-          .checkbox-custom {
+          .checkboxCustom {
             position: absolute;
             top: 0;
             left: 0;
@@ -69,14 +71,16 @@ const CustomCheckBox = ({ checkbox, onChange }) => {
             border: 1px solid #9e9e9e;
             cursor: pointer;
           }
-          input:hover ~ .checkbox-custom {
+
+          input:hover ~ .checkboxCustom {
             background: #af2f4e;
           }
-          input:active ~ .checkbox-custom {
+
+          input:active ~ .checkboxCustom {
             background: #680019;
           }
 
-          input:checked ~ .checkbox-custom {
+          input:checked ~ .checkboxCustom {
             background-color: #931332;
             background-position: 50% 50%;
             background-repeat: no-repeat;
