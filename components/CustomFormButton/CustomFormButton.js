@@ -5,8 +5,9 @@ const CustomFormButton = ({
   margin = 0,
   onClick = () => {},
   text,
+  disabled
 }) => (
-  <button type='button' className='button' onClick={onClick}>
+  <button type='button' className='button' onClick={onClick} disabled={disabled}>
     {text}
     <style jsx>
       {`
@@ -14,8 +15,8 @@ const CustomFormButton = ({
           width: ${width};
           height: 58px;
           margin: ${margin};
-          background: #232323;
-          color: white;
+          background-color: ${!disabled ? '#232323' : '#e9e9e9'};
+          color: ${disabled ? 'rgba(0,0,0,0.45)' : 'white'};
           font-size: 22px;
           font-family: 'PT Sans', sans-serif;
           font-weight: 400;
@@ -26,8 +27,8 @@ const CustomFormButton = ({
           transition: 0.2s;
         }
         .button:hover {
-          background: #af2f4e;
-          box-shadow: 0 0 8px rgba(253, 0, 0, 0.5);
+          background-color: ${!disabled ? '#af2f4e' : '#e9e9e9'};
+          box-shadow: ${!disabled && '0 0 8px rgba(253, 0, 0, 0.5)'};
         }
       `}
     </style>

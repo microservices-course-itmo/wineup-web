@@ -15,6 +15,7 @@ const ModalWrapper = ({ visible = true, children = 'hee hee', onClose }) => {
       <div className='wrapper' ref={wrapperRef}>
         <div className='content'>{children}</div>
       </div>
+      <div className='overlay'/>
       <style jsx>{Styles}</style>
     </div>
   ) : null

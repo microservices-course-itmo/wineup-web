@@ -7,6 +7,7 @@ import useLocalStorage from '../../utils/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -32,7 +33,7 @@ const Profile = () => {
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
-  // const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(true)
 
   const resetFields = () => {
     setNameInputState(currentUser.name || emptyInputValue)
@@ -61,26 +62,43 @@ const Profile = () => {
     }
   }
 
+  const onSubmitPhoneChange = (code) => {
+    console.log(code)
+  }
+
+  const onCancelPhoneChange = () => {
+    setIsConfirmModalVisible(false)
+  }
+
   const onSubmit = async () => {
     const updatedCity = cityIdByName(cityInputState)
+    const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber;
     const userToPatch = {
       name: nameInputState !== currentUser.name ? nameInputState : null,
       cityId: updatedCity !== currentUser.cityId ? updatedCity : null,
-      phoneNumber:
-        phoneInputState !== currentUser.phoneNumber ? phoneInputState : null,
+      phoneNumber: isPhoneUpdated ? phoneInputState : null,
     }
     const preparedData = Object.values(userToPatch).filter(
       field => field !== null
     )
-    api
-      .patchProfile(accessToken, preparedData)
-      .then(() => window.location.reload())
-      .catch(alert)
+    if (isPhoneUpdated) {
+      setIsConfirmModalVisible(true)
+    } else {
+      api
+        .patchProfile(accessToken, preparedData)
+        .then(() => window.location.reload())
+        .catch(alert)
+    }
   }
 
   return (
     <GlobalRecoilWrapper>
       <Header />
+      <ConfirmPhoneModal
+        visible={isConfirmModalVisible}
+        onSubmit={onSubmitPhoneChange}
+        onClose={onCancelPhoneChange}
+      />
       <div className='content'>
         <header className='main-header'>Личный кабинет</header>
         {currentUser && (
@@ -93,7 +111,6 @@ const Profile = () => {
                   alt='User Avatar'
                 />
               </div>
-
               <footer className='button-footer'>
                 <Link href='/'>
                   <button type='button' className='btn logout-btn'>
