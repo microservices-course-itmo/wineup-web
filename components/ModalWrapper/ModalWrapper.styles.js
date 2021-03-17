@@ -12,6 +12,7 @@ export default css`
     transform: translate(-50%, -50%);
     z-index: 1010;
   }
+
   .overlay {
     background-color: rgba(0, 0, 0, 0.2);
     position: fixed;
@@ -21,6 +22,7 @@ export default css`
     height: 100%;
     z-index: 1000;
   }
+
   .content {
     display: flex;
     padding: 40px 20px;

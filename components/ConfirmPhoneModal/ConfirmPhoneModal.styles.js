@@ -4,6 +4,7 @@ export default css`
   .header {
     text-align: center;
   }
+
   .inputField {
     height: 53px;
     margin-top: 10px;
@@ -14,10 +15,12 @@ export default css`
     border: 1px solid #9e9e9e;
     border-radius: 5px;
   }
+
   .inputField:active {
     border: 0;
     border-bottom: 2px solid red;
   }
+
   .contentWrapper {
     display: flex;
     height: 100%;
@@ -25,6 +28,7 @@ export default css`
     flex-direction: column;
     justify-content: space-between;
   }
+
   .controlsWrapper {
     display: flex;
     justify-content: space-between;
