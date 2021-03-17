@@ -97,7 +97,7 @@ const Catalog = () => {
           {state === 'hasError' && (
             <div className='loading'>
               <img
-                className='error-icon'
+                className='errorIcon'
                 src='/assets/error.svg'
                 alt='error icon'
               />
@@ -133,7 +133,6 @@ const Catalog = () => {
 
         .message {
           padding-top: 30px;
-
           display: flex;
           justify-content: center;
         }
@@ -149,13 +148,12 @@ const Catalog = () => {
 
         .loading p {
           margin-top: 25px;
-
           font-family: Playfair Display, serif;
           font-size: 16px;
           color: #000000;
         }
 
-        .error-icon {
+        .errorIcon {
           width: 120px;
           height: auto;
         }

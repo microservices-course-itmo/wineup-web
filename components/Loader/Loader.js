@@ -15,6 +15,7 @@ const Loader = () => (
         width: 80px;
         height: 80px;
       }
+
       .loader div {
         box-sizing: border-box;
         display: block;

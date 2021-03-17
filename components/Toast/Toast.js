@@ -8,22 +8,22 @@ const Toast = ({ show = true, message }) => {
   const [showToast, setShowToast] = useState(show)
   return (
     showToast && (
-      <div className='notification-container'>
-        <div className='notification-msg'>{message}</div>
+      <div className='notificationContainer'>
+        <div className='notificationMsg'>{message}</div>
         <button
-          className='notification-btn'
+          className='notificationBtn'
           type='button'
           onClick={() => setShowToast(false)}
         >
           <img
-            className='close-btn-img'
+            className='closeBtnImg'
             src='assets/toast/close.svg'
             alt='close'
           />
         </button>
         <style jsx>
           {`
-            .notification-container {
+            .notificationContainer {
               position: relative;
               margin: 0 40px;
               border: 1px black solid;
@@ -33,7 +33,8 @@ const Toast = ({ show = true, message }) => {
               justify-content: center;
               align-items: center;
             }
-            .notification-btn {
+
+            .notificationBtn {
               position: absolute;
               top: 18px;
               bottom: 18px;
@@ -45,13 +46,15 @@ const Toast = ({ show = true, message }) => {
               justify-self: flex-end;
               padding: 0;
             }
-            .notification-msg {
+
+            .notificationMsg {
               margin-top: 24px;
               margin-bottom: 24px;
               font-weight: bold;
               font-size: 28px;
             }
-            .close-btn-img {
+
+            .closeBtnImg {
               width: 50px;
               height: 50px;
             }
