@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import firebase from 'firebase'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
@@ -33,7 +34,8 @@ const Profile = () => {
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(true)
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+  const [profileData, setProfileData] = useState(null)
 
   const resetFields = () => {
     setNameInputState(currentUser.name || emptyInputValue)
@@ -62,17 +64,51 @@ const Profile = () => {
     }
   }
 
-  const onSubmitPhoneChange = (code) => {
-    console.log(code)
+  const updateProfile = (data = null) => {
+    api
+      .patchProfile(accessToken, data || profileData)
+      .then(() => window.location.reload())
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const onSubmitPhoneChange = verificationCode => {
+    let applicationVerifier
+    try {
+      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+        size: 'invisible',
+      })
+    } catch (e) {
+      applicationVerifier = document.getElementById('recaptcha')
+    }
+    const provider = new firebase.auth.PhoneAuthProvider()
+    provider
+      .verifyPhoneNumber(phoneInputState, applicationVerifier)
+      .then(verificationId => {
+        const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
+          verificationId,
+          verificationCode
+        )
+        firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
+      })
+      .then(res => {
+        console.log(res)
+        updateProfile()
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   const onCancelPhoneChange = () => {
     setIsConfirmModalVisible(false)
+    updateProfile()
   }
 
   const onSubmit = async () => {
     const updatedCity = cityIdByName(cityInputState)
-    const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber;
+    const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber
     const userToPatch = {
       name: nameInputState !== currentUser.name ? nameInputState : null,
       cityId: updatedCity !== currentUser.cityId ? updatedCity : null,
@@ -83,11 +119,9 @@ const Profile = () => {
     )
     if (isPhoneUpdated) {
       setIsConfirmModalVisible(true)
+      setProfileData(preparedData)
     } else {
-      api
-        .patchProfile(accessToken, preparedData)
-        .then(() => window.location.reload())
-        .catch(alert)
+      updateProfile(preparedData)
     }
   }
 
