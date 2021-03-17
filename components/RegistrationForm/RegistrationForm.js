@@ -152,7 +152,7 @@ const RegistrationForm = props => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
         birthday: date,
-        cityId: cityId,
+        cityId,
         fireBaseToken: uid,
         name: username,
       }

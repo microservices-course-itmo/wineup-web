@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react'
-import { ReducerType } from '../AuthorizationForm/store'
+import React from 'react'
 
 /**
  * @param {Object} options - массив городов
