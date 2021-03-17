@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { animateScroll } from 'react-scroll'
 import { useRouter } from 'next/router'
-import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValueLoadable, useRecoilState } from 'recoil'
 
 import ButtonGroup from '../ButtonGroup'
 import WineCard from '../WineCard'
@@ -9,17 +9,10 @@ import Loader from '../Loader'
 import ChangePageButtons from '../ChangePageButtons'
 
 import { parseImageSrc, getWineInfo, sortingButtons } from './utils'
-import {
-  winesSortState,
-  winesState,
-  sortedWinesState,
-  winesQuery,
-  winesPageState,
-} from './store'
+import { winesSortState, winesState, winesQuery, winesPageState } from './store'
 
 const Catalog = () => {
   const [wines, setWines] = useRecoilState(winesState)
-  const sortedWine = useRecoilValue(sortedWinesState)
   const [winesSort, setWinesSort] = useRecoilState(winesSortState)
   const [winesPage, setWinesPage] = useRecoilState(winesPageState)
   const { contents, state } = useRecoilValueLoadable(winesQuery)
@@ -34,33 +27,33 @@ const Catalog = () => {
   useEffect(() => {
     if (router.query.page) {
       setWinesPage({
-        from: Number(router.query.page),
-        to: winesPage.to,
+        page: Number(router.query.page),
+        amount: winesPage.amount,
       })
     } else {
       setWinesPage({
-        from: 1,
-        to: winesPage.to,
+        page: 1,
+        amount: winesPage.amount,
       })
     }
-  }, [router, setWinesPage, winesPage.to])
+  }, [router, setWinesPage, winesPage.amount])
 
   const changePage = isNextPage => {
     animateScroll.scrollToTop({
       duration: 100,
     })
 
-    if (!isNextPage && winesPage.from > 1) {
+    if (!isNextPage && winesPage.page > 1) {
       router.push({
         pathname: '/',
-        query: { page: winesPage.from - 1 },
+        query: { page: winesPage.page - 1 },
       })
     }
 
     if (isNextPage) {
       router.push({
         pathname: '/',
-        query: { page: winesPage.from + 1 },
+        query: { page: winesPage.page + 1 },
       })
     }
   }
@@ -77,7 +70,7 @@ const Catalog = () => {
         (wines.length > 0 ? (
           <>
             <div className='grid'>
-              {sortedWine.map((wine, index) => (
+              {wines.map((wine, index) => (
                 <WineCard
                   key={wine.wine_position_id}
                   wineId={wine.wine_position_id}
@@ -90,7 +83,7 @@ const Catalog = () => {
             </div>
 
             <ChangePageButtons
-              isPrev={winesPage.from !== 1}
+              isPrev={winesPage.page !== 1}
               previousPage={() => changePage()}
               nextPage={() => changePage(1)}
             />

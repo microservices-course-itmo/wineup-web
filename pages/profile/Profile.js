@@ -108,7 +108,7 @@ const Profile = () => {
               </div>
 
               <footer className='button-footer'>
-                <Link href='/'>
+                <Link href='logout'>
                   <button type='button' className='btn logout-btn'>
                     Выйти
                   </button>
