@@ -46,6 +46,7 @@ const AuthorizationForm = () => {
           username={formState.username}
           usernameError={formState.usernameError}
           calendarError={formState.calendarError}
+          cityId={formState.cityId}
         />
       </div>
       <div className='finalMessage'>
