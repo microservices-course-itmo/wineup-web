@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { ReducerType } from '../AuthorizationForm/store'
 
 /**
  * @param {Object} options - массив городов
@@ -9,12 +10,12 @@ import React from 'react'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-const Dropdown = ({ options }) => {
+const Dropdown = ({ options, onChange }) => {
   return (
     <div>
       <div className='inputForm'>
         <div className='formName'>Город</div>
-        <select className='customSelect'>
+        <select className='customSelect' onChange={onChange}>
           {options.map(option => (
             <option key={option.id} selected={option.selected}>
               {option.value}

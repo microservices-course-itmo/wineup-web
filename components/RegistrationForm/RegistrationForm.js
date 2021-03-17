@@ -50,6 +50,7 @@ const RegistrationForm = props => {
     authForm,
     isCalendarOpen,
     uid,
+    cityId,
   } = props
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
@@ -139,11 +140,19 @@ const RegistrationForm = props => {
     [dispatch]
   )
 
+  const handleCity = useCallback(
+    e => {
+      const cityId = e.target.selectedIndex + 1
+      dispatch({ type: ReducerType.setCityId, payload: cityId })
+    },
+    [dispatch]
+  )
+
   const registration = async () => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
         birthday: date,
-        cityId: 1,
+        cityId: cityId,
         fireBaseToken: uid,
         name: username,
       }
@@ -202,7 +211,7 @@ const RegistrationForm = props => {
             dispatch={dispatch}
           />
         </div>
-        <Dropdown options={options} />
+        <Dropdown options={options} onChange={handleCity} />
         <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'
