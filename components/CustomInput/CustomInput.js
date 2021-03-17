@@ -11,8 +11,8 @@ const CustomInput = ({ id, label, value, onChange }) => {
   return (
     <div className='container'>
       <label htmlFor={id}>
-        <div className='label-text'>{label}</div>
-        <div className='input-container'>
+        <div className='labelText'>{label}</div>
+        <div className='inputContainer'>
           <input
             id={id}
             readOnly={isReadOnly}
@@ -21,7 +21,7 @@ const CustomInput = ({ id, label, value, onChange }) => {
             onChange={onChange}
           />
           <div
-            className='edit-icon'
+            className='editIcon'
             onClick={() => setReadOnly(prevState => !prevState)}
           >
             <img src='assets/edit-icon.svg' alt='Edit' />
@@ -30,20 +30,23 @@ const CustomInput = ({ id, label, value, onChange }) => {
       </label>
       <style jsx>
         {`
-          .input-container {
+          .inputContainer {
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
           }
-          .edit-icon {
+
+          .editIcon {
             margin-left: -40px;
             cursor: pointer;
           }
-          .label-text {
+
+          .labelText {
             margin: 35px 0 15px;
             font-size: 24px;
             color: #818181;
           }
+
           input {
             width: 100%;
             height: 54px;

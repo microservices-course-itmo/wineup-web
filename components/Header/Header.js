@@ -41,13 +41,13 @@ const Header = () => {
   return (
     <div className='header'>
       <Link href='/'>
-        <div className='menu-item city'>
+        <div className='menuItem city'>
           <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
           <p>Санкт-Петербург</p>
         </div>
       </Link>
       <Link href='/'>
-        <div className='menu-item catalog'>
+        <div className='menuItem catalog'>
           <img
             className='icon'
             src={`${imagePaths.home}${
@@ -59,7 +59,7 @@ const Header = () => {
         </div>
       </Link>
       <Link href='/'>
-        <div className='menu-item community'>
+        <div className='menuItem community'>
           <img
             className='icon'
             src={`${imagePaths.community}${
@@ -74,7 +74,7 @@ const Header = () => {
         <p className='title'>WineUp</p>
       </Link>
       <Link href='/'>
-        <div className='menu-item likes'>
+        <div className='menuItem likes'>
           <img
             className='icon'
             src={`${imagePaths.likes}${
@@ -86,7 +86,7 @@ const Header = () => {
         </div>
       </Link>
       <Link href={`${currentUser ? '/favorites' : 'login'}`}>
-        <div className='menu-item heart'>
+        <div className='menuItem heart'>
           <img
             className='icon'
             src={`${imagePaths.favorites}${
@@ -98,7 +98,7 @@ const Header = () => {
         </div>
       </Link>
       <Link href={`${currentUser ? '/profile' : 'login'}`}>
-        <div className='menu-item login'>
+        <div className='menuItem login'>
           <img
             className='icon'
             src={`${imagePaths.login}${
@@ -118,15 +118,13 @@ const Header = () => {
             justify-content: space-between;
             align-items: center;
             margin: 10px;
-
             font-family: Arial, serif;
             font-style: normal;
             font-weight: normal;
-
             color: #000000;
           }
 
-          .menu-item {
+          .menuItem {
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
@@ -142,32 +140,30 @@ const Header = () => {
             margin-right: 10px;
           }
 
-          .active-icon {
+          .activeIcon {
             filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
               brightness(60%) contrast(110%);
           }
 
           .title {
             padding: 0 10px;
-
             font-family: 'Poller One', cursive;
             font-style: normal;
             font-weight: normal;
             font-size: 70px;
             line-height: 83px;
             color: #000000;
-
             cursor: pointer;
           }
 
           @media screen and (max-width: 1200px) {
-            .menu-item p {
+            .menuItem p {
               display: none;
             }
           }
 
           @media screen and (max-width: 767px) {
-            .menu-item {
+            .menuItem {
               display: none;
             }
           }

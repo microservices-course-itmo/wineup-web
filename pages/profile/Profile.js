@@ -95,11 +95,11 @@ const Profile = () => {
     <GlobalRecoilWrapper>
       <Header />
       <div className='content'>
-        <header className='main-header'>Личный кабинет</header>
+        <header className='mainHeader'>Личный кабинет</header>
         {currentUser && (
           <div className='profile'>
             <nav className='container'>
-              <div className='user-avatar'>
+              <div className='userAvatar'>
                 <img
                   className='avatar'
                   src='/assets/wineup-avatar-default.svg'
@@ -107,7 +107,7 @@ const Profile = () => {
                 />
               </div>
 
-              <footer className='button-footer'>
+              <footer className='buttonFooter'>
                 <Link href='logout'>
                   <button type='button' className='btn logout-btn'>
                     Выйти
@@ -115,9 +115,9 @@ const Profile = () => {
                 </Link>
               </footer>
             </nav>
-            <div className='info-container'>
-              <header className='info-header'>Профиль</header>
-              <div className='info-list'>
+            <div className='infoContainer'>
+              <header className='infoHeader'>Профиль</header>
+              <div className='infoList'>
                 <CustomInput
                   id={InputTypes.name}
                   label='Ваше имя'
@@ -137,17 +137,17 @@ const Profile = () => {
                   onChange={onInputChange}
                 />
               </div>
-              <footer className='button-footer'>
+              <footer className='buttonFooter'>
                 <button
                   type='reset'
-                  className='btn cancel-btn'
+                  className='btn cancelBtn'
                   onClick={onCancel}
                 >
                   Отменить
                 </button>
                 <button
                   type='button'
-                  className='btn submit-btn'
+                  className='btn submitBtn'
                   onClick={onSubmit}
                 >
                   Подтвердить
@@ -168,7 +168,7 @@ const Profile = () => {
             background-color: #f5f5f5;
           }
 
-          .main-header {
+          .mainHeader {
             font-size: 32px;
             font-weight: bold;
             padding: 30px;
@@ -192,7 +192,7 @@ const Profile = () => {
             margin-bottom: 40px;
           }
 
-          .info-container {
+          .infoContainer {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -204,26 +204,26 @@ const Profile = () => {
             margin-bottom: 40px;
           }
 
-          .info-header {
+          .infoHeader {
             background-color: #b65f74;
             color: white;
             font-size: 28px;
             padding: 20px;
           }
 
-          .user-avatar {
+          .userAvatar {
             display: flex;
             flex-flow: row nowrap;
             align-items: flex-end;
           }
 
-          .button-footer {
+          .buttonFooter {
             display: flex;
             justify-content: space-around;
             margin-top: 150px;
           }
 
-          .info-list {
+          .infoList {
             display: flex;
             flex-flow: column nowrap;
             padding: 0 20px;
@@ -243,14 +243,14 @@ const Profile = () => {
             cursor: pointer;
           }
 
-          .logout-btn,
-          .cancel-btn {
+          .logoutBtn,
+          .cancelBtn {
             background-color: #931332;
             border-color: #931332;
             color: white;
           }
 
-          .submit-btn {
+          .submitBtn {
             background-color: transparent;
             border-color: #717171;
             color: #717171;

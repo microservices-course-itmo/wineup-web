@@ -6,6 +6,7 @@ const CatalogFavorite = ({ children }) => {
         .catalog {
           width: 100%;
         }
+
         .grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, 300px);

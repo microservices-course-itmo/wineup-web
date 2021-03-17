@@ -2,38 +2,33 @@ import React from 'react'
 
 const ChangePageButtons = ({ nextPage, previousPage, isPrev }) => (
   <>
-    <div className='pages-controller'>
+    <div className='pagesController'>
       {isPrev && (
-        <button className='pages-button' type='button' onClick={previousPage}>
+        <button className='pagesButton' type='button' onClick={previousPage}>
           ← Предыдущая
         </button>
       )}
-      <button
-        className='pages-button next-page'
-        type='button'
-        onClick={nextPage}
-      >
+      <button className='pagesButton nextPage' type='button' onClick={nextPage}>
         Следующая →
       </button>
     </div>
     <style jsx>
       {`
-        .pages-controller {
+        .pagesController {
           width: 100%;
           margin-bottom: 40px;
           display: flex;
           justify-content: space-between;
         }
 
-        .next-page {
+        .nextPage {
           margin-left: auto;
         }
 
-        .pages-button {
+        .pagesButton {
           padding: 0 20px;
           background-color: transparent;
           border: none;
-
           font-family: 'PT Sans', sans-serif;
           font-size: 24px;
           color: #931332;
@@ -42,11 +37,11 @@ const ChangePageButtons = ({ nextPage, previousPage, isPrev }) => (
         }
 
         @media screen and (max-width: 767px) {
-          .pages-controller {
+          .pagesController {
             flex-direction: column;
           }
 
-          .next-page {
+          .nextPage {
             margin-left: 0;
             margin-top: 10px;
           }
