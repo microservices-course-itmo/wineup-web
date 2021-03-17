@@ -40,7 +40,7 @@ const ConfirmLogout = () => {
                 text='Отменить'
               />
             </Link>
-            <Link href='home'>
+            <Link href='/'>
               <CustomFormButton
                 width='230px'
                 height='33px'
