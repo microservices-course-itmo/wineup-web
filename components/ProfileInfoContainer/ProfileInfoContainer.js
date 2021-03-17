@@ -18,7 +18,7 @@ const ProfileInfoContainer = ({ title, children }) => (
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        flex-basis: 75%;
+        flex-basis: 70%;
         flex-grow: 3;
         background-color: white;
         padding-bottom: 40px;

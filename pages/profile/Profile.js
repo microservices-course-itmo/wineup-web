@@ -206,7 +206,7 @@ const Profile = () => {
             width: 100%;
           }
           nav.container {
-            flex-basis: 25%;
+            flex-basis: 30%;
             flex-grow: 1;
             display: flex;
             flex-flow: column nowrap;
