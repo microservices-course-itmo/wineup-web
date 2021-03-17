@@ -2,9 +2,17 @@ import React from 'react'
 
 const CustomFormButton = ({
   width = '100%',
-  margin = 0,
+  height = '58px',
+  margin = '0',
   onClick = () => {},
   text,
+  fontWeight = 400,
+  fontSize = '22px',
+  background = '#232323',
+  color = 'white',
+  backgroundOnHover = '#af2f4e',
+  colorOnHover = color,
+  border = 'none',
   disabled,
 }) => (
   <button
@@ -18,21 +26,22 @@ const CustomFormButton = ({
       {`
         .button {
           width: ${width};
-          height: 58px;
+          height: ${height};
           margin: ${margin};
-          background-color: ${!disabled ? '#232323' : '#e9e9e9'};
-          color: ${disabled ? 'rgba(0,0,0,0.45)' : 'white'};
-          font-size: 22px;
+          background-color: ${!disabled ? background : '#e9e9e9'};
+          color: ${disabled ? color : 'white'};
+          font-size: ${fontSize};
           font-family: 'PT Sans', sans-serif;
-          font-weight: 400;
-          border: none;
+          font-weight: ${fontWeight};
+          border: ${border};
           border-radius: 50px;
           cursor: pointer;
           outline: none;
           transition: 0.2s;
         }
         .button:hover {
-          background-color: ${!disabled ? '#af2f4e' : '#e9e9e9'};
+          background: ${backgroundOnHover};
+          background-color: ${!disabled ? colorOnHover : '#e9e9e9'};
           box-shadow: ${!disabled && '0 0 8px rgba(253, 0, 0, 0.5)'};
         }
       `}

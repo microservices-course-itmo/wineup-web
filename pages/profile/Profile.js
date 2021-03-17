@@ -45,7 +45,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (currentUser) resetFields()
-  }, [currentUser])
+  }, [currentUser, resetFields])
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
@@ -146,7 +146,7 @@ const Profile = () => {
                 />
               </div>
               <footer className='button-footer'>
-                <Link href='/'>
+                <Link href='logout'>
                   <button type='button' className='btn logout-btn'>
                     Выйти
                   </button>

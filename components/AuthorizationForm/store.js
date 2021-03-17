@@ -13,6 +13,7 @@ export const initialState = {
   sendCode: null,
   uid: null,
   isMessageVisible: false,
+  cityId: 1,
 }
 
 export const ReducerType = {
@@ -33,6 +34,7 @@ export const ReducerType = {
   setUid: 'setUid',
   showMessage: 'setIsMessageVisible',
   setUser: 'setUser',
+  setCityId: 'setCityId',
 }
 
 export const reducer = (state, action) => {
@@ -72,6 +74,8 @@ export const reducer = (state, action) => {
       return { ...state, calendarError: initialState.calendarError }
     case ReducerType.showMessage:
       return { ...state, isMessageVisible: true }
+    case ReducerType.setCityId:
+      return { ...state, cityId: payload }
     default:
       return initialState
   }

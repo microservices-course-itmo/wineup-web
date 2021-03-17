@@ -14,7 +14,7 @@ const useCatchOutsideClick = (ref, onAction) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [ref])
+  }, [ref, onAction])
 }
 
 export default useCatchOutsideClick
