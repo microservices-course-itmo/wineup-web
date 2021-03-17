@@ -24,7 +24,6 @@
     "react-scroll": "^1.8.1",
     "reactjs-popup": "^2.0.4",
     "recoil": "^0.1.2",
-    "styled-jsx": "^3.4.4",
     "swiper": "^6.4.15"
   },
   "devDependencies": {

@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import Styles from './ConfirmPhoneModal.styles'
 import ModalWrapper from '../ModalWrapper'
 import CustomFormButton from '../CustomFormButton'
 
@@ -45,7 +44,40 @@ const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
           </div>
         </div>
       </ModalWrapper>
-      <style jsx>{Styles}</style>
+      <style jsx>{`
+        .header {
+          text-align: center;
+        }
+
+        .inputField {
+          height: 53px;
+          margin-top: 10px;
+          text-indent: 25px;
+          width: 499px;
+          font-size: 18px;
+          font-family: 'PT Sans', sans-serif;
+          border: 1px solid #9e9e9e;
+          border-radius: 5px;
+        }
+
+        .inputField:active {
+          border: 0;
+          border-bottom: 2px solid red;
+        }
+
+        .contentWrapper {
+          display: flex;
+          height: 100%;
+          flex-wrap: wrap;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .controlsWrapper {
+          display: flex;
+          justify-content: space-between;
+        }
+      `}</style>
     </div>
   )
 }
