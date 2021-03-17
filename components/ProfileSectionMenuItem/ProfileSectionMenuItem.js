@@ -1,9 +1,17 @@
 import React from 'react'
 
-const ProfileSectionMenuItem = ({ active, labelText, children }) => {
+/**
+ * @param{boolean} active
+ * @param{string} labelText
+ * @param{function} onClick
+ * @param{Node} children
+ * */
+const ProfileSectionMenuItem = ({ active, labelText, onClick, children }) => {
   return (
     <div className={`${active ? 'active ' : ''}item`}>
-      <div className='menu-item-title'>{labelText}</div>
+      <div className='menu-item-title' onClick={onClick}>
+        {labelText}
+      </div>
       {children}
       <style jsx>
         {`

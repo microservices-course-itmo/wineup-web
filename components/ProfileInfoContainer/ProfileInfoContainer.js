@@ -2,10 +2,10 @@ import React from 'react'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-const NotificationsContainer = ({ children }) => (
-  <>
+const ProfileInfoContainer = ({ title, children }) => (
+  <div className='wrapper'>
     <div className='header'>
-      <h2 className='title'>Уведомления</h2>
+      <h2 className='title'>{title}</h2>
       <button type='button' className='button'>
         <img src={`${prefix}/assets/notifications/gear.svg`} alt='settings' />
       </button>
@@ -14,12 +14,26 @@ const NotificationsContainer = ({ children }) => (
     <div className='container'>{children}</div>
 
     <style jsx>{`
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-basis: 75%;
+        flex-grow: 3;
+        background-color: white;
+        padding-bottom: 40px;
+        margin-left: 80px;
+        margin-bottom: 40px;
+      }
+
       .header {
         display: flex;
         justify-content: space-between;
         padding: 20px;
         background-color: #b65f74;
         font-family: 'Playfair Display', serif;
+        color: white;
+        font-size: 28px;
       }
 
       .title {
@@ -29,8 +43,10 @@ const NotificationsContainer = ({ children }) => (
       }
 
       .container {
-        padding: 20px;
         background-color: #fff;
+        display: flex;
+        flex-flow: column nowrap;
+        padding: 0 20px;
       }
 
       .button {
@@ -41,7 +57,7 @@ const NotificationsContainer = ({ children }) => (
         cursor: pointer;
       }
     `}</style>
-  </>
+  </div>
 )
 
-export default NotificationsContainer
+export default ProfileInfoContainer

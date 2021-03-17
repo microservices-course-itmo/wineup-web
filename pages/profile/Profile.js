@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
+import {
+  userState,
+  notificationsState,
+  unreadNotificationsCountState,
+} from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../utils/useLocalStorage'
-import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
 import Badge from '../../components/Badge'
 import ProfileSectionMenuItem from '../../components/ProfileSectionMenuItem'
 import Toast from '../../components/Toast'
+import UserInfoBox from '../../components/UserInfoBox'
+import ProfileInfoContainer from '../../components/ProfileInfoContainer'
+import NotificationsBox from '../../components/NotificationsBox'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -27,17 +33,27 @@ const InputTypes = {
   cityName: 'city-input',
   phone: 'phone-input',
 }
-
+const SectionKeys = {
+  userInfo: {
+    key: 'userInfo',
+    title: 'Профиль',
+  },
+  notifications: {
+    key: 'notifications',
+    title: 'Уведомления',
+  },
+}
 const Profile = () => {
   /* ESLint error: 'setAccessToken' is assigned a value but never used  no-unused-vars
   const [accessToken, setAccessToken] = useLocalStorage('accessToken') */
   const [accessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
-
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
-
+  const [activeSection, setActiveSection] = useState(SectionKeys.userInfo)
+  const notificationsList = useRecoilValue(notificationsState) // mock
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
   const [toastVisibility, setToastVisibility] = useState(false)
 
   useEffect(() => {
@@ -124,9 +140,17 @@ const Profile = () => {
                 />
               </div>
               <ul className='nav-list'>
-                <ProfileSectionMenuItem labelText='Профиль' />
-                <ProfileSectionMenuItem active labelText='Уведомления'>
-                  <Badge count={2} />
+                <ProfileSectionMenuItem
+                  active={activeSection === SectionKeys.userInfo}
+                  labelText={SectionKeys.userInfo.title}
+                  onClick={() => setActiveSection(SectionKeys.userInfo)}
+                />
+                <ProfileSectionMenuItem
+                  active={activeSection === SectionKeys.notifications}
+                  labelText={SectionKeys.notifications.title}
+                  onClick={() => setActiveSection(SectionKeys.notifications)}
+                >
+                  <Badge count={unreadNotificationsCount} />
                 </ProfileSectionMenuItem>
               </ul>
 
@@ -138,45 +162,25 @@ const Profile = () => {
                 </Link>
               </footer>
             </nav>
-            <div className='info-container'>
-              <header className='info-header'>Профиль</header>
-              <div className='info-list'>
-                <CustomInput
-                  id={InputTypes.name}
-                  label='Ваше имя'
-                  value={nameInputState}
-                  onChange={onInputChange}
+            <ProfileInfoContainer title={activeSection.title}>
+              {activeSection === SectionKeys.userInfo && (
+                <UserInfoBox
+                  name={nameInputState}
+                  cityName={cityInputState}
+                  phone={phoneInputState}
+                  onInputChange={onInputChange}
+                  onSubmit={onSubmit}
+                  onCancel={onCancel}
                 />
-                <CustomInput
-                  id={InputTypes.cityName}
-                  label='Город'
-                  value={cityInputState}
-                  onChange={onInputChange}
-                />
-                <CustomInput
-                  id={InputTypes.phone}
-                  label='Телефон'
-                  value={phoneInputState}
-                  onChange={onInputChange}
-                />
-              </div>
-              <footer className='button-footer'>
-                <button
-                  type='reset'
-                  className='btn cancel-btn'
-                  onClick={onCancel}
-                >
-                  Отменить
-                </button>
-                <button
-                  type='button'
-                  className='btn submit-btn'
-                  onClick={onSubmit}
-                >
-                  Подтвердить
-                </button>
-              </footer>
-            </div>
+              )}
+              {activeSection === SectionKeys.notifications && (
+                <>
+                  <NotificationsBox
+                    notificationsGroupList={notificationsList}
+                  />
+                </>
+              )}
+            </ProfileInfoContainer>
           </div>
         )}
         {currentUser === 'hasError' && <p>Error</p>}
@@ -190,20 +194,17 @@ const Profile = () => {
             flex-direction: column;
             background-color: #f5f5f5;
           }
-
           .main-header {
             font-size: 32px;
             font-weight: bold;
             padding: 30px;
           }
-
           .profile {
             display: flex;
             flex-flow: row nowrap;
             justify-content: space-between;
             width: 100%;
           }
-
           nav.container {
             flex-basis: 25%;
             flex-grow: 1;
@@ -214,54 +215,24 @@ const Profile = () => {
             padding: 40px;
             margin-bottom: 40px;
           }
-
           .nav-list {
             padding: 50px 0;
           }
-
-          .info-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-basis: 75%;
-            flex-grow: 3;
-            background-color: white;
-            padding-bottom: 40px;
-            margin-left: 80px;
-            margin-bottom: 40px;
-          }
-
-          .info-header {
-            background-color: #b65f74;
-            color: white;
-            font-size: 28px;
-            padding: 20px;
-          }
-
           .user-avatar {
             display: flex;
             flex-flow: row nowrap;
             align-items: flex-end;
           }
-
           .button-footer {
             display: flex;
             justify-content: space-around;
             margin-top: 150px;
           }
-
-          .info-list {
-            display: flex;
-            flex-flow: column nowrap;
-            padding: 0 20px;
-          }
-
           nav.container .avatar {
             height: 210px;
             width: 210px;
             border-radius: 50%;
           }
-
           .btn {
             border: 1px solid;
             border-radius: 50px;
@@ -269,18 +240,10 @@ const Profile = () => {
             padding: 5px 60px;
             cursor: pointer;
           }
-
-          .logout-btn,
-          .cancel-btn {
+          .logout-btn {
             background-color: #931332;
             border-color: #931332;
             color: white;
-          }
-
-          .submit-btn {
-            background-color: transparent;
-            border-color: #717171;
-            color: #717171;
           }
         `}
       </style>

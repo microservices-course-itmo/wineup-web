@@ -1,11 +1,11 @@
 import React from 'react'
 
-import NotificationsContainer from './index'
+import ProfileInfoContainer from './index'
 import NotificationsBox from '../NotificationsBox'
 
 export default {
   title: 'Notifications',
-  component: NotificationsContainer,
+  component: ProfileInfoContainer,
   argTypes: {
     type: {
       description: 'Тип уведомлений, может быть read или unread',
@@ -21,9 +21,9 @@ export default {
 }
 
 const Template = args => (
-  <NotificationsContainer>
+  <ProfileInfoContainer>
     <NotificationsBox {...args} />
-  </NotificationsContainer>
+  </ProfileInfoContainer>
 )
 
 export const notifications = Template.bind({})

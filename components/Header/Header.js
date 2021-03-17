@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
+import {
+  unreadNotificationsCountState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
 import HeaderMenuItem from '../HeaderMenuItem'
 
 const imagePaths = {
@@ -26,7 +29,8 @@ const Header = () => {
   const [activeImage, setActiveImage] = useState('')
   const currentUser = useRecoilValue(userState)
   const { asPath } = useRouter()
-
+  // mock
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState)
   useEffect(() => {
     switch (asPath) {
       case '/':
@@ -87,7 +91,7 @@ const Header = () => {
         iconSrc={imagePaths.login}
         isActive={activeImage === MenuItemKeys.login}
         labelText={currentUser ? currentUser.name : 'Войти'}
-        badgeCount={2}
+        badgeCount={unreadNotificationsCount}
       />
 
       <style jsx>
