@@ -232,13 +232,13 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      throw new Error('[patchProfile]: status is not 200')
     }
 
     return response.data
   }
 
-  async sendRequest({ url, method, data, headers }) {
+  async sendRequest({ url, method, data, headers, params }) {
     try {
       const response = await this.request({
         url,

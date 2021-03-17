@@ -1,6 +1,7 @@
 import React from 'react'
-import ModalWrapper from './ModalWrapper'
 import { action } from '@storybook/addon-actions'
+
+import ModalWrapper from './ModalWrapper'
 
 export default {
   title: 'Modal Wrapper',

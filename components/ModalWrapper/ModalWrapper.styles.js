@@ -12,7 +12,7 @@ export default css`
     transform: translate(-50%, -50%);
     z-index: 1010;
   }
-  .overlay { 
+  .overlay {
     background-color: rgba(0, 0, 0, 0.2);
     position: fixed;
     top: 0;

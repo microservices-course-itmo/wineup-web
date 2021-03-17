@@ -5,9 +5,14 @@ const CustomFormButton = ({
   margin = 0,
   onClick = () => {},
   text,
-  disabled
+  disabled,
 }) => (
-  <button type='button' className='button' onClick={onClick} disabled={disabled}>
+  <button
+    type='button'
+    className='button'
+    onClick={onClick}
+    disabled={disabled}
+  >
     {text}
     <style jsx>
       {`

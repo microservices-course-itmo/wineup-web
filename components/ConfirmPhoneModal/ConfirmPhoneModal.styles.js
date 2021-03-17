@@ -18,14 +18,14 @@ export default css`
     border: 0;
     border-bottom: 2px solid red;
   }
-  .content-wrapper {
+  .contentWrapper {
     display: flex;
     height: 100%;
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: space-between;
   }
-  .controls-wrapper {
+  .controlsWrapper {
     display: flex;
     justify-content: space-between;
   }

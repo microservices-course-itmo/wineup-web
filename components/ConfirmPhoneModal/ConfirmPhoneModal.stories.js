@@ -1,6 +1,7 @@
 import React from 'react'
-import ConfirmPhoneModal from './ConfirmPhoneModal'
 import { action } from '@storybook/addon-actions'
+
+import ConfirmPhoneModal from './ConfirmPhoneModal'
 
 export default {
   title: 'Confirm Phone Modal',

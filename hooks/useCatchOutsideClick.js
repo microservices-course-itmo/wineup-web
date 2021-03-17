@@ -1,10 +1,10 @@
-import React, { useRef, useEffect } from 'react'
+import { useEffect } from 'react'
 
 /**
  * @param {ref} ref
  * @param {function} onAction
  */
-export const useCatchOutsideClick = (ref, onAction) => {
+const useCatchOutsideClick = (ref, onAction) => {
   useEffect(() => {
     const handleClickOutside = event => {
       if (ref.current && !ref.current.contains(event.target)) onAction()
@@ -16,3 +16,5 @@ export const useCatchOutsideClick = (ref, onAction) => {
     }
   }, [ref])
 }
+
+export default useCatchOutsideClick

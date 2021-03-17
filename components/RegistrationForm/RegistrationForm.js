@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
@@ -136,12 +136,10 @@ const RegistrationForm = props => {
 
       const response = await api.registration(data)
 
-      if (response.status === 200) {
-        response.json().then(json => {
-          setUser(json)
-          setAccessToken(json.accessToken)
-          setRefreshToken(json.refreshToken)
-        })
+      if (!response.error) {
+        setUser(response.user)
+        setAccessToken(response.user.accessToken)
+        setRefreshToken(response.user.refreshToken)
       }
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {

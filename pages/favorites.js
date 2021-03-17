@@ -23,7 +23,7 @@ import {
   getWineInfo,
   sortingButtons,
 } from '../components/Catalog/utils'
-import useLocalStorage from '../utils/useLocalStorage'
+import useLocalStorage from '../hooks/useLocalStorage'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')

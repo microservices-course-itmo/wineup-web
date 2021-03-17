@@ -4,7 +4,7 @@ import firebase from 'firebase'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
@@ -69,7 +69,7 @@ const Profile = () => {
       .patchProfile(accessToken, data || profileData)
       .then(() => window.location.reload())
       .catch(err => {
-        console.log(err)
+        console.error(err)
       })
   }
 
@@ -97,7 +97,7 @@ const Profile = () => {
         updateProfile()
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
       })
   }
 

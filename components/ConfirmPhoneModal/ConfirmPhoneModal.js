@@ -26,7 +26,7 @@ const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
   return (
     <div>
       <ModalWrapper visible={visible} onClose={onClose}>
-        <div className='content-wrapper'>
+        <div className='contentWrapper'>
           <h1 className='header'>Введите код подтверждения</h1>
           <input
             className='inputField'
@@ -34,7 +34,7 @@ const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
             value={verificationCode}
             onChange={handleCodeChange}
           />
-          <div className='controls-wrapper'>
+          <div className='controlsWrapper'>
             <CustomFormButton width='49%' onClick={onClose} text='Отменить' />
             <CustomFormButton
               width='49%'
