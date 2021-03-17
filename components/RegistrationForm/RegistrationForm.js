@@ -12,7 +12,7 @@ import Dropdown from '../Dropdown'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
-const dateRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,<>/?~\- a-zA-Zа-яА-Я]/
+const dateRegex = /[`№!@#$%^&*()_+=[\]{};':"\\|,<>/?~\- a-zA-Zа-яА-Я]/
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
 const DATE_MAX_LENGTH = 11
