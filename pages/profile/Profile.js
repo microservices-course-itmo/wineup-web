@@ -69,11 +69,6 @@ const Profile = () => {
     if (currentUser) resetFields()
   }, [currentUser, resetFields])
 
-  const showToast = () => {
-    setToastVisibility(true)
-    setTimeout(() => setToastVisibility(false), 5000)
-  }
-
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
     switch (evt.currentTarget.id) {
@@ -213,9 +208,7 @@ const Profile = () => {
                 />
               )}
               {activeSection === SectionKeys.notifications && (
-                  <NotificationsBox
-                    notificationsGroupList={notificationsList}
-                  />
+                <NotificationsBox notificationsGroupList={notificationsList} />
               )}
             </ProfileInfoContainer>
           </div>
