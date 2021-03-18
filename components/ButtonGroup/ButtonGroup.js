@@ -9,9 +9,9 @@ import SortButton from '../SortButton'
  */
 const ButtonGroup = ({ title, buttons, onChange, activeButton }) => {
   return (
-    <div className='button-group-container'>
+    <div className='buttonGroupContainer'>
       <div className='title'>{title}</div>
-      <div className='buttons-list'>
+      <div className='buttonsList'>
         {buttons.map(button => (
           <SortButton
             btn={button}
@@ -24,11 +24,11 @@ const ButtonGroup = ({ title, buttons, onChange, activeButton }) => {
 
       <style jsx>
         {`
-          .button-group-container {
+          .buttonGroupContainer {
             margin-bottom: 40px;
           }
 
-          .buttons-list {
+          .buttonsList {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;

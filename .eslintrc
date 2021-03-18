@@ -28,6 +28,7 @@
     "prettier"
   ],
   "rules": {
+    "import/no-extraneous-dependencies": ["warn", { "devDependencies": false }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/prefer-default-export": "off",
     "arrow-parens": ["error", "as-needed"],

@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import Link from 'next/link'
 import CustomFormButton from '../CustomFormButton'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const imagePath = '/assets/confirmLogoutWavingHand.svg'
 

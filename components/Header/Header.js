@@ -102,24 +102,20 @@ const Header = () => {
             justify-content: space-between;
             align-items: center;
             margin: 10px;
-
             font-family: Arial, serif;
             font-style: normal;
             font-weight: normal;
-
             color: #000000;
           }
 
           .title {
             padding: 0 10px;
-
             font-family: 'Poller One', cursive;
             font-style: normal;
             font-weight: normal;
             font-size: 70px;
             line-height: 83px;
             color: #000000;
-
             cursor: pointer;
           }
         `}
