@@ -1,7 +1,7 @@
 import React from 'react'
 import { RecoilRoot } from 'recoil'
 
-import Profile from '../../pages/profile/Profile'
+import Profile from './Profile'
 
 export default {
   title: 'Profile',

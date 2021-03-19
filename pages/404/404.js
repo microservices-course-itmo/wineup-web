@@ -7,11 +7,11 @@ const Custom404 = () => {
     <div>
       <Header />
       <Search />
-      <div className='content-wrapper'>
-        <div className='icon-container'>
+      <div className='contentWrapper'>
+        <div className='iconContainer'>
           <img src='/assets/broken-bottle.svg' alt='Broken bottle' />
         </div>
-        <div className='text-container'>
+        <div className='textContainer'>
           <div className='warning'>Ошибка 404</div>
           <div className='description'>
             <p>Страница не найдена. </p>
@@ -28,20 +28,23 @@ const Custom404 = () => {
       </div>
       <style jsx>
         {`
-          .content-wrapper {
+          .contentWrapper {
             display: flex;
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
             margin-top: 95px;
           }
-          .icon-container {
+
+          .iconContainer {
             margin-right: 54px;
           }
-          .text-container {
+
+          .textContainer {
             padding-bottom: 80px;
             padding-top: 170px;
           }
+
           .warning {
             color: #931332;
             font-size: 62px;
@@ -49,13 +52,16 @@ const Custom404 = () => {
             font-family: 'Playfair Display', serif;
             margin-bottom: 60px;
           }
+
           .description {
             font-size: 32px;
             font-weight: 700;
           }
+
           .link {
             text-decoration: none;
           }
+
           .link:hover {
             text-decoration: underline;
           }

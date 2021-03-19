@@ -328,16 +328,16 @@ const FilterBar = () => {
 
   return (
     <form
-      className='filter-list-container'
+      className='filterListContainer'
       onSubmit={handleSubmit}
       onReset={handleReset}
     >
       <button type='submit'>Submit</button>
-      <div className='filter-bar-title'>Фильтры</div>
-      <div className='filter-bar-subtitle'>WineUp</div>
-      <ul className='filter-list'>{list}</ul>
-      <button type='reset' className='clear-filter-button'>
-        <span className='btn-text'>
+      <div className='filterBarTitle'>Фильтры</div>
+      <div className='filterBarSubtitle'>WineUp</div>
+      <ul className='filterList'>{list}</ul>
+      <button type='reset' className='clearFilterButton'>
+        <span className='btnText'>
           <span>Очистить фильтр</span>
           <img src='/assets/resetBtnIcon.svg' alt='reset' />
         </span>
@@ -345,33 +345,37 @@ const FilterBar = () => {
 
       <style jsx>
         {`
-          .filter-list-container {
+          .filterListContainer {
             background-color: gray;
             background-image: url('assets/filterBackground.png');
             min-width: 375px;
             overflow: hidden;
             height: 100vh;
           }
-          .filter-list {
+
+          .filterList {
             padding-left: 20px;
             overflow-y: auto;
             height: calc(100vh - 160px);
             width: 100%;
             padding-right: 20px;
           }
-          .filter-bar-title {
+
+          .filterBarTitle {
             color: white;
             font-weight: bold;
             font-size: 44px;
             text-align: center;
           }
-          .filter-bar-subtitle {
+
+          .filterBarSubtitle {
             color: white;
             font-size: 24px;
             text-align: right;
             margin-right: 48px;
           }
-          .clear-filter-button {
+
+          .clearFilterButton {
             position: relative;
             height: 60px;
             width: 100%;
@@ -382,27 +386,30 @@ const FilterBar = () => {
             font-size: 22px;
             cursor: pointer;
           }
-          .btn-text {
+
+          .btnText {
             display: flex;
             align-items: center;
             justify-content: center;
           }
-          .btn-text span {
+
+          .btnText span {
             margin: 10px;
           }
+
           button[type='submit'] {
             display: none;
           }
 
           @media all and (max-width: 767px) {
-            .filter-list-container {
+            .filterListContainer {
               //min-width: 375px;
               width: 100%;
               overflow: hidden;
               height: 400px;
             }
 
-            .filter-list {
+            .filterList {
               height: calc(400px - 160px);
             }
           }

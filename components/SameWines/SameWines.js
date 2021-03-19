@@ -7,8 +7,8 @@ import WineCard from '../WineCard'
 SwiperCore.use([Pagination])
 
 const SameWines = () => (
-  <div className='same-wines'>
-    <h3 className='temporary-wines'>Похожие вина</h3>
+  <div className='sameWines'>
+    <h3 className='temporaryWines'>Похожие вина</h3>
 
     <Swiper
       spaceBetween={50}
@@ -208,18 +208,16 @@ const SameWines = () => (
     </Swiper>
 
     <style jsx>{`
-      .same-wines {
+      .sameWines {
         margin-bottom: 50px;
       }
 
-      .temporary-wines {
+      .temporaryWines {
         margin-top: 70px;
         margin-bottom: 60px;
-
         font-family: Playfair Display, serif;
         font-style: normal;
         font-size: 28px;
-
         color: #000000;
       }
     `}</style>

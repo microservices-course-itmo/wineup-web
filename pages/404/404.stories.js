@@ -1,5 +1,5 @@
 import React from 'react'
-import Custom404 from '../../pages/404/404'
+import Custom404 from './404'
 
 export default {
   title: 'Page 404',
