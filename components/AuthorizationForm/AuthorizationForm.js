@@ -71,9 +71,8 @@ const AuthorizationForm = () => {
             left: 30%;
             z-index: 1000;
           }
-          .authFormMain {
 
-          .authForm {
+          .authFormMain {
             width: 100%;
             height: 100%;
             display: flex;
