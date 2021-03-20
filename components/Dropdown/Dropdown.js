@@ -1,6 +1,5 @@
 import React, { useReducer, useState } from 'react'
-import { initialState, reducer } from '../AuthorizationForm/store'
-import { ReducerType } from '../AuthorizationForm/store'
+import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
 
 /**
  * @param {Object} options - массив городов
