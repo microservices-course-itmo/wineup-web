@@ -71,6 +71,7 @@ const AuthorizationForm = () => {
             left: 30%;
             z-index: 1000;
           }
+
           .authFormMain {
             width: 100%;
             height: 100%;
