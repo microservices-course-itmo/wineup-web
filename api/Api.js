@@ -219,6 +219,25 @@ class Api {
     }
   }
 
+  async patchProfile(token, data) {
+    const response = await this.sendRequest({
+      url: '/user-service/users/me',
+      method: 'PATCH',
+      data,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json;charset=utf-8',
+        accept: '*/*',
+      },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('[patchProfile]: status is not 200')
+    }
+
+    return response.data
+  }
+
   async sendRequest({ url, method, data, headers, params }) {
     try {
       const response = await this.request({

@@ -3,7 +3,7 @@ import firebase from 'firebase'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'

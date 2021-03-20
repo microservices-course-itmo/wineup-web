@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import { userState } from './store'
 import api from '../../api'
 

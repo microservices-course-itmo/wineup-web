@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import firebase from 'firebase'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import CustomInput from '../../components/CustomInput'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -26,21 +28,24 @@ const InputTypes = {
 }
 
 const Profile = () => {
-  /* ESLint error: 'setAccessToken' is assigned a value but never used  no-unused-vars
-  const [accessToken, setAccessToken] = useLocalStorage('accessToken') */
   const [accessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
 
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+  const [profileData, setProfileData] = useState(null)
+
+  const resetFields = () => {
+    setNameInputState(currentUser.name || emptyInputValue)
+    setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
+    setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
+  }
+
   useEffect(() => {
-    if (currentUser) {
-      setNameInputState(currentUser.name || emptyInputValue)
-      setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
-      setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
-    }
-  }, [currentUser])
+    if (currentUser) resetFields()
+  }, [currentUser, resetFields])
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
@@ -58,42 +63,76 @@ const Profile = () => {
         break
     }
   }
+
+  const updateProfile = (data = null) => {
+    api
+      .patchProfile(accessToken, data || profileData)
+      .then(() => window.location.reload())
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const onSubmitPhoneChange = verificationCode => {
+    let applicationVerifier
+    try {
+      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+        size: 'invisible',
+      })
+    } catch (e) {
+      applicationVerifier = document.getElementById('recaptcha')
+    }
+    const provider = new firebase.auth.PhoneAuthProvider()
+    provider
+      .verifyPhoneNumber(phoneInputState, applicationVerifier)
+      .then(verificationId => {
+        const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
+          verificationId,
+          verificationCode
+        )
+        firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
+      })
+      .then(res => {
+        console.log(res)
+        updateProfile()
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const onCancelPhoneChange = () => {
+    setIsConfirmModalVisible(false)
+    updateProfile()
+  }
+
   const onSubmit = async () => {
+    const updatedCity = cityIdByName(cityInputState)
+    const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber
     const userToPatch = {
       name: nameInputState !== currentUser.name ? nameInputState : null,
-      cityId:
-        cityIdByName(cityInputState) !== currentUser.cityId
-          ? cityIdByName(cityInputState)
-          : null,
-      phoneNumber:
-        phoneInputState !== currentUser.phoneNumber ? phoneInputState : null,
+      cityId: updatedCity !== currentUser.cityId ? updatedCity : null,
+      phoneNumber: isPhoneUpdated ? phoneInputState : null,
     }
-    Object.keys(userToPatch).forEach(key => {
-      if (!userToPatch[key]) delete userToPatch[key]
-    })
-    api
-      .sendRequest({
-        url: '/user-service/users/me',
-        method: 'PATCH',
-        data: userToPatch,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json;charset=utf-8',
-          accept: '*/*',
-        },
-      })
-      .then(() => window.location.reload())
-      .catch(alert)
-  }
-  const onCancel = () => {
-    setNameInputState(currentUser.name || 'Не указано')
-    setCityInputState(cityNameById(currentUser.cityId) || 'Не указано')
-    setPhoneInputState(currentUser.phoneNumber || 'Не указано')
+    const preparedData = Object.values(userToPatch).filter(
+      field => field !== null
+    )
+    if (isPhoneUpdated) {
+      setIsConfirmModalVisible(true)
+      setProfileData(preparedData)
+    } else {
+      updateProfile(preparedData)
+    }
   }
 
   return (
     <GlobalRecoilWrapper>
       <Header />
+      <ConfirmPhoneModal
+        visible={isConfirmModalVisible}
+        onSubmit={onSubmitPhoneChange}
+        onClose={onCancelPhoneChange}
+      />
       <div className='content'>
         <header className='mainHeader'>Личный кабинет</header>
         {currentUser && (
@@ -109,7 +148,7 @@ const Profile = () => {
 
               <footer className='buttonFooter'>
                 <Link href='logout'>
-                  <button type='button' className='btn logout-btn'>
+                  <button type='button' className='btn logoutBtn'>
                     Выйти
                   </button>
                 </Link>
@@ -141,7 +180,7 @@ const Profile = () => {
                 <button
                   type='reset'
                   className='btn cancelBtn'
-                  onClick={onCancel}
+                  onClick={resetFields}
                 >
                   Отменить
                 </button>
