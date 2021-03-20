@@ -14,6 +14,8 @@ export const CalendarErrors = {
   yearExceeded: 'Приветствую тебя, гость из будущего!',
   userYoungAge: `Ошибка: не достигли ${CONSENT_YEAR} лет`,
   sizeExceeded: 'Предупреждение: вы пытаетесь ввести слишком длинную строку',
+  negativeValue: 'Ошибка: отрицательное значение одного из полей даты',
+  invalidData: 'Ошибка: недопустимые символы в одном из полей даты',
 }
 
 const parseIntToDecimal = value => {

@@ -1,16 +1,25 @@
 import { useReducer } from 'react'
 
+import { useRouter } from 'next/router'
 import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
 
 const AuthorizationForm = () => {
+  const router = useRouter()
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
+  const exitAuthForm = e => {
+    if (e.target.className.includes('authFormMain')) {
+      setTimeout(() => {
+        router.push('/')
+      }, 1000)
+    }
+  }
 
   return (
     <div>
-      <div className='authForm'>
+      <div className='authFormMain' onClick={exitAuthForm}>
         <TelephoneForm
           telephone={formState.telephone}
           telephoneError={formState.telephoneError}
@@ -62,6 +71,7 @@ const AuthorizationForm = () => {
             left: 30%;
             z-index: 1000;
           }
+          .authFormMain {
 
           .authForm {
             width: 100%;

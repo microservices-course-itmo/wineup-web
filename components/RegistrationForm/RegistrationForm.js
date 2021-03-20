@@ -11,7 +11,8 @@ import { CalendarErrors } from '../FormCalendar/FormCalendar'
 import Dropdown from '../Dropdown'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
+const dateRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~\- a-zA-Zа-яА-Я]/
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
 const DATE_MAX_LENGTH = 11
@@ -97,6 +98,24 @@ const RegistrationForm = props => {
           dispatch({
             type: ReducerType.setCalendarError,
             payload: CalendarErrors.userYoungAge,
+          })
+        }
+        if (
+          parseIntToDecimal(day) < 1 ||
+          parseIntToDecimal(month) < 1 ||
+          parseIntToDecimal(year) < 1
+        ) {
+          validConditions = false
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: CalendarErrors.negativeValue,
+          })
+        }
+        if (dateRegex.test(date)) {
+          validConditions = false
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: CalendarErrors.invalidData,
           })
         }
         if (validConditions) {
