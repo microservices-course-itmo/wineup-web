@@ -19,8 +19,8 @@ const HeaderMenuItem = ({
   return (
     <>
       <Link href={href}>
-        <div className='menu-item'>
-          <div className='badge-icon-container'>
+        <div className='menuItem'>
+          <div className='badgeIconContainer'>
             <img
               className='icon'
               src={`${iconSrc}${isActive ? '-active' : ''}.svg`}
@@ -33,7 +33,7 @@ const HeaderMenuItem = ({
       </Link>
       <style jsx>
         {`
-          .menu-item {
+          .menuItem {
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
@@ -44,24 +44,24 @@ const HeaderMenuItem = ({
             white-space: nowrap;
             cursor: pointer;
           }
-          .badge-icon-container {
+          .badgeIconContainer {
             display: flex;
             flex-flow: row nowrap;
             margin-right: 10px;
             max-width: 30px;
           }
-          .active-icon {
+          .activeIcon {
             filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
               brightness(60%) contrast(110%);
           }
           @media screen and (max-width: 1200px) {
-            .menu-item p {
+            .menuItem p {
               display: none;
             }
           }
 
           @media screen and (max-width: 767px) {
-            .menu-item {
+            .menuItem {
               display: none;
             }
           }

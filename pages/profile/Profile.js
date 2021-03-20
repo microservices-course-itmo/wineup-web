@@ -173,7 +173,7 @@ const Profile = () => {
                   alt='User Avatar'
                 />
               </div>
-              <ul className='nav-list'>
+              <ul className='navList'>
                 <ProfileSectionMenuItem
                   active={activeSection === SectionKeys.userInfo}
                   labelText={SectionKeys.userInfo.title}
@@ -246,7 +246,7 @@ const Profile = () => {
             padding: 40px;
             margin-bottom: 40px;
           }
-          .nav-list {
+          .navList {
             padding: 50px 0;
           }
 

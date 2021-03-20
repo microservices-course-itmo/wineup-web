@@ -24,7 +24,7 @@ const NotificationsBox = ({ notificationsGroupList }) => {
             )
         )
       ) : (
-        <p className='no-notifications'>Нет уведомлений</p>
+        <p className='noNotifications'>Нет уведомлений</p>
       )}
 
       <style jsx>
@@ -34,7 +34,7 @@ const NotificationsBox = ({ notificationsGroupList }) => {
             flex-direction: column;
           }
 
-          .no-notifications {
+          .noNotifications {
             padding: 5px;
             font-family: 'PT Sans', sans-serif;
           }

@@ -9,7 +9,7 @@ import React from 'react'
 const ProfileSectionMenuItem = ({ active, labelText, onClick, children }) => {
   return (
     <div className={`${active ? 'active ' : ''}item`}>
-      <div className='menu-item-title' onClick={onClick}>
+      <div className='menuItemTitle' onClick={onClick}>
         {labelText}
       </div>
       {children}
@@ -26,11 +26,11 @@ const ProfileSectionMenuItem = ({ active, labelText, onClick, children }) => {
           .active {
             font-size: 28px;
           }
-          .menu-item-title {
+          .menuItemTitle {
             margin-right: 22px;
             cursor: pointer;
           }
-          .menu-item-title:hover {
+          .menuItemTitle:hover {
             text-decoration: underline;
           }
         `}

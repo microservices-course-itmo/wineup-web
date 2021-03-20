@@ -6,18 +6,14 @@ import React from 'react'
 
 const Toast = ({ message, onClose }) => {
   return (
-    <div className='notification-container'>
-      <div className='notification-msg'>{message}</div>
-      <button className='notification-btn' type='button' onClick={onClose}>
-        <img
-          className='close-btn-img'
-          src='assets/toast/close.svg'
-          alt='close'
-        />
+    <div className='notificationContainer'>
+      <div className='notificationMsg'>{message}</div>
+      <button className='notificationBtn' type='button' onClick={onClose}>
+        <img className='closeBtnImg' src='assets/toast/close.svg' alt='close' />
       </button>
       <style jsx>
         {`
-          .notification-container {
+          .notificationContainer {
             position: absolute;
             left: 0;
             right: 0;
@@ -31,7 +27,7 @@ const Toast = ({ message, onClose }) => {
             align-items: center;
             z-index: 999;
           }
-          .notification-btn {
+          .notificationBtn {
             position: absolute;
             top: 18px;
             bottom: 18px;
@@ -43,13 +39,13 @@ const Toast = ({ message, onClose }) => {
             justify-self: flex-end;
             padding: 0;
           }
-          .notification-msg {
+          .notificationMsg {
             margin-top: 24px;
             margin-bottom: 24px;
             font-weight: bold;
             font-size: 28px;
           }
-          .close-btn-img {
+          .closeBtnImg {
             width: 50px;
             height: 50px;
           }

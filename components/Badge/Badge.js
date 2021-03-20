@@ -8,7 +8,7 @@ const Badge = ({ count }) => {
     <>
       {count ? (
         <div className='container'>
-          <div className='text-content'>{count}</div>
+          <div className='textContent'>{count}</div>
         </div>
       ) : null}
       <style jsx>
@@ -27,7 +27,7 @@ const Badge = ({ count }) => {
             padding: 1px 5px;
           }
 
-          .text-content {
+          .textContent {
             color: white;
             font-size: 14px;
             font-weight: normal;

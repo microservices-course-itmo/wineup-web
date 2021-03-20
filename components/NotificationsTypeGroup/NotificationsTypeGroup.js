@@ -51,7 +51,7 @@ const NotificationsTypeGroup = ({ type = 'unread', notifications = [] }) => (
           margin-bottom: 30px;
         }
 
-        .no-notifications {
+        .noNotifications {
           padding: 5px;
           font-family: 'PT Sans', sans-serif;
         }

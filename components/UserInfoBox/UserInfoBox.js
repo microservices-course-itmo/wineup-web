@@ -23,12 +23,9 @@ const UserInfoBox = ({
   onSubmit,
   onCancel,
 }) => {
-  // const [nameInputState, setNameInputState] = useState(name)
-  // const [cityInputState, setCityInputState] = useState(cityName)
-  // const [phoneInputState, setPhoneInputState] = useState(phone)
   return (
     <>
-      <div className='info-list'>
+      <div className='infoList'>
         <CustomInput
           id={InputTypes.name}
           label='Ваше имя'
@@ -48,23 +45,23 @@ const UserInfoBox = ({
           onChange={onInputChange}
         />
       </div>
-      <footer className='button-footer'>
-        <button type='reset' className='btn cancel-btn' onClick={onCancel}>
+      <footer className='buttonFooter'>
+        <button type='reset' className='btn cancelBtn' onClick={onCancel}>
           Отменить
         </button>
-        <button type='button' className='btn submit-btn' onClick={onSubmit}>
+        <button type='button' className='btn submitBtn' onClick={onSubmit}>
           Подтвердить
         </button>
       </footer>
       <style jsx>
         {`
-          .button-footer {
+          .buttonFooter {
             display: flex;
             justify-content: space-around;
             margin-top: 150px;
           }
 
-          .info-list {
+          .infoList {
             display: flex;
             flex-flow: column nowrap;
             padding: 0 20px;
@@ -78,14 +75,14 @@ const UserInfoBox = ({
             cursor: pointer;
           }
 
-          .logout-btn,
-          .cancel-btn {
+          .logoutBtn,
+          .cancelBtn {
             background-color: #931332;
             border-color: #931332;
             color: white;
           }
 
-          .submit-btn {
+          .submitBtn {
             background-color: transparent;
             border-color: #717171;
             color: #717171;
