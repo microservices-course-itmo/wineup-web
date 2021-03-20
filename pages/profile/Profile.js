@@ -3,11 +3,20 @@ import Link from 'next/link'
 import firebase from 'firebase'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import CustomInput from '../../components/CustomInput'
+import {
+  userState,
+  notificationsState,
+  unreadNotificationsCountState,
+} from '../../store/GlobalRecoilWrapper/store'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+import Badge from '../../components/Badge'
+import ProfileSectionMenuItem from '../../components/ProfileSectionMenuItem'
+import Toast from '../../components/Toast'
+import UserInfoBox from '../../components/UserInfoBox'
+import ProfileInfoContainer from '../../components/ProfileInfoContainer'
+import NotificationsBox from '../../components/NotificationsBox'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
 
 const cityNameById = id => {
@@ -26,14 +35,27 @@ const InputTypes = {
   cityName: 'city-input',
   phone: 'phone-input',
 }
-
+const SectionKeys = {
+  userInfo: {
+    key: 'userInfo',
+    title: 'Профиль',
+  },
+  notifications: {
+    key: 'notifications',
+    title: 'Уведомления',
+  },
+}
 const Profile = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
-
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
+  const [activeSection, setActiveSection] = useState(SectionKeys.userInfo)
+  const notificationsList = useRecoilValue(notificationsState) // mock
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
+  const [toastVisibility, setToastVisibility] = useState(false)
+
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const [profileData, setProfileData] = useState(null)
 
@@ -127,6 +149,12 @@ const Profile = () => {
 
   return (
     <GlobalRecoilWrapper>
+      {toastVisibility ? (
+        <Toast
+          message='Пользователь успешно изменен'
+          onClose={() => setToastVisibility(false)}
+        />
+      ) : null}
       <Header />
       <ConfirmPhoneModal
         visible={isConfirmModalVisible}
@@ -145,6 +173,20 @@ const Profile = () => {
                   alt='User Avatar'
                 />
               </div>
+              <ul className='navList'>
+                <ProfileSectionMenuItem
+                  active={activeSection === SectionKeys.userInfo}
+                  labelText={SectionKeys.userInfo.title}
+                  onClick={() => setActiveSection(SectionKeys.userInfo)}
+                />
+                <ProfileSectionMenuItem
+                  active={activeSection === SectionKeys.notifications}
+                  labelText={SectionKeys.notifications.title}
+                  onClick={() => setActiveSection(SectionKeys.notifications)}
+                >
+                  <Badge count={unreadNotificationsCount} />
+                </ProfileSectionMenuItem>
+              </ul>
 
               <footer className='buttonFooter'>
                 <Link href='logout'>
@@ -154,45 +196,21 @@ const Profile = () => {
                 </Link>
               </footer>
             </nav>
-            <div className='infoContainer'>
-              <header className='infoHeader'>Профиль</header>
-              <div className='infoList'>
-                <CustomInput
-                  id={InputTypes.name}
-                  label='Ваше имя'
-                  value={nameInputState}
-                  onChange={onInputChange}
+            <ProfileInfoContainer title={activeSection.title}>
+              {activeSection === SectionKeys.userInfo && (
+                <UserInfoBox
+                  name={nameInputState}
+                  cityName={cityInputState}
+                  phone={phoneInputState}
+                  onInputChange={onInputChange}
+                  onSubmit={onSubmit}
+                  onCancel={resetFields}
                 />
-                <CustomInput
-                  id={InputTypes.cityName}
-                  label='Город'
-                  value={cityInputState}
-                  onChange={onInputChange}
-                />
-                <CustomInput
-                  id={InputTypes.phone}
-                  label='Телефон'
-                  value={phoneInputState}
-                  onChange={onInputChange}
-                />
-              </div>
-              <footer className='buttonFooter'>
-                <button
-                  type='reset'
-                  className='btn cancelBtn'
-                  onClick={resetFields}
-                >
-                  Отменить
-                </button>
-                <button
-                  type='button'
-                  className='btn submitBtn'
-                  onClick={onSubmit}
-                >
-                  Подтвердить
-                </button>
-              </footer>
-            </div>
+              )}
+              {activeSection === SectionKeys.notifications && (
+                <NotificationsBox notificationsGroupList={notificationsList} />
+              )}
+            </ProfileInfoContainer>
           </div>
         )}
         {currentUser === 'hasError' && <p>Error</p>}
@@ -212,16 +230,14 @@ const Profile = () => {
             font-weight: bold;
             padding: 30px;
           }
-
           .profile {
             display: flex;
             flex-flow: row nowrap;
             justify-content: space-between;
             width: 100%;
           }
-
           nav.container {
-            flex-basis: 25%;
+            flex-basis: 30%;
             flex-grow: 1;
             display: flex;
             flex-flow: column nowrap;
@@ -230,24 +246,8 @@ const Profile = () => {
             padding: 40px;
             margin-bottom: 40px;
           }
-
-          .infoContainer {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-basis: 75%;
-            flex-grow: 3;
-            background-color: white;
-            padding-bottom: 40px;
-            margin-left: 80px;
-            margin-bottom: 40px;
-          }
-
-          .infoHeader {
-            background-color: #b65f74;
-            color: white;
-            font-size: 28px;
-            padding: 20px;
+          .navList {
+            padding: 50px 0;
           }
 
           .userAvatar {
@@ -262,18 +262,11 @@ const Profile = () => {
             margin-top: 150px;
           }
 
-          .infoList {
-            display: flex;
-            flex-flow: column nowrap;
-            padding: 0 20px;
-          }
-
           nav.container .avatar {
             height: 210px;
             width: 210px;
             border-radius: 50%;
           }
-
           .btn {
             border: 1px solid;
             border-radius: 50px;
@@ -282,17 +275,10 @@ const Profile = () => {
             cursor: pointer;
           }
 
-          .logoutBtn,
-          .cancelBtn {
+          .logoutBtn {
             background-color: #931332;
             border-color: #931332;
             color: white;
-          }
-
-          .submitBtn {
-            background-color: transparent;
-            border-color: #717171;
-            color: #717171;
           }
         `}
       </style>
