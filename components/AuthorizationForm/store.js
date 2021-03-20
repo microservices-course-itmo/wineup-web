@@ -14,6 +14,8 @@ export const initialState = {
   uid: null,
   isMessageVisible: false,
   cityId: 1,
+  finalMessage: '',
+  isAuthFormVisible: true,
 }
 
 export const ReducerType = {
@@ -35,6 +37,8 @@ export const ReducerType = {
   showMessage: 'setIsMessageVisible',
   setUser: 'setUser',
   setCityId: 'setCityId',
+  setFinalMessage: 'setFinalMessage',
+  hideAuthForm: 'setIsAuthFormVisible',
 }
 
 export const reducer = (state, action) => {
@@ -76,6 +80,10 @@ export const reducer = (state, action) => {
       return { ...state, isMessageVisible: true }
     case ReducerType.setCityId:
       return { ...state, cityId: payload }
+    case ReducerType.setFinalMessage:
+      return { ...state, finalMessage: payload }
+    case ReducerType.hideAuthForm:
+      return { ...state, isAuthFormVisible: false }
     default:
       return initialState
   }

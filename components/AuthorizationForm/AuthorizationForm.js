@@ -24,6 +24,7 @@ const AuthorizationForm = () => {
           telephoneError={formState.telephoneError}
           telCode={formState.telCode}
           telCodeError={formState.telCodeError}
+          finalMessage={formState.finalMessage}
           dispatch={dispatch}
         />
 
@@ -38,11 +39,10 @@ const AuthorizationForm = () => {
           usernameError={formState.usernameError}
           calendarError={formState.calendarError}
           cityId={formState.cityId}
+          finalMessage={formState.finalMessage}
         />
       </div>
-      <div className='finalMessage'>
-        Вы успешно зарегистрировались в системе
-      </div>
+      <div className='finalMessage'>{formState.finalMessage}</div>
       <style jsx>
         {`
           .finalMessage {
@@ -58,15 +58,15 @@ const AuthorizationForm = () => {
             font-size: 20px;
             text-align: center;
             position: fixed;
-            top: 92.9%;
+            top: 10%;
             left: 30%;
             z-index: 1000;
           }
 
           .authForm {
+            display: ${formState.authForm === 0 ? 'none' : 'flex'};
             width: 100%;
             height: 100%;
-            display: flex;
             justify-content: center;
             align-items: center;
             position: fixed;
