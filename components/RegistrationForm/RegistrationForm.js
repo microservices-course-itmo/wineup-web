@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useReducer } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
-import { ReducerType } from '../AuthorizationForm/store'
+import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -159,14 +159,6 @@ const RegistrationForm = props => {
     [dispatch]
   )
 
-  const handleCity = useCallback(
-    e => {
-      const cityId = e.target.selectedIndex + 1
-      dispatch({ type: ReducerType.setCityId, payload: cityId })
-    },
-    [dispatch]
-  )
-
   const registration = async () => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
@@ -228,7 +220,7 @@ const RegistrationForm = props => {
             dispatch={dispatch}
           />
         </div>
-        <Dropdown options={options} onChange={handleCity} />
+        <Dropdown options={options} defaultValue={options[0].value} />
         <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'
