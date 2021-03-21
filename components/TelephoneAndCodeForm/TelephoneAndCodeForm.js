@@ -54,7 +54,6 @@ const TelephoneAndCodeForm = props => {
         const response = await api.login(data)
 
         if (!response.error) {
-          dispatch({ type: ReducerType.setUser })
           setUser(response.user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
