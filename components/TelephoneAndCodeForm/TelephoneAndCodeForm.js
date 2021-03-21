@@ -12,14 +12,7 @@ import CustomFormButton from '../CustomFormButton/CustomFormButton'
 const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneAndCodeForm = props => {
-  const {
-    authForm,
-    telephone,
-    telephoneError,
-    telCode,
-    telCodeError,
-    dispatch,
-  } = props
+  const { telephone, telephoneError, telCode, telCodeError, dispatch } = props
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
@@ -129,7 +122,7 @@ const TelephoneAndCodeForm = props => {
         {`
           .authForm2 {
             background: white;
-            display: ${authForm === 2 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

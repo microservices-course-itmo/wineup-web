@@ -6,7 +6,7 @@ const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneForm = props => {
-  const { dispatch, authForm, telephone, telephoneError } = props
+  const { dispatch, telephone, telephoneError } = props
   const handleTelephone = useCallback(
     e => {
       const telephone = e.target.value
@@ -74,7 +74,7 @@ const TelephoneForm = props => {
         {`
           .authForm1 {
             background: white;
-            display: ${authForm === 1 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

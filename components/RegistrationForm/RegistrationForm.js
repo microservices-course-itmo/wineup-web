@@ -48,7 +48,6 @@ const RegistrationForm = props => {
     calendarError,
     dateParts,
     dispatch,
-    authForm,
     isCalendarOpen,
     uid,
     cityId,
@@ -245,7 +244,7 @@ const RegistrationForm = props => {
         {`
           .authForm3 {
             background: white;
-            display: ${authForm === 3 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
