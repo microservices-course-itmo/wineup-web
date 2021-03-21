@@ -16,6 +16,7 @@ const AuthorizationForm = () => {
       }, 1000)
     }
   }
+  console.log(formState.authForm)
 
   return (
     <div>
@@ -24,6 +25,7 @@ const AuthorizationForm = () => {
           telephone={formState.telephone}
           telephoneError={formState.telephoneError}
           authForm={formState.authForm}
+          isMessageVisible={formState.isMessageVisible}
           dispatch={dispatch}
         />
 

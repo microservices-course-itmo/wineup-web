@@ -65,11 +65,11 @@ const TelephoneAndCodeForm = props => {
           setUser(response.user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
-          dispatch({ type: ReducerType.setAuthForm, payload: 0 })
           dispatch({
             type: ReducerType.setFinalMessage,
             payload: 'Вы успешко авторизировались в системе',
           })
+          dispatch({ type: ReducerType.setAuthForm, payload: 0 })
           dispatch({ type: ReducerType.showMessage })
           setTimeout(() => {
             router.push('/')
