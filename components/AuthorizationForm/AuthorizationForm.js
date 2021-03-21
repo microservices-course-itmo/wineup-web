@@ -5,6 +5,7 @@ import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
+import AuthorizationStatus from '../AuthorizationStatus'
 
 const AuthorizationForm = () => {
   const router = useRouter()
@@ -48,30 +49,17 @@ const AuthorizationForm = () => {
           calendarError={formState.calendarError}
           cityId={formState.cityId}
         />
+
+        <AuthorizationStatus
+          type='success'
+          title='Успех!'
+          text='Вы успешно зарегистроровались в системе'
+          isVisible={formState.isMessageVisible}
+        />
       </div>
-      <div className='finalMessage'>
-        Вы успешно зарегистрировались в системе
-      </div>
+
       <style jsx>
         {`
-          .finalMessage {
-            width: 40%;
-            height: 66px;
-            padding: 12px 0;
-            display: ${formState.isMessageVisible ? 'inline-block' : 'none'};
-            background: #b1e86b;
-            border: 1px solid #000000;
-            box-sizing: border-box;
-            border-radius: 5px;
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            text-align: center;
-            position: fixed;
-            top: 92.9%;
-            left: 30%;
-            z-index: 1000;
-          }
-
           .authFormMain {
             width: 100%;
             height: 100%;
