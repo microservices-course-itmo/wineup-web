@@ -55,7 +55,6 @@ const AuthorizationForm = () => {
         return (
           <TelephoneAndCodeForm
             telCode={telCode}
-            authForm={authForm}
             dispatch={dispatch}
             telephone={telephone}
             telCodeError={telCodeError}
@@ -94,6 +93,7 @@ const AuthorizationForm = () => {
           Вы успешно зарегистрировались в системе
         </div>
       )}
+      <div id='recaptcha' />
       <style jsx>
         {`
           .finalMessage {

@@ -201,7 +201,9 @@ const RegistrationForm = props => {
             value={username}
             onChange={handleUserName}
           />
-          <input className='errorMessage' value={usernameError} disabled />
+          {usernameError && (
+            <span className='errorMessage'>{usernameError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Дата рождения</div>
@@ -220,7 +222,9 @@ const RegistrationForm = props => {
               />
             </span>
           </div>
-          <input className='errorMessage' value={calendarError} disabled />
+          {calendarError && (
+            <span className='errorMessage'>{calendarError}</span>
+          )}
           <FormCalendar
             dateParts={dateParts}
             isCalendarOpen={isCalendarOpen}

@@ -44,6 +44,12 @@ const TelephoneForm = props => {
       })
   }
 
+  const handlePressEnter = event => {
+    if (event.key === 'Enter') {
+      handleFirstForm()
+    }
+  }
+
   return (
     <div className='authForm1'>
       <div className='header'>Войдите или зарегистрируйтесь</div>
@@ -56,9 +62,12 @@ const TelephoneForm = props => {
           placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
           value={telephone}
           onChange={handleTelephone}
+          onKeyDown={handlePressEnter}
         />
 
-        <input className='errorMessage' value={telephoneError} disabled />
+        {telephoneError && (
+          <span className='errorMessage'>{telephoneError}</span>
+        )}
       </div>
 
       <CustomFormButton

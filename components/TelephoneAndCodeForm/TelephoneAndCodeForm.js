@@ -80,6 +80,12 @@ const TelephoneAndCodeForm = props => {
       })
   }
 
+  const handlePressEnter = event => {
+    if (event.key === 'Enter') {
+      handleSecondForm()
+    }
+  }
+
   return (
     <div>
       <div className='authForm2'>
@@ -91,7 +97,9 @@ const TelephoneAndCodeForm = props => {
             placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
             value={telephone}
           />
-          <input className='errorMessage' value={telephoneError} disabled />
+          {telephoneError && (
+            <span className='errorMessage'>{telephoneError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Введите код</div>
@@ -100,8 +108,9 @@ const TelephoneAndCodeForm = props => {
             placeholder='_ _ _ _ _ _'
             value={telCode}
             onChange={handleTelCode}
+            onKeyDown={handlePressEnter}
           />
-          <input className='errorMessage' value={telCodeError} disabled />
+          {telCodeError && <span className='errorMessage'>{telCodeError}</span>}
         </div>
         <div className='buttonGroup'>
           <CustomFormButton
