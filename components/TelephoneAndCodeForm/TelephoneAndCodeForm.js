@@ -67,7 +67,7 @@ const TelephoneAndCodeForm = props => {
           setRefreshToken(response.user.refreshToken)
           dispatch({
             type: ReducerType.setFinalMessage,
-            payload: 'Вы успешко авторизировались в системе',
+            payload: 'Вы успешно авторизировались в системе',
           })
           dispatch({ type: ReducerType.setAuthForm, payload: 0 })
           dispatch({ type: ReducerType.showMessage })

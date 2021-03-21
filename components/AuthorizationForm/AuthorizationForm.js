@@ -56,20 +56,22 @@ const AuthorizationForm = () => {
       <style jsx>
         {`
           .finalMessage {
-            width: 40%;
-            height: 66px;
-            padding: 12px 0;
+            width: 60%;
+            height: 86px;
             display: ${formState.isMessageVisible ? 'inline-block' : 'none'};
             background: #b1e86b;
             border: 1px solid #000000;
             box-sizing: border-box;
             border-radius: 5px;
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 28px;
+            line-height: 86px;
             text-align: center;
             position: fixed;
-            top: 10%;
-            left: 30%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
             z-index: 1000;
           }
 
