@@ -16,7 +16,6 @@ const AuthorizationForm = () => {
       }, 1000)
     }
   }
-  console.log(formState.authForm)
 
   return (
     <div>
