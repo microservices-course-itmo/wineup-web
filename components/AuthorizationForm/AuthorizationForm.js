@@ -52,7 +52,6 @@ const AuthorizationForm = () => {
 
         <AuthorizationStatus
           type='success'
-          title='Успех!'
           text='Вы успешно зарегистроровались в системе'
           isVisible={formState.isMessageVisible}
           closeCallback={() => router.push('/')}

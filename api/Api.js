@@ -67,10 +67,16 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      return {
+        error: true,
+        message: 'Ошибка получения refresh token',
+      }
     }
 
-    return [response.data.accessToken, response.data.refreshToken]
+    return {
+      error: false,
+      data: [response.data.accessToken, response.data.refreshToken],
+    }
   }
 
   async getAllWines(data) {
@@ -78,7 +84,7 @@ class Api {
       url: '/catalog-service/position/true/trueSettings',
       params: data,
       headers: {
-        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
       },
     })
 

@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'react'
+
 const titleBackground = type => {
   switch (type) {
     case 'success':
@@ -13,19 +15,33 @@ const titleBackground = type => {
 
 const AuthorizationStatus = ({
   type,
-  title,
   text,
   isVisible = true,
   closeCallback = () => {},
 }) => {
+  const wrapper = useRef()
+
+  useEffect(() => {
+    const timer1 = setTimeout(() => {
+      wrapper.current.classList.add('hidden')
+    }, 3000)
+    const timer2 = setTimeout(() => {
+      wrapper.current.style.display = 'none'
+    }, 5000)
+
+    return () => {
+      clearInterval(timer1)
+      clearInterval(timer2)
+    }
+  }, [])
+
   return (
     <>
-      <div className='finalMessage'>
+      <div className='finalMessage' ref={wrapper}>
         <div className='title'>
-          <h5>{title}</h5>
+          <h5>{text}</h5>
           <input type='button' onClick={closeCallback} />
         </div>
-        <p>{text}</p>
       </div>
 
       <style jsx>
@@ -33,8 +49,13 @@ const AuthorizationStatus = ({
           .finalMessage {
             width: 100%;
             max-width: 700px;
-            margin: 0 20px;
             display: ${isVisible ? 'block' : 'none'};
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            transition: opacity 1s, visibility 0s;
             background: #fff;
             border: 1px solid black;
             border-radius: 5px;
@@ -45,8 +66,10 @@ const AuthorizationStatus = ({
             box-shadow: 0 10px 20px 0 rgb(0 0 0 / 5%);
           }
 
-          .finalMessage p {
-            padding: 20px 40px;
+          .finalMessage.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s, visibility 0s 1s;
           }
 
           .title {
