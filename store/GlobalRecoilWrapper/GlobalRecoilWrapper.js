@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { userState } from './store'
@@ -8,31 +8,24 @@ const GlobalRecoilWrapper = ({ children }) => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
   const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
   const [currentUser, setCurrentUser] = useRecoilState(userState)
-  useEffect(() => {
-    const getUser = async () => {
-      const response = await api.getProfile(accessToken)
+  const getUser = useCallback(async () => {
+    const response = await api.getProfile(accessToken)
 
-      if (!response.profile || response.profile.error) {
-        const [newAccessToken, newRefreshToken] = await api.refreshToken(
-          refreshToken
-        )
-        setAccessToken(newAccessToken)
-        setRefreshToken(newRefreshToken)
-      }
-      const newCurrentUser = await response.profile
-      setCurrentUser(newCurrentUser)
+    if (!response.profile || response.profile.error) {
+      const [newAccessToken, newRefreshToken] = await api.refreshToken(
+        refreshToken
+      )
+      setAccessToken(newAccessToken)
+      setRefreshToken(newRefreshToken)
     }
+    const newCurrentUser = await response.profile
+    setCurrentUser(newCurrentUser)
+  })
+  useEffect(() => {
     if (!currentUser || currentUser.error) {
       getUser().catch(alert)
     }
-  }, [
-    accessToken,
-    currentUser,
-    refreshToken,
-    setAccessToken,
-    setCurrentUser,
-    setRefreshToken,
-  ])
+  }, [accessToken, currentUser, refreshToken])
   return (
     <div className='wrapper'>
       {children}

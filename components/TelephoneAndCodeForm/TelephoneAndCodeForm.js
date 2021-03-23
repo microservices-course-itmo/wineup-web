@@ -62,7 +62,7 @@ const TelephoneAndCodeForm = props => {
 
         if (!response.error) {
           dispatch({ type: ReducerType.setUser })
-          setUser(response.user)
+          setUser(response.user.user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
           dispatch({ type: ReducerType.showMessage })
