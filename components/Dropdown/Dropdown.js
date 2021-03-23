@@ -5,7 +5,7 @@ import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
  * @param {Object} options - массив городов
  * @param {number} id - уникальный номер города
  * @param {string} value - имя города
- * @param {boolean} selected - устанавливает какой пункт списка выбрант
+ * @param {string} defaultValue - дефолтное значение списка
  */
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -42,8 +42,9 @@ const Dropdown = ({ options, defaultValue }) => {
         <div className='list'>
           {options.map(option => (
             <button
-              className='option'
               key={option.id}
+              type='button'
+              className='option'
               onClick={() => handleSelect(option)}
             >
               {option.value}
