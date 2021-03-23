@@ -44,6 +44,8 @@ const Wine = () => {
             <WinePosition
               imageSrc={parseImageSrc(contents.image)}
               info={getWinePositionInfo(contents)}
+              favorite={contents.liked}
+              wineId={contents.wine_position_id}
             />
           </div>
 

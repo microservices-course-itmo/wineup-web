@@ -33,6 +33,7 @@ const Favorite = () => {
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
     await snapshot.getPromise(deleteQuery(accessToken))
+    setFavorites('')
   })
   useEffect(() => {
     if (contentQueryLoadable.state === 'hasValue') {
@@ -68,8 +69,8 @@ const Favorite = () => {
                 wineId={wine.wine_position_id}
                 imageSrc={parseImageSrc(wine.image)}
                 info={getWineInfo(wine)}
-                isLiked='true'
-                color='3'
+                isLiked={wine.liked}
+                color={index % 3}
               />
             ))
           ) : (

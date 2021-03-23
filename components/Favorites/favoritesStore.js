@@ -44,12 +44,20 @@ export const winesQuery = selectorFamily({
     return response
   },
 })
+// export const contentQuery = selectorFamily({
+//   key: 'contentQuery',
+//   get: token => async ({ get }) => {
+//     const favoriteIds = get(favoritesQuery(token))
+//     const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
+//     return wines
+//   },
+// })
 export const contentQuery = selectorFamily({
   key: 'contentQuery',
   get: token => async ({ get }) => {
-    const favoriteIds = get(favoritesQuery(token))
-    const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
-    return wines
+    const response = await api.getFavoritesWines(token)
+
+    return response
   },
 })
 export const sortedFavoritesWinesState = selector({

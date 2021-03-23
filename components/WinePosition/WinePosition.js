@@ -40,7 +40,7 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
  * @param {number} info.discount.price - Цена со скидкой
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
-const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
+const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const userExist = useRecoilValue(userState)
   const [accessToken] = useLocalStorage('accessToken')
   const [isFavorite, setIsFavorite] = useState(favorite)
@@ -128,7 +128,8 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             type='button'
             className='favorite'
             onClick={() =>
-              clickHeart(window.location.pathname.substring(6), accessToken)
+              // clickHeart(window.location.pathname.substring(6), accessToken)
+              clickHeart(wineId, accessToken)
             }
           >
             {isFavorite ? (
