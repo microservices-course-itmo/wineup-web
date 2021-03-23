@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import firebase from 'firebase'
 import { ReducerType } from '../AuthorizationForm/store'
 import CustomFormButton from '../CustomFormButton/CustomFormButton'
 
@@ -34,7 +35,28 @@ const TelephoneForm = props => {
   )
 
   const handleFirstForm = async () => {
+    let applicationVerifier
+    try {
+      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+        size: 'normal',
+        callback: response => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // ...
+          console.log(response)
+        },
+        'expired-callback': () => {
+          // Response expired. Ask user to solve reCAPTCHA again.
+          // ...
+        },
+      })
+    } catch (e) {
+      applicationVerifier = document.getElementById('recaptcha')
+    }
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
+      const fb = await firebase
+        .auth()
+        .signInWithPhoneNumber(telephone, applicationVerifier)
+      dispatch({ type: ReducerType.setFB, payload: fb })
       dispatch({ type: ReducerType.setAuthForm, payload: 2 })
     } else
       dispatch({
@@ -77,10 +99,14 @@ const TelephoneForm = props => {
         text='Запросить код подтверждения'
       />
 
-      <div id='recaptcha' />
+      <div id='recaptcha' className='captcha' />
 
       <style jsx>
         {`
+          .captcha {
+            position: relative;
+            left: 200px;
+          }
           .authForm1 {
             background: white;
             display: block;

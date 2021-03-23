@@ -31,6 +31,7 @@ const AuthorizationForm = () => {
     isCalendarOpen,
     telephoneError,
     isMessageVisible,
+    fb,
   } = formState
 
   const exitAuthForm = e => {
@@ -59,6 +60,7 @@ const AuthorizationForm = () => {
             telephone={telephone}
             telCodeError={telCodeError}
             telephoneError={telephoneError}
+            fb={fb}
           />
         )
       case formCodes.registrationForm:

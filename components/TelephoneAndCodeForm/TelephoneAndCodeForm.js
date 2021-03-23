@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import firebase from 'firebase'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 
@@ -12,7 +11,14 @@ import CustomFormButton from '../CustomFormButton/CustomFormButton'
 const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneAndCodeForm = props => {
-  const { telephone, telephoneError, telCode, telCodeError, dispatch } = props
+  const {
+    telephone,
+    telephoneError,
+    telCode,
+    telCodeError,
+    dispatch,
+    fb,
+  } = props
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
@@ -33,18 +39,8 @@ const TelephoneAndCodeForm = props => {
 
   const handleSecondForm = async () => {
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
-      let applicationVerifier
       try {
-        applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-          size: 'invisible',
-        })
-      } catch (e) {
-        applicationVerifier = document.getElementById('recaptcha')
-      }
-      try {
-        const fb = await firebase
-          .auth()
-          .signInWithPhoneNumber(telephone, applicationVerifier)
+        console.log(fb)
         const token = await fb.confirm(telCode).then(({ user: { za } }) => za)
 
         dispatch({ type: ReducerType.setUid, payload: token })
@@ -66,6 +62,7 @@ const TelephoneAndCodeForm = props => {
         }
         dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
+        console.log(err)
         dispatch({
           type: ReducerType.setTelCodeError,
           payload: 'Ошибка: неправильный код',

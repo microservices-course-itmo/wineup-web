@@ -15,6 +15,7 @@ export const initialState = {
   isMessageVisible: false,
   cityId: 1,
   token: null,
+  fb: null,
 }
 
 export const ReducerType = {
@@ -35,6 +36,7 @@ export const ReducerType = {
   setUid: 'setUid',
   showMessage: 'setIsMessageVisible',
   setCityId: 'setCityId',
+  setFB: 'setFB',
 }
 
 export const reducer = (state, action) => {
@@ -78,6 +80,9 @@ export const reducer = (state, action) => {
       return { ...state, cityId: payload }
     case ReducerType.setUid:
       return { ...state, token: payload }
+    case ReducerType.setFB:
+      console.log(payload)
+      return { ...state, fb: payload }
     default:
       return initialState
   }
