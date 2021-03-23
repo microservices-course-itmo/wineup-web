@@ -48,6 +48,8 @@ const AuthorizationForm = () => {
           usernameError={formState.usernameError}
           calendarError={formState.calendarError}
           cityId={formState.cityId}
+          cityName={formState.cityName}
+          isDropdownVisible={formState.isDropdownVisible}
         />
 
         <AuthorizationStatus
