@@ -18,7 +18,6 @@ export const initialState = {
   cityName: 'Москва',
   token: null,
   finalMessage: '',
-  isAuthFormVisible: true,
 }
 
 export const ReducerType = {
@@ -42,7 +41,6 @@ export const ReducerType = {
   showDropdown: 'setIsDropdownVisible',
   setCityName: 'setCityName',
   setFinalMessage: 'setFinalMessage',
-  hideAuthForm: 'setIsAuthFormVisible',
 }
 
 export const reducer = (state, action) => {
@@ -91,9 +89,8 @@ export const reducer = (state, action) => {
     case ReducerType.setUid:
       return { ...state, token: payload }
     case ReducerType.setFinalMessage:
+      console.log(payload)
       return { ...state, finalMessage: payload }
-    case ReducerType.hideAuthForm:
-      return { ...state, isAuthFormVisible: false }
     default:
       return initialState
   }

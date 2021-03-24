@@ -32,6 +32,7 @@ const AuthorizationForm = () => {
     isCalendarOpen,
     telephoneError,
     isMessageVisible,
+    finalMessage,
   } = formState
 
   const exitAuthForm = e => {
@@ -60,6 +61,7 @@ const AuthorizationForm = () => {
             telephone={telephone}
             telCodeError={telCodeError}
             telephoneError={telephoneError}
+            isMessageVisible={isMessageVisible}
           />
         )
       case formCodes.registrationForm:
@@ -75,6 +77,7 @@ const AuthorizationForm = () => {
             isCalendarOpen={isCalendarOpen}
             usernameError={usernameError}
             calendarError={calendarError}
+            isMessageVisible={isMessageVisible}
           />
         )
       default:
@@ -90,38 +93,31 @@ const AuthorizationForm = () => {
         </div>
       )}
       {isMessageVisible && (
-        <AuthorizationStatus
-          type='success'
-          title='Успех!'
-          text='Вы успешно зарегистроровались в системе'
-          closeCallback={() => router.push('/')}
-        />
+        <div className='authStatusWrapper'>
+          <AuthorizationStatus
+            type='success'
+            text={finalMessage}
+            closeCallback={() => router.push('/')}
+          />
+        </div>
       )}
       <div id='recaptcha' />
       <style jsx>
         {`
-          .finalMessage {
-            width: 40%;
-            height: 66px;
-            padding: 12px 0;
-            display: inline-block;
-            background: #b1e86b;
-            border: 1px solid #000000;
-            box-sizing: border-box;
-            border-radius: 5px;
-            font-family: 'Times New Roman', serif;
-            font-weight: bold;
-            font-size: 28px;
-            line-height: 86px;
-            text-align: center;
+          .authFormMain {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
           }
 
-          .authFormMain {
+          .authStatusWrapper {
             width: 100%;
             height: 100%;
             display: flex;

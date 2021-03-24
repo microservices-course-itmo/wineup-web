@@ -11,20 +11,14 @@ const titleBackground = type => {
   }
 }
 
-const AuthorizationStatus = ({
-  type,
-  title,
-  text,
-  closeCallback = () => {},
-}) => {
+const AuthorizationStatus = ({ type, text, closeCallback = () => {} }) => {
   return (
     <>
       <div className='finalMessage'>
         <div className='title'>
-          <h5>{title}</h5>
+          <h5>{text}</h5>
           <input type='button' onClick={closeCallback} />
         </div>
-        <p>{text}</p>
       </div>
 
       <style jsx>
@@ -32,7 +26,6 @@ const AuthorizationStatus = ({
           .finalMessage {
             width: 100%;
             max-width: 700px;
-            margin: 0 20px;
             display: block;
             background: #fff;
             border: 1px solid black;
@@ -42,27 +35,31 @@ const AuthorizationStatus = ({
             text-align: center;
             overflow: hidden;
             box-shadow: 0 10px 20px 0 rgb(0 0 0 / 5%);
-          }
-
-          .finalMessage p {
-            padding: 20px 40px;
+            z-index: 100000;
           }
 
           .title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
             display: flex;
-            padding: 20px 40px;
+            padding: 24px 40px;
             border-bottom: 1px solid #e0e0e0;
             background-color: ${titleBackground(type)};
+            z-index: 100000;
           }
 
           .title h5 {
-            margin: 0;
+            margin: auto;
             font-size: 28px;
+            font-family: 'Times New Roman', serif;
           }
 
           .title input {
             width: 20px;
-            margin: 0 0 0 auto;
+            margin: 0 0 0 1.5em;
             background: transparent
               url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3E%3C/svg%3E")
               50%/1em auto no-repeat;
