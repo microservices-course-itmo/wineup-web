@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import firebase from 'firebase'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
 import {
   userState,
@@ -29,7 +29,6 @@ const cityIdByName = cityName => {
   if (cityName === 'Санкт-Петербург') return 2
   return null
 }
-const emptyInputValue = 'Не указано'
 const InputTypes = {
   name: 'name-input',
   cityName: 'city-input',
@@ -47,10 +46,16 @@ const SectionKeys = {
 }
 const Profile = () => {
   const [accessToken] = useLocalStorage('accessToken')
-  const currentUser = useRecoilValue(userState)
-  const [nameInputState, setNameInputState] = useState()
-  const [cityInputState, setCityInputState] = useState()
-  const [phoneInputState, setPhoneInputState] = useState()
+  const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const [nameInputState, setNameInputState] = useState(
+    currentUser ? currentUser.name : null
+  )
+  const [cityInputState, setCityInputState] = useState(
+    currentUser ? cityNameById(currentUser.cityId) : null
+  )
+  const [phoneInputState, setPhoneInputState] = useState(
+    currentUser ? currentUser.phoneNumber : null
+  )
   const [activeSection, setActiveSection] = useState(SectionKeys.userInfo)
   const notificationsList = useRecoilValue(notificationsState) // mock
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
@@ -60,14 +65,27 @@ const Profile = () => {
   const [profileData, setProfileData] = useState(null)
 
   const resetFields = () => {
-    setNameInputState(currentUser.name || emptyInputValue)
-    setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
-    setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
+    if (currentUser) {
+      setNameInputState(currentUser.name)
+      setCityInputState(cityNameById(currentUser.cityId))
+      setPhoneInputState(currentUser.phoneNumber)
+    }
   }
 
+  const refetchProfileData = useCallback(() => {
+    api.getProfile(accessToken).then(res => {
+      if (res.profile && !res.profile.error) {
+        setCurrentUser(res.profile)
+      }
+    })
+  }, [setCurrentUser, accessToken])
+
   useEffect(() => {
-    if (currentUser) resetFields()
-  }, [currentUser, resetFields])
+    if (!currentUser) {
+      refetchProfileData()
+    }
+    resetFields()
+  }, [currentUser, refetchProfileData, resetFields])
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
@@ -89,7 +107,7 @@ const Profile = () => {
   const updateProfile = (data = null) => {
     api
       .patchProfile(accessToken, data || profileData)
-      .then(() => window.location.reload())
+      .then(() => refetchProfileData())
       .catch(err => {
         console.error(err)
       })
@@ -136,8 +154,8 @@ const Profile = () => {
       cityId: updatedCity !== currentUser.cityId ? updatedCity : null,
       phoneNumber: isPhoneUpdated ? phoneInputState : null,
     }
-    const preparedData = Object.values(userToPatch).filter(
-      field => field !== null
+    const preparedData = Object.fromEntries(
+      Object.entries(userToPatch).filter(field => field[1] !== null)
     )
     if (isPhoneUpdated) {
       setIsConfirmModalVisible(true)
