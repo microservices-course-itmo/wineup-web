@@ -78,7 +78,7 @@ class Api {
       url: '/catalog-service/position/true/trueSettings',
       params: data,
       headers: {
-        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
       },
     })
 
