@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { userState, errorState } from './store'
@@ -11,24 +11,32 @@ const GlobalRecoilWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useRecoilState(userState)
   const [error, setError] = useRecoilState(errorState)
 
-  useEffect(() => {
-    const getUser = async () => {
-      const response = await api.getProfile(accessToken)
+  const getUser = useCallback(async () => {
+    const response = await api.getProfile(accessToken)
 
-      if (!response.profile || response.error) {
-        const { error, message, data } = await api.refreshToken(refreshToken)
+    if (!response.profile || response.error) {
+      const { error, message, data } = await api.refreshToken(refreshToken)
 
-        if (error) {
-          setError({ error, message })
-          return
-        }
-
-        setAccessToken(data[0])
-        setRefreshToken(data[1])
+      if (error) {
+        setError({ error, message })
+        return
       }
-      const newCurrentUser = response.profile
-      setCurrentUser(newCurrentUser)
+
+      setAccessToken(data[0])
+      setRefreshToken(data[1])
     }
+    const newCurrentUser = response.profile
+    setCurrentUser(newCurrentUser)
+  }, [
+    accessToken,
+    refreshToken,
+    setAccessToken,
+    setCurrentUser,
+    setError,
+    setRefreshToken,
+  ])
+
+  useEffect(() => {
     if (!currentUser || currentUser.error) {
       getUser().catch(console.error)
     }

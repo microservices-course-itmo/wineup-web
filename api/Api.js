@@ -230,7 +230,6 @@ class Api {
     }
   }
 
-  // TODO: добавить обработку ошибок
   async patchProfile(token, data) {
     const response = await this.sendRequest({
       url: '/user-service/users/me',

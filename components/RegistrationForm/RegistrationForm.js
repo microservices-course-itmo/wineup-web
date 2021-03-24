@@ -171,7 +171,7 @@ const RegistrationForm = props => {
       const response = await api.registration(data)
 
       if (!response.error) {
-        setUser(response.user)
+        setUser(response.user.user)
         setAccessToken(response.user.accessToken)
         setRefreshToken(response.user.refreshToken)
         dispatch({ type: ReducerType.showMessage })

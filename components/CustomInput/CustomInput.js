@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+const emptyInputValue = 'Не указано'
+
 /**
  * @param{string} id - id поля
  * @param{string} label - label для поля
@@ -15,9 +17,10 @@ const CustomInput = ({ id, label, value, onChange }) => {
         <div className='inputContainer'>
           <input
             id={id}
+            autoComplete='off'
             readOnly={isReadOnly}
             disabled={isReadOnly}
-            value={value}
+            value={value || emptyInputValue}
             onChange={onChange}
           />
           <div
