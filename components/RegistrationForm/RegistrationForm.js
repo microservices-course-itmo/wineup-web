@@ -178,6 +178,12 @@ const RegistrationForm = props => {
       } else {
         setError({ error: response.error, message: response.message })
       }
+      dispatch({
+        type: ReducerType.setFinalMessage,
+        payload: 'Вы успешно зарегистрировались в системе',
+      })
+      dispatch({ type: ReducerType.setAuthForm, payload: 0 })
+      dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
       }, 2000)

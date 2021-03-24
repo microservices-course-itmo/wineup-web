@@ -303,6 +303,7 @@ const Profile = () => {
             font-size: 18px;
             padding: 5px 60px;
             cursor: pointer;
+            outline: none;
           }
 
           .logoutBtn {
