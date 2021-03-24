@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import firebase from 'firebase'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -71,19 +71,22 @@ const Profile = () => {
       setPhoneInputState(currentUser.phoneNumber)
     }
   }
-  const refetchProfileData = () => {
+
+  const refetchProfileData = useCallback(() => {
     api.getProfile(accessToken).then(res => {
       if (res.profile && !res.profile.error) {
         setCurrentUser(res.profile)
       }
     })
-  }
+  }, [setCurrentUser, accessToken])
+
   useEffect(() => {
     if (!currentUser) {
       refetchProfileData()
     }
     resetFields()
-  }, [currentUser, setCurrentUser, accessToken])
+  }, [currentUser, refetchProfileData, resetFields])
+
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
     switch (evt.currentTarget.id) {
