@@ -14,6 +14,9 @@ export const initialState = {
   uid: null,
   isMessageVisible: false,
   cityId: 1,
+  isDropdownVisible: false,
+  cityName: 'Москва',
+  token: null,
   finalMessage: '',
   isAuthFormVisible: true,
 }
@@ -35,8 +38,9 @@ export const ReducerType = {
   clearCalendarError: 'clearCalendarError',
   setUid: 'setUid',
   showMessage: 'setIsMessageVisible',
-  setUser: 'setUser',
   setCityId: 'setCityId',
+  showDropdown: 'setIsDropdownVisible',
+  setCityName: 'setCityName',
   setFinalMessage: 'setFinalMessage',
   hideAuthForm: 'setIsAuthFormVisible',
 }
@@ -80,6 +84,12 @@ export const reducer = (state, action) => {
       return { ...state, isMessageVisible: true }
     case ReducerType.setCityId:
       return { ...state, cityId: payload }
+    case ReducerType.showDropdown:
+      return { ...state, isDropdownVisible: payload }
+    case ReducerType.setCityName:
+      return { ...state, cityName: payload }
+    case ReducerType.setUid:
+      return { ...state, token: payload }
     case ReducerType.setFinalMessage:
       return { ...state, finalMessage: payload }
     case ReducerType.hideAuthForm:

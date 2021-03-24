@@ -12,14 +12,7 @@ import CustomFormButton from '../CustomFormButton/CustomFormButton'
 const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneAndCodeForm = props => {
-  const {
-    authForm,
-    telephone,
-    telephoneError,
-    telCode,
-    telCodeError,
-    dispatch,
-  } = props
+  const { telephone, telephoneError, telCode, telCodeError, dispatch } = props
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
@@ -61,7 +54,6 @@ const TelephoneAndCodeForm = props => {
         const response = await api.login(data)
 
         if (!response.error) {
-          dispatch({ type: ReducerType.setUser })
           setUser(response.user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
@@ -92,6 +84,12 @@ const TelephoneAndCodeForm = props => {
       })
   }
 
+  const handlePressEnter = event => {
+    if (event.key === 'Enter') {
+      handleSecondForm()
+    }
+  }
+
   return (
     <div>
       <div className='authForm2'>
@@ -103,7 +101,9 @@ const TelephoneAndCodeForm = props => {
             placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
             value={telephone}
           />
-          <input className='errorMessage' value={telephoneError} disabled />
+          {telephoneError && (
+            <span className='errorMessage'>{telephoneError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Введите код</div>
@@ -112,8 +112,9 @@ const TelephoneAndCodeForm = props => {
             placeholder='_ _ _ _ _ _'
             value={telCode}
             onChange={handleTelCode}
+            onKeyDown={handlePressEnter}
           />
-          <input className='errorMessage' value={telCodeError} disabled />
+          {telCodeError && <span className='errorMessage'>{telCodeError}</span>}
         </div>
         <div className='buttonGroup'>
           <CustomFormButton
@@ -134,7 +135,7 @@ const TelephoneAndCodeForm = props => {
         {`
           .authForm2 {
             background: white;
-            display: ${authForm === 2 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;
