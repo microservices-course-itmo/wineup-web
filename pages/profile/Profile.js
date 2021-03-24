@@ -80,7 +80,7 @@ const Profile = () => {
       })
     }
     resetFields()
-  }, [currentUser])
+  }, [currentUser, setCurrentUser, accessToken])
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
     switch (evt.currentTarget.id) {

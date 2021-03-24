@@ -25,7 +25,7 @@ const GlobalRecoilWrapper = ({ children }) => {
     if (!currentUser || currentUser.error) {
       getUser().catch(alert)
     }
-  }, [accessToken, currentUser, refreshToken])
+  }, [accessToken, currentUser, getUser, refreshToken])
   return (
     <div className='wrapper'>
       {children}

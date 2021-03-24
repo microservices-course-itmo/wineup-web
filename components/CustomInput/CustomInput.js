@@ -17,6 +17,7 @@ const CustomInput = ({ id, label, value, onChange }) => {
         <div className='inputContainer'>
           <input
             id={id}
+            autoComplete='off'
             readOnly={isReadOnly}
             disabled={isReadOnly}
             value={value || emptyInputValue}
