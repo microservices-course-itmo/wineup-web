@@ -23,7 +23,7 @@ const GlobalRecoilWrapper = ({ children }) => {
   })
   useEffect(() => {
     if (!currentUser || currentUser.error) {
-      getUser().catch(alert)
+      getUser().catch(console.error)
     }
   }, [accessToken, currentUser, getUser, refreshToken])
   return (
