@@ -15,7 +15,6 @@ const AuthorizationStatus = ({
   type,
   title,
   text,
-  isVisible = true,
   closeCallback = () => {},
 }) => {
   return (
@@ -34,7 +33,7 @@ const AuthorizationStatus = ({
             width: 100%;
             max-width: 700px;
             margin: 0 20px;
-            display: ${isVisible ? 'block' : 'none'};
+            display: block;
             background: #fff;
             border: 1px solid black;
             border-radius: 5px;

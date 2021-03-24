@@ -23,7 +23,7 @@ const GlobalRecoilWrapper = ({ children }) => {
       setCurrentUser(newCurrentUser)
     }
     if (!currentUser || currentUser.error) {
-      getUser().catch(alert)
+      getUser().catch(console.error)
     }
   }, [
     accessToken,

@@ -48,7 +48,6 @@ const RegistrationForm = props => {
     calendarError,
     dateParts,
     dispatch,
-    authForm,
     isCalendarOpen,
     uid,
     cityId,
@@ -194,7 +193,9 @@ const RegistrationForm = props => {
             value={username}
             onChange={handleUserName}
           />
-          <input className='errorMessage' value={usernameError} disabled />
+          {usernameError && (
+            <span className='errorMessage'>{usernameError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Дата рождения</div>
@@ -213,7 +214,9 @@ const RegistrationForm = props => {
               />
             </span>
           </div>
-          <input className='errorMessage' value={calendarError} disabled />
+          {calendarError && (
+            <span className='errorMessage'>{calendarError}</span>
+          )}
           <FormCalendar
             dateParts={dateParts}
             isCalendarOpen={isCalendarOpen}
@@ -237,7 +240,7 @@ const RegistrationForm = props => {
         {`
           .authForm3 {
             background: white;
-            display: ${authForm === 3 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

@@ -16,6 +16,7 @@ export const initialState = {
   cityId: 1,
   isDropdownVisible: false,
   cityName: 'Москва',
+  token: null,
 }
 
 export const ReducerType = {
@@ -35,7 +36,6 @@ export const ReducerType = {
   clearCalendarError: 'clearCalendarError',
   setUid: 'setUid',
   showMessage: 'setIsMessageVisible',
-  setUser: 'setUser',
   setCityId: 'setCityId',
   showDropdown: 'setIsDropdownVisible',
   setCityName: 'setCityName',
@@ -84,6 +84,8 @@ export const reducer = (state, action) => {
       return { ...state, isDropdownVisible: payload }
     case ReducerType.setCityName:
       return { ...state, cityName: payload }
+    case ReducerType.setUid:
+      return { ...state, token: payload }
     default:
       return initialState
   }
