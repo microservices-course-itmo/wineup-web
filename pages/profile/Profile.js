@@ -118,6 +118,8 @@ const Profile = () => {
       .then(res => {
         if (res.error) {
           setError({ error: res.error, message: res.message })
+        } else {
+          setToastVisibility(true)
         }
       })
       .then(() => refetchProfileData())
@@ -180,7 +182,7 @@ const Profile = () => {
         <Toast
           type='success'
           text='Пользователь успешно изменен'
-          onClose={() => setToastVisibility(false)}
+          closeCallback={() => setToastVisibility(false)}
         />
       ) : null}
       <Header />
