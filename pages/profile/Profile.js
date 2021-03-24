@@ -71,13 +71,16 @@ const Profile = () => {
       setPhoneInputState(currentUser.phoneNumber)
     }
   }
+  const refetchProfileData = () => {
+    api.getProfile(accessToken).then(res => {
+      if (res.profile && !res.profile.error) {
+        setCurrentUser(res.profile)
+      }
+    })
+  }
   useEffect(() => {
     if (!currentUser) {
-      api.getProfile(accessToken).then(res => {
-        if (res.profile && !res.profile.error) {
-          setCurrentUser(res.profile)
-        }
-      })
+      refetchProfileData()
     }
     resetFields()
   }, [currentUser, setCurrentUser, accessToken])
@@ -101,7 +104,7 @@ const Profile = () => {
   const updateProfile = (data = null) => {
     api
       .patchProfile(accessToken, data || profileData)
-      .then(() => setCurrentUser(null))
+      .then(() => refetchProfileData())
       .catch(err => {
         console.error(err)
       })
