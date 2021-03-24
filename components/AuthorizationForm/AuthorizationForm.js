@@ -5,7 +5,7 @@ import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
-import AuthorizationStatus from '../AuthorizationStatus'
+import Toast from '../Toast'
 
 const formCodes = {
   closedForm: 0,
@@ -32,6 +32,7 @@ const AuthorizationForm = () => {
     isCalendarOpen,
     telephoneError,
     isMessageVisible,
+    finalMessage,
     fb,
   } = formState
 
@@ -61,6 +62,7 @@ const AuthorizationForm = () => {
             telephone={telephone}
             telCodeError={telCodeError}
             telephoneError={telephoneError}
+            isMessageVisible={isMessageVisible}
             fb={fb}
           />
         )
@@ -77,6 +79,7 @@ const AuthorizationForm = () => {
             isCalendarOpen={isCalendarOpen}
             usernameError={usernameError}
             calendarError={calendarError}
+            isMessageVisible={isMessageVisible}
           />
         )
       default:
@@ -92,34 +95,15 @@ const AuthorizationForm = () => {
         </div>
       )}
       {isMessageVisible && (
-        <AuthorizationStatus
+        <Toast
           type='success'
-          title='Успех!'
-          text='Вы успешно зарегистроровались в системе'
+          text={finalMessage}
           closeCallback={() => router.push('/')}
         />
       )}
       <div id='recaptcha' />
       <style jsx>
         {`
-          .finalMessage {
-            width: 40%;
-            height: 66px;
-            padding: 12px 0;
-            display: inline-block;
-            background: #b1e86b;
-            border: 1px solid #000000;
-            box-sizing: border-box;
-            border-radius: 5px;
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            text-align: center;
-            position: fixed;
-            top: 92.9%;
-            left: 30%;
-            z-index: 1000;
-          }
-
           .authFormMain {
             width: 100%;
             height: 100%;
