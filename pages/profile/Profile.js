@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
 import {
   userState,
+  errorState,
   notificationsState,
   unreadNotificationsCountState,
 } from '../../store/GlobalRecoilWrapper/store'
@@ -44,9 +45,11 @@ const SectionKeys = {
     title: 'Уведомления',
   },
 }
+
 const Profile = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const [, setError] = useRecoilState(errorState)
   const [nameInputState, setNameInputState] = useState(
     currentUser ? currentUser.name : null
   )
@@ -74,6 +77,10 @@ const Profile = () => {
 
   const refetchProfileData = () => {
     api.getProfile(accessToken).then(res => {
+      if (res.error) {
+        setError({ error: res.error, message: res.message })
+      }
+
       if (res.profile && !res.profile.error) {
         setCurrentUser(res.profile)
       }
@@ -89,6 +96,7 @@ const Profile = () => {
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
+
     switch (evt.currentTarget.id) {
       case InputTypes.name:
         setNameInputState(newValue)
@@ -107,10 +115,15 @@ const Profile = () => {
   const updateProfile = (data = null) => {
     api
       .patchProfile(accessToken, data || profileData)
-      .then(() => refetchProfileData())
-      .catch(err => {
-        console.error(err)
+      .then(res => {
+        if (res.error) {
+          setError({ error: res.error, message: res.message })
+        } else {
+          setToastVisibility(true)
+        }
       })
+      .then(() => refetchProfileData())
+      .catch(console.error)
   }
 
   const onSubmitPhoneChange = verificationCode => {
@@ -136,9 +149,7 @@ const Profile = () => {
         console.log(res)
         updateProfile()
       })
-      .catch(err => {
-        console.error(err)
-      })
+      .catch(console.error)
   }
 
   const onCancelPhoneChange = () => {
@@ -169,8 +180,9 @@ const Profile = () => {
     <GlobalRecoilWrapper>
       {toastVisibility ? (
         <Toast
-          message='Пользователь успешно изменен'
-          onClose={() => setToastVisibility(false)}
+          type='success'
+          text='Пользователь успешно изменен'
+          closeCallback={() => setToastVisibility(false)}
         />
       ) : null}
       <Header />

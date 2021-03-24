@@ -5,7 +5,7 @@ import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
-import AuthorizationStatus from '../AuthorizationStatus'
+import Toast from '../Toast'
 
 const formCodes = {
   closedForm: 0,
@@ -93,31 +93,16 @@ const AuthorizationForm = () => {
         </div>
       )}
       {isMessageVisible && (
-        <div className='authStatusWrapper'>
-          <AuthorizationStatus
-            type='success'
-            text={finalMessage}
-            closeCallback={() => router.push('/')}
-          />
-        </div>
+        <Toast
+          type='success'
+          text={finalMessage}
+          closeCallback={() => router.push('/')}
+        />
       )}
       <div id='recaptcha' />
       <style jsx>
         {`
           .authFormMain {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-          }
-
-          .authStatusWrapper {
             width: 100%;
             height: 100%;
             display: flex;

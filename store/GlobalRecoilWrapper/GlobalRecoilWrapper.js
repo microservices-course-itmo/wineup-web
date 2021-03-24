@@ -1,36 +1,61 @@
 import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import { userState } from './store'
+import { userState, errorState } from './store'
+import Toast from '../../components/Toast'
 import api from '../../api'
 
 const GlobalRecoilWrapper = ({ children }) => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
   const [refreshToken, setRefreshToken] = useLocalStorage('refreshToken')
   const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const [error, setError] = useRecoilState(errorState)
+
   const getUser = useCallback(async () => {
     const response = await api.getProfile(accessToken)
 
-    if (!response.profile || response.profile.error) {
-      const [newAccessToken, newRefreshToken] = await api.refreshToken(
-        refreshToken
-      )
-      setAccessToken(newAccessToken)
-      setRefreshToken(newRefreshToken)
+    if (!response.profile || response.error) {
+      const { error, message, data } = await api.refreshToken(refreshToken)
+
+      if (error) {
+        setError({ error, message })
+        return
+      }
+
+      setAccessToken(data[0])
+      setRefreshToken(data[1])
     }
-    const newCurrentUser = await response.profile
+    const newCurrentUser = response.profile
     setCurrentUser(newCurrentUser)
-  })
+  }, [
+    accessToken,
+    refreshToken,
+    setAccessToken,
+    setCurrentUser,
+    setError,
+    setRefreshToken,
+  ])
+
   useEffect(() => {
     if (!currentUser || currentUser.error) {
       getUser().catch(console.error)
     }
-  }, [accessToken, currentUser, getUser, refreshToken])
+  }, [])
+
   return (
     <div className='wrapper'>
+      {!!error.error && (
+        <Toast
+          type='error'
+          text={error.message}
+          closeCallback={() => setError({ error: false, message: '' })}
+        />
+      )}
+
       {children}
       <style jsx>{`
         .wrapper {
+          position: relative
           max-width: 1440px;
           padding: 0 20px;
           margin: 0 auto;
