@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import firebase from 'firebase'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 import Header from '../../components/Header'
 import {
   userState,
+  errorState,
   notificationsState,
   unreadNotificationsCountState,
 } from '../../store/GlobalRecoilWrapper/store'
@@ -45,9 +46,11 @@ const SectionKeys = {
     title: 'Уведомления',
   },
 }
+
 const Profile = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const currentUser = useRecoilValue(userState)
+  const [, setError] = useRecoilState(errorState)
   const [nameInputState, setNameInputState] = useState()
   const [cityInputState, setCityInputState] = useState()
   const [phoneInputState, setPhoneInputState] = useState()
@@ -71,6 +74,7 @@ const Profile = () => {
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
+
     switch (evt.currentTarget.id) {
       case InputTypes.name:
         setNameInputState(newValue)
@@ -89,10 +93,13 @@ const Profile = () => {
   const updateProfile = (data = null) => {
     api
       .patchProfile(accessToken, data || profileData)
-      .then(() => window.location.reload())
-      .catch(err => {
-        console.error(err)
+      .then(data => {
+        if (data.error) {
+          setError({ error: data.error, message: data.message })
+        }
+        window.location.reload()
       })
+      .catch(console.error)
   }
 
   const onSubmitPhoneChange = verificationCode => {
@@ -118,9 +125,7 @@ const Profile = () => {
         console.log(res)
         updateProfile()
       })
-      .catch(err => {
-        console.error(err)
-      })
+      .catch(console.error)
   }
 
   const onCancelPhoneChange = () => {
@@ -151,7 +156,8 @@ const Profile = () => {
     <GlobalRecoilWrapper>
       {toastVisibility ? (
         <Toast
-          message='Пользователь успешно изменен'
+          type='success'
+          text='Пользователь успешно изменен'
           onClose={() => setToastVisibility(false)}
         />
       ) : null}

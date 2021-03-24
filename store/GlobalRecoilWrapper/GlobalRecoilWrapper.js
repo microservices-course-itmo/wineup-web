@@ -2,9 +2,8 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { userState, errorState } from './store'
-import AuthorizationStatus from '../../components/AuthorizationStatus'
+import Toast from '../../components/Toast'
 import api from '../../api'
-import handleError from '../../utils/handleError'
 
 const GlobalRecoilWrapper = ({ children }) => {
   const [accessToken, setAccessToken] = useLocalStorage('accessToken')
@@ -16,13 +15,11 @@ const GlobalRecoilWrapper = ({ children }) => {
     const getUser = async () => {
       const response = await api.getProfile(accessToken)
 
-      if (!response.profile || response.profile.error) {
+      if (!response.profile || response.error) {
         const { error, message, data } = await api.refreshToken(refreshToken)
 
         if (error) {
-          setTimeout(() => {
-            setError({ error, message })
-          }, 1000)
+          setError({ error, message })
           return
         }
 
@@ -37,17 +34,16 @@ const GlobalRecoilWrapper = ({ children }) => {
     }
   }, [])
 
-  useEffect(() => {
-    handleError(setError, { error: false, message: '' })
-  }, [error, setError])
-
   return (
     <div className='wrapper'>
-      <AuthorizationStatus
-        type='error'
-        text={error.message}
-        isVisible={error.error}
-      />
+      {!!error.error && (
+        <Toast
+          type='error'
+          text={error.message}
+          closeCallback={() => setError({ error: false, message: '' })}
+        />
+      )}
+
       {children}
       <style jsx>{`
         .wrapper {

@@ -21,7 +21,7 @@ class Api {
     if (response.status !== 200) {
       return {
         error: true,
-        message: '[API]: LOGIN error',
+        message: 'Ошибка авторизации',
       }
     }
 
@@ -45,7 +45,7 @@ class Api {
     if (response.status !== 200) {
       return {
         error: true,
-        message: '[API]: REGISTRATION error',
+        message: 'Ошибка регистрации',
       }
     }
 
@@ -69,7 +69,7 @@ class Api {
     if (response.status !== 200) {
       return {
         error: true,
-        message: 'Ошибка получения refresh token',
+        message: 'Ошибка получения данных профиля',
       }
     }
 
@@ -89,7 +89,7 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      throw new Error('Ошибка получения каталога вин')
     }
 
     return response.data
@@ -106,12 +106,13 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      throw new Error('Ошибка получения винной позиции')
     }
 
     return response.data
   }
 
+  // TODO: добавить обработку ошибок
   async addWineToFavorites(id, token) {
     const response = await this.sendRequest({
       url: `/user-service/favorites/${id}`,
@@ -130,6 +131,7 @@ class Api {
     return response.data
   }
 
+  // TODO: добавить обработку ошибок
   async deleteWineFromFavorites(id, token) {
     const response = await this.sendRequest({
       url: `/user-service/favorites/${id}`,
@@ -148,6 +150,7 @@ class Api {
     return response.data
   }
 
+  // TODO: добавить обработку ошибок
   async deleteAllWinesFromFavorites(token) {
     const response = await this.sendRequest({
       url: '/user-service/favorites/clear',
@@ -166,6 +169,7 @@ class Api {
     return response.data
   }
 
+  // TODO: добавить обработку ошибок
   async getFavoritesWines(token) {
     const response = await this.sendRequest({
       url: '/user-service/favorites/list',
@@ -184,6 +188,7 @@ class Api {
     return response.data
   }
 
+  // TODO: добавить обработку ошибок
   async getFavoritesWinesByUserId(userId) {
     const response = await this.sendRequest({
       url: `/catalog-service/position/true/byId/${userId}`,
@@ -212,10 +217,10 @@ class Api {
       },
     })
 
-    if (response.status === 403) {
+    if (response.status !== 200) {
       return {
         error: true,
-        message: '[API]: GETPROFILE - token expired',
+        message: 'Ошибка получения данных пользователя',
       }
     }
 
@@ -225,6 +230,7 @@ class Api {
     }
   }
 
+  // TODO: добавить обработку ошибок
   async patchProfile(token, data) {
     const response = await this.sendRequest({
       url: '/user-service/users/me',
@@ -238,10 +244,16 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('[patchProfile]: status is not 200')
+      return {
+        error: true,
+        message: 'Не удалось обновить профиль',
+      }
     }
 
-    return response.data
+    return {
+      error: false,
+      data: response.data,
+    }
   }
 
   async sendRequest({ url, method, data, headers, params }) {

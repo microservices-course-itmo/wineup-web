@@ -5,7 +5,7 @@ import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
-import AuthorizationStatus from '../AuthorizationStatus'
+import Toast from '../Toast'
 
 const AuthorizationForm = () => {
   const router = useRouter()
@@ -49,13 +49,13 @@ const AuthorizationForm = () => {
           calendarError={formState.calendarError}
           cityId={formState.cityId}
         />
-
-        <AuthorizationStatus
-          type='success'
-          text='Вы успешно зарегистроровались в системе'
-          isVisible={formState.isMessageVisible}
-          closeCallback={() => router.push('/')}
-        />
+        {formState.isMessageVisible && (
+          <Toast
+            type='success'
+            text='Вы успешно зарегистроровались в системе'
+            closeCallback={() => router.push('/')}
+          />
+        )}
       </div>
 
       <style jsx>

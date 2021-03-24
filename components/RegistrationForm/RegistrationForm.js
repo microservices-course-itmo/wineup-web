@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
+import { userState, errorState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
@@ -54,6 +54,7 @@ const RegistrationForm = props => {
     cityId,
   } = props
   const [, setUser] = useRecoilState(userState)
+  const [, setError] = useRecoilState(errorState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
@@ -182,8 +183,10 @@ const RegistrationForm = props => {
         setUser(response.user)
         setAccessToken(response.user.accessToken)
         setRefreshToken(response.user.refreshToken)
+        dispatch({ type: ReducerType.showMessage })
+      } else {
+        setError({ error: response.error, message: response.message })
       }
-      dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
       }, 2000)
