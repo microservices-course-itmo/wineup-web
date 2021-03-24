@@ -174,6 +174,11 @@ const RegistrationForm = props => {
         setAccessToken(response.user.accessToken)
         setRefreshToken(response.user.refreshToken)
       }
+      dispatch({
+        type: ReducerType.setFinalMessage,
+        payload: 'Вы успешно зарегистрировались в системе',
+      })
+      dispatch({ type: ReducerType.setAuthForm, payload: 0 })
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
