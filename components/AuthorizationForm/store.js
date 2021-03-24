@@ -14,6 +14,8 @@ export const initialState = {
   uid: null,
   isMessageVisible: false,
   cityId: 1,
+  isDropdownVisible: false,
+  cityName: 'Москва',
   token: null,
   fb: null,
 }
@@ -36,6 +38,8 @@ export const ReducerType = {
   setUid: 'setUid',
   showMessage: 'setIsMessageVisible',
   setCityId: 'setCityId',
+  showDropdown: 'setIsDropdownVisible',
+  setCityName: 'setCityName',
   setFB: 'setFB',
 }
 
@@ -78,10 +82,13 @@ export const reducer = (state, action) => {
       return { ...state, isMessageVisible: true }
     case ReducerType.setCityId:
       return { ...state, cityId: payload }
+    case ReducerType.showDropdown:
+      return { ...state, isDropdownVisible: payload }
+    case ReducerType.setCityName:
+      return { ...state, cityName: payload }
     case ReducerType.setUid:
       return { ...state, token: payload }
     case ReducerType.setFB:
-      console.log(payload)
       return { ...state, fb: payload }
     default:
       return initialState

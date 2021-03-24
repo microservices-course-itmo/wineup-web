@@ -40,7 +40,6 @@ const TelephoneAndCodeForm = props => {
   const handleSecondForm = async () => {
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
       try {
-        console.log(fb)
         const token = await fb.confirm(telCode).then(({ user: { za } }) => za)
 
         dispatch({ type: ReducerType.setUid, payload: token })
@@ -50,7 +49,7 @@ const TelephoneAndCodeForm = props => {
         const response = await api.login(data)
 
         if (!response.error) {
-          setUser(response.user)
+          setUser(response.user.user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
           dispatch({ type: ReducerType.showMessage })
@@ -62,7 +61,6 @@ const TelephoneAndCodeForm = props => {
         }
         dispatch({ type: ReducerType.clearTelCodeError })
       } catch (err) {
-        console.log(err)
         dispatch({
           type: ReducerType.setTelCodeError,
           payload: 'Ошибка: неправильный код',

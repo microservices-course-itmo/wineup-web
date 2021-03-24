@@ -39,13 +39,8 @@ const TelephoneForm = props => {
     try {
       applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
         size: 'normal',
-        callback: response => {
+        callback: () => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
-          // ...
-          console.log(response)
-        },
-        'expired-callback': () => {
-          // Response expired. Ask user to solve reCAPTCHA again.
           // ...
         },
       })

@@ -5,6 +5,7 @@ import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
+import AuthorizationStatus from '../AuthorizationStatus'
 
 const formCodes = {
   closedForm: 0,
@@ -91,9 +92,12 @@ const AuthorizationForm = () => {
         </div>
       )}
       {isMessageVisible && (
-        <div className='finalMessage'>
-          Вы успешно зарегистрировались в системе
-        </div>
+        <AuthorizationStatus
+          type='success'
+          title='Успех!'
+          text='Вы успешно зарегистроровались в системе'
+          closeCallback={() => router.push('/')}
+        />
       )}
       <div id='recaptcha' />
       <style jsx>
