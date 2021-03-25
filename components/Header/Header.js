@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
+import {
+  unreadNotificationsCountState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import HeaderMenuItem from '../HeaderMenuItem'
 
 const imagePaths = {
   city: '/assets/header/city-icon',
@@ -12,25 +16,34 @@ const imagePaths = {
   favorites: '/assets/header/heart',
   login: '/assets/header/login',
 }
+const MenuItemKeys = {
+  city: 'city',
+  home: 'home',
+  community: 'community',
+  likes: 'likes',
+  favorites: 'favorites',
+  login: 'login',
+}
 
 const Header = () => {
   const [activeImage, setActiveImage] = useState('')
   const currentUser = useRecoilValue(userState)
   const { asPath } = useRouter()
-
+  // mock
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState)
   useEffect(() => {
     switch (asPath) {
       case '/':
-        setActiveImage('home')
+        setActiveImage(MenuItemKeys.home)
         break
       case '/favorites':
-        setActiveImage('favorites')
+        setActiveImage(MenuItemKeys.favorites)
         break
       case '/login':
-        setActiveImage('login')
+        setActiveImage(MenuItemKeys.login)
         break
       case '/profile':
-        setActiveImage('login')
+        setActiveImage(MenuItemKeys.login)
         break
       default:
         setActiveImage('')
@@ -40,75 +53,46 @@ const Header = () => {
 
   return (
     <div className='header'>
-      <Link href='/'>
-        <div className='menu-item city'>
-          <img className='icon' src='/assets/header/city-icon.svg' alt='city' />
-          <p>Санкт-Петербург</p>
-        </div>
-      </Link>
-      <Link href='/'>
-        <div className='menu-item catalog'>
-          <img
-            className='icon'
-            src={`${imagePaths.home}${
-              activeImage === 'home' ? '-active' : ''
-            }.svg`}
-            alt='catalog'
-          />
-          <p>Каталог</p>
-        </div>
-      </Link>
-      <Link href='/'>
-        <div className='menu-item community'>
-          <img
-            className='icon'
-            src={`${imagePaths.community}${
-              activeImage === 'community' ? '-active' : ''
-            }.svg`}
-            alt='city'
-          />
-          <p>Сообщество</p>
-        </div>
-      </Link>
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.city}
+        isActive={activeImage === MenuItemKeys.city}
+        labelText='Санкт-Петербург'
+      />
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.home}
+        isActive={activeImage === MenuItemKeys.home}
+        labelText='Каталог'
+      />
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.community}
+        isActive={activeImage === MenuItemKeys.community}
+        labelText='Сообщество'
+      />
       <Link href='/'>
         <p className='title'>WineUp</p>
       </Link>
-      <Link href='/'>
-        <div className='menu-item likes'>
-          <img
-            className='icon'
-            src={`${imagePaths.likes}${
-              activeImage === 'likes' ? '-active' : ''
-            }.svg`}
-            alt='city'
-          />
-          <p>Лайки</p>
-        </div>
-      </Link>
-      <Link href={`${currentUser ? '/favorites' : 'login'}`}>
-        <div className='menu-item heart'>
-          <img
-            className='icon'
-            src={`${imagePaths.favorites}${
-              activeImage === 'favorites' ? '-active' : ''
-            }.svg`}
-            alt='heart'
-          />
-          <p>Избранное</p>
-        </div>
-      </Link>
-      <Link href={`${currentUser ? '/profile' : 'login'}`}>
-        <div className='menu-item login'>
-          <img
-            className='icon'
-            src={`${imagePaths.login}${
-              activeImage === 'login' ? '-active' : ''
-            }.svg`}
-            alt='profile'
-          />
-          {currentUser ? <p>{currentUser.name}</p> : <p>Войти</p>}
-        </div>
-      </Link>
+      <HeaderMenuItem
+        href='/'
+        iconSrc={imagePaths.likes}
+        isActive={activeImage === MenuItemKeys.likes}
+        labelText='Лайки'
+      />
+      <HeaderMenuItem
+        href={`${currentUser ? '/favorites' : 'login'}`}
+        iconSrc={imagePaths.favorites}
+        isActive={activeImage === MenuItemKeys.favorites}
+        labelText='Избранное'
+      />
+      <HeaderMenuItem
+        href={`${currentUser ? '/profile' : 'login'}`}
+        iconSrc={imagePaths.login}
+        isActive={activeImage === MenuItemKeys.login}
+        labelText={currentUser ? currentUser.name : 'Войти'}
+        badgeCount={unreadNotificationsCount}
+      />
 
       <style jsx>
         {`
@@ -118,58 +102,21 @@ const Header = () => {
             justify-content: space-between;
             align-items: center;
             margin: 10px;
-
             font-family: Arial, serif;
             font-style: normal;
             font-weight: normal;
-
             color: #000000;
-          }
-
-          .menu-item {
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-            font-size: 16px;
-            min-width: max-content;
-            line-height: 18px;
-            margin: 0 8px;
-            white-space: nowrap;
-            cursor: pointer;
-          }
-
-          .icon {
-            margin-right: 10px;
-          }
-
-          .active-icon {
-            filter: invert(25%) sepia(30%) saturate(5944%) hue-rotate(310deg)
-              brightness(60%) contrast(110%);
           }
 
           .title {
             padding: 0 10px;
-
             font-family: 'Poller One', cursive;
             font-style: normal;
             font-weight: normal;
             font-size: 70px;
             line-height: 83px;
             color: #000000;
-
             cursor: pointer;
-          }
-
-          @media screen and (max-width: 1200px) {
-            .menu-item p {
-              display: none;
-            }
-          }
-
-          @media screen and (max-width: 767px) {
-            .menu-item {
-              display: none;
-            }
           }
         `}
       </style>

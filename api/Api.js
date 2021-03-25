@@ -78,7 +78,7 @@ class Api {
       url: '/catalog-service/position/true/trueSettings',
       params: data,
       headers: {
-        accessToken: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
       },
     })
 
@@ -234,6 +234,25 @@ class Api {
       error: false,
       profile: response.data,
     }
+  }
+
+  async patchProfile(token, data) {
+    const response = await this.sendRequest({
+      url: '/user-service/users/me',
+      method: 'PATCH',
+      data,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json;charset=utf-8',
+        accept: '*/*',
+      },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('[patchProfile]: status is not 200')
+    }
+
+    return response.data
   }
 
   async sendRequest({ url, method, data, headers, params }) {

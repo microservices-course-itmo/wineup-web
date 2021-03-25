@@ -1,16 +1,26 @@
 import { useReducer } from 'react'
 
+import { useRouter } from 'next/router'
 import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
+import AuthorizationStatus from '../AuthorizationStatus'
 
 const AuthorizationForm = () => {
+  const router = useRouter()
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
+  const exitAuthForm = e => {
+    if (e.target.className.includes('authFormMain')) {
+      setTimeout(() => {
+        router.push('/')
+      }, 1000)
+    }
+  }
 
   return (
     <div>
-      <div className='authForm'>
+      <div className='authFormMain' onClick={exitAuthForm}>
         <TelephoneForm
           telephone={formState.telephone}
           telephoneError={formState.telephoneError}
@@ -37,31 +47,23 @@ const AuthorizationForm = () => {
           username={formState.username}
           usernameError={formState.usernameError}
           calendarError={formState.calendarError}
+          cityId={formState.cityId}
+          cityName={formState.cityName}
+          isDropdownVisible={formState.isDropdownVisible}
+        />
+
+        <AuthorizationStatus
+          type='success'
+          title='Успех!'
+          text='Вы успешно зарегистроровались в системе'
+          isVisible={formState.isMessageVisible}
+          closeCallback={() => router.push('/')}
         />
       </div>
-      <div className='finalMessage'>
-        Вы успешно зарегистрировались в системе
-      </div>
+
       <style jsx>
         {`
-          .finalMessage {
-            width: 40%;
-            height: 66px;
-            padding: 12px 0;
-            display: ${formState.isMessageVisible ? 'inline-block' : 'none'};
-            background: #b1e86b;
-            border: 1px solid #000000;
-            box-sizing: border-box;
-            border-radius: 5px;
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            text-align: center;
-            position: fixed;
-            top: 92.9%;
-            left: 30%;
-            z-index: 1000;
-          }
-          .authForm {
+          .authFormMain {
             width: 100%;
             height: 100%;
             display: flex;

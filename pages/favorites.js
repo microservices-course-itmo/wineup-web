@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   useRecoilValueLoadable,
   useRecoilState,
@@ -17,30 +17,37 @@ import {
   deleteQuery,
   favoritesSortState,
   sortedFavoritesWinesState,
+  favoritesStored,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
   getWineInfo,
   sortingButtons,
 } from '../components/Catalog/utils'
-import useLocalStorage from '../utils/useLocalStorage'
-
+import useLocalStorage from '../hooks/useLocalStorage'
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const [, setFavorites] = useRecoilState(favoritesState)
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
+  const [sort, setSortedWinde] = useRecoilState(sortedFavoritesWinesState)
+  const storedFavorites = useRecoilValue(favoritesStored)
+  const [, setStoredFavorites] = useRecoilState(favoritesStored)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
     await snapshot.getPromise(deleteQuery(accessToken))
     setFavorites('')
   })
+  const copiedFavorites = [...sortedWine]
   useEffect(() => {
-    if (contentQueryLoadable.state === 'hasValue') {
-      setFavorites(() => contentQueryLoadable.contents)
+    if (sortedWine.length === 0) {
+      if (contentQueryLoadable.state === 'hasValue') {
+        setFavorites(() => contentQueryLoadable.contents)
+        setStoredFavorites(copiedFavorites)
+      }
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
-
+  console.log(storedFavorites)
   return (
     <div className='wrapper'>
       <Header />
@@ -69,8 +76,8 @@ const Favorite = () => {
                 wineId={wine.wine_position_id}
                 imageSrc={parseImageSrc(wine.image)}
                 info={getWineInfo(wine)}
-                isLiked={wine.liked}
-                color={index % 3}
+                isLiked={true}
+                color={wine.color}
               />
             ))
           ) : (
@@ -135,13 +142,16 @@ const Favorite = () => {
           padding: 0 20px;
           margin: 0 auto;
         }
+
         .hidden {
           display: none;
         }
+
         .line {
           border: 0.1px solid;
           color: black;
         }
+
         .nav {
           width: 100%;
           height: 62px;
@@ -149,11 +159,13 @@ const Favorite = () => {
           margin-top: 40px;
           margin-bottom: 40px;
         }
+
         .content {
           display: flex;
           flex-direction: column;
           margin-top: 40px;
         }
+
         .filter {
           background-color: lightgray;
           min-width: 375px;
@@ -161,6 +173,7 @@ const Favorite = () => {
           max-width: 375px;
           max-height: 1265px;
         }
+
         .buttonClear {
           float: right;
           margin-top: -20px;
@@ -169,12 +182,14 @@ const Favorite = () => {
           width: 200px;
           outline: 0;
         }
+
         .buttonCatalog {
           background: transparent;
           border: none;
           width: 200px;
           outline: 0;
         }
+
         .textBtn {
           font-size: 12px;
           color: grey;
@@ -182,11 +197,13 @@ const Favorite = () => {
           text-decoration-line: underline;
           cursor: pointer;
         }
+
         .textFavorite {
           font-size: 18px;
           font-family: times new roman;
           font-weight: bold;
         }
+
         .emptyFavorite {
           background-image: url('assets/heart-background.png');
           background-repeat: no-repeat;
@@ -201,6 +218,7 @@ const Favorite = () => {
           padding: 200px 0;
           gap: 50px;
         }
+
         .emptyContainer {
           position: absolute;
           left: 26.67%;
@@ -208,10 +226,12 @@ const Favorite = () => {
           top: 39.16%;
           bottom: 26.91%;
         }
+
         .emptyContainerText {
           font-size: 28px;
           font-family: 'Times New Roman';
         }
+
         .linkText {
           font-size: 22px;
           color: #921332;
@@ -219,12 +239,14 @@ const Favorite = () => {
           text-decoration-line: underline;
           cursor: pointer;
         }
+
         .btnAllFavoritesContainer {
           display: flex;
           justify-content: center;
           margin-top: 147px;
           margin-bottom: 336px;
         }
+
         .btnAllFavorites {
           background: transparent;
           border: 1px solid;

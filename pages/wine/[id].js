@@ -40,7 +40,7 @@ const Wine = () => {
 
       {state === 'hasValue' && (
         <>
-          <div className='wine-position'>
+          <div className='winePosition'>
             <WinePosition
               imageSrc={parseImageSrc(contents.image)}
               info={getWinePositionInfo(contents)}
@@ -58,7 +58,7 @@ const Wine = () => {
           {state === 'hasError' && (
             <div className='loading'>
               <img
-                className='error-icon'
+                className='errorIcon'
                 src='/assets/error.svg'
                 alt='error icon'
               />
@@ -85,7 +85,7 @@ const Wine = () => {
           margin: 0 auto;
         }
 
-        .wine-position {
+        .winePosition {
           margin-top: 80px;
         }
 
@@ -97,7 +97,6 @@ const Wine = () => {
 
         .message {
           padding-top: 30px;
-
           display: flex;
           justify-content: center;
         }
@@ -107,19 +106,17 @@ const Wine = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
-
           text-align: center;
         }
 
         .loading p {
           margin-top: 25px;
-
           font-family: Playfair Display, serif;
           font-size: 16px;
           color: #000000;
         }
 
-        .error-icon {
+        .errorIcon {
           width: 120px;
           height: auto;
         }

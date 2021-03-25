@@ -22,7 +22,7 @@ const ReviewBox = ({ reviews = [] }) => {
           reviews.map((review, index) => (
             <div
               id={index}
-              className={`review-container ${index > 2 ? showResults : ''}`}
+              className={`reviewContainer ${index > 2 ? showResults : ''}`}
             >
               <ReviewCard
                 logDate={review.logDate}
@@ -62,13 +62,12 @@ const ReviewBox = ({ reviews = [] }) => {
             min-width: 500px;
           }
 
-          .review-container {
+          .reviewContainer {
             width: 100%;
           }
 
           .title {
             margin-bottom: 45px;
-
             font-size: 28px;
             font-family: 'Playfair Display', serif;
           }
@@ -76,7 +75,6 @@ const ReviewBox = ({ reviews = [] }) => {
           .box {
             width: 100%;
             padding: 0 40px;
-
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -90,7 +88,6 @@ const ReviewBox = ({ reviews = [] }) => {
             display: flex;
             align-self: center;
             margin-top: 20px;
-
             background: transparent;
             border: none;
             outline: 0;
@@ -98,14 +95,12 @@ const ReviewBox = ({ reviews = [] }) => {
 
           .textAllReviews {
             padding-left: 40px;
-
             font-size: 16px;
             font-weight: 300;
             font-family: 'Roboto', sans-serif;
             font-style: italic;
             text-decoration-line: underline;
             color: #707070;
-
             cursor: pointer;
           }
 

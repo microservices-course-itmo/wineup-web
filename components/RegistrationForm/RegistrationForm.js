@@ -1,16 +1,18 @@
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
+import Dropdown from '../Dropdown'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
+const dateRegex = /[`№!@#$%^&*()_+=[\]{};':"\\|,<>/?~\- a-zA-Zа-яА-Я]/
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
 const DATE_MAX_LENGTH = 11
@@ -25,6 +27,19 @@ const parseIntToDecimal = value => {
   return parseInt(value, 10)
 }
 
+const options = [
+  {
+    id: 1,
+    value: 'Москва',
+    selected: true,
+  },
+  {
+    id: 2,
+    value: 'Санкт-Петербург',
+    selected: false,
+  },
+]
+
 const RegistrationForm = props => {
   const {
     username,
@@ -36,6 +51,7 @@ const RegistrationForm = props => {
     authForm,
     isCalendarOpen,
     uid,
+    cityId,
   } = props
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
@@ -84,6 +100,24 @@ const RegistrationForm = props => {
             payload: CalendarErrors.userYoungAge,
           })
         }
+        if (
+          parseIntToDecimal(day) < 1 ||
+          parseIntToDecimal(month) < 1 ||
+          parseIntToDecimal(year) < 1
+        ) {
+          validConditions = false
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: CalendarErrors.negativeValue,
+          })
+        }
+        if (dateRegex.test(date)) {
+          validConditions = false
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: CalendarErrors.invalidData,
+          })
+        }
         if (validConditions) {
           dispatch({ type: ReducerType.clearCalendarError })
           const isLastCharValid = date.charAt(date.length - 1) !== '.'
@@ -129,7 +163,7 @@ const RegistrationForm = props => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
         birthday: date,
-        cityId: 1,
+        cityId,
         fireBaseToken: uid,
         name: username,
       }
@@ -186,16 +220,7 @@ const RegistrationForm = props => {
             dispatch={dispatch}
           />
         </div>
-        <div className='inputForm'>
-          <div className='formName'>Город</div>
-          <input className='inputField' placeholder='Москва' />
-          <input className='errorMessage' disabled />
-          <img
-            className='icon2'
-            src={`${prefix}assets/authorization/arrow.svg`}
-            alt=''
-          />
-        </div>
+        <Dropdown options={options} defaultValue={options[0].value} />
         <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'
@@ -219,6 +244,7 @@ const RegistrationForm = props => {
             height: 797px;
             box-shadow: 0 0 18px rgba(0, 0, 0, 0.48);
           }
+
           .header {
             width: 453px;
             height: 35px;
@@ -229,11 +255,13 @@ const RegistrationForm = props => {
             text-align: center;
             font-weight: bold;
           }
+
           .inputForm {
             margin: 2px 93px 12px 93px;
             width: 499px;
             height: 110px;
           }
+
           .icon1 {
             position: relative;
             cursor: pointer;
@@ -241,6 +269,7 @@ const RegistrationForm = props => {
             margin: 0 0 0 auto;
             right: 16px;
           }
+
           .formName {
             height: 22px;
             margin-bottom: 10px;
@@ -248,9 +277,11 @@ const RegistrationForm = props => {
             font-family: 'PT Sans', sans-serif;
             color: black;
           }
+
           .calendarInputWrapper {
             margin-top: 10px;
           }
+
           .inputField {
             height: 53px;
             text-indent: 25px;
@@ -260,10 +291,12 @@ const RegistrationForm = props => {
             border: 1px solid #9e9e9e;
             border-radius: 5px;
           }
+
           .inputField:active {
             border: 0;
             border-bottom: 2px solid red;
           }
+
           .errorMessage {
             color: #cf3737;
             font-family: 'PT Sans', sans-serif;
@@ -277,11 +310,13 @@ const RegistrationForm = props => {
             padding: 0 0 2px;
             background: inherit;
           }
+
           .icon2 {
             position: relative;
             top: -47.5px;
             left: 467px;
           }
+
           .soulContract {
             margin: 5px 185px 5px 185px;
             width: 315px;
@@ -294,6 +329,7 @@ const RegistrationForm = props => {
             text-align: center;
             color: #9e9e9e;
           }
+
           .authButton {
             width: 274px;
             height: 58px;

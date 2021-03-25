@@ -104,18 +104,15 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
             display: block;
             padding: 0;
             margin: -25px 30px 0 auto;
-
             background: transparent;
             border: none;
             outline: 0;
-
             font-size: 16px;
             font-weight: 300;
             font-family: 'Roboto', sans-serif;
             font-style: italic;
             text-decoration-line: underline;
             color: #707070;
-
             cursor: pointer;
           }
 
@@ -133,17 +130,14 @@ const ReviewCard = ({ logDate, logName, stars, review }) => {
             position: relative;
             margin-top: 10px;
             padding-right: 0;
-
             overflow: hidden;
           }
 
           .module p {
             margin-right: 50px;
-
             font-size: 18px;
             font-weight: 300;
             font-family: 'Roboto', sans-serif;
-
             color: #000000;
           }
         `}

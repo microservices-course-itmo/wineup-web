@@ -1,8 +1,21 @@
-import React, { useState } from 'react'
-import { useRecoilCallback, useRecoilValue } from 'recoil'
-import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
+import React, { useState, useEffect } from 'react'
+import {
+  useRecoilCallback,
+  useRecoilValue,
+  useRecoilState,
+  useRecoilValueLoadable,
+} from 'recoil'
+import {
+  addWineQuery,
+  deleteWineQuery,
+  favoritesState,
+  contentQuery,
+  sortedFavoritesWinesState,
+  favoritesStored,
+} from '../Favorites/favoritesStore'
+import { winesState } from '../Catalog/store'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../utils/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -43,13 +56,38 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
 const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const userExist = useRecoilValue(userState)
   const [accessToken] = useLocalStorage('accessToken')
+  const [, setFavorites] = useRecoilState(favoritesState)
+  const [, setStoredFavorites] = useRecoilState(favoritesStored)
+  const storedFavorites = useRecoilValue(favoritesStored)
   const [isFavorite, setIsFavorite] = useState(favorite)
+
+  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
+  const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+  const allWinesStore = useRecoilValue(winesState)
 
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
+    // console.log(storedFavorites)
+    // const copyAll = allWinesStore.map(a => Object.assign({},a)) // Do I need to copy???
+    let item = allWinesStore.find(x => x.wine_position_id === id)
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    copy.push(item)
+    setSortedWine(() => copy)
   })
   const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(deleteWineQuery([id, accessToken]))
+
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    // for (var i=0; i < copy.length; i++) {
+    //   if (copy[i].wine_position_id === id) {
+    //       return copy[i].indexOf;
+    //   }
+    let item = copy.find(x => x.wine_position_id === id)
+    let index = copy.indexOf(item)
+    copy.splice(index, 1)
+    // setStoredFavorites(copy)
+    setSortedWine(() => copy)
+    console.log(sortedWine)
   })
   const clickHeart = (id, token) => {
     if (userExist) {
@@ -67,61 +105,59 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
       <h2 className='name'>{info.name}</h2>
       <div className='card'>
         <div className='img'>
-          <img className='wine-img' src={imageSrc} alt='bottle' />
-          <p className='score-caption'>
+          <img className='wineImg' src={imageSrc} alt='bottle' />
+          <p className='scoreCaption'>
             Подходит вам на:
-            <span className='score-percent'>{info.fitsPercent}%</span>
+            <span className='scorePercent'>{info.fitsPercent}%</span>
           </p>
         </div>
 
         <div className='info'>
-          <p className='info-title'>
-            Виноград: <span className='info-text'>{info.grape}</span>
+          <p className='infoTitle'>
+            Виноград: <span className='infoText'>{info.grape}</span>
           </p>
-          <p className='info-title'>
-            Объем: <span className='info-text'>{formatNumber(info.size)}</span>
+          <p className='infoTitle'>
+            Объем: <span className='infoText'>{formatNumber(info.size)}</span>
           </p>
-          <p className='info-title'>
-            Страна: <span className='info-text'>{info.country}</span>
+          <p className='infoTitle'>
+            Страна: <span className='infoText'>{info.country}</span>
           </p>
-          <p className='info-title'>
-            Сахар: <span className='info-text'>{info.sugar}</span>
+          <p className='infoTitle'>
+            Сахар: <span className='infoText'>{info.sugar}</span>
           </p>
-          <p className='info-title'>
-            Цвет: <span className='info-text'>{info.color}</span>
+          <p className='infoTitle'>
+            Цвет: <span className='infoText'>{info.color}</span>
           </p>
-          <p className='info-title'>
-            Магазин: <span className='info-text'>{info.shop}</span>
+          <p className='infoTitle'>
+            Магазин: <span className='infoText'>{info.shop}</span>
           </p>
-          <p className='info-title'>
-            Крепость: <span className='info-text'>{info.alcohol}</span>
+          <p className='infoTitle'>
+            Крепость: <span className='infoText'>{info.alcohol}</span>
           </p>
-          <p className='info-title'>
-            Производитель: <span className='info-text'>{info.brand}</span>
+          <p className='infoTitle'>
+            Производитель: <span className='infoText'>{info.brand}</span>
           </p>
-          <p className='info-title'>
-            Винтаж: <span className='info-text'>{info.year}</span>
+          <p className='infoTitle'>
+            Винтаж: <span className='infoText'>{info.year}</span>
           </p>
 
-          <a href='https://amwine.ru/' className='go-to-shop'>
+          <a href='https://amwine.ru/' className='goToShop'>
             Перейти в магазин
             <img src='../assets/card/cart-icon.svg' alt='cart-icon' />
           </a>
         </div>
 
-        <div className='right-block'>
+        <div className='rightBlock'>
           {info.discount ? (
             <>
               <p>
-                <span className='previous-price'>{info.price}</span> -
+                <span className='previousPrice'>{info.price}</span> -
                 {info.discount.percent}%
               </p>
-              <p className='current-price'>
-                {formatPrice(info.discount.price)}
-              </p>
+              <p className='currentPrice'>{formatPrice(info.discount.price)}</p>
             </>
           ) : (
-            <p className='current-price price-pt'>{formatPrice(info.price)}</p>
+            <p className='currentPrice pricePt'>{formatPrice(info.price)}</p>
           )}
 
           <button
@@ -155,7 +191,6 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
             font-weight: bold;
             font-size: 32px;
             line-height: 43px;
-
             color: #000000;
           }
 
@@ -163,10 +198,8 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
             width: 100%;
             margin-top: 80px;
             padding-bottom: 60px;
-
             display: flex;
             justify-content: space-between;
-
             background: linear-gradient(
               180deg,
               white 0,
@@ -181,13 +214,12 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
 
           .img {
             flex-basis: 33%;
-
             display: flex;
             flex-direction: column;
             align-items: center;
           }
 
-          .wine-img {
+          .wineImg {
             width: 120px;
             height: auto;
             margin-bottom: 25px;
@@ -196,32 +228,28 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
           .info {
             flex-basis: 33%;
             min-width: 315px;
-
             display: flex;
             flex-direction: column;
-
             padding: 40px 50px;
-
             background: rgba(252, 252, 252, 0.91);
             box-shadow: 0 4px 29px rgba(0, 0, 0, 0.15);
           }
 
-          .info-title {
+          .infoTitle {
             margin-bottom: 20px;
             font-family: PT Sans, sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 22px;
             line-height: 28px;
-
             color: #9e9e9e;
           }
 
-          .info-text {
+          .infoText {
             color: #000;
           }
 
-          .go-to-shop {
+          .goToShop {
             margin-top: 20px;
             padding: 10px;
             display: flex;
@@ -237,19 +265,19 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
             transition: 0.2s;
           }
 
-          .go-to-shop img {
+          .goToShop img {
             margin-left: 10px;
           }
 
-          .go-to-shop:hover {
+          .goToShop:hover {
             background: #af2f4e;
           }
 
-          .go-to-shop:focus {
+          .goToShop:focus {
             background: #680019;
           }
 
-          .right-block {
+          .rightBlock {
             margin-top: 105px;
             flex-basis: 33%;
             font-family: Playfair Display, serif;
@@ -258,58 +286,51 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
             font-size: 35px;
             line-height: 47px;
             text-align: center;
-
             color: #fff;
           }
 
-          .previous-price {
+          .previousPrice {
             text-decoration-line: line-through;
             color: #000;
           }
 
-          .current-price {
+          .currentPrice {
             font-size: 50px;
           }
 
-          .price-pt {
+          .pricePt {
             padding-top: 1.5rem;
           }
 
-          .score-caption {
+          .scoreCaption {
             padding-right: 15px;
-
             font-family: PT Sans, sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 22px;
             line-height: 28px;
             text-align: left;
-
             color: #000000;
           }
 
-          .score-percent {
+          .scorePercent {
             padding-left: 15px;
             font-style: normal;
             font-weight: 400;
             font-size: 22px;
             line-height: 28px;
-
             color: #ecab2e;
           }
 
           .favorite {
             margin: 50px 20px 0 auto;
             padding: 10px 20px;
-
             display: flex;
             align-items: center;
-
             font-family: 'PT Sans', sans-serif;
             font-weight: 400;
             font-size: 24px;
             color: #931332;
-
             border: 1px solid #931332;
             border-radius: 8px;
             background-color: transparent;

@@ -6,6 +6,10 @@ export const favoritesState = atom({
   key: 'favorites',
   default: [],
 })
+export const favoritesStored = atom({
+  key: 'favoritesStored',
+  default: [],
+})
 export const favoritesSortState = atom({
   key: 'favoritesSortState',
   default: 'recommendations',
@@ -74,6 +78,7 @@ export const sortedFavoritesWinesState = selector({
         return list
     }
   },
+  set: ({ set }, newValue) => set(favoritesState, newValue),
 })
 export const sorts = atom({
   key: 'sortsFavorites',

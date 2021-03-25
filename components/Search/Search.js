@@ -11,16 +11,16 @@ const Search = () => {
   }, [])
 
   return (
-    <div className='search-form'>
+    <div className='searchForm'>
       <input
         onChange={handleChangeField}
-        className='search-field'
+        className='searchField'
         id='f1'
         value={input}
       />
       <button
         type='button'
-        className='search-button'
+        className='searchButton'
         onClick={handleClickButton}
       >
         <img
@@ -32,13 +32,13 @@ const Search = () => {
       </button>
       <style jsx>
         {`
-          .search-form {
+          .searchForm {
             font: 18px Sans;
             display: flex;
             margin: 10px;
           }
 
-          .search-field {
+          .searchField {
             border-radius: 20px 0 0 20px;
             border: 1px solid #9e9e9e;
             margin: 0 0.5% 0 0;
@@ -47,7 +47,6 @@ const Search = () => {
             padding-left: 20px;
             //text-indent: 20px;
             outline: none;
-
             font-family: PT Sans, sans-serif;
             font-style: normal;
             font-weight: normal;
@@ -55,21 +54,19 @@ const Search = () => {
             line-height: 23px;
           }
 
-          .search-field::placeholder {
+          .searchField::placeholder {
             color: black;
             padding: 20px;
           }
 
-          .search-button {
+          .searchButton {
             height: 38px;
             width: 24.5%;
             //padding: 0;
             //margin: 0;
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             background: #931332;
             border-radius: 0 20px 20px 0;
             border: 0;
@@ -87,16 +84,16 @@ const Search = () => {
             margin-right: 10px;
           }
 
-          .search-button:hover {
+          .searchButton:hover {
             background: #af2f4e;
           }
 
-          .search-button:focus {
+          .searchButton:focus {
             background: #680019;
           }
 
           @media screen and (max-width: 600px) {
-            .search-field {
+            .searchField {
               width: 100%;
               padding-left: 40px;
               border-radius: 20px;
@@ -107,7 +104,7 @@ const Search = () => {
               background-position: 45px 19px;
             }
 
-            .search-button {
+            .searchButton {
               display: none;
             }
           }
