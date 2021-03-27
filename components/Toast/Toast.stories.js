@@ -2,12 +2,22 @@ import React from 'react'
 import Toast from './Toast'
 
 export default {
-  title: 'Toast',
+  title: '/Toast',
   component: Toast,
+  argTypes: {
+    type: {
+      description: 'Тип, может быть success, warning и error',
+    },
+  },
 }
 
 const Template = args => <Toast {...args} />
+
 export const toast = Template.bind({})
+
 toast.args = {
-  message: 'Внимание! Вы не зарегистрированы',
+  type: 'success',
+  text: 'Вы успешно зарегистроровались в системе',
 }
+
+toast.storyName = 'Toast'

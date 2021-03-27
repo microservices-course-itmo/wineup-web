@@ -25,8 +25,9 @@ const NotificationsTypeGroup = ({ type = 'unread', notifications = [] }) => (
     <h2 className='title'>{titles(type)}</h2>
 
     <div className='container'>
-      {notifications.map(notification => (
+      {notifications.map((notification, index) => (
         <Notification
+          key={`${type}-${index + 1}`}
           text={notification.text}
           time={notification.time}
           type={type}
