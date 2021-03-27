@@ -33,6 +33,7 @@ const AuthorizationForm = () => {
     telephoneError,
     isMessageVisible,
     finalMessage,
+    cityName,
   } = formState
 
   const exitAuthForm = e => {
@@ -70,6 +71,7 @@ const AuthorizationForm = () => {
             uid={uid}
             date={date}
             cityId={cityId}
+            cityName={cityName}
             authForm={authForm}
             dispatch={dispatch}
             username={username}

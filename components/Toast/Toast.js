@@ -6,26 +6,45 @@ import React from 'react'
 
 const Toast = ({ message, onClose }) => {
   return (
-    <div className='notificationContainer'>
-      <div className='notificationMsg'>{message}</div>
-      <button className='notificationBtn' type='button' onClick={onClose}>
-        <img className='closeBtnImg' src='assets/toast/close.svg' alt='close' />
-      </button>
+    <div className='toastWrapper'>
+      <div className='notificationContainer'>
+        <div className='notificationMsg'>{message}</div>
+        <button className='notificationBtn' type='button' onClick={onClose}>
+          <img
+            className='closeBtnImg'
+            src='assets/toast/close.svg'
+            alt='close'
+          />
+        </button>
+      </div>
       <style jsx>
         {`
-          .notificationContainer {
-            position: absolute;
-            left: 0;
-            right: 0;
-            max-width: 1440px;
-            margin: 0 auto;
-            border: 1px black solid;
-            border-radius: 5px;
-            background-color: #b1e86b;
+          .toastWrapper {
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+          }
+
+          .notificationContainer {
+            width: 100%;
+            max-width: 700px;
+            display: block;
+            background: #fff;
+            border: 1px solid black;
+            border-radius: 5px;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 10px 20px 0 rgb(0 0 0 / 5%);
+            z-index: 100000;
           }
           .notificationBtn {
             position: absolute;

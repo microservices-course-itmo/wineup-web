@@ -1,5 +1,6 @@
 import React from 'react'
 import CustomInput from '../CustomInput'
+import Dropdown from '../Dropdown'
 
 const InputTypes = {
   name: 'name-input',
@@ -32,11 +33,15 @@ const UserInfoBox = ({
           value={name}
           onChange={onInputChange}
         />
-        <CustomInput
-          id={InputTypes.cityName}
-          label='Город'
-          value={cityName}
-          onChange={onInputChange}
+        <Dropdown
+          defaultValue={cityName}
+          width='100%'
+          backgroundColor='rgba(196, 196, 196, 0.16)'
+          margin='0'
+          colorLabel='#818181'
+          color='rgb(84, 84, 84)'
+          border='2px solid #9e9e9e'
+          marginLabel='35px 0 15px'
         />
         <CustomInput
           id={InputTypes.phone}
