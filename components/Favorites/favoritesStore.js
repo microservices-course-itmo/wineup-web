@@ -1,13 +1,13 @@
-import { atom, selector, selectorFamily, waitForAll } from 'recoil'
+import { atom, selector, selectorFamily } from 'recoil'
 import { sortAsc, sortDesc } from '../Catalog/utils'
 import api from '../../api'
 
+export const emptyState = atom({
+  key: 'emptyState',
+  default: false,
+})
 export const favoritesState = atom({
   key: 'favorites',
-  default: [],
-})
-export const favoritesStored = atom({
-  key: 'favoritesStored',
   default: [],
 })
 export const favoritesSortState = atom({
@@ -48,17 +48,10 @@ export const winesQuery = selectorFamily({
     return response
   },
 })
-// export const contentQuery = selectorFamily({
-//   key: 'contentQuery',
-//   get: token => async ({ get }) => {
-//     const favoriteIds = get(favoritesQuery(token))
-//     const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
-//     return wines
-//   },
-// })
+
 export const contentQuery = selectorFamily({
   key: 'contentQuery',
-  get: token => async ({ get }) => {
+  get: token => async () => {
     const response = await api.getFavoritesWines(token)
 
     return response

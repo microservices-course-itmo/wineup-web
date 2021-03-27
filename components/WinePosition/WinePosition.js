@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import {
-  useRecoilCallback,
-  useRecoilValue,
-  useRecoilState,
-  useRecoilValueLoadable,
-} from 'recoil'
+import React, { useState } from 'react'
+import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
 import {
   addWineQuery,
   deleteWineQuery,
-  favoritesState,
-  contentQuery,
   sortedFavoritesWinesState,
-  favoritesStored,
+  emptyState,
 } from '../Favorites/favoritesStore'
 import { winesState } from '../Catalog/store'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
@@ -56,38 +49,37 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
 const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const userExist = useRecoilValue(userState)
   const [accessToken] = useLocalStorage('accessToken')
-  const [, setFavorites] = useRecoilState(favoritesState)
-  const [, setStoredFavorites] = useRecoilState(favoritesStored)
-  const storedFavorites = useRecoilValue(favoritesStored)
   const [isFavorite, setIsFavorite] = useState(favorite)
 
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
-
+  const [, setEmpty] = useRecoilState(emptyState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
-    // console.log(storedFavorites)
-    // const copyAll = allWinesStore.map(a => Object.assign({},a)) // Do I need to copy???
-    let item = allWinesStore.find(x => x.wine_position_id === id)
+    const item = allWinesStore.find(x => x.wine_position_id === id)
+    // eslint-disable-next-line
     const copy = sortedWine.map(a => Object.assign({}, a))
-    copy.push(item)
-    setSortedWine(() => copy)
+    if (copy.length === 0) {
+      setEmpty(false)
+      copy.push(item)
+    } else {
+      setEmpty(true)
+      copy.push(item)
+      setSortedWine(() => copy)
+    }
   })
   const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(deleteWineQuery([id, accessToken]))
-
+    // eslint-disable-next-line
     const copy = sortedWine.map(a => Object.assign({}, a))
-    // for (var i=0; i < copy.length; i++) {
-    //   if (copy[i].wine_position_id === id) {
-    //       return copy[i].indexOf;
-    //   }
-    let item = copy.find(x => x.wine_position_id === id)
-    let index = copy.indexOf(item)
+    const item = copy.find(x => x.wine_position_id === id)
+    const index = copy.indexOf(item)
     copy.splice(index, 1)
-    // setStoredFavorites(copy)
+    if (copy.length === 0) {
+      setEmpty(true)
+    }
     setSortedWine(() => copy)
-    console.log(sortedWine)
   })
   const clickHeart = (id, token) => {
     if (userExist) {
@@ -163,10 +155,7 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
           <button
             type='button'
             className='favorite'
-            onClick={() =>
-              // clickHeart(window.location.pathname.substring(6), accessToken)
-              clickHeart(wineId, accessToken)
-            }
+            onClick={() => clickHeart(wineId, accessToken)}
           >
             {isFavorite ? (
               <>

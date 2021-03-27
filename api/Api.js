@@ -160,24 +160,6 @@ class Api {
     return response.data
   }
 
-  // async getFavoritesWines(token) {
-  //   const response = await this.sendRequest({
-  //     url: '/user-service/favorites/list',
-  //     method: 'GET',
-  //     data: {},
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-
-  //   if (response.status !== 200) {
-  //     throw new Error('Server Error')
-  //   }
-
-  //   return response.data
-  // }
-
   async getFavoritesWines(token) {
     const response = await this.sendRequest({
       url: '/catalog-service/favorites/',
@@ -195,6 +177,7 @@ class Api {
 
     return response.data
   }
+
   async getFavoritesWinesByUserId(userId) {
     const response = await this.sendRequest({
       url: `/catalog-service/position/true/byId/${userId}`,

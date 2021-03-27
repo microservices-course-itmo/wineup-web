@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   useRecoilValueLoadable,
   useRecoilState,
@@ -17,7 +17,7 @@ import {
   deleteQuery,
   favoritesSortState,
   sortedFavoritesWinesState,
-  favoritesStored,
+  emptyState,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -25,29 +25,29 @@ import {
   sortingButtons,
 } from '../components/Catalog/utils'
 import useLocalStorage from '../hooks/useLocalStorage'
+
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const [, setFavorites] = useRecoilState(favoritesState)
+  const empty = useRecoilValue(emptyState)
+  const [, setEmpty] = useRecoilState(emptyState)
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
-  const [sort, setSortedWinde] = useRecoilState(sortedFavoritesWinesState)
-  const storedFavorites = useRecoilValue(favoritesStored)
-  const [, setStoredFavorites] = useRecoilState(favoritesStored)
+  const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
     await snapshot.getPromise(deleteQuery(accessToken))
-    setFavorites('')
+    setSortedWine(() => '')
+    setEmpty(true)
   })
-  const copiedFavorites = [...sortedWine]
   useEffect(() => {
-    if (sortedWine.length === 0) {
+    if (sortedWine.length === 0 && !empty) {
       if (contentQueryLoadable.state === 'hasValue') {
         setFavorites(() => contentQueryLoadable.contents)
-        setStoredFavorites(copiedFavorites)
+        setEmpty(true)
       }
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
-  console.log(storedFavorites)
   return (
     <div className='wrapper'>
       <Header />
@@ -76,7 +76,7 @@ const Favorite = () => {
                 wineId={wine.wine_position_id}
                 imageSrc={parseImageSrc(wine.image)}
                 info={getWineInfo(wine)}
-                isLiked={true}
+                isLiked
                 color={wine.color}
               />
             ))
