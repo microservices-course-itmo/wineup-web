@@ -64,8 +64,9 @@ const Profile = () => {
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
   const [toastVisibility, setToastVisibility] = useState(false)
 
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const [profileData, setProfileData] = useState(null)
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+  const [phoneChangeError, setPhoneChangeError] = useState(null)
 
   const resetFields = () => {
     if (currentUser) {
@@ -126,35 +127,44 @@ const Profile = () => {
       .catch(console.error)
   }
 
+  const onClosePhoneConfirmModal = () => {
+    setIsConfirmModalVisible(false)
+  }
+
   const onSubmitPhoneChange = verificationCode => {
     let applicationVerifier
     try {
       applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-        size: 'invisible',
+        size: 'normal',
       })
     } catch (e) {
       applicationVerifier = document.getElementById('recaptcha')
     }
-    const provider = new firebase.auth.PhoneAuthProvider()
-    provider
-      .verifyPhoneNumber(phoneInputState, applicationVerifier)
-      .then(verificationId => {
-        const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
-          verificationId,
-          verificationCode
-        )
-        firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
-      })
-      .then(res => {
-        console.log(res)
-        updateProfile()
-      })
-      .catch(console.error)
-  }
-
-  const onCancelPhoneChange = () => {
-    setIsConfirmModalVisible(false)
-    updateProfile()
+    try {
+      const provider = new firebase.auth.PhoneAuthProvider()
+      provider
+        .verifyPhoneNumber(phoneInputState, applicationVerifier)
+        .then(verificationId => {
+          try {
+            const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
+              verificationId,
+              verificationCode
+            )
+            firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
+          } catch (e) {
+            setPhoneChangeError(e.code)
+          }
+        })
+        .then(() => {
+          onClosePhoneConfirmModal()
+          updateProfile()
+        })
+        .catch(e => {
+          setPhoneChangeError(e.code)
+        })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const onSubmit = async () => {
@@ -189,7 +199,8 @@ const Profile = () => {
       <ConfirmPhoneModal
         visible={isConfirmModalVisible}
         onSubmit={onSubmitPhoneChange}
-        onClose={onCancelPhoneChange}
+        onClose={onClosePhoneConfirmModal}
+        errorCode={phoneChangeError}
       />
       <div className='content'>
         <header className='mainHeader'>Личный кабинет</header>

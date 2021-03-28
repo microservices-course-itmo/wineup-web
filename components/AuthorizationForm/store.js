@@ -91,7 +91,6 @@ export const reducer = (state, action) => {
     case ReducerType.setUid:
       return { ...state, token: payload }
     case ReducerType.setFinalMessage:
-      console.log(payload)
       return { ...state, finalMessage: payload }
     case ReducerType.setFB:
       return { ...state, fb: payload }
