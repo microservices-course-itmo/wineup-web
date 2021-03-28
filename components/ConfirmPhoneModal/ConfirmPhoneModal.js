@@ -70,7 +70,7 @@ const ConfirmPhoneModal = ({ visible, errorCode, onSubmit, onClose }) => {
               onClick={() => onSubmit(verificationCode)}
             />
           </div>
-          {!errorMessage && <div id='recaptcha' />}
+          <div id='recaptcha' />
         </div>
       </ModalWrapper>
       <style jsx>{`

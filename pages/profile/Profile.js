@@ -129,6 +129,7 @@ const Profile = () => {
 
   const onClosePhoneConfirmModal = () => {
     setIsConfirmModalVisible(false)
+    setPhoneChangeError(null)
   }
 
   const onSubmitPhoneChange = verificationCode => {
@@ -156,7 +157,7 @@ const Profile = () => {
           }
         })
         .then(() => {
-          onClosePhoneConfirmModal()
+          // onClosePhoneConfirmModal()
           updateProfile()
         })
         .catch(e => {
