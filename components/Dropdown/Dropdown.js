@@ -142,7 +142,7 @@ const Dropdown = ({
           }
 
           .option:last-child {
-            border-bottom: 1px solid #9e9e9e;
+            border-bottom: ${border};
             border-radius: 0 0 5px 5px;
           }
 
