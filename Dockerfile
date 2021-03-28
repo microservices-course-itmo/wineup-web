@@ -7,12 +7,6 @@ COPY . /out
 
 RUN npm install
 
-COPY . /out
-
 RUN npm run build
-COPY . /out
-
-RUN npm run export
-COPY . /out
-
-CMD [ "npm", "run", "start" ]
+EXPOSE 3000
+CMD npm run start
