@@ -157,13 +157,14 @@ const Profile = () => {
           }
         })
         .then(() => {
-          // onClosePhoneConfirmModal()
+          onClosePhoneConfirmModal()
           updateProfile()
         })
         .catch(e => {
           setPhoneChangeError(e.code)
         })
     } catch (e) {
+      setPhoneChangeError(e.code)
       console.error(e)
     }
   }
