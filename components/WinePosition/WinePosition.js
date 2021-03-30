@@ -54,10 +54,18 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
+  const [, setAllWinesStore] = useRecoilState(winesState)
   const [, setEmpty] = useRecoilState(emptyState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
-    const item = allWinesStore.find(x => x.wine_position_id === id)
+    // eslint-disable-next-line
+    const copyAll = allWinesStore.map(a => Object.assign({}, a))
+    const item = copyAll.find(x => x.wine_position_id === id)
+    item.liked = 'true'
+    const index = copyAll.indexOf(item)
+    copyAll.splice(index, 1)
+    copyAll.push(item)
+    setAllWinesStore(() => copyAll)
     // eslint-disable-next-line
     const copy = sortedWine.map(a => Object.assign({}, a))
     if (copy.length === 0) {

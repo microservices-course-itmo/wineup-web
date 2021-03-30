@@ -13,12 +13,13 @@ import {
 } from '../../components/Catalog/utils'
 import Loader from '../../components/Loader'
 import api from '../../api'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
-  get: id => async () => {
+  get: ([id, token]) => async () => {
     if (id) {
-      const response = await api.getWineById(id)
+      const response = await api.getWineById(id, token)
 
       return response
     }
@@ -28,9 +29,10 @@ export const winesPositionState = selectorFamily({
 })
 
 const Wine = () => {
+  const [accessToken] = useLocalStorage('accessToken')
   const router = useRouter()
   const { state, contents } = useRecoilValueLoadable(
-    winesPositionState(router.query.id)
+    winesPositionState([router.query.id, accessToken])
   )
 
   return (

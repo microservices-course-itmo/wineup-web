@@ -89,13 +89,14 @@ class Api {
     return response.data
   }
 
-  async getWineById(id) {
+  async getWineById(id, token) {
     const response = await this.sendRequest({
       url: `/catalog-service/position/true/byId/${id}`,
       method: 'GET',
       data: {},
       headers: {
         accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        Authorization: `Bearer ${token}`,
       },
     })
 
@@ -178,7 +179,7 @@ class Api {
     return response.data
   }
 
-  async getFavoritesWinesByUserId(userId) {
+  async getFavoritesWinesByUserId(userId, token) {
     const response = await this.sendRequest({
       url: `/catalog-service/position/true/byId/${userId}`,
       method: 'GET',
@@ -186,6 +187,7 @@ class Api {
       headers: {
         accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
 
