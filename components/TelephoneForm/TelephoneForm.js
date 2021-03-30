@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import firebase from 'firebase'
 import { ReducerType } from '../AuthorizationForm/store'
 import CustomFormButton from '../CustomFormButton/CustomFormButton'
 
@@ -6,7 +7,7 @@ const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneForm = props => {
-  const { dispatch, authForm, telephone, telephoneError } = props
+  const { dispatch, telephone, telephoneError } = props
   const handleTelephone = useCallback(
     e => {
       const telephone = e.target.value
@@ -34,7 +35,23 @@ const TelephoneForm = props => {
   )
 
   const handleFirstForm = async () => {
+    let applicationVerifier
+    try {
+      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+        size: 'normal',
+        callback: () => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // ...
+        },
+      })
+    } catch (e) {
+      applicationVerifier = document.getElementById('recaptcha')
+    }
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
+      const fb = await firebase
+        .auth()
+        .signInWithPhoneNumber(telephone, applicationVerifier)
+      dispatch({ type: ReducerType.setFB, payload: fb })
       dispatch({ type: ReducerType.setAuthForm, payload: 2 })
     } else
       dispatch({
@@ -42,6 +59,12 @@ const TelephoneForm = props => {
         payload:
           'Ошибка: Неправильный формат номера телефона - +7-XXX-XXX-XX-XX',
       })
+  }
+
+  const handlePressEnter = event => {
+    if (event.key === 'Enter') {
+      handleFirstForm()
+    }
   }
 
   return (
@@ -56,9 +79,12 @@ const TelephoneForm = props => {
           placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
           value={telephone}
           onChange={handleTelephone}
+          onKeyDown={handlePressEnter}
         />
 
-        <input className='errorMessage' value={telephoneError} disabled />
+        {telephoneError && (
+          <span className='errorMessage'>{telephoneError}</span>
+        )}
       </div>
 
       <CustomFormButton
@@ -68,13 +94,17 @@ const TelephoneForm = props => {
         text='Запросить код подтверждения'
       />
 
-      <div id='recaptcha' />
+      <div id='recaptcha' className='captcha' />
 
       <style jsx>
         {`
+          .captcha {
+            position: relative;
+            left: 200px;
+          }
           .authForm1 {
             background: white;
-            display: ${authForm === 1 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

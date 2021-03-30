@@ -1,15 +1,41 @@
-import { useReducer } from 'react'
+import React, { useReducer } from 'react'
 
 import { useRouter } from 'next/router'
 import { initialState, reducer } from './store'
 import TelephoneForm from '../TelephoneForm'
 import TelephoneAndCodeForm from '../TelephoneAndCodeForm'
 import RegistrationForm from '../RegistrationForm'
-import AuthorizationStatus from '../AuthorizationStatus'
+import Toast from '../Toast'
+
+const formCodes = {
+  closedForm: 0,
+  telephoneForm: 1,
+  telephoneAndCodeForm: 2,
+  registrationForm: 3,
+}
 
 const AuthorizationForm = () => {
   const router = useRouter()
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
+  const {
+    uid,
+    date,
+    cityId,
+    telCode,
+    authForm,
+    username,
+    dateParts,
+    telephone,
+    telCodeError,
+    usernameError,
+    calendarError,
+    isCalendarOpen,
+    telephoneError,
+    isMessageVisible,
+    finalMessage,
+    fb,
+  } = formState
+
   const exitAuthForm = e => {
     if (e.target.className.includes('authFormMain')) {
       setTimeout(() => {
@@ -18,49 +44,64 @@ const AuthorizationForm = () => {
     }
   }
 
+  const currentAuthForm = () => {
+    switch (authForm) {
+      case formCodes.telephoneForm:
+        return (
+          <TelephoneForm
+            dispatch={dispatch}
+            telephone={telephone}
+            telephoneError={telephoneError}
+          />
+        )
+      case formCodes.telephoneAndCodeForm:
+        return (
+          <TelephoneAndCodeForm
+            telCode={telCode}
+            dispatch={dispatch}
+            telephone={telephone}
+            telCodeError={telCodeError}
+            telephoneError={telephoneError}
+            isMessageVisible={isMessageVisible}
+            fb={fb}
+          />
+        )
+      case formCodes.registrationForm:
+        return (
+          <RegistrationForm
+            uid={uid}
+            date={date}
+            cityId={cityId}
+            authForm={authForm}
+            dispatch={dispatch}
+            username={username}
+            dateParts={dateParts}
+            isCalendarOpen={isCalendarOpen}
+            usernameError={usernameError}
+            calendarError={calendarError}
+            isMessageVisible={isMessageVisible}
+          />
+        )
+      default:
+        return null
+    }
+  }
+
   return (
     <div>
-      <div className='authFormMain' onClick={exitAuthForm}>
-        <TelephoneForm
-          telephone={formState.telephone}
-          telephoneError={formState.telephoneError}
-          authForm={formState.authForm}
-          dispatch={dispatch}
-        />
-
-        <TelephoneAndCodeForm
-          authForm={formState.authForm}
-          telephone={formState.telephone}
-          telephoneError={formState.telephoneError}
-          telCode={formState.telCode}
-          telCodeError={formState.telCodeError}
-          dispatch={dispatch}
-        />
-
-        <RegistrationForm
-          authForm={formState.authForm}
-          dispatch={dispatch}
-          dateParts={formState.dateParts}
-          isCalendarOpen={formState.isCalendarOpen}
-          date={formState.date}
-          uid={formState.uid}
-          username={formState.username}
-          usernameError={formState.usernameError}
-          calendarError={formState.calendarError}
-          cityId={formState.cityId}
-          cityName={formState.cityName}
-          isDropdownVisible={formState.isDropdownVisible}
-        />
-
-        <AuthorizationStatus
+      {authForm !== formCodes.closedForm && (
+        <div className='authFormMain' onClick={exitAuthForm}>
+          {currentAuthForm()}
+        </div>
+      )}
+      {isMessageVisible && (
+        <Toast
           type='success'
-          title='Успех!'
-          text='Вы успешно зарегистроровались в системе'
-          isVisible={formState.isMessageVisible}
+          text={finalMessage}
           closeCallback={() => router.push('/')}
         />
-      </div>
-
+      )}
+      <div id='recaptcha' />
       <style jsx>
         {`
           .authFormMain {

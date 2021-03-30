@@ -6,6 +6,14 @@ const userState = atom({
   default: null,
 })
 
+const errorState = atom({
+  key: 'error',
+  default: {
+    error: false,
+    message: '',
+  },
+})
+
 const notificationsState = atom({
   key: 'notifications',
   default: [
@@ -57,6 +65,7 @@ const notificationsState = atom({
     },
   ],
 })
+
 const unreadNotificationsCountState = selector({
   key: 'unread-notifications-count',
   get: ({ get }) => {
@@ -68,4 +77,9 @@ const unreadNotificationsCountState = selector({
   },
 })
 
-export { userState, notificationsState, unreadNotificationsCountState }
+export {
+  userState,
+  errorState,
+  notificationsState,
+  unreadNotificationsCountState,
+}

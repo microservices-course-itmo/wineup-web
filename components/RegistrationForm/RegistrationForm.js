@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
+import { userState, errorState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
@@ -48,12 +48,12 @@ const RegistrationForm = props => {
     calendarError,
     dateParts,
     dispatch,
-    authForm,
     isCalendarOpen,
     uid,
     cityId,
   } = props
   const [, setUser] = useRecoilState(userState)
+  const [, setError] = useRecoilState(errorState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
@@ -171,10 +171,18 @@ const RegistrationForm = props => {
       const response = await api.registration(data)
 
       if (!response.error) {
-        setUser(response.user)
+        setUser(response.user.user)
         setAccessToken(response.user.accessToken)
         setRefreshToken(response.user.refreshToken)
+        dispatch({ type: ReducerType.showMessage })
+      } else {
+        setError({ error: response.error, message: response.message })
       }
+      dispatch({
+        type: ReducerType.setFinalMessage,
+        payload: 'Вы успешно зарегистрировались в системе',
+      })
+      dispatch({ type: ReducerType.setAuthForm, payload: 0 })
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
@@ -194,7 +202,9 @@ const RegistrationForm = props => {
             value={username}
             onChange={handleUserName}
           />
-          <input className='errorMessage' value={usernameError} disabled />
+          {usernameError && (
+            <span className='errorMessage'>{usernameError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Дата рождения</div>
@@ -213,7 +223,9 @@ const RegistrationForm = props => {
               />
             </span>
           </div>
-          <input className='errorMessage' value={calendarError} disabled />
+          {calendarError && (
+            <span className='errorMessage'>{calendarError}</span>
+          )}
           <FormCalendar
             dateParts={dateParts}
             isCalendarOpen={isCalendarOpen}
@@ -237,7 +249,7 @@ const RegistrationForm = props => {
         {`
           .authForm3 {
             background: white;
-            display: ${authForm === 3 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

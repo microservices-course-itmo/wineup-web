@@ -106,7 +106,7 @@ describe('Api tests', () => {
       const result = await promise
 
       expect(result.error).toBeTruthy()
-      expect(result.message).toBe('[API]: LOGIN error')
+      expect(result.message).toBe('Ошибка авторизации')
     })
   })
 
@@ -128,7 +128,7 @@ describe('Api tests', () => {
       const result = await promise
 
       expect(result.error).toBeTruthy()
-      expect(result.message).toBe('[API]: REGISTRATION error')
+      expect(result.message).toBe('Ошибка регистрации')
     })
   })
 
@@ -147,8 +147,8 @@ describe('Api tests', () => {
       mockAxios.mockResponse(mockResponseToken)
       const result = await promise
 
-      expect(result[0]).toBe(mockResponseToken.data.accessToken)
-      expect(result[1]).toBe(mockResponseToken.data.refreshToken)
+      expect(result.data[0]).toBe(mockResponseToken.data.accessToken)
+      expect(result.data[1]).toBe(mockResponseToken.data.refreshToken)
     })
 
     it('Should throw error to not 200 response', async () => {
@@ -179,7 +179,7 @@ describe('Api tests', () => {
       try {
         await promise
       } catch (e) {
-        expect(e.message).toBe('Server Error')
+        expect(e.message).toBe('Ошибка получения каталога вин')
       }
     })
   })
@@ -201,7 +201,7 @@ describe('Api tests', () => {
       try {
         await promise
       } catch (e) {
-        expect(e.message).toBe('Server Error')
+        expect(e.message).toBe('Ошибка получения винной позиции')
       }
     })
   })
@@ -339,7 +339,7 @@ describe('Api tests', () => {
       const result = await promise
 
       expect(result.error).toBeTruthy()
-      expect(result.message).toBe('[API]: GETPROFILE - token expired')
+      expect(result.message).toBe('Ошибка получения данных пользователя')
     })
   })
 })
