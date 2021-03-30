@@ -89,7 +89,7 @@ export const reducer = (state, action) => {
     case ReducerType.setCityName:
       return { ...state, cityName: payload }
     case ReducerType.setUid:
-      return { ...state, token: payload }
+      return { ...state, token: payload, uid: payload }
     case ReducerType.setFinalMessage:
       return { ...state, finalMessage: payload }
     case ReducerType.setFB:
