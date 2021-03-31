@@ -138,7 +138,7 @@ const Profile = () => {
       applicationVerifier = new firebase.auth.RecaptchaVerifier(
         'phone-confirm-recaptcha',
         {
-          size: 'invisible',
+          size: 'normal',
         }
       )
     } catch (e) {
