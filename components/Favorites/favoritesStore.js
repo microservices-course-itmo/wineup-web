@@ -2,6 +2,11 @@ import { atom, selector, selectorFamily, waitForAll } from 'recoil'
 import { sortAsc, sortDesc } from '../Catalog/utils'
 import api from '../../api'
 
+export const emptyState = atom({
+  key: 'emptyState',
+  default: false,
+})
+
 export const favoritesState = atom({
   key: 'favorites',
   default: [],
@@ -32,7 +37,6 @@ export const favoritesQuery = selectorFamily({
   key: 'favoritesQuery',
   get: token => async () => {
     const response = await api.getFavoritesWines(token)
-
     return response
   },
 })
@@ -73,6 +77,24 @@ export const sortedWinesState = selector({
     }
   },
 })
+
+export const sortedFavoritesWinesState = selector({
+  key: 'filteredFavoritesListState',
+  get: ({ get }) => {
+    const list = get(favoritesState)
+    const sort = get(favoritesSortState)
+    switch (sort) {
+      case 'priceAsc':
+        return sortAsc(list)
+      case 'priceDesc':
+        return sortDesc(list)
+      default:
+        return list
+    }
+  },
+  set: ({ set }, newValue) => set(favoritesState, newValue),
+})
+
 export const sorts = atom({
   key: 'sorts',
   default: [],
