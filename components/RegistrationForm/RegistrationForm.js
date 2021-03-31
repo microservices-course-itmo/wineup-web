@@ -9,6 +9,7 @@ import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
 import Dropdown from '../Dropdown'
+import { cityIndexSeparator } from '../Dropdown/Dropdown'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
@@ -27,19 +28,6 @@ const parseIntToDecimal = value => {
   return parseInt(value, 10)
 }
 
-const options = [
-  {
-    id: 1,
-    value: 'Москва',
-    selected: true,
-  },
-  {
-    id: 2,
-    value: 'Санкт-Петербург',
-    selected: false,
-  },
-]
-
 const RegistrationForm = props => {
   const {
     username,
@@ -51,6 +39,7 @@ const RegistrationForm = props => {
     isCalendarOpen,
     uid,
     cityId,
+    cityName,
   } = props
   const [, setUser] = useRecoilState(userState)
   const [, setError] = useRecoilState(errorState)
@@ -159,6 +148,15 @@ const RegistrationForm = props => {
     [dispatch]
   )
 
+  const handleCity = useCallback(
+    e => {
+      const targetId = e.target.id.split(cityIndexSeparator)[1]
+      dispatch({ type: ReducerType.setCityId, payload: targetId })
+      dispatch({ type: ReducerType.setCityName, payload: e.target.value })
+    },
+    [dispatch]
+  )
+
   const registration = async () => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
@@ -232,7 +230,16 @@ const RegistrationForm = props => {
             dispatch={dispatch}
           />
         </div>
-        <Dropdown options={options} defaultValue={options[0].value} />
+        <Dropdown
+          selectedCity={{ id: cityId, value: cityName }}
+          onChange={handleCity}
+          width='499px'
+          backgroundColor='white'
+          margin='2px 93px 12px 93px'
+          color='black'
+          border='1px solid #9e9e9e'
+          marginLabel='0 0 10px 0'
+        />
         <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'

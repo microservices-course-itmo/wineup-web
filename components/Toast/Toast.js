@@ -16,30 +16,37 @@ const titleBackground = type => {
 const Toast = ({ type, text, closeCallback = () => {} }) => {
   const [isHidden, setHidden] = useState(false)
 
-  const clickHandker = useCallback(() => {
+  const clickHandler = useCallback(() => {
     setHidden(true)
     setTimeout(closeCallback, 1000)
   }, [closeCallback])
 
   return (
-    <>
+    <div className='toastWrapper'>
       <div className={`finalMessage ${isHidden ? 'hidden' : ''}`}>
         <div className='title'>
           <h5>{text}</h5>
-          <input type='button' onClick={clickHandker} />
+          <input type='button' onClick={clickHandler} />
         </div>
       </div>
 
       <style jsx>
         {`
+          .toastWrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 10000;
+          }
+
           .finalMessage {
+            position: fixed;
+            top: 10%;
             width: 100%;
             max-width: 700px;
             display: block;
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             background: #fff;
             border: 1px solid black;
             border-radius: 5px;
@@ -109,7 +116,7 @@ const Toast = ({ type, text, closeCallback = () => {} }) => {
           }
         `}
       </style>
-    </>
+    </div>
   )
 }
 

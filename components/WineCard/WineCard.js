@@ -1,8 +1,14 @@
-import { useRecoilCallback, useRecoilValue } from 'recoil'
+import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
-import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
+import {
+  addWineQuery,
+  deleteWineQuery,
+  sortedFavoritesWinesState,
+  emptyState,
+} from '../Favorites/favoritesStore'
+import { winesState } from '../Catalog/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
@@ -48,24 +54,48 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const userExist = useRecoilValue(userState)
   const [accessToken] = useLocalStorage('accessToken')
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
-  const addFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
-    await snapshot.getPromise(addWineQuery(id, accessToken))
+  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
+  const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+  const allWinesStore = useRecoilValue(winesState)
+  const [, setEmpty] = useRecoilState(emptyState)
+  const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
+    await snapshot.getPromise(addWineQuery([id, accessToken]))
+    const item = allWinesStore.find(x => x.wine_position_id === id)
+    // eslint-disable-next-line
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    if (copy.length === 0) {
+      setEmpty(false)
+      copy.push(item)
+    } else {
+      setEmpty(true)
+      copy.push(item)
+      setSortedWine(() => copy)
+    }
   })
-  const deleteFavorite = useRecoilCallback(({ snapshot, id }) => async () => {
-    await snapshot.getPromise(deleteWineQuery(id, accessToken))
+  const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
+    await snapshot.getPromise(deleteWineQuery([id, accessToken]))
+    // eslint-disable-next-line
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    const item = copy.find(x => x.wine_position_id === id)
+    const index = copy.indexOf(item)
+    copy.splice(index, 1)
+    if (copy.length === 0) {
+      setEmpty(true)
+    }
+    setSortedWine(() => copy)
   })
-  const clickHeart = id => {
+  const clickHeart = (e, id, token) => {
+    e.stopPropagation()
     if (userExist) {
       if (!isHeartFilled) {
         setIsHeartFilled(true)
-        addFavorite(id)
+        addFavorite(id, token)
       } else {
         setIsHeartFilled(false)
-        deleteFavorite(id)
+        deleteFavorite(id, token)
       }
     }
   }
-
   return (
     <>
       <Link href={`/wine/${wineId}`}>
@@ -73,7 +103,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
           <div className='top'>
             <button
               className='heartButton'
-              onClick={() => clickHeart(wineId)}
+              onClick={e => clickHeart(e, wineId)}
               type='button'
             >
               <img
@@ -158,7 +188,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             background-position: 50%;
             background-repeat: no-repeat;
           }
-
           .card {
             width: 300px;
             height: 587px;
@@ -166,12 +195,10 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             background-color: #ffffff;
             cursor: pointer;
           }
-
           .top {
             height: 340px;
             position: relative;
           }
-
           .heartButton {
             padding: 10px;
             border: none;
@@ -179,28 +206,23 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             outline: none;
             cursor: pointer;
           }
-
           .heart {
             fill: transparent;
             stroke: #931332;
             transition: fill 0.3s;
           }
-
           .heart.filled {
             fill: #931332;
           }
-
           .stars {
             width: 137px;
             display: flex;
             justify-content: space-between;
           }
-
           .score {
             padding-left: 10px;
             padding-top: 52px;
           }
-
           .scoreCaption {
             padding-top: 4px;
             font-family: PT Sans, sans-serif;
@@ -210,7 +232,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 18px;
             color: #9e9e9e;
           }
-
           .wineImg {
             width: auto;
             height: 270px;
@@ -219,7 +240,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             right: 65px;
             z-index: 2;
           }
-
           .wineBg {
             width: 100%;
             height: 122px;
@@ -227,13 +247,11 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             top: 152px;
             background-color: ${colors[color] || '#931332'};
           }
-
           .discount {
             position: absolute;
             top: 60px;
             right: 5px;
           }
-
           .discountPercent {
             font-family: Playfair Display, serif;
             font-style: normal;
@@ -242,7 +260,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 40px;
             color: #931332;
           }
-
           .oldPrice {
             position: relative;
             font-family: Playfair Display, serif;
@@ -253,7 +270,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             text-decoration-line: line-through;
             color: #c4c4c4;
           }
-
           .price {
             position: absolute;
             top: 40px;
@@ -265,7 +281,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 37px;
             color: #ffffff;
           }
-
           .size {
             position: absolute;
             bottom: 5px;
@@ -277,7 +292,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 24px;
             color: #ffffff;
           }
-
           .name {
             max-height: 75px;
             padding-left: 10px;
@@ -289,7 +303,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             color: #000000;
             overflow: hidden;
           }
-
           .line {
             width: 165px;
             position: absolute;
@@ -297,7 +310,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             left: 10px;
             border-bottom: 2px solid #9e9e9e;
           }
-
           .year {
             position: absolute;
             bottom: 5px;
@@ -309,7 +321,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 40px;
             color: #000000;
           }
-
           .icons {
             width: 25px;
             height: 108px;
@@ -321,7 +332,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             bottom: 20px;
             left: 10px;
           }
-
           .info {
             position: absolute;
             bottom: 11px;

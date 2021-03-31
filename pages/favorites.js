@@ -18,6 +18,7 @@ import {
   favoritesSortState,
   emptyState,
   sortedFavoritesWinesState,
+
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -31,6 +32,7 @@ const Favorite = () => {
   const [, setFavorites] = useRecoilState(favoritesState)
   const [empty, setEmpty] = useRecoilState(emptyState)
   const [sortedWine, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
@@ -302,21 +304,18 @@ const Favorite = () => {
           font-size: 16px;
           color: #000000;
         }
-
         .mainHeader {
           font-size: 32px;
           font-weight: bold;
           padding: 30px;
           text-align: center;
         }
-
         .buttonFooter {
           display: flex;
           justify-content: space-around;
           margin-top: 150px;
           padding-bottom: 20px;
         }
-
         .btnLogin {
           border: 1px solid;
           border-radius: 50px;
@@ -327,6 +326,7 @@ const Favorite = () => {
           cursor: pointer;
           outline: none;
         }
+
       `}</style>
     </div>
   )
