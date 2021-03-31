@@ -1,7 +1,11 @@
-import { atom, selector, selectorFamily, waitForAll } from 'recoil'
+import { atom, selector, selectorFamily } from 'recoil'
 import { sortAsc, sortDesc } from '../Catalog/utils'
 import api from '../../api'
 
+export const emptyState = atom({
+  key: 'emptyState',
+  default: false,
+})
 export const favoritesState = atom({
   key: 'favorites',
   default: [],
@@ -12,13 +16,13 @@ export const favoritesSortState = atom({
 })
 export const addWineQuery = selectorFamily({
   key: 'addWineQuery',
-  get: (id, token) => async () => {
+  get: ([id, token]) => async () => {
     await api.addWineToFavorites(id, token)
   },
 })
 export const deleteWineQuery = selectorFamily({
   key: 'deleteWineQuery',
-  get: (id, token) => async () => {
+  get: ([id, token]) => async () => {
     await api.deleteWineFromFavorites(id, token)
   },
 })
@@ -44,16 +48,17 @@ export const winesQuery = selectorFamily({
     return response
   },
 })
+
 export const contentQuery = selectorFamily({
   key: 'contentQuery',
-  get: token => async ({ get }) => {
-    const favoriteIds = get(favoritesQuery(token))
-    const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
-    return wines
+  get: token => async () => {
+    const response = await api.getFavoritesWines(token)
+
+    return response
   },
 })
-export const sortedWinesState = selector({
-  key: 'filteredTodoListState',
+export const sortedFavoritesWinesState = selector({
+  key: 'filteredFavoritesListState',
   get: ({ get }) => {
     const list = get(favoritesState)
     const sort = get(favoritesSortState)
@@ -66,8 +71,9 @@ export const sortedWinesState = selector({
         return list
     }
   },
+  set: ({ set }, newValue) => set(favoritesState, newValue),
 })
 export const sorts = atom({
-  key: 'sorts',
+  key: 'sortsFavorites',
   default: [],
 })

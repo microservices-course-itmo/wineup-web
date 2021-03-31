@@ -76,7 +76,7 @@ const Catalog = () => {
                   wineId={wine.wine_position_id}
                   imageSrc={parseImageSrc(wine.image)}
                   info={getWineInfo(wine)}
-                  isLiked={Math.round(Math.random())}
+                  isLiked={wine.liked}
                   color={index % 3}
                 />
               ))}
