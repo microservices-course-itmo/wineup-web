@@ -259,7 +259,15 @@ const Profile = () => {
             </ProfileInfoContainer>
           </div>
         )}
-        {currentUser === 'hasError' && <p>Error</p>}
+        {!currentUser && (
+          <footer className='buttonFooter'>
+            <Link href='/login'>
+              <button type='button' className='btn logoutBtn'>
+                Войти
+              </button>
+            </Link>
+          </footer>
+        )}
       </div>
       <style jsx>
         {`
@@ -306,6 +314,7 @@ const Profile = () => {
             display: flex;
             justify-content: space-around;
             margin-top: 150px;
+            padding-bottom: 20px;
           }
 
           nav.container .avatar {
