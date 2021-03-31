@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { useRouter } from 'next/router'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -38,6 +41,15 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
  */
 const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
   const [isFavorite, setIsFavorite] = useState(favorite)
+  const currentUser = useRecoilValue(userState)
+  const router = useRouter()
+  const toggleFavorite = () => {
+    if (currentUser) {
+      setIsFavorite(prevState => !prevState)
+    } else {
+      router.push('/login')
+    }
+  }
 
   return (
     <>
@@ -99,11 +111,7 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             <p className='currentPrice pricePt'>{formatPrice(info.price)}</p>
           )}
 
-          <button
-            type='button'
-            className='favorite'
-            onClick={() => setIsFavorite(!isFavorite)}
-          >
+          <button type='button' className='favorite' onClick={toggleFavorite}>
             {isFavorite ? (
               <>
                 Убрать из избранного
