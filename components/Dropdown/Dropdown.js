@@ -175,6 +175,7 @@ const Dropdown = ({
             top: 50%;
             transform: translateY(-50%);
             margin-right: 18px;
+            z-index: 100;
           }
         `}
       </style>
