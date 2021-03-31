@@ -37,15 +37,15 @@ const Toast = ({ type, text, closeCallback = () => {} }) => {
             height: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
             position: fixed;
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
             z-index: 10000;
           }
 
           .finalMessage {
+            position: fixed;
             width: 100%;
             max-width: 700px;
             display: block;
