@@ -355,10 +355,11 @@ const FilterBar = () => {
 
           .filterList {
             padding-left: 20px;
-            overflow-y: auto;
+            overflow-y: scroll;
             height: calc(100vh - 160px);
             width: 100%;
             padding-right: 20px;
+            box-sizing: content-box; /* Hide scrollbar but keep functionality */
           }
 
           .filterBarTitle {
