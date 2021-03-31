@@ -1,18 +1,41 @@
-import React, { useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import ModalWrapper from '../ModalWrapper'
 import CustomFormButton from '../CustomFormButton'
 
 const CODE_LENGTH = 6
 
+const ErrorCodesMapper = {
+  'auth/captcha-check-failed': 'Повторите ввод reCAPTCHA',
+  'auth/invalid-phone-number': 'Неверный формат номера телефона',
+  'auth/quota-exceeded': 'Квота на отправку СМС превышена',
+  'auth/user-disabled': 'Данные профиля недоступны',
+  'auth/maximum-second-factor-count-exceeded':
+    'Превышен максимальный лимит двухфакторных проверок',
+  'auth/unsupported-first-factor':
+    'Для изменения данных профиля необходимо повторить вход в аккаунт',
+  'auth/unverified-email': 'Неподтвержденная электронная почта',
+  'auth/too-many-requests': 'Превышен лимит запросов',
+}
+
+const unknownErrorMessage = 'Профиль не обновлен: система перегружена'
+
 /**
  * @param {boolean} visible
+ * @param {string} errorCode
  * @param {function} onClose
  * @param {function} onSubmit
  */
-const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
+const ConfirmPhoneModal = ({ visible, errorCode, onSubmit, onClose }) => {
   const [verificationCode, setVerificationCode] = useState('')
 
-  const isSubmitDisabled = verificationCode.length !== CODE_LENGTH
+  const errorMessage = useMemo(() => {
+    if (errorCode) return ErrorCodesMapper[errorCode] || unknownErrorMessage
+    return null
+  }, [errorCode])
+
+  const isSubmitDisabled = useMemo(() => {
+    return verificationCode.length !== CODE_LENGTH || errorCode
+  }, [verificationCode, errorCode])
 
   const handleCodeChange = useCallback(
     e => {
@@ -27,12 +50,17 @@ const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
       <ModalWrapper visible={visible} onClose={onClose}>
         <div className='contentWrapper'>
           <h1 className='header'>Введите код подтверждения</h1>
-          <input
-            className='inputField'
-            placeholder='Введите код подтверждения'
-            value={verificationCode}
-            onChange={handleCodeChange}
-          />
+          <div className='inputWithErrorWrapper'>
+            <input
+              className='inputField'
+              placeholder='Введите код подтверждения'
+              value={verificationCode}
+              onChange={handleCodeChange}
+            />
+            {errorMessage && (
+              <span className='errorMessage'>{errorMessage}</span>
+            )}
+          </div>
           <div className='controlsWrapper'>
             <CustomFormButton width='49%' onClick={onClose} text='Отменить' />
             <CustomFormButton
@@ -42,6 +70,7 @@ const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
               onClick={() => onSubmit(verificationCode)}
             />
           </div>
+          <div id='phone-confirm-recaptcha' />
         </div>
       </ModalWrapper>
       <style jsx>{`
@@ -76,6 +105,25 @@ const ConfirmPhoneModal = ({ visible, onSubmit, onClose }) => {
         .controlsWrapper {
           display: flex;
           justify-content: space-between;
+        }
+
+        .inputWithErrorWrapper {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .errorMessage {
+          color: #cf3737;
+          font-family: 'PT Sans', sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 18px;
+          height: 18px;
+          width: 499px;
+          border: 0;
+          padding: 0;
+          background: inherit;
         }
       `}</style>
     </div>
