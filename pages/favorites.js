@@ -169,16 +169,13 @@ const Favorite = () => {
           padding: 0 20px;
           margin: 0 auto;
         }
-
         .hidden {
           display: none;
         }
-
         .line {
           border: 0.1px solid;
           color: black;
         }
-
         .nav {
           width: 100%;
           height: 62px;
@@ -186,13 +183,11 @@ const Favorite = () => {
           margin-top: 40px;
           margin-bottom: 40px;
         }
-
         .content {
           display: flex;
           flex-direction: column;
           margin-top: 40px;
         }
-
         .filter {
           background-color: lightgray;
           min-width: 375px;
@@ -200,7 +195,6 @@ const Favorite = () => {
           max-width: 375px;
           max-height: 1265px;
         }
-
         .buttonClear {
           float: right;
           margin-top: -20px;
@@ -209,14 +203,12 @@ const Favorite = () => {
           width: 200px;
           outline: 0;
         }
-
         .buttonCatalog {
           background: transparent;
           border: none;
           width: 200px;
           outline: 0;
         }
-
         .textBtn {
           font-size: 12px;
           color: grey;
@@ -224,13 +216,11 @@ const Favorite = () => {
           text-decoration-line: underline;
           cursor: pointer;
         }
-
         .textFavorite {
           font-size: 18px;
           font-family: times new roman;
           font-weight: bold;
         }
-
         .emptyFavorite {
           background-image: url('assets/heart-background.png');
           background-repeat: no-repeat;
@@ -245,7 +235,6 @@ const Favorite = () => {
           padding: 200px 0;
           gap: 50px;
         }
-
         .emptyContainer {
           position: absolute;
           left: 26.67%;
@@ -253,12 +242,10 @@ const Favorite = () => {
           top: 39.16%;
           bottom: 26.91%;
         }
-
         .emptyContainerText {
           font-size: 28px;
           font-family: 'Times New Roman';
         }
-
         .linkText {
           font-size: 22px;
           color: #921332;
@@ -266,14 +253,12 @@ const Favorite = () => {
           text-decoration-line: underline;
           cursor: pointer;
         }
-
         .btnAllFavoritesContainer {
           display: flex;
           justify-content: center;
           margin-top: 147px;
           margin-bottom: 336px;
         }
-
         .btnAllFavorites {
           background: transparent;
           border: 1px solid;
@@ -284,7 +269,6 @@ const Favorite = () => {
           box-sizing: border-box;
           outline: 0;
         }
-
         .loading {
           max-width: 250px;
           display: flex;
@@ -294,7 +278,6 @@ const Favorite = () => {
           margin-top: 60px;
           margin-left: 700px;
         }
-
         .loading p {
           margin-top: 25px;
           font-family: Playfair Display, serif;

@@ -71,13 +71,15 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
         <div className='card'>
           <div className='top'>
             <button
-              className='heart-button'
+              className='heartButton'
               onClick={() => clickHeart(wineId)}
               type='button'
             >
               <img
-                className={`heart ${isLiked ? 'filled' : ''}`}
-                src={`/assets/card/heart-${isLiked ? 'filled' : 'empty'}.svg`}
+                className={`heart ${isHeartFilled ? 'filled' : ''}`}
+                src={`/assets/card/heart-${
+                  isHeartFilled ? 'filled' : 'empty'
+                }.svg`}
                 alt='heart'
               />
             </button>
@@ -155,7 +157,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             background-position: 50%;
             background-repeat: no-repeat;
           }
-
           .card {
             width: 300px;
             height: 587px;
@@ -163,12 +164,10 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             background-color: #ffffff;
             cursor: pointer;
           }
-
           .top {
             height: 340px;
             position: relative;
           }
-
           .heartButton {
             padding: 10px;
             border: none;
@@ -176,28 +175,23 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             outline: none;
             cursor: pointer;
           }
-
           .heart {
             fill: transparent;
             stroke: #931332;
             transition: fill 0.3s;
           }
-
           .heart.filled {
             fill: #931332;
           }
-
           .stars {
             width: 137px;
             display: flex;
             justify-content: space-between;
           }
-
           .score {
             padding-left: 10px;
             padding-top: 52px;
           }
-
           .scoreCaption {
             padding-top: 4px;
             font-family: PT Sans, sans-serif;
@@ -207,7 +201,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 18px;
             color: #9e9e9e;
           }
-
           .wineImg {
             width: auto;
             height: 270px;
@@ -216,7 +209,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             right: 65px;
             z-index: 2;
           }
-
           .wineBg {
             width: 100%;
             height: 122px;
@@ -224,13 +216,11 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             top: 152px;
             background-color: ${colors[color] || '#931332'};
           }
-
           .discount {
             position: absolute;
             top: 60px;
             right: 5px;
           }
-
           .discountPercent {
             font-family: Playfair Display, serif;
             font-style: normal;
@@ -239,7 +229,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 40px;
             color: #931332;
           }
-
           .oldPrice {
             position: relative;
             font-family: Playfair Display, serif;
@@ -250,7 +239,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             text-decoration-line: line-through;
             color: #c4c4c4;
           }
-
           .price {
             position: absolute;
             top: 40px;
@@ -262,7 +250,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 37px;
             color: #ffffff;
           }
-
           .size {
             position: absolute;
             bottom: 5px;
@@ -274,7 +261,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 24px;
             color: #ffffff;
           }
-
           .name {
             max-height: 75px;
             padding-left: 10px;
@@ -286,7 +272,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             color: #000000;
             overflow: hidden;
           }
-
           .line {
             width: 165px;
             position: absolute;
@@ -294,7 +279,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             left: 10px;
             border-bottom: 2px solid #9e9e9e;
           }
-
           .year {
             position: absolute;
             bottom: 5px;
@@ -306,7 +290,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             line-height: 40px;
             color: #000000;
           }
-
           .icons {
             width: 25px;
             height: 108px;
@@ -318,7 +301,6 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
             bottom: 20px;
             left: 10px;
           }
-
           .info {
             position: absolute;
             bottom: 11px;

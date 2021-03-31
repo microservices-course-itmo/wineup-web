@@ -86,23 +86,19 @@ const Wine = () => {
           padding: 0 20px;
           margin: 0 auto;
         }
-
         .winePosition {
           margin-top: 80px;
         }
-
         .container {
           padding-top: 20px;
           display: flex;
           justify-content: space-between;
         }
-
         .message {
           padding-top: 30px;
           display: flex;
           justify-content: center;
         }
-
         .loading {
           max-width: 250px;
           display: flex;
@@ -110,14 +106,12 @@ const Wine = () => {
           align-items: center;
           text-align: center;
         }
-
         .loading p {
           margin-top: 25px;
           font-family: Playfair Display, serif;
           font-size: 16px;
           color: #000000;
         }
-
         .errorIcon {
           width: 120px;
           height: auto;
