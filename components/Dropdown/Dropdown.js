@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
 
 /**
@@ -67,7 +67,6 @@ const Dropdown = ({
             onChange={onChange}
             readOnly
           />
-          {/*<span className='selectedCity' >{selectedCity}</span>*/}
           <img
             className='arrow'
             src={`${prefix}assets/authorization/arrow.svg`}

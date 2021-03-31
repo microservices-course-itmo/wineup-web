@@ -1,6 +1,6 @@
 import React from 'react'
 import CustomInput from '../CustomInput'
-import Dropdown from '../Dropdown'
+import CitySelect from '../CitySelect/CitySelect'
 
 const USERNAME_MAX_LENGTH = 15
 const USERNAME_MIN_LENGTH = 2
@@ -36,7 +36,7 @@ const isTelephoneValid = phoneNumber => {
 }
 /**
  * @param{string} name
- * @param{string} cityName
+ * @param{string} currentCity
  * @param{string} phone
  * @param{function} onInputChange
  * @param{function} onSubmit
@@ -44,7 +44,7 @@ const isTelephoneValid = phoneNumber => {
  */
 const UserInfoBox = ({
   name,
-  cityName,
+  currentCity,
   phone,
   onInputChange,
   onSubmit,
@@ -53,7 +53,7 @@ const UserInfoBox = ({
   const validateAndSubmit = () => {
     if (
       isUsernameValid(name) &&
-      isCityNameValid(cityName) &&
+      isCityNameValid(currentCity.value) &&
       isTelephoneValid(phone)
     ) {
       onSubmit()
@@ -71,16 +71,9 @@ const UserInfoBox = ({
           hasError={!isUsernameValid(name)}
           onChange={onInputChange}
         />
-        <Dropdown
+        <CitySelect
           id={InputTypes.cityName}
-          defaultValue={cityName}
-          width='100%'
-          backgroundColor='rgba(196, 196, 196, 0.16)'
-          margin='0'
-          colorLabel='#818181'
-          color='rgb(84, 84, 84)'
-          border='2px solid #9e9e9e'
-          marginLabel='35px 0 15px'
+          selectedCity={currentCity}
           onChange={onInputChange}
         />
         <CustomInput

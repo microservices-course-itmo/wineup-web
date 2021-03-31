@@ -8,7 +8,7 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
-import Dropdown from '../Dropdown'
+import CitySelect from '../CitySelect/CitySelect'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
@@ -147,6 +147,14 @@ const RegistrationForm = props => {
     [dispatch]
   )
 
+  const handleCity = useCallback(
+    e => {
+      dispatch({ type: ReducerType.setCityId, payload: e.target.id })
+      dispatch({ type: ReducerType.setCityName, payload: e.target.value })
+    },
+    [dispatch]
+  )
+
   const registration = async () => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
@@ -220,14 +228,9 @@ const RegistrationForm = props => {
             dispatch={dispatch}
           />
         </div>
-        <Dropdown
-          defaultValue={cityName}
-          width='499px'
-          backgroundColor='white'
-          margin='2px 93px 12px 93px'
-          color='black'
-          border='1px solid #9e9e9e'
-          marginLabel='0 0 10px 0'
+        <CitySelect
+          selectedCity={{ id: cityId, value: cityName }}
+          onChange={handleCity}
         />
         <CustomFormButton
           width='274px'
