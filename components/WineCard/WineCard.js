@@ -1,8 +1,14 @@
-import { useRecoilCallback, useRecoilValue } from 'recoil'
+import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
-import { addWineQuery, deleteWineQuery } from '../Favorites/favoritesStore'
+import {
+  addWineQuery,
+  deleteWineQuery,
+  sortedFavoritesWinesState,
+  emptyState,
+} from '../Favorites/favoritesStore'
+import { winesState } from '../Catalog/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
 
@@ -48,13 +54,38 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const userExist = useRecoilValue(userState)
   const [accessToken] = useLocalStorage('accessToken')
   const [isHeartFilled, setIsHeartFilled] = useState(isLiked)
+  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
+  const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+  const allWinesStore = useRecoilValue(winesState)
+  const [, setEmpty] = useRecoilState(emptyState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
+    const item = allWinesStore.find(x => x.wine_position_id === id)
+    // eslint-disable-next-line
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    if (copy.length === 0) {
+      setEmpty(false)
+      copy.push(item)
+    } else {
+      setEmpty(true)
+      copy.push(item)
+      setSortedWine(() => copy)
+    }
   })
   const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(deleteWineQuery([id, accessToken]))
+    // eslint-disable-next-line
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    const item = copy.find(x => x.wine_position_id === id)
+    const index = copy.indexOf(item)
+    copy.splice(index, 1)
+    if (copy.length === 0) {
+      setEmpty(true)
+    }
+    setSortedWine(() => copy)
   })
-  const clickHeart = (id, token) => {
+  const clickHeart = (e, id, token) => {
+    e.stopPropagation()
     if (userExist) {
       if (!isHeartFilled) {
         setIsHeartFilled(true)
@@ -72,7 +103,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
           <div className='top'>
             <button
               className='heartButton'
-              onClick={() => clickHeart(wineId)}
+              onClick={e => clickHeart(e, wineId)}
               type='button'
             >
               <img
