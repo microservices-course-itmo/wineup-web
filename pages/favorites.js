@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   useRecoilValueLoadable,
   useRecoilState,
@@ -35,7 +35,10 @@ const Favorite = () => {
     await snapshot.getPromise(deleteQuery(accessToken))
   })
   useEffect(() => {
-    if (contentQueryLoadable.state === 'hasValue') {
+    if (
+      contentQueryLoadable.state === 'hasValue' &&
+      !contentQueryLoadable.contents.error
+    ) {
       setFavorites(() => contentQueryLoadable.contents)
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
@@ -45,48 +48,67 @@ const Favorite = () => {
       <Header />
       <Search />
       <div className='content'>
-        <ButtonGroup
-          title='Сортировать по'
-          activeButton={favoritesSort}
-          buttons={sortingButtons}
-          onChange={event => setFavoritesSort(event.currentTarget.value)}
-        />
-        <div>
-          <button
-            type='button'
-            className='buttonClear'
-            onClick={() => clearFavorites()}
-          >
-            <text className='textBtn'>Очистить избранное?</text>
-          </button>
-        </div>
-        <CatalogFavorite>
-          {sortedWine && sortedWine.length > 0 ? (
-            sortedWine.map(wine => (
-              <WineCard
-                key={wine.wine_position_id}
-                wineId={wine.wine_position_id}
-                imageSrc={parseImageSrc(wine.image)}
-                info={getWineInfo(wine)}
-                isLiked='true'
-                color='3'
-              />
-            ))
-          ) : (
-            <div className='emptyContainer'>
-              <div className='emptyFavorite'>
-                <p className='emptyContainerText'>
-                  Тут пока пусто, но наш каталог поможет вам что-нибудь найти...
-                </p>
-                <Link href='/'>
-                  <a href='/#' className='linkText'>
-                    Перейти в каталог...
-                  </a>
-                </Link>
-              </div>
+        {!contentQueryLoadable.contents.error ? (
+          <>
+            <ButtonGroup
+              title='Сортировать по'
+              activeButton={favoritesSort}
+              buttons={sortingButtons}
+              onChange={event => setFavoritesSort(event.currentTarget.value)}
+            />
+            <div>
+              <button
+                type='button'
+                className='buttonClear'
+                onClick={() => clearFavorites()}
+              >
+                <text className='textBtn'>Очистить избранное?</text>
+              </button>
             </div>
-          )}
-        </CatalogFavorite>
+            <CatalogFavorite>
+              {sortedWine && sortedWine.length > 0 ? (
+                sortedWine.map(wine => (
+                  <WineCard
+                    key={wine.wine_position_id}
+                    wineId={wine.wine_position_id}
+                    imageSrc={parseImageSrc(wine.image)}
+                    info={getWineInfo(wine)}
+                    isLiked='true'
+                    color='3'
+                  />
+                ))
+              ) : (
+                <div className='emptyContainer'>
+                  <div className='emptyFavorite'>
+                    <p className='emptyContainerText'>
+                      Тут пока пусто, но наш каталог поможет вам что-нибудь
+                      найти...
+                    </p>
+                    <Link href='/'>
+                      <a href='/#' className='linkText'>
+                        Перейти в каталог...
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </CatalogFavorite>
+          </>
+        ) : (
+          <>
+            <header className='mainHeader'>
+              Чтобы просматривать Избранное, авторизуйтесь
+            </header>
+            <footer className='buttonFooter'>
+              <Link href='/login'>
+                <button type='button' className='btnLogin'>
+                  Войти
+                </button>
+              </Link>
+            </footer>
+          </>
+        )}
+
         {/* {favorites && !favorites.length ? (
           <div />
         ) : (
@@ -248,6 +270,31 @@ const Favorite = () => {
           height: 57px;
           box-sizing: border-box;
           outline: 0;
+        }
+
+        .mainHeader {
+          font-size: 32px;
+          font-weight: bold;
+          padding: 30px;
+          text-align: center;
+        }
+
+        .buttonFooter {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 150px;
+          padding-bottom: 20px;
+        }
+
+        .btnLogin {
+          border: 1px solid;
+          border-radius: 50px;
+          background-color: #931332;
+          color: white;
+          font-size: 18px;
+          padding: 5px 60px;
+          cursor: pointer;
+          outline: none;
         }
       `}</style>
     </div>

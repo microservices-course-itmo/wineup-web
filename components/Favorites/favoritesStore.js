@@ -48,6 +48,12 @@ export const contentQuery = selectorFamily({
   key: 'contentQuery',
   get: token => async ({ get }) => {
     const favoriteIds = get(favoritesQuery(token))
+    if (favoriteIds.error) {
+      return {
+        error: true,
+        data: null,
+      }
+    }
     const wines = get(waitForAll(favoriteIds.map(id => winesQuery(id))))
     return wines
   },
