@@ -72,6 +72,7 @@ const UserInfoBox = ({
           onChange={onInputChange}
         />
         <Dropdown
+          id={InputTypes.cityName}
           defaultValue={cityName}
           width='100%'
           backgroundColor='rgba(196, 196, 196, 0.16)'
@@ -80,6 +81,7 @@ const UserInfoBox = ({
           color='rgb(84, 84, 84)'
           border='2px solid #9e9e9e'
           marginLabel='35px 0 15px'
+          onChange={onInputChange}
         />
         <CustomInput
           id={InputTypes.phone}

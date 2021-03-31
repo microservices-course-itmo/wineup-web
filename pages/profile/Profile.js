@@ -96,12 +96,12 @@ const Profile = () => {
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
-
     switch (evt.currentTarget.id) {
       case InputTypes.name:
         setNameInputState(newValue)
         break
       case InputTypes.cityName:
+        console.log('city')
         setCityInputState(newValue)
         break
       case InputTypes.phone:

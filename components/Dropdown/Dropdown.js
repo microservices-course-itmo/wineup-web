@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
 
 /**
@@ -24,6 +24,7 @@ const options = [
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 const Dropdown = ({
+  id,
   defaultValue,
   width,
   backgroundColor,
@@ -32,6 +33,7 @@ const Dropdown = ({
   color,
   border,
   marginLabel,
+  onChange,
 }) => {
   const [formState, dispatch] = useReducer(reducer, initialState, reducer)
   const [selectedCity, setSelectedCity] = useState(defaultValue)
@@ -45,6 +47,7 @@ const Dropdown = ({
 
   const handleSelect = item => {
     dispatch({ type: ReducerType.setCityId, payload: item.id })
+    dispatch({ type: ReducerType.setCityName, payload: item.value })
     setSelectedCity(item.value)
     toggleIsDropdownVisible()
   }
@@ -53,8 +56,18 @@ const Dropdown = ({
     <div>
       <div className='inputForm'>
         <div className='formName'>Город</div>
-        <div className='inputField' onClick={toggleIsDropdownVisible}>
-          <span className='selectedCity'>{selectedCity}</span>
+        <div className='wrapper'>
+          <input
+            id={id}
+            className='inputField'
+            value={selectedCity}
+            autoComplete='off'
+            placeholder={selectedCity}
+            onClick={toggleIsDropdownVisible}
+            onChange={onChange}
+            readOnly
+          />
+          {/*<span className='selectedCity' >{selectedCity}</span>*/}
           <img
             className='arrow'
             src={`${prefix}assets/authorization/arrow.svg`}
@@ -76,6 +89,14 @@ const Dropdown = ({
       </div>
       <style jsx>
         {`
+          input {
+            outline: none;
+          }
+          .wrapper {
+            position: relative;
+            display: flex;
+          }
+
           .inputField {
             color: ${color};
             background: ${backgroundColor};
@@ -93,6 +114,7 @@ const Dropdown = ({
               ? '5px 5px 0 0'
               : '5px'};
             cursor: pointer;
+            z-index: 100;
           }
 
           .inputForm {
@@ -151,6 +173,10 @@ const Dropdown = ({
           }
 
           .arrow {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
             margin-right: 18px;
           }
         `}
