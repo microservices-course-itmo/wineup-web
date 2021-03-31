@@ -11,9 +11,9 @@ const CustomFormButton = ({
   background = '#232323',
   color = 'white',
   backgroundOnHover = '#af2f4e',
-  colorOnHover = color,
+  colorOnHover = backgroundOnHover,
   border = 'none',
-  disabled,
+  disabled = false,
 }) => (
   <button
     type='button'
@@ -28,8 +28,8 @@ const CustomFormButton = ({
           width: ${width};
           height: ${height};
           margin: ${margin};
-          background-color: ${!disabled ? background : '#e9e9e9'};
-          color: ${disabled ? color : 'white'};
+          background-color: ${disabled ? '#e9e9e9' : background};
+          color: ${disabled ? 'white' : color};
           font-size: ${fontSize};
           font-family: 'PT Sans', sans-serif;
           font-weight: ${fontWeight};
@@ -42,8 +42,8 @@ const CustomFormButton = ({
 
         .button:hover {
           background: ${backgroundOnHover};
-          background-color: ${!disabled ? colorOnHover : '#e9e9e9'};
-          box-shadow: ${!disabled && '0 0 8px rgba(253, 0, 0, 0.5)'};
+          background-color: ${disabled ? '#e9e9e9' : colorOnHover};
+          box-shadow: ${disabled ? 'none' : '0 0 8px rgba(253, 0, 0, 0.5)'};
         }
       `}
     </style>

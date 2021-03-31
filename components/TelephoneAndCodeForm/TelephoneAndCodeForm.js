@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import firebase from 'firebase'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 
@@ -13,12 +12,12 @@ const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneAndCodeForm = props => {
   const {
-    authForm,
     telephone,
     telephoneError,
     telCode,
     telCodeError,
     dispatch,
+    fb,
   } = props
   const [, setUser] = useRecoilState(userState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
@@ -40,18 +39,7 @@ const TelephoneAndCodeForm = props => {
 
   const handleSecondForm = async () => {
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
-      let applicationVerifier
       try {
-        applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-          size: 'invisible',
-        })
-      } catch (e) {
-        applicationVerifier = document.getElementById('recaptcha')
-      }
-      try {
-        const fb = await firebase
-          .auth()
-          .signInWithPhoneNumber(telephone, applicationVerifier)
         const token = await fb.confirm(telCode).then(({ user: { za } }) => za)
 
         dispatch({ type: ReducerType.setUid, payload: token })
@@ -61,10 +49,14 @@ const TelephoneAndCodeForm = props => {
         const response = await api.login(data)
 
         if (!response.error) {
-          dispatch({ type: ReducerType.setUser })
-          setUser(response.user)
+          setUser(response.user.user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
+          dispatch({
+            type: ReducerType.setFinalMessage,
+            payload: 'Вы успешно авторизировались в системе',
+          })
+          dispatch({ type: ReducerType.setAuthForm, payload: 0 })
           dispatch({ type: ReducerType.showMessage })
           setTimeout(() => {
             router.push('/')
@@ -87,6 +79,12 @@ const TelephoneAndCodeForm = props => {
       })
   }
 
+  const handlePressEnter = event => {
+    if (event.key === 'Enter') {
+      handleSecondForm()
+    }
+  }
+
   return (
     <div>
       <div className='authForm2'>
@@ -98,7 +96,9 @@ const TelephoneAndCodeForm = props => {
             placeholder='+7- (_ _ _) - _ _ _ - _ _ - _ _'
             value={telephone}
           />
-          <input className='errorMessage' value={telephoneError} disabled />
+          {telephoneError && (
+            <span className='errorMessage'>{telephoneError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Введите код</div>
@@ -107,8 +107,9 @@ const TelephoneAndCodeForm = props => {
             placeholder='_ _ _ _ _ _'
             value={telCode}
             onChange={handleTelCode}
+            onKeyDown={handlePressEnter}
           />
-          <input className='errorMessage' value={telCodeError} disabled />
+          {telCodeError && <span className='errorMessage'>{telCodeError}</span>}
         </div>
         <div className='buttonGroup'>
           <CustomFormButton
@@ -129,7 +130,7 @@ const TelephoneAndCodeForm = props => {
         {`
           .authForm2 {
             background: white;
-            display: ${authForm === 2 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

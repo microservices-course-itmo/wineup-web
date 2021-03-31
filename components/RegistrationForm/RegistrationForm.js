@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
 import api from '../../api'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
+import { userState, errorState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import FormCalendar from '../FormCalendar'
 import CustomFormButton from '../CustomFormButton'
@@ -11,7 +11,8 @@ import { CalendarErrors } from '../FormCalendar/FormCalendar'
 import Dropdown from '../Dropdown'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const usernameRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
+const dateRegex = /[`№!@#$%^&*()_+=[\]{};':"\\|,<>/?~\- a-zA-Zа-яА-Я]/
 const CURRENT_YEAR = 2021
 const CONSENT_YEAR = 18
 const DATE_MAX_LENGTH = 11
@@ -47,12 +48,12 @@ const RegistrationForm = props => {
     calendarError,
     dateParts,
     dispatch,
-    authForm,
     isCalendarOpen,
     uid,
     cityId,
   } = props
   const [, setUser] = useRecoilState(userState)
+  const [, setError] = useRecoilState(errorState)
   const [, setAccessToken] = useLocalStorage('accessToken', '')
   const [, setRefreshToken] = useLocalStorage('refreshToken', '')
   const router = useRouter()
@@ -99,6 +100,24 @@ const RegistrationForm = props => {
             payload: CalendarErrors.userYoungAge,
           })
         }
+        if (
+          parseIntToDecimal(day) < 1 ||
+          parseIntToDecimal(month) < 1 ||
+          parseIntToDecimal(year) < 1
+        ) {
+          validConditions = false
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: CalendarErrors.negativeValue,
+          })
+        }
+        if (dateRegex.test(date)) {
+          validConditions = false
+          dispatch({
+            type: ReducerType.setCalendarError,
+            payload: CalendarErrors.invalidData,
+          })
+        }
         if (validConditions) {
           dispatch({ type: ReducerType.clearCalendarError })
           const isLastCharValid = date.charAt(date.length - 1) !== '.'
@@ -140,14 +159,6 @@ const RegistrationForm = props => {
     [dispatch]
   )
 
-  const handleCity = useCallback(
-    e => {
-      const cityId = e.target.selectedIndex + 1
-      dispatch({ type: ReducerType.setCityId, payload: cityId })
-    },
-    [dispatch]
-  )
-
   const registration = async () => {
     if (username.length > 0 && usernameError === '' && calendarError === '') {
       const data = {
@@ -160,10 +171,18 @@ const RegistrationForm = props => {
       const response = await api.registration(data)
 
       if (!response.error) {
-        setUser(response.user)
+        setUser(response.user.user)
         setAccessToken(response.user.accessToken)
         setRefreshToken(response.user.refreshToken)
+        dispatch({ type: ReducerType.showMessage })
+      } else {
+        setError({ error: response.error, message: response.message })
       }
+      dispatch({
+        type: ReducerType.setFinalMessage,
+        payload: 'Вы успешно зарегистрировались в системе',
+      })
+      dispatch({ type: ReducerType.setAuthForm, payload: 0 })
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
@@ -183,7 +202,9 @@ const RegistrationForm = props => {
             value={username}
             onChange={handleUserName}
           />
-          <input className='errorMessage' value={usernameError} disabled />
+          {usernameError && (
+            <span className='errorMessage'>{usernameError}</span>
+          )}
         </div>
         <div className='inputForm'>
           <div className='formName'>Дата рождения</div>
@@ -202,14 +223,16 @@ const RegistrationForm = props => {
               />
             </span>
           </div>
-          <input className='errorMessage' value={calendarError} disabled />
+          {calendarError && (
+            <span className='errorMessage'>{calendarError}</span>
+          )}
           <FormCalendar
             dateParts={dateParts}
             isCalendarOpen={isCalendarOpen}
             dispatch={dispatch}
           />
         </div>
-        <Dropdown options={options} onChange={handleCity} />
+        <Dropdown options={options} defaultValue={options[0].value} />
         <CustomFormButton
           width='274px'
           margin='50px 206px 5px 205px'
@@ -226,7 +249,7 @@ const RegistrationForm = props => {
         {`
           .authForm3 {
             background: white;
-            display: ${authForm === 3 ? 'block' : 'none'};
+            display: block;
             border: 2px solid black;
             border-radius: 10px;
             width: 685px;

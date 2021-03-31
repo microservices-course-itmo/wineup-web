@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import firebase from 'firebase'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import Header from '../../components/Header'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import CustomInput from '../../components/CustomInput'
+import {
+  userState,
+  errorState,
+  notificationsState,
+  unreadNotificationsCountState,
+} from '../../store/GlobalRecoilWrapper/store'
 import api from '../../api'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
+import Badge from '../../components/Badge'
+import ProfileSectionMenuItem from '../../components/ProfileSectionMenuItem'
+import Toast from '../../components/Toast'
+import UserInfoBox from '../../components/UserInfoBox'
+import ProfileInfoContainer from '../../components/ProfileInfoContainer'
+import NotificationsBox from '../../components/NotificationsBox'
+import useLocalStorage from '../../hooks/useLocalStorage'
 import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
 
 const cityNameById = id => {
@@ -20,35 +30,74 @@ const cityIdByName = cityName => {
   if (cityName === 'Санкт-Петербург') return 2
   return null
 }
-const emptyInputValue = 'Не указано'
 const InputTypes = {
   name: 'name-input',
   cityName: 'city-input',
   phone: 'phone-input',
 }
+const SectionKeys = {
+  userInfo: {
+    key: 'userInfo',
+    title: 'Профиль',
+  },
+  notifications: {
+    key: 'notifications',
+    title: 'Уведомления',
+  },
+}
 
 const Profile = () => {
   const [accessToken] = useLocalStorage('accessToken')
-  const currentUser = useRecoilValue(userState)
+  const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const [, setError] = useRecoilState(errorState)
+  const [nameInputState, setNameInputState] = useState(
+    currentUser ? currentUser.name : null
+  )
+  const [cityInputState, setCityInputState] = useState(
+    currentUser ? cityNameById(currentUser.cityId) : null
+  )
+  const [phoneInputState, setPhoneInputState] = useState(
+    currentUser ? currentUser.phoneNumber : null
+  )
+  const [activeSection, setActiveSection] = useState(SectionKeys.userInfo)
+  const notificationsList = useRecoilValue(notificationsState) // mock
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
+  const [toastVisibility, setToastVisibility] = useState(false)
 
-  const [nameInputState, setNameInputState] = useState()
-  const [cityInputState, setCityInputState] = useState()
-  const [phoneInputState, setPhoneInputState] = useState()
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const [profileData, setProfileData] = useState(null)
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+  const [phoneChangeError, setPhoneChangeError] = useState(null)
 
   const resetFields = () => {
-    setNameInputState(currentUser.name || emptyInputValue)
-    setCityInputState(cityNameById(currentUser.cityId) || emptyInputValue)
-    setPhoneInputState(currentUser.phoneNumber || emptyInputValue)
+    if (currentUser) {
+      setNameInputState(currentUser.name)
+      setCityInputState(cityNameById(currentUser.cityId))
+      setPhoneInputState(currentUser.phoneNumber)
+    }
+  }
+
+  const refetchProfileData = () => {
+    api.getProfile(accessToken).then(res => {
+      if (res.error) {
+        setError({ error: res.error, message: res.message })
+      }
+
+      if (res.profile && !res.profile.error) {
+        setCurrentUser(res.profile)
+      }
+    })
   }
 
   useEffect(() => {
-    if (currentUser) resetFields()
-  }, [currentUser, resetFields])
+    if (!currentUser) {
+      refetchProfileData()
+    }
+    resetFields()
+  }, [currentUser, setCurrentUser, accessToken])
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
+
     switch (evt.currentTarget.id) {
       case InputTypes.name:
         setNameInputState(newValue)
@@ -67,43 +116,60 @@ const Profile = () => {
   const updateProfile = (data = null) => {
     api
       .patchProfile(accessToken, data || profileData)
-      .then(() => window.location.reload())
-      .catch(err => {
-        console.error(err)
+      .then(res => {
+        if (res.error) {
+          setError({ error: res.error, message: res.message })
+        } else {
+          setToastVisibility(true)
+        }
       })
+      .then(() => refetchProfileData())
+      .catch(console.error)
+  }
+
+  const onClosePhoneConfirmModal = () => {
+    setIsConfirmModalVisible(false)
+    setPhoneChangeError(null)
   }
 
   const onSubmitPhoneChange = verificationCode => {
     let applicationVerifier
     try {
-      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-        size: 'invisible',
-      })
+      applicationVerifier = new firebase.auth.RecaptchaVerifier(
+        'phone-confirm-recaptcha',
+        {
+          size: 'normal',
+        }
+      )
     } catch (e) {
-      applicationVerifier = document.getElementById('recaptcha')
+      applicationVerifier = document.getElementById('phone-confirm-recaptcha')
     }
-    const provider = new firebase.auth.PhoneAuthProvider()
-    provider
-      .verifyPhoneNumber(phoneInputState, applicationVerifier)
-      .then(verificationId => {
-        const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
-          verificationId,
-          verificationCode
-        )
-        firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
-      })
-      .then(res => {
-        console.log(res)
-        updateProfile()
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }
-
-  const onCancelPhoneChange = () => {
-    setIsConfirmModalVisible(false)
-    updateProfile()
+    try {
+      const provider = new firebase.auth.PhoneAuthProvider()
+      provider
+        .verifyPhoneNumber(phoneInputState, applicationVerifier)
+        .then(verificationId => {
+          try {
+            const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
+              verificationId,
+              verificationCode
+            )
+            firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
+          } catch (e) {
+            setPhoneChangeError(e.code)
+          }
+        })
+        .then(() => {
+          onClosePhoneConfirmModal()
+          updateProfile()
+        })
+        .catch(e => {
+          setPhoneChangeError(e.code)
+        })
+    } catch (e) {
+      setPhoneChangeError(e.code)
+      console.error(e)
+    }
   }
 
   const onSubmit = async () => {
@@ -114,8 +180,8 @@ const Profile = () => {
       cityId: updatedCity !== currentUser.cityId ? updatedCity : null,
       phoneNumber: isPhoneUpdated ? phoneInputState : null,
     }
-    const preparedData = Object.values(userToPatch).filter(
-      field => field !== null
+    const preparedData = Object.fromEntries(
+      Object.entries(userToPatch).filter(field => field[1] !== null)
     )
     if (isPhoneUpdated) {
       setIsConfirmModalVisible(true)
@@ -127,11 +193,19 @@ const Profile = () => {
 
   return (
     <GlobalRecoilWrapper>
+      {toastVisibility ? (
+        <Toast
+          type='success'
+          text='Пользователь успешно изменен'
+          closeCallback={() => setToastVisibility(false)}
+        />
+      ) : null}
       <Header />
       <ConfirmPhoneModal
         visible={isConfirmModalVisible}
         onSubmit={onSubmitPhoneChange}
-        onClose={onCancelPhoneChange}
+        onClose={onClosePhoneConfirmModal}
+        errorCode={phoneChangeError}
       />
       <div className='content'>
         <header className='mainHeader'>Личный кабинет</header>
@@ -145,6 +219,20 @@ const Profile = () => {
                   alt='User Avatar'
                 />
               </div>
+              <ul className='navList'>
+                <ProfileSectionMenuItem
+                  active={activeSection === SectionKeys.userInfo}
+                  labelText={SectionKeys.userInfo.title}
+                  onClick={() => setActiveSection(SectionKeys.userInfo)}
+                />
+                <ProfileSectionMenuItem
+                  active={activeSection === SectionKeys.notifications}
+                  labelText={SectionKeys.notifications.title}
+                  onClick={() => setActiveSection(SectionKeys.notifications)}
+                >
+                  <Badge count={unreadNotificationsCount} />
+                </ProfileSectionMenuItem>
+              </ul>
 
               <footer className='buttonFooter'>
                 <Link href='logout'>
@@ -154,45 +242,21 @@ const Profile = () => {
                 </Link>
               </footer>
             </nav>
-            <div className='infoContainer'>
-              <header className='infoHeader'>Профиль</header>
-              <div className='infoList'>
-                <CustomInput
-                  id={InputTypes.name}
-                  label='Ваше имя'
-                  value={nameInputState}
-                  onChange={onInputChange}
+            <ProfileInfoContainer title={activeSection.title}>
+              {activeSection === SectionKeys.userInfo && (
+                <UserInfoBox
+                  name={nameInputState}
+                  cityName={cityInputState}
+                  phone={phoneInputState}
+                  onInputChange={onInputChange}
+                  onSubmit={onSubmit}
+                  onCancel={resetFields}
                 />
-                <CustomInput
-                  id={InputTypes.cityName}
-                  label='Город'
-                  value={cityInputState}
-                  onChange={onInputChange}
-                />
-                <CustomInput
-                  id={InputTypes.phone}
-                  label='Телефон'
-                  value={phoneInputState}
-                  onChange={onInputChange}
-                />
-              </div>
-              <footer className='buttonFooter'>
-                <button
-                  type='reset'
-                  className='btn cancelBtn'
-                  onClick={resetFields}
-                >
-                  Отменить
-                </button>
-                <button
-                  type='button'
-                  className='btn submitBtn'
-                  onClick={onSubmit}
-                >
-                  Подтвердить
-                </button>
-              </footer>
-            </div>
+              )}
+              {activeSection === SectionKeys.notifications && (
+                <NotificationsBox notificationsGroupList={notificationsList} />
+              )}
+            </ProfileInfoContainer>
           </div>
         )}
         {currentUser === 'hasError' && <p>Error</p>}
@@ -212,16 +276,14 @@ const Profile = () => {
             font-weight: bold;
             padding: 30px;
           }
-
           .profile {
             display: flex;
             flex-flow: row nowrap;
             justify-content: space-between;
             width: 100%;
           }
-
           nav.container {
-            flex-basis: 25%;
+            flex-basis: 30%;
             flex-grow: 1;
             display: flex;
             flex-flow: column nowrap;
@@ -230,24 +292,8 @@ const Profile = () => {
             padding: 40px;
             margin-bottom: 40px;
           }
-
-          .infoContainer {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-basis: 75%;
-            flex-grow: 3;
-            background-color: white;
-            padding-bottom: 40px;
-            margin-left: 80px;
-            margin-bottom: 40px;
-          }
-
-          .infoHeader {
-            background-color: #b65f74;
-            color: white;
-            font-size: 28px;
-            padding: 20px;
+          .navList {
+            padding: 50px 0;
           }
 
           .userAvatar {
@@ -262,37 +308,24 @@ const Profile = () => {
             margin-top: 150px;
           }
 
-          .infoList {
-            display: flex;
-            flex-flow: column nowrap;
-            padding: 0 20px;
-          }
-
           nav.container .avatar {
             height: 210px;
             width: 210px;
             border-radius: 50%;
           }
-
           .btn {
             border: 1px solid;
             border-radius: 50px;
             font-size: 18px;
             padding: 5px 60px;
             cursor: pointer;
+            outline: none;
           }
 
-          .logoutBtn,
-          .cancelBtn {
+          .logoutBtn {
             background-color: #931332;
             border-color: #931332;
             color: white;
-          }
-
-          .submitBtn {
-            background-color: transparent;
-            border-color: #717171;
-            color: #717171;
           }
         `}
       </style>
