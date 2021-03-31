@@ -18,6 +18,7 @@ const NotificationsBox = ({ notificationsGroupList }) => {
           group =>
             group.notifications.length > 0 && (
               <NotificationsTypeGroup
+                key={group.type}
                 type={group.type}
                 notifications={group.notifications}
               />
