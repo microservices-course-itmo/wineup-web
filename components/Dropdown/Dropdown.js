@@ -1,5 +1,4 @@
-import React, { useReducer, useState } from 'react'
-import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
+import React, { useState } from 'react'
 
 /**
  * @param {Object} options - массив городов
@@ -21,12 +20,22 @@ const options = [
   },
 ]
 
+export const cityIndexSeparator = '\u0333'
+
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
+/**
+ * @param {number} optional id for Profile change handling
+ * @param {{
+ *   id: number,
+ *   value: string,
+ * }} selectСity - выбранный город
+ * @param {function} onChange - функция для смены значения
+ */
 const Dropdown = ({
   id,
-  defaultValue,
   width,
+  selectedCity,
   backgroundColor,
   margin,
   colorLabel,
@@ -35,21 +44,10 @@ const Dropdown = ({
   marginLabel,
   onChange,
 }) => {
-  const [formState, dispatch] = useReducer(reducer, initialState, reducer)
-  const [selectedCity, setSelectedCity] = useState(defaultValue)
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 
   const toggleIsDropdownVisible = () => {
-    dispatch({
-      type: ReducerType.showDropdown,
-      payload: !formState.isDropdownVisible,
-    })
-  }
-
-  const handleSelect = item => {
-    dispatch({ type: ReducerType.setCityId, payload: item.id })
-    dispatch({ type: ReducerType.setCityName, payload: item.value })
-    setSelectedCity(item.value)
-    toggleIsDropdownVisible()
+    setIsDropdownVisible(!isDropdownVisible)
   }
 
   return (
@@ -58,13 +56,11 @@ const Dropdown = ({
         <div className='formName'>Город</div>
         <div className='wrapper'>
           <input
-            id={id}
             className='inputField'
-            value={selectedCity}
+            value={selectedCity.value}
             autoComplete='off'
-            placeholder={selectedCity}
+            placeholder={selectedCity.value}
             onClick={toggleIsDropdownVisible}
-            onChange={onChange}
             readOnly
           />
           <img
@@ -74,14 +70,19 @@ const Dropdown = ({
           />
         </div>
         <div className='list'>
-          {options.map(option => (
+          {options.map(({ id: cityId, value }) => (
             <button
-              key={option.id}
+              id={`${id}${cityIndexSeparator}${cityId}`}
+              key={`city-option-${cityId}`}
               type='button'
+              value={value}
               className='option'
-              onClick={() => handleSelect(option)}
+              onClick={event => {
+                onChange(event)
+                toggleIsDropdownVisible()
+              }}
             >
-              {option.value}
+              {value}
             </button>
           ))}
         </div>
@@ -109,9 +110,7 @@ const Dropdown = ({
             font-size: 18px;
             font-family: 'PT Sans', sans-serif;
             border: ${border};
-            border-radius: ${formState.isDropdownVisible
-              ? '5px 5px 0 0'
-              : '5px'};
+            border-radius: ${isDropdownVisible ? '5px 5px 0 0' : '5px'};
             cursor: pointer;
             z-index: 100;
           }
@@ -133,7 +132,7 @@ const Dropdown = ({
 
           .list {
             position: absolute;
-            display: ${formState.isDropdownVisible ? 'flex' : 'none'};
+            display: ${isDropdownVisible ? 'flex' : 'none'};
             flex-direction: column;
             z-index: 1000;
             top: 85px;
@@ -143,7 +142,6 @@ const Dropdown = ({
           }
 
           .option {
-            background: ${backgroundColor};
             text-align: left;
             text-indent: 35px;
             background: white;

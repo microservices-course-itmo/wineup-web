@@ -19,6 +19,7 @@ import ProfileInfoContainer from '../../components/ProfileInfoContainer'
 import NotificationsBox from '../../components/NotificationsBox'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
+import { cityIndexSeparator } from '../../components/Dropdown/Dropdown'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -100,7 +101,8 @@ const Profile = () => {
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
-    switch (evt.currentTarget.id) {
+    const eventId = evt.currentTarget.id.split(cityIndexSeparator)[0]
+    switch (eventId) {
       case InputTypes.name:
         setNameInputState(newValue)
         break
