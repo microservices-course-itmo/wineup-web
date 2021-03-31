@@ -135,11 +135,14 @@ const Profile = () => {
   const onSubmitPhoneChange = verificationCode => {
     let applicationVerifier
     try {
-      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-        size: 'normal',
-      })
+      applicationVerifier = new firebase.auth.RecaptchaVerifier(
+        'phone-confirm-recaptcha',
+        {
+          size: 'invisible',
+        }
+      )
     } catch (e) {
-      applicationVerifier = document.getElementById('recaptcha')
+      applicationVerifier = document.getElementById('phone-confirm-recaptcha')
     }
     try {
       const provider = new firebase.auth.PhoneAuthProvider()
