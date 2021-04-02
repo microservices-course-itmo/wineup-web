@@ -33,6 +33,8 @@ const NotificationsBox = ({ notificationsGroupList }) => {
           .container {
             display: flex;
             flex-direction: column;
+            max-height: 760px;
+            overflow: scroll;
           }
 
           .noNotifications {

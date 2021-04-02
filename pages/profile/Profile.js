@@ -19,6 +19,7 @@ import ProfileInfoContainer from '../../components/ProfileInfoContainer'
 import NotificationsBox from '../../components/NotificationsBox'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
+import { cityIndexSeparator } from '../../components/Dropdown/Dropdown'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -53,9 +54,10 @@ const Profile = () => {
   const [nameInputState, setNameInputState] = useState(
     currentUser ? currentUser.name : null
   )
-  const [cityInputState, setCityInputState] = useState(
-    currentUser ? cityNameById(currentUser.cityId) : null
-  )
+  const [cityInputState, setCityInputState] = useState({
+    id: currentUser ? currentUser.cityId : null,
+    value: currentUser ? cityNameById(currentUser.cityId) : null,
+  })
   const [phoneInputState, setPhoneInputState] = useState(
     currentUser ? currentUser.phoneNumber : null
   )
@@ -71,7 +73,10 @@ const Profile = () => {
   const resetFields = () => {
     if (currentUser) {
       setNameInputState(currentUser.name)
-      setCityInputState(cityNameById(currentUser.cityId))
+      setCityInputState({
+        id: currentUser.cityId,
+        value: cityNameById(currentUser.cityId),
+      })
       setPhoneInputState(currentUser.phoneNumber)
     }
   }
@@ -97,13 +102,13 @@ const Profile = () => {
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
-
-    switch (evt.currentTarget.id) {
+    const eventId = evt.currentTarget.id.split(cityIndexSeparator)[0]
+    switch (eventId) {
       case InputTypes.name:
         setNameInputState(newValue)
         break
       case InputTypes.cityName:
-        setCityInputState(newValue)
+        setCityInputState({ id: cityIdByName(newValue), value: newValue })
         break
       case InputTypes.phone:
         setPhoneInputState(newValue)
@@ -173,7 +178,7 @@ const Profile = () => {
   }
 
   const onSubmit = async () => {
-    const updatedCity = cityIdByName(cityInputState)
+    const updatedCity = cityInputState.id
     const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber
     const userToPatch = {
       name: nameInputState !== currentUser.name ? nameInputState : null,
@@ -246,7 +251,9 @@ const Profile = () => {
               {activeSection === SectionKeys.userInfo && (
                 <UserInfoBox
                   name={nameInputState}
-                  cityName={cityInputState}
+                  currentCity={{
+                    ...cityInputState,
+                  }}
                   phone={phoneInputState}
                   onInputChange={onInputChange}
                   onSubmit={onSubmit}

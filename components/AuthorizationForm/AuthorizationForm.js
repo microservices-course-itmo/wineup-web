@@ -33,6 +33,7 @@ const AuthorizationForm = () => {
     telephoneError,
     isMessageVisible,
     finalMessage,
+    cityName,
     fb,
   } = formState
 
@@ -72,6 +73,7 @@ const AuthorizationForm = () => {
             uid={uid}
             date={date}
             cityId={cityId}
+            cityName={cityName}
             authForm={authForm}
             dispatch={dispatch}
             username={username}

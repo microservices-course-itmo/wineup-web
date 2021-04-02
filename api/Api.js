@@ -95,13 +95,14 @@ class Api {
     return response.data
   }
 
-  async getWineById(id) {
+  async getWineById(id, token) {
     const response = await this.sendRequest({
       url: `/catalog-service/position/true/byId/${id}`,
       method: 'GET',
       data: {},
       headers: {
         accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        Authorization: `Bearer ${token}`,
       },
     })
 
@@ -172,7 +173,7 @@ class Api {
   // TODO: добавить обработку ошибок
   async getFavoritesWines(token) {
     const response = await this.sendRequest({
-      url: '/user-service/favorites/list',
+      url: '/catalog-service/favorites/',
       method: 'GET',
       data: {},
       headers: {
@@ -190,7 +191,7 @@ class Api {
   }
 
   // TODO: добавить обработку ошибок
-  async getFavoritesWinesByUserId(userId) {
+  async getFavoritesWinesByUserId(userId, token) {
     const response = await this.sendRequest({
       url: `/catalog-service/position/true/byId/${userId}`,
       method: 'GET',
@@ -198,6 +199,7 @@ class Api {
       headers: {
         accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
 

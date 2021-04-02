@@ -7,13 +7,14 @@ import {
   useSetRecoilState,
 } from 'recoil'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
+
 import {
   addWineQuery,
   deleteWineQuery,
   sortedFavoritesWinesState,
   emptyState,
 } from '../Favorites/favoritesStore'
-import { winesState } from '../Catalog'
+import { winesState } from '../Catalog/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 // Форматирует цены
@@ -59,12 +60,14 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const [isFavorite, setIsFavorite] = useState(favorite)
   const router = useRouter()
   const [sortedWine, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+
   const allWinesStore = useRecoilValue(winesState)
   const setEmpty = useSetRecoilState(emptyState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
     const item = allWinesStore.find(x => x.wine_position_id === id)
     const copy = sortedWine.map(a => ({ ...a }))
+
     if (copy.length === 0) {
       setEmpty(false)
       copy.push(item)
@@ -77,6 +80,7 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(deleteWineQuery([id, accessToken]))
     const copy = sortedWine.map(a => ({ ...a }))
+
     const item = copy.find(x => x.wine_position_id === id)
     const index = copy.indexOf(item)
     copy.splice(index, 1)

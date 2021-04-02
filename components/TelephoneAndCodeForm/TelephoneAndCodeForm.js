@@ -41,7 +41,6 @@ const TelephoneAndCodeForm = props => {
     if (telephoneError === '' && telephone.length === TELEPHONE_MAX_SIZE) {
       try {
         const token = await fb.confirm(telCode).then(({ user: { za } }) => za)
-
         dispatch({ type: ReducerType.setUid, payload: token })
         const data = {
           fireBaseToken: token,

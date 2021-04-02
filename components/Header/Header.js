@@ -91,7 +91,7 @@ const Header = () => {
         iconSrc={imagePaths.login}
         isActive={activeImage === MenuItemKeys.login}
         labelText={currentUser ? currentUser.name : 'Войти'}
-        badgeCount={unreadNotificationsCount}
+        badgeCount={currentUser ? unreadNotificationsCount : 0}
       />
 
       <style jsx>
