@@ -19,7 +19,6 @@ import {
   favoritesSortState,
   emptyState,
   sortedFavoritesWinesState,
-
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -344,7 +343,6 @@ const Favorite = () => {
           cursor: pointer;
           outline: none;
         }
-
       `}</style>
     </div>
   )
