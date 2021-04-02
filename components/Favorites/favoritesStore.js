@@ -74,23 +74,6 @@ export const sortedFavoritesWinesState = selector({
   set: ({ set }, newValue) => set(favoritesState, newValue),
 })
 
-export const sortedFavoritesWinesState = selector({
-  key: 'filteredFavoritesListState',
-  get: ({ get }) => {
-    const list = get(favoritesState)
-    const sort = get(favoritesSortState)
-    switch (sort) {
-      case 'priceAsc':
-        return sortAsc(list)
-      case 'priceDesc':
-        return sortDesc(list)
-      default:
-        return list
-    }
-  },
-  set: ({ set }, newValue) => set(favoritesState, newValue),
-})
-
 export const sorts = atom({
   key: 'sortsFavorites',
   default: [],
