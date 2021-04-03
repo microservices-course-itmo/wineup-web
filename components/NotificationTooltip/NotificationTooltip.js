@@ -9,7 +9,6 @@ const NotificationTooltip = ({ notificationEnable }) => {
   const [switchValue, setSwitchValue] = useState(notificationEnable)
   const onSwitchCheckbox = () => {
     setSwitchValue(prevState => !prevState)
-    console.log('clicked')
   }
   return (
     <div>
