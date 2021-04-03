@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Header from '../../components/Header'
 import Search from '../../components/Search'
+import Footer from '../../components/Footer'
 
 const Custom404 = () => {
   return (
@@ -26,6 +27,7 @@ const Custom404 = () => {
           </div>
         </div>
       </div>
+      <Footer />
       <style jsx>
         {`
           .contentWrapper {
@@ -33,7 +35,7 @@ const Custom404 = () => {
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            margin-top: 95px;
+            margin: 95px 0;
           }
 
           .iconContainer {

@@ -26,6 +26,7 @@ import {
   sortingButtons,
 } from '../components/Catalog/utils'
 import useLocalStorage from '../hooks/useLocalStorage'
+import Footer from '../components/Footer'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
@@ -50,38 +51,40 @@ const Favorite = () => {
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
   return (
-    <div className='wrapper'>
-      <Header />
-      <Search />
-      <div className='content'>
-        <ButtonGroup
-          title='Сортировать по'
-          activeButton={favoritesSort}
-          buttons={sortingButtons}
-          onChange={event => setFavoritesSort(event.currentTarget.value)}
-        />
-        <div>
-          <button
-            type='button'
-            className='buttonClear'
-            onClick={() => clearFavorites()}
-          >
-            <text className='textBtn'>Очистить избранное?</text>
-          </button>
-        </div>
-        <CatalogFavorite>
+    <>
+      <div className='wrapper'>
+        <Header />
+        <Search />
+        <div className='content'>
+          <ButtonGroup
+            title='Сортировать по'
+            activeButton={favoritesSort}
+            buttons={sortingButtons}
+            onChange={event => setFavoritesSort(event.currentTarget.value)}
+          />
+          <div>
+            <button
+              type='button'
+              className='buttonClear'
+              onClick={() => clearFavorites()}
+            >
+              <text className='textBtn'>Очистить избранное?</text>
+            </button>
+          </div>
           {contentQueryLoadable.state === 'hasValue' &&
             (sortedWine && sortedWine.length > 0 ? (
-              sortedWine.map(wine => (
-                <WineCard
-                  key={wine.wine_position_id}
-                  wineId={wine.wine_position_id}
-                  imageSrc={parseImageSrc(wine.image)}
-                  info={getWineInfo(wine)}
-                  isLiked
-                  color={wine.color}
-                />
-              ))
+              <CatalogFavorite>
+                {sortedWine.map(wine => (
+                  <WineCard
+                    key={wine.wine_position_id}
+                    wineId={wine.wine_position_id}
+                    imageSrc={parseImageSrc(wine.image)}
+                    info={getWineInfo(wine)}
+                    isLiked
+                    color={wine.color}
+                  />
+                ))}
+              </CatalogFavorite>
             ) : (
               <div className='emptyContainer'>
                 <div className='emptyFavorite'>
@@ -121,8 +124,7 @@ const Favorite = () => {
               )}
             </div>
           )}
-        </CatalogFavorite>
-        {/* {favorites && !favorites.length ? (
+          {/* {favorites && !favorites.length ? (
           <div />
         ) : (
           <div>
@@ -162,130 +164,128 @@ const Favorite = () => {
             </div>
           </div>
         )} */}
+        </div>
+        <style jsx>{`
+          .wrapper {
+            max-width: 1440px;
+            padding: 0 20px;
+            margin: 0 auto;
+          }
+          .hidden {
+            display: none;
+          }
+          .line {
+            border: 0.1px solid;
+            color: black;
+          }
+          .nav {
+            width: 100%;
+            height: 62px;
+            background-color: lightgray;
+            margin-top: 40px;
+            margin-bottom: 40px;
+          }
+          .content {
+            display: flex;
+            flex-direction: column;
+            margin-top: 40px;
+          }
+          .filter {
+            background-color: lightgray;
+            min-width: 375px;
+            min-height: 1265px;
+            max-width: 375px;
+            max-height: 1265px;
+          }
+          .buttonClear {
+            float: right;
+            margin-top: -20px;
+            background: transparent;
+            border: none;
+            width: 200px;
+            outline: 0;
+          }
+          .buttonCatalog {
+            background: transparent;
+            border: none;
+            width: 200px;
+            outline: 0;
+          }
+          .textBtn {
+            font-size: 12px;
+            color: grey;
+            font-family: arial;
+            text-decoration-line: underline;
+            cursor: pointer;
+          }
+          .textFavorite {
+            font-size: 18px;
+            font-family: times new roman;
+            font-weight: bold;
+          }
+          .emptyFavorite {
+            background-image: url('assets/heart-background.png');
+            background-repeat: no-repeat;
+            background-size: 684px;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            margin-top: 100px;
+            width: 784px;
+            height: 784px;
+            align-items: center;
+            padding: 200px 0;
+            gap: 50px;
+          }
+          .emptyContainer {
+            margin: 0 auto;
+          }
+          .emptyContainerText {
+            font-size: 28px;
+            font-family: 'Times New Roman';
+          }
+          .linkText {
+            font-size: 22px;
+            color: #921332;
+            font-weight: 700;
+            text-decoration-line: underline;
+            cursor: pointer;
+          }
+          .btnAllFavoritesContainer {
+            display: flex;
+            justify-content: center;
+            margin-top: 147px;
+            margin-bottom: 336px;
+          }
+          .btnAllFavorites {
+            background: transparent;
+            border: 1px solid;
+            border-color: #931332;
+            border-radius: 50px;
+            width: 328px;
+            height: 57px;
+            box-sizing: border-box;
+            outline: 0;
+          }
+          .loading {
+            max-width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 60px;
+            margin-left: 700px;
+          }
+          .loading p {
+            margin-top: 25px;
+            font-family: Playfair Display, serif;
+            font-size: 16px;
+            color: #000000;
+          }
+        `}</style>
       </div>
-      <style jsx>{`
-        .wrapper {
-          max-width: 1440px;
-          padding: 0 20px;
-          margin: 0 auto;
-        }
-        .hidden {
-          display: none;
-        }
-        .line {
-          border: 0.1px solid;
-          color: black;
-        }
-        .nav {
-          width: 100%;
-          height: 62px;
-          background-color: lightgray;
-          margin-top: 40px;
-          margin-bottom: 40px;
-        }
-        .content {
-          display: flex;
-          flex-direction: column;
-          margin-top: 40px;
-        }
-        .filter {
-          background-color: lightgray;
-          min-width: 375px;
-          min-height: 1265px;
-          max-width: 375px;
-          max-height: 1265px;
-        }
-        .buttonClear {
-          float: right;
-          margin-top: -20px;
-          background: transparent;
-          border: none;
-          width: 200px;
-          outline: 0;
-        }
-        .buttonCatalog {
-          background: transparent;
-          border: none;
-          width: 200px;
-          outline: 0;
-        }
-        .textBtn {
-          font-size: 12px;
-          color: grey;
-          font-family: arial;
-          text-decoration-line: underline;
-          cursor: pointer;
-        }
-        .textFavorite {
-          font-size: 18px;
-          font-family: times new roman;
-          font-weight: bold;
-        }
-        .emptyFavorite {
-          background-image: url('assets/heart-background.png');
-          background-repeat: no-repeat;
-          background-size: 684px;
-          background-position: center;
-          display: flex;
-          flex-direction: column;
-          margin-top: 100px;
-          width: 784px;
-          height: 784px;
-          align-items: center;
-          padding: 200px 0;
-          gap: 50px;
-        }
-        .emptyContainer {
-          position: absolute;
-          left: 26.67%;
-          right: 25.83%;
-          top: 39.16%;
-          bottom: 26.91%;
-        }
-        .emptyContainerText {
-          font-size: 28px;
-          font-family: 'Times New Roman';
-        }
-        .linkText {
-          font-size: 22px;
-          color: #921332;
-          font-weight: 700;
-          text-decoration-line: underline;
-          cursor: pointer;
-        }
-        .btnAllFavoritesContainer {
-          display: flex;
-          justify-content: center;
-          margin-top: 147px;
-          margin-bottom: 336px;
-        }
-        .btnAllFavorites {
-          background: transparent;
-          border: 1px solid;
-          border-color: #931332;
-          border-radius: 50px;
-          width: 328px;
-          height: 57px;
-          box-sizing: border-box;
-          outline: 0;
-        }
-        .loading {
-          max-width: 250px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          margin-top: 60px;
-          margin-left: 700px;
-        }
-        .loading p {
-          margin-top: 25px;
-          font-family: Playfair Display, serif;
-          font-size: 16px;
-          color: #000000;
-        }
-      `}</style>
-    </div>
+      <Footer />
+    </>
   )
 }
 export default Favorite
