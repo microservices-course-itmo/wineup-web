@@ -65,6 +65,7 @@ const Profile = () => {
   const notificationsList = useRecoilValue(notificationsState) // mock
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
   const [toastVisibility, setToastVisibility] = useState(false)
+  const [isProfileChanged, setIsProfileChanged] = useState(true)
 
   const [profileData, setProfileData] = useState(null)
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
@@ -101,6 +102,7 @@ const Profile = () => {
   }, [currentUser, setCurrentUser, accessToken])
 
   const onInputChange = evt => {
+    setIsProfileChanged(true)
     const newValue = evt.currentTarget.value
     const eventId = evt.currentTarget.id.split(cityIndexSeparator)[0]
     switch (eventId) {
@@ -124,7 +126,7 @@ const Profile = () => {
       .then(res => {
         if (res.error) {
           setError({ error: res.error, message: res.message })
-        } else {
+        } else if (isProfileChanged) {
           setToastVisibility(true)
         }
       })
@@ -178,6 +180,14 @@ const Profile = () => {
   }
 
   const onSubmit = async () => {
+    if (
+      currentUser.name === nameInputState &&
+      currentUser.cityId === cityInputState.id &&
+      currentUser.phoneNumber === phoneInputState
+    ) {
+      setIsProfileChanged(false)
+      return
+    }
     const updatedCity = cityInputState.id
     const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber
     const userToPatch = {
