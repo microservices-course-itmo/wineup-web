@@ -12,6 +12,7 @@ const CustomSwitchCheckbox = ({ checked, onChange }) => {
           className='switchCheckbox'
           checked={checked}
         />
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor='checkbox1' className='checkbox-label' />
       </div>
       <style jsx>
