@@ -1,5 +1,7 @@
 import React from 'react'
 
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 const Footer = () => {
   return (
     <>
@@ -16,13 +18,13 @@ const Footer = () => {
                 test@test.ru
               </a>
             </div>
-            <div className='nav-top'>
+            <div className='navTop'>
               <h3 className='title'>О WineUP</h3>
               <a href='/'>Возможности</a>
               <a href='/'>Сообщество</a>
               <a href='/'>Контакты</a>
             </div>
-            <div className='nav-bottom'>
+            <div className='navBottom'>
               <h3 className='title'>Города</h3>
               <a href='/'>Санкт-Петербург</a>
               <a href='/'>Москва</a>
@@ -35,16 +37,16 @@ const Footer = () => {
             <div className='apps'>
               <h3 className='title'>Приложение WineUP</h3>
               <a href='/'>
-                <img src='/assets/gplay.svg' alt='google play' />
+                <img src={`${prefix}/assets/gplay.svg`} alt='google play' />
               </a>
               <a href='/'>
-                <img src='/assets/appstore.svg' alt='appstore' />
+                <img src={`${prefix}/assets/appstore.svg`} alt='appstore' />
               </a>
             </div>
           </div>
           <div className='bottom'>
             <p className='copyright'>
-              <img src='/assets/copyright.svg' alt='copyright' />
+              <img src={`${prefix}/assets/copyright.svg`} alt='copyright' />
               WineUp, 2020
             </p>
             <a href='/'>Пользовательское соглашение</a>
@@ -119,12 +121,12 @@ const Footer = () => {
             font-family: 'Poller One', cursive;
           }
 
-          .nav-top {
+          .navTop {
             grid-column: 2;
             grid-row: 1;
           }
 
-          .nav-bottom {
+          .navBottom {
             grid-column: 2;
             grid-row: 2;
           }
