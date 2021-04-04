@@ -247,7 +247,7 @@ const Profile = () => {
                 </Link>
               </footer>
             </nav>
-            <ProfileInfoContainer title={activeSection.title}>
+            <ProfileInfoContainer section={activeSection}>
               {activeSection === SectionKeys.userInfo && (
                 <UserInfoBox
                   name={nameInputState}
