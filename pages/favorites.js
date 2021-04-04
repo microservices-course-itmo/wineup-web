@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   useRecoilValueLoadable,
   useRecoilState,
@@ -87,46 +87,6 @@ const Favorite = () => {
             </div>
           )}
         </CatalogFavorite>
-        {/* {favorites && !favorites.length ? (
-          <div />
-        ) : (
-          <div>
-            <div>
-              <hr className='line' />
-              <p className='textFavorite'>Найдено в каталоге:</p>
-            </div>
-            <CatalogFavorite>
-              {favorites &&
-                favorites.map((item, index) => (
-                  <div id={index} className={`${index > 3 ? showResults : ''}`}>
-                    <WineCard
-                      key={wine.wine_position_id}
-                      wineId={wine.wine_position_id}
-                      imageSrc={parseImageSrc(wine.image)}
-                      info={getWineInfo(wine)}
-                      isLiked={Math.round(Math.random())}
-                      color="3"
-                    />
-                  </div>
-                ))}
-            </CatalogFavorite>
-            <div className='btnAllFavoritesContainer'>
-              {favorites.length > 4 ? (
-                <button
-                  type='button'
-                  className='btnAllFavorites'
-                  onClick={() => handleAllFavorites()}
-                >
-                  <text className='emptyContainerText'>
-                    {clicked ? 'Скрыть' : 'Посмотреть больше'}{' '}
-                  </text>
-                </button>
-              ) : (
-                ''
-              )}
-            </div>
-          </div>
-        )} */}
       </div>
       <style jsx>{`
         .wrapper {

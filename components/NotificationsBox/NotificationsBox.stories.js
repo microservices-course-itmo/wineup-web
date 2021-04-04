@@ -25,23 +25,64 @@ export const notifications = Template.bind({})
 
 notifications.args = {
   type: 'read',
-  notifications: [
+  notificationsGroupList: [
     {
-      imageType: 'wineup',
-      text:
-        'WineUp поздровляет Вас с днем рождения! Порадуйте себя мпецаильно подобранными внами по вашим предпочтениям!',
-      time: '19:01',
+      type: 'viewed',
+      notifications: [
+        {
+          id: 1,
+          message: 'Banti',
+          date: Date.now(),
+          type: 'WINE_PRICE_UPDATED',
+          userId: 80,
+          wineId: 'wine-328',
+        },
+        {
+          id: 2,
+          message: 'Banti',
+          date: Date.now(),
+          type: 'WINE_PRICE_UPDATED',
+          userId: 80,
+          wineId: 'wine-328',
+        },
+        {
+          id: 3,
+          message: 'Banti',
+          date: Date.now(),
+          type: 'WINE_PRICE_UPDATED',
+          userId: 80,
+          wineId: 'wine-328',
+        },
+      ],
     },
     {
-      imageType: 'liked',
-      text:
-        'Порадуйте себя мпецаильно подобранными внами по вашим предпочтениям!',
-      time: '19:02',
-    },
-    {
-      imageType: 'wineup',
-      text: 'WineUp поздровляет подобранными винами по вашим предпочтениям!',
-      time: '19:03',
+      type: 'unviewed',
+      notifications: [
+        {
+          id: 4,
+          message: 'Banti',
+          date: Date.now(),
+          type: 'WINE_PRICE_UPDATED',
+          userId: 80,
+          wineId: 'wine-328',
+        },
+        {
+          id: 5,
+          message: 'Banti',
+          date: Date.now(),
+          type: 'WINE_PRICE_UPDATED',
+          userId: 80,
+          wineId: 'wine-328',
+        },
+        {
+          id: 6,
+          message: 'Banti',
+          date: Date.now(),
+          type: 'WINE_PRICE_UPDATED',
+          userId: 80,
+          wineId: 'wine-328',
+        },
+      ],
     },
   ],
 }

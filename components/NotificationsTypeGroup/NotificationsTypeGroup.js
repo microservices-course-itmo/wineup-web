@@ -3,9 +3,9 @@ import Notification from '../Notification'
 
 const titles = type => {
   switch (type) {
-    case 'read':
+    case 'viewed':
       return 'Прочитанные'
-    case 'unread':
+    case 'unviewed':
       return 'Новые'
     default:
       return 'Уведомления'
@@ -14,24 +14,27 @@ const titles = type => {
 
 /**
  * Контейнер для списка уведомлений
- * @param {string} type - Тип уведомлений
+ * @param {string} groupType - Тип уведомлений
  * @param {Array} notifications - Объект уведомления
  * @param {string} notifications.text - Текст уведомления
  * @param {string} notifications.time - Время создания уведомления
  * @param {string} notifications.imageType - Тип изображения слева
  */
-const NotificationsTypeGroup = ({ type = 'unread', notifications = [] }) => (
+const NotificationsTypeGroup = ({
+  type: groupType = 'unread',
+  notifications = [],
+}) => (
   <>
-    <h2 className='title'>{titles(type)}</h2>
+    <h2 className='title'>{titles(groupType)}</h2>
 
     <div className='container'>
-      {notifications.map((notification, index) => (
+      {notifications.map(({ message, date, type: notificationType }, index) => (
         <Notification
-          key={`${type}-${index + 1}`}
-          text={notification.text}
-          time={notification.time}
-          type={type}
-          imageType={notification.imageType}
+          date={date}
+          message={message}
+          type={notificationType}
+          key={`${groupType}-${index + 1}`}
+          isViewed={groupType === 'viewed'}
         />
       ))}
     </div>

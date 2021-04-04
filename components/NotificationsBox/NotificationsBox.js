@@ -14,16 +14,20 @@ const NotificationsBox = ({ notificationsGroupList }) => {
   return (
     <div className='container'>
       {!isEmpty ? (
-        notificationsGroupList.map(
-          group =>
-            group.notifications.length > 0 && (
-              <NotificationsTypeGroup
-                key={group.type}
-                type={group.type}
-                notifications={group.notifications}
-              />
-            )
-        )
+        notificationsGroupList
+          .sort(a => {
+            return a.type === 'viewed' ? 1 : -1
+          })
+          .map(
+            group =>
+              group.notifications.length > 0 && (
+                <NotificationsTypeGroup
+                  key={group.type}
+                  type={group.type}
+                  notifications={group.notifications}
+                />
+              )
+          )
       ) : (
         <p className='noNotifications'>Нет уведомлений</p>
       )}

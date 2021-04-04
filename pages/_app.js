@@ -4,6 +4,8 @@ import 'swiper/swiper-bundle.min.css'
 
 import { initFirebase } from '../utils/firebaseConfig'
 import RecoilObserver from '../store/RecoilObserver'
+import NotificationsModule from '../store/NotificationsModule'
+import '@firebase/messaging'
 
 initFirebase()
 
@@ -11,6 +13,7 @@ const App = ({ Component, pageProps }) => {
   return (
     <RecoilRoot>
       {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
+      <NotificationsModule />
       <Component {...pageProps} />
       <style jsx global>
         {`

@@ -60,7 +60,9 @@ const Profile = () => {
     currentUser ? currentUser.phoneNumber : null
   )
   const [activeSection, setActiveSection] = useState(SectionKeys.userInfo)
-  const notificationsList = useRecoilValue(notificationsState) // mock
+  const [notificationsList, setNotificationsList] = useRecoilState(
+    notificationsState
+  ) // mock
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
   const [toastVisibility, setToastVisibility] = useState(false)
 
@@ -238,7 +240,10 @@ const Profile = () => {
                 />
               )}
               {activeSection === SectionKeys.notifications && (
-                <NotificationsBox notificationsGroupList={notificationsList} />
+                <NotificationsBox
+                  notificationsGroupList={notificationsList}
+                  setNotificationsList={setNotificationsList}
+                />
               )}
             </ProfileInfoContainer>
           </div>
