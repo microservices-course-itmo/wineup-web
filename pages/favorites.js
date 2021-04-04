@@ -1,10 +1,6 @@
 import { useEffect } from 'react'
-import {
-  useRecoilValueLoadable,
-  useRecoilState,
-  useRecoilValue,
-  useRecoilCallback,
-} from 'recoil'
+import { useRouter } from 'next/router'
+import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
 import Link from 'next/link'
 import Header from '../components/Header'
 import Search from '../components/Search'
@@ -15,7 +11,6 @@ import Loader from '../components/Loader'
 import {
   favoritesState,
   contentQuery,
-  deleteQuery,
   favoritesSortState,
   sortedFavoritesWinesState,
   emptyState,
@@ -28,26 +23,15 @@ import {
 import useLocalStorage from '../hooks/useLocalStorage'
 
 const Favorite = () => {
+  const router = useRouter()
+
   const [accessToken] = useLocalStorage('accessToken')
   const [, setFavorites] = useRecoilState(favoritesState)
   const empty = useRecoilValue(emptyState)
   const [, setEmpty] = useRecoilState(emptyState)
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
-  const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
-  const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
-    await snapshot.getPromise(deleteQuery(accessToken))
-    // eslint-disable-next-line
-    const copy = sortedWine.map(a => Object.assign({}, a))
-    copy.forEach(element => {
-      const index = copy.indexOf(element)
-      copy.splice(index, 1)
-    })
-
-    setSortedWine(() => copy)
-    setEmpty(true)
-  })
   useEffect(() => {
     if (sortedWine.length === 0 && !empty) {
       if (contentQueryLoadable.state === 'hasValue') {
@@ -71,7 +55,10 @@ const Favorite = () => {
           <button
             type='button'
             className='buttonClear'
-            onClick={() => clearFavorites()}
+            // onClick={() => clearFavorites()}
+            onClick={() => {
+              router.push('/ClearFavorite')
+            }}
           >
             <text className='textBtn'>Очистить избранное?</text>
           </button>
