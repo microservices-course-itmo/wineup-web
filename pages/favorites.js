@@ -41,6 +41,8 @@ const Favorite = () => {
     setSortedWine(() => '')
     setEmpty(true)
   })
+  const hasWines = sortedWine && sortedWine.length > 0
+
   useEffect(() => {
     if (sortedWine.length === 0 && !empty) {
       if (contentQueryLoadable.state === 'hasValue') {
@@ -49,6 +51,7 @@ const Favorite = () => {
       }
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
+
   return (
     <div className='wrapper'>
       <Header />
@@ -65,13 +68,14 @@ const Favorite = () => {
             type='button'
             className='buttonClear'
             onClick={() => clearFavorites()}
+            disabled={!hasWines}
           >
             <text className='textBtn'>Очистить избранное?</text>
           </button>
         </div>
         <CatalogFavorite>
           {contentQueryLoadable.state === 'hasValue' &&
-            (sortedWine && sortedWine.length > 0 ? (
+            (hasWines ? (
               sortedWine.map(wine => (
                 <WineCard
                   key={wine.wine_position_id}
@@ -122,46 +126,6 @@ const Favorite = () => {
             </div>
           )}
         </CatalogFavorite>
-        {/* {favorites && !favorites.length ? (
-          <div />
-        ) : (
-          <div>
-            <div>
-              <hr className='line' />
-              <p className='textFavorite'>Найдено в каталоге:</p>
-            </div>
-            <CatalogFavorite>
-              {favorites &&
-                favorites.map((item, index) => (
-                  <div id={index} className={`${index > 3 ? showResults : ''}`}>
-                    <WineCard
-                      key={wine.wine_position_id}
-                      wineId={wine.wine_position_id}
-                      imageSrc={parseImageSrc(wine.image)}
-                      info={getWineInfo(wine)}
-                      isLiked={Math.round(Math.random())}
-                      color="3"
-                    />
-                  </div>
-                ))}
-            </CatalogFavorite>
-            <div className='btnAllFavoritesContainer'>
-              {favorites.length > 4 ? (
-                <button
-                  type='button'
-                  className='btnAllFavorites'
-                  onClick={() => handleAllFavorites()}
-                >
-                  <text className='emptyContainerText'>
-                    {clicked ? 'Скрыть' : 'Посмотреть больше'}{' '}
-                  </text>
-                </button>
-              ) : (
-                ''
-              )}
-            </div>
-          </div>
-        )} */}
       </div>
       <style jsx>{`
         .wrapper {
@@ -169,13 +133,16 @@ const Favorite = () => {
           padding: 0 20px;
           margin: 0 auto;
         }
+
         .hidden {
           display: none;
         }
+
         .line {
           border: 0.1px solid;
           color: black;
         }
+
         .nav {
           width: 100%;
           height: 62px;
@@ -183,11 +150,13 @@ const Favorite = () => {
           margin-top: 40px;
           margin-bottom: 40px;
         }
+
         .content {
           display: flex;
           flex-direction: column;
           margin-top: 40px;
         }
+
         .filter {
           background-color: lightgray;
           min-width: 375px;
@@ -195,6 +164,7 @@ const Favorite = () => {
           max-width: 375px;
           max-height: 1265px;
         }
+
         .buttonClear {
           float: right;
           margin-top: -20px;
@@ -203,24 +173,28 @@ const Favorite = () => {
           width: 200px;
           outline: 0;
         }
+
         .buttonCatalog {
           background: transparent;
           border: none;
           width: 200px;
           outline: 0;
         }
+
         .textBtn {
           font-size: 12px;
           color: grey;
           font-family: arial;
           text-decoration-line: underline;
-          cursor: pointer;
+          cursor: ${hasWines ? 'pointer' : 'not-allowed'};
         }
+
         .textFavorite {
           font-size: 18px;
           font-family: times new roman;
           font-weight: bold;
         }
+
         .emptyFavorite {
           background-image: url('assets/heart-background.png');
           background-repeat: no-repeat;
@@ -235,6 +209,7 @@ const Favorite = () => {
           padding: 200px 0;
           gap: 50px;
         }
+
         .emptyContainer {
           position: absolute;
           left: 26.67%;
@@ -242,10 +217,12 @@ const Favorite = () => {
           top: 39.16%;
           bottom: 26.91%;
         }
+
         .emptyContainerText {
           font-size: 28px;
           font-family: 'Times New Roman';
         }
+
         .linkText {
           font-size: 22px;
           color: #921332;
@@ -253,12 +230,14 @@ const Favorite = () => {
           text-decoration-line: underline;
           cursor: pointer;
         }
+
         .btnAllFavoritesContainer {
           display: flex;
           justify-content: center;
           margin-top: 147px;
           margin-bottom: 336px;
         }
+
         .btnAllFavorites {
           background: transparent;
           border: 1px solid;
@@ -269,6 +248,7 @@ const Favorite = () => {
           box-sizing: border-box;
           outline: 0;
         }
+
         .loading {
           max-width: 250px;
           display: flex;
@@ -278,6 +258,7 @@ const Favorite = () => {
           margin-top: 60px;
           margin-left: 700px;
         }
+
         .loading p {
           margin-top: 25px;
           font-family: Playfair Display, serif;

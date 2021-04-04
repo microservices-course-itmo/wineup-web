@@ -336,7 +336,11 @@ const FilterBar = () => {
       <div className='filterBarTitle'>Фильтры</div>
       <div className='filterBarSubtitle'>WineUp</div>
       <ul className='filterList'>{list}</ul>
-      <button type='reset' className='clearFilterButton'>
+      <button
+        type='reset'
+        className='clearFilterButton'
+        disabled={Object.is(formState, initialFormState)}
+      >
         <span className='btnText'>
           <span>Очистить фильтр</span>
           <img src='/assets/resetBtnIcon.svg' alt='reset' />
@@ -385,7 +389,9 @@ const FilterBar = () => {
             background-color: #931332;
             color: white;
             font-size: 22px;
-            cursor: pointer;
+            cursor: ${Object.is(formState, initialFormState)
+              ? 'not-allowed'
+              : 'pointer'};
           }
 
           .btnText {

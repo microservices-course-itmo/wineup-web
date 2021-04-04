@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const emptyInputValue = 'Не указано'
 
@@ -9,8 +9,15 @@ const emptyInputValue = 'Не указано'
  * @param{boolean} hasError - Ошибка при валидации
  * @param{function} onChange - Функция-обработчик изменений поля
  */
-const CustomInput = ({ id, label, value, hasError, onChange }) => {
-  const [isReadOnly, setReadOnly] = useState(true)
+const CustomInput = ({
+  id,
+  label,
+  value,
+  hasError,
+  onChange,
+  isDisabled,
+  dispatch,
+}) => {
   return (
     <div className='container'>
       <label htmlFor={id}>
@@ -20,16 +27,13 @@ const CustomInput = ({ id, label, value, hasError, onChange }) => {
             id={id}
             className={hasError ? 'hasError' : null}
             autoComplete='off'
-            readOnly={isReadOnly}
-            disabled={isReadOnly}
+            readOnly={isDisabled}
+            disabled={isDisabled}
             value={value}
             placeholder={!value ? emptyInputValue : null}
             onChange={onChange}
           />
-          <div
-            className='editIcon'
-            onClick={() => setReadOnly(prevState => !prevState)}
-          >
+          <div className='editIcon' onClick={() => dispatch({ type: id })}>
             <img src='assets/edit-icon.svg' alt='Edit' />
           </div>
         </div>
