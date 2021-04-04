@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { selectorFamily, useRecoilValueLoadable } from 'recoil'
 
 import WinePosition from '../../components/WinePosition'
-import Header from '../../components/Header'
 import Search from '../../components/Search'
 import GlobalRecoilWrapper from '../../store/GlobalRecoilWrapper'
 import SameWines from '../../components/SameWines'
@@ -14,7 +13,6 @@ import {
 import Loader from '../../components/Loader'
 import api from '../../api'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import Footer from '../../components/Footer'
 
 export const winesPositionState = selectorFamily({
   key: 'winesPositionState',
@@ -39,7 +37,6 @@ const Wine = () => {
   return (
     <>
       <GlobalRecoilWrapper>
-        <Header />
         <Search />
 
         {state === 'hasValue' && (
@@ -120,7 +117,6 @@ const Wine = () => {
           }
         `}</style>
       </GlobalRecoilWrapper>
-      <Footer />
     </>
   )
 }

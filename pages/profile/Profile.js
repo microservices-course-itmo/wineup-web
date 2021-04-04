@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import firebase from 'firebase'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import Header from '../../components/Header'
 import {
   userState,
   errorState,
@@ -20,7 +19,6 @@ import NotificationsBox from '../../components/NotificationsBox'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
 import { cityIndexSeparator } from '../../components/Dropdown/Dropdown'
-import Footer from '../../components/Footer'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -207,7 +205,6 @@ const Profile = () => {
             closeCallback={() => setToastVisibility(false)}
           />
         ) : null}
-        <Header />
         <ConfirmPhoneModal
           visible={isConfirmModalVisible}
           onSubmit={onSubmitPhoneChange}
@@ -341,7 +338,6 @@ const Profile = () => {
           `}
         </style>
       </GlobalRecoilWrapper>
-      <Footer />
     </>
   )
 }

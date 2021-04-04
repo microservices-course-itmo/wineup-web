@@ -6,7 +6,6 @@ import {
   useRecoilCallback,
 } from 'recoil'
 import Link from 'next/link'
-import Header from '../components/Header'
 import Search from '../components/Search'
 import CatalogFavorite from '../components/CatalogFavorite'
 import WineCard from '../components/WineCard'
@@ -26,7 +25,6 @@ import {
   sortingButtons,
 } from '../components/Catalog/utils'
 import useLocalStorage from '../hooks/useLocalStorage'
-import Footer from '../components/Footer'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
@@ -53,7 +51,6 @@ const Favorite = () => {
   return (
     <>
       <div className='wrapper'>
-        <Header />
         <Search />
         <div className='content'>
           <ButtonGroup
@@ -284,7 +281,6 @@ const Favorite = () => {
           }
         `}</style>
       </div>
-      <Footer />
     </>
   )
 }

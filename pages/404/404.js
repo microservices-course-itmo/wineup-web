@@ -1,12 +1,9 @@
 import Link from 'next/link'
-import Header from '../../components/Header'
 import Search from '../../components/Search'
-import Footer from '../../components/Footer'
 
 const Custom404 = () => {
   return (
-    <div>
-      <Header />
+    <>
       <Search />
       <div className='contentWrapper'>
         <div className='iconContainer'>
@@ -27,7 +24,6 @@ const Custom404 = () => {
           </div>
         </div>
       </div>
-      <Footer />
       <style jsx>
         {`
           .contentWrapper {
@@ -69,7 +65,7 @@ const Custom404 = () => {
           }
         `}
       </style>
-    </div>
+    </>
   )
 }
 

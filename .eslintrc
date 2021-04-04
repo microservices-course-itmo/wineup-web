@@ -45,6 +45,7 @@
     "prettier/prettier": ["error", {
      "endOfLine":"auto"
    }],
-    "func-names": "off"
+    "func-names": "off",
+    "jsx-a11y/anchor-is-valid": "off"
   }
 }

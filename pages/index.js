@@ -1,15 +1,12 @@
-import Header from '../components/Header/Header'
 import Search from '../components/Search/Search'
 import Catalog from '../components/Catalog'
 import FilterBar from '../components/FilterBar'
 import GlobalRecoilWrapper from '../store/GlobalRecoilWrapper'
-import Footer from '../components/Footer'
 
 const Home = () => {
   return (
     <>
       <GlobalRecoilWrapper>
-        <Header />
         <Search />
 
         <div className='content'>
@@ -54,7 +51,6 @@ const Home = () => {
           `}
         </style>
       </GlobalRecoilWrapper>
-      <Footer />
     </>
   )
 }
