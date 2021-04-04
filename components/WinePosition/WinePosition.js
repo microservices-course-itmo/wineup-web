@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
 import {
   addWineQuery,
@@ -50,7 +51,7 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const userExist = useRecoilValue(userState)
   const [accessToken] = useLocalStorage('accessToken')
   const [isFavorite, setIsFavorite] = useState(favorite)
-
+  const router = useRouter()
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
@@ -90,6 +91,8 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
         setIsFavorite(false)
         deleteFavorite(id, token)
       }
+    } else {
+      router.push('/login')
     }
   }
   return (

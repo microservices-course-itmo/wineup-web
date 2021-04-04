@@ -38,7 +38,14 @@ const Favorite = () => {
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
     await snapshot.getPromise(deleteQuery(accessToken))
-    setSortedWine(() => '')
+    // eslint-disable-next-line
+    const copy = sortedWine.map(a => Object.assign({}, a))
+    copy.forEach(element => {
+      const index = copy.indexOf(element)
+      copy.splice(index, 1)
+    })
+
+    setSortedWine(() => copy)
     setEmpty(true)
   })
   useEffect(() => {

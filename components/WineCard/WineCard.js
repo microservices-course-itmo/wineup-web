@@ -1,5 +1,6 @@
 import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
 import {
@@ -58,6 +59,7 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
   const [, setEmpty] = useRecoilState(emptyState)
+  const router = useRouter()
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
     const item = allWinesStore.find(x => x.wine_position_id === id)
@@ -94,6 +96,8 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
         setIsHeartFilled(false)
         deleteFavorite(id, token)
       }
+    } else {
+      router.push('/login')
     }
   }
   return (
