@@ -60,34 +60,34 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const fetched = useRecoilValue(fetchedState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
-    const item = allWinesStore.find(x => x.wine_position_id === id)
-    // eslint-disable-next-line
-    const copy = sortedWine.map(a => Object.assign({}, a))
-    if (fetched) {
-      copy.push(item)
-      setSortedWine(() => copy)
-    }
   })
   const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(deleteWineQuery([id, accessToken]))
-    // eslint-disable-next-line
-    const copy = sortedWine.map(a => Object.assign({}, a))
-    const item = copy.find(x => x.wine_position_id === id)
-    const index = copy.indexOf(item)
-    copy.splice(index, 1)
-    if (copy.length === 0) {
-      setEmpty(true)
-    }
-    setSortedWine(() => copy)
   })
   const clickHeart = (id, token) => {
     if (userExist) {
       if (!isFavorite) {
         setIsFavorite(true)
         addFavorite(id, token)
+        const item = allWinesStore.find(x => x.wine_position_id === id)
+        // eslint-disable-next-line
+        const copy = sortedWine.map(a => Object.assign({}, a))
+        if (fetched) {
+          copy.push(item)
+          setSortedWine(() => copy)
+        }
       } else {
         setIsFavorite(false)
         deleteFavorite(id, token)
+        // eslint-disable-next-line
+        const copy = sortedWine.map(a => Object.assign({}, a))
+        const item = copy.find(x => x.wine_position_id === id)
+        const index = copy.indexOf(item)
+        copy.splice(index, 1)
+        if (copy.length === 0) {
+          setEmpty(true)
+        }
+        setSortedWine(() => copy)
       }
     } else {
       router.push('/login')
