@@ -54,7 +54,7 @@ const GlobalRecoilWrapper = ({ children }) => {
       {children}
       <style jsx>{`
         .wrapper {
-          position: relative
+          position: relative;
           max-width: 1440px;
           padding: 0 20px;
           margin: 0 auto;

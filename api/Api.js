@@ -183,7 +183,8 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      return response
+      // throw new Error('Server Error')
     }
 
     return response.data
@@ -203,7 +204,8 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      return response
+      // throw new Error('Server Error')
     }
 
     return response.data

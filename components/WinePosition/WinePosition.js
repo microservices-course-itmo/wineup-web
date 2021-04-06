@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
+import {
+  useRecoilCallback,
+  useRecoilValue,
+  useRecoilState,
+  useSetRecoilState,
+} from 'recoil'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
 import {
   addWineQuery,
   deleteWineQuery,
@@ -9,7 +15,6 @@ import {
   fetchedState,
 } from '../Favorites/favoritesStore'
 import { winesState } from '../Catalog/store'
-import { userState } from '../../store/GlobalRecoilWrapper/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 // Форматирует цены
@@ -32,6 +37,7 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
  * @param {number} color - Номер цвета заднего фона, всего их три, они указаны в массиве colors
  * @param {boolean} favorite - Является ли избранным вином
  * @param {Object} info - Информация о вине
+ * @param {string} wineId
  * @param {string} info.name - Название вина
  * @param {string} info.grape - Сорт винограда
  * @param {number} info.size - Размер бутылки
@@ -53,10 +59,9 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const [accessToken] = useLocalStorage('accessToken')
   const [isFavorite, setIsFavorite] = useState(favorite)
   const router = useRouter()
-  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
-  const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+  const [sortedWine, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
-  const [, setEmpty] = useRecoilState(emptyState)
+  const setEmpty = useSetRecoilState(emptyState)
   const fetched = useRecoilValue(fetchedState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))

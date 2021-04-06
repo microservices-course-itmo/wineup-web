@@ -10,6 +10,10 @@ export const fetchedState = atom({
   key: 'fetchedState',
   default: false,
 })
+export const showClearState = atom({
+  key: 'showClearState',
+  default: false,
+})
 export const favoritesState = atom({
   key: 'favorites',
   default: [],
@@ -40,7 +44,6 @@ export const favoritesQuery = selectorFamily({
   key: 'favoritesQuery',
   get: token => async () => {
     const response = await api.getFavoritesWines(token)
-
     return response
   },
 })
@@ -77,6 +80,7 @@ export const sortedFavoritesWinesState = selector({
   },
   set: ({ set }, newValue) => set(favoritesState, newValue),
 })
+
 export const sorts = atom({
   key: 'sortsFavorites',
   default: [],

@@ -1,15 +1,16 @@
 import React from 'react'
 import { useRecoilState, useRecoilCallback } from 'recoil'
-import Link from 'next/link'
 import CustomFormButton from '../CustomFormButton'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import {
   deleteQuery,
   sortedFavoritesWinesState,
   emptyState,
+  showClearState,
 } from '../Favorites/favoritesStore'
 
 const ConfirmClearFavorites = () => {
+  const [show, setShow] = useRecoilState(showClearState)
   const [accessToken] = useLocalStorage('accessToken')
   const [, setEmpty] = useRecoilState(emptyState)
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
@@ -18,6 +19,7 @@ const ConfirmClearFavorites = () => {
     const copy = []
     setSortedWine(() => copy)
     setEmpty(true)
+    setShow(false)
   })
 
   return (
@@ -26,47 +28,51 @@ const ConfirmClearFavorites = () => {
         <div className='confirmLogoutContainer'>
           <div className='header'>
             <div className='confirmationText'>Очистить избранное? </div>
-            <Link href='/favorites'>
-              <button className='closeButton'>x</button>
-            </Link>
+            <button
+              className='closeButton'
+              onClick={() => {
+                setShow(false)
+              }}
+            >
+              x
+            </button>
           </div>
           <div className='descriptionText'>Вы хотите очистить избранное?</div>
           <div className='descriptionText'>
             Отменить это действие будет невозможно
           </div>
           <div className='buttonsContainer'>
-            <Link href='/favorites'>
-              <CustomFormButton
-                width='230px'
-                height='33px'
-                margin='0 40px 0 0'
-                background='white'
-                color='#931332'
-                fontSize='18px'
-                fontWeight='normal'
-                backgroundOnHover='#931332'
-                colorOnHover='#931332'
-                textColorOnHovor='white'
-                border='1px solid #931332'
-                text='Отменить'
-              />
-            </Link>
-            <Link href='/favorites'>
-              <CustomFormButton
-                width='230px'
-                height='33px'
-                background='white'
-                color='#931332'
-                fontSize='18px'
-                fontWeight='normal'
-                backgroundOnHover='#931332'
-                colorOnHover='#931332'
-                textColorOnHovor='white'
-                border='1px solid #931332'
-                text='Очистить'
-                onClick={clearFavorites}
-              />
-            </Link>
+            <CustomFormButton
+              width='230px'
+              height='33px'
+              margin='0 40px 0 0'
+              backgroundColor='white'
+              color='#931332'
+              fontSize='18px'
+              fontWeight='normal'
+              backgroundOnHover='#931332'
+              colorOnHover='#931332'
+              textColorOnHovеr='white'
+              border='1px solid #931332'
+              text='Отменить'
+              onClick={() => {
+                setShow(false)
+              }}
+            />
+            <CustomFormButton
+              width='230px'
+              height='33px'
+              backgroundColor='white'
+              color='#931332'
+              fontSize='18px'
+              fontWeight='normal'
+              backgroundOnHover='#931332'
+              colorOnHover='#931332'
+              textColorOnHovеr='white'
+              border='1px solid #931332'
+              text='Очистить'
+              onClick={clearFavorites}
+            />
           </div>
         </div>
       </div>
@@ -88,7 +94,7 @@ const ConfirmClearFavorites = () => {
           .shadow {
             width: 100%;
             height: 100%;
-            display: flex;
+            display: ${show ? 'flex' : 'none'};
             justify-content: center;
             align-items: center;
             position: fixed;
@@ -129,10 +135,6 @@ const ConfirmClearFavorites = () => {
             line-height: 37px;
             text-align: center;
             color: #000000;
-          }
-
-          .icon {
-            margin-left: 250.81px;
           }
 
           .buttonsContainer {

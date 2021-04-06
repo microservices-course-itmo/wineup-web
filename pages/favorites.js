@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil'
+import {
+  useRecoilValueLoadable,
+  useRecoilState,
+  useSetRecoilState,
+} from 'recoil'
 import Link from 'next/link'
 import Header from '../components/Header'
 import Search from '../components/Search'
@@ -12,9 +15,10 @@ import {
   favoritesState,
   contentQuery,
   favoritesSortState,
-  sortedFavoritesWinesState,
   emptyState,
   fetchedState,
+  sortedFavoritesWinesState,
+  showClearState,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -22,21 +26,23 @@ import {
   sortingButtons,
 } from '../components/Catalog/utils'
 import useLocalStorage from '../hooks/useLocalStorage'
+import ConfirmClearFavorites from '../components/ConfirmClearFavorites'
 
 const Favorite = () => {
-  const router = useRouter()
-
   const [accessToken] = useLocalStorage('accessToken')
-  const [, setFavorites] = useRecoilState(favoritesState)
-  const empty = useRecoilValue(emptyState)
-  const [, setEmpty] = useRecoilState(emptyState)
+  const [, setShowClear] = useRecoilState(showClearState)
+  const setFavorites = useSetRecoilState(favoritesState)
   const [, setFetched] = useRecoilState(fetchedState)
-  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
+  const [empty, setEmpty] = useRecoilState(emptyState)
+  const [sortedWine] = useRecoilState(sortedFavoritesWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   useEffect(() => {
     if (sortedWine.length === 0 && !empty) {
-      if (contentQueryLoadable.state === 'hasValue') {
+      if (
+        contentQueryLoadable.state === 'hasValue' &&
+        !contentQueryLoadable.contents.error
+      ) {
         setFavorites(() => contentQueryLoadable.contents)
         setEmpty(true)
         setFetched(true)
@@ -48,77 +54,95 @@ const Favorite = () => {
       <Header />
       <Search />
       <div className='content'>
-        <ButtonGroup
-          title='Сортировать по'
-          activeButton={favoritesSort}
-          buttons={sortingButtons}
-          onChange={event => setFavoritesSort(event.currentTarget.value)}
-        />
-        <div>
-          <button
-            type='button'
-            className='buttonClear'
-            // onClick={() => clearFavorites()}
-            onClick={() => {
-              router.push('/ClearFavorite')
-            }}
-          >
-            <text className='textBtn'>Очистить избранное?</text>
-          </button>
-        </div>
-        <CatalogFavorite>
-          {contentQueryLoadable.state === 'hasValue' &&
-            (sortedWine && sortedWine.length > 0 ? (
-              sortedWine.map(wine => (
-                <WineCard
-                  key={wine.wine_position_id}
-                  wineId={wine.wine_position_id}
-                  imageSrc={parseImageSrc(wine.image)}
-                  info={getWineInfo(wine)}
-                  isLiked
-                  color={wine.color}
-                />
-              ))
-            ) : (
-              <div className='emptyContainer'>
-                <div className='emptyFavorite'>
-                  <p className='emptyContainerText'>
-                    Тут пока пусто, но наш каталог поможет вам что-нибудь
-                    найти...
-                  </p>
-                  <Link href='/'>
-                    <a href='/#' className='linkText'>
-                      Перейти в каталог...
-                    </a>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          {contentQueryLoadable.state !== 'hasValue' && (
+        {!contentQueryLoadable.contents.error ? (
+          <>
+            <ConfirmClearFavorites />
+            <ButtonGroup
+              title='Сортировать по'
+              activeButton={favoritesSort}
+              buttons={sortingButtons}
+              onChange={event => setFavoritesSort(event.currentTarget.value)}
+            />
             <div>
-              {contentQueryLoadable.state === 'hasError' && (
-                <div className='loading'>
-                  <img
-                    className='errorIcon'
-                    src='/assets/error.svg'
-                    alt='error icon'
-                  />
-                  <p>
-                    Произошла ошибка
-                    <br />
-                    Попробуйте перезагрузить страницу
-                  </p>
-                </div>
-              )}
-              {contentQueryLoadable.state === 'loading' && (
-                <div className='loading'>
-                  <Loader />
-                  <p>Загружаем каталог избранного...</p>
-                </div>
-              )}
+              <button
+                type='button'
+                className='buttonClear'
+                onClick={() => {
+                  setShowClear(true)
+                }}
+              >
+                <text className='textBtn'>Очистить избранное?</text>
+              </button>
             </div>
-          )}
-        </CatalogFavorite>
+            <CatalogFavorite>
+              {contentQueryLoadable.state === 'hasValue' &&
+                (sortedWine && sortedWine.length > 0 ? (
+                  sortedWine.map(wine => (
+                    <WineCard
+                      key={wine.wine_position_id}
+                      wineId={wine.wine_position_id}
+                      imageSrc={parseImageSrc(wine.image)}
+                      info={getWineInfo(wine)}
+                      isLiked
+                      color={wine.color}
+                    />
+                  ))
+                ) : (
+                  <div className='emptyContainer'>
+                    <div className='emptyFavorite'>
+                      <p className='emptyContainerText'>
+                        Тут пока пусто, но наш каталог поможет вам что-нибудь
+                        найти...
+                      </p>
+                      <Link href='/'>
+                        <a href='/#' className='linkText'>
+                          Перейти в каталог...
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              {contentQueryLoadable.state !== 'hasValue' && (
+                <div>
+                  {contentQueryLoadable.state === 'hasError' && (
+                    <div className='loading'>
+                      <img
+                        className='errorIcon'
+                        src='/assets/error.svg'
+                        alt='error icon'
+                      />
+                      <p>
+                        Произошла ошибка
+                        <br />
+                        Попробуйте перезагрузить страницу
+                      </p>
+                    </div>
+                  )}
+                  {contentQueryLoadable.state === 'loading' && (
+                    <div className='loading'>
+                      <Loader />
+                      <p>Загружаем каталог избранного...</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CatalogFavorite>
+          </>
+        ) : (
+          <>
+            <header className='mainHeader'>
+              Чтобы просматривать Избранное, авторизуйтесь
+            </header>
+            <footer className='buttonFooter'>
+              <Link href='/login'>
+                <button type='button' className='btnLogin'>
+                  Войти
+                </button>
+              </Link>
+            </footer>
+          </>
+        )}
+
         {/* {favorites && !favorites.length ? (
           <div />
         ) : (
@@ -166,13 +190,16 @@ const Favorite = () => {
           padding: 0 20px;
           margin: 0 auto;
         }
+
         .hidden {
           display: none;
         }
+
         .line {
           border: 0.1px solid;
           color: black;
         }
+
         .nav {
           width: 100%;
           height: 62px;
@@ -180,11 +207,13 @@ const Favorite = () => {
           margin-top: 40px;
           margin-bottom: 40px;
         }
+
         .content {
           display: flex;
           flex-direction: column;
           margin-top: 40px;
         }
+
         .filter {
           background-color: lightgray;
           min-width: 375px;
@@ -192,6 +221,7 @@ const Favorite = () => {
           max-width: 375px;
           max-height: 1265px;
         }
+
         .buttonClear {
           float: right;
           margin-top: -20px;
@@ -200,24 +230,28 @@ const Favorite = () => {
           width: 200px;
           outline: 0;
         }
+
         .buttonCatalog {
           background: transparent;
           border: none;
           width: 200px;
           outline: 0;
         }
+
         .textBtn {
           font-size: 12px;
           color: grey;
-          font-family: arial;
+          font-family: 'Arial', serif;
           text-decoration-line: underline;
           cursor: pointer;
         }
+
         .textFavorite {
           font-size: 18px;
-          font-family: times new roman;
+          font-family: 'Times New Roman', serif;
           font-weight: bold;
         }
+
         .emptyFavorite {
           background-image: url('assets/heart-background.png');
           background-repeat: no-repeat;
@@ -232,6 +266,7 @@ const Favorite = () => {
           padding: 200px 0;
           gap: 50px;
         }
+
         .emptyContainer {
           position: absolute;
           left: 26.67%;
@@ -239,10 +274,12 @@ const Favorite = () => {
           top: 39.16%;
           bottom: 26.91%;
         }
+
         .emptyContainerText {
           font-size: 28px;
-          font-family: 'Times New Roman';
+          font-family: 'Times New Roman', serif;
         }
+
         .linkText {
           font-size: 22px;
           color: #921332;
@@ -250,12 +287,14 @@ const Favorite = () => {
           text-decoration-line: underline;
           cursor: pointer;
         }
+
         .btnAllFavoritesContainer {
           display: flex;
           justify-content: center;
           margin-top: 147px;
           margin-bottom: 336px;
         }
+
         .btnAllFavorites {
           background: transparent;
           border: 1px solid;
@@ -266,6 +305,7 @@ const Favorite = () => {
           box-sizing: border-box;
           outline: 0;
         }
+
         .loading {
           max-width: 250px;
           display: flex;
@@ -275,11 +315,34 @@ const Favorite = () => {
           margin-top: 60px;
           margin-left: 700px;
         }
+
         .loading p {
           margin-top: 25px;
           font-family: Playfair Display, serif;
           font-size: 16px;
           color: #000000;
+        }
+        .mainHeader {
+          font-size: 32px;
+          font-weight: bold;
+          padding: 30px;
+          text-align: center;
+        }
+        .buttonFooter {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 150px;
+          padding-bottom: 20px;
+        }
+        .btnLogin {
+          border: 1px solid;
+          border-radius: 50px;
+          background-color: #931332;
+          color: white;
+          font-size: 18px;
+          padding: 5px 60px;
+          cursor: pointer;
+          outline: none;
         }
       `}</style>
     </div>

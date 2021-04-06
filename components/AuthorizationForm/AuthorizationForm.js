@@ -33,14 +33,13 @@ const AuthorizationForm = () => {
     telephoneError,
     isMessageVisible,
     finalMessage,
+    cityName,
     fb,
   } = formState
 
   const exitAuthForm = e => {
     if (e.target.className.includes('authFormMain')) {
-      setTimeout(() => {
-        router.push('/')
-      }, 1000)
+      router.push('/')
     }
   }
 
@@ -72,6 +71,7 @@ const AuthorizationForm = () => {
             uid={uid}
             date={date}
             cityId={cityId}
+            cityName={cityName}
             authForm={authForm}
             dispatch={dispatch}
             username={username}

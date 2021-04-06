@@ -19,6 +19,7 @@ import ProfileInfoContainer from '../../components/ProfileInfoContainer'
 import NotificationsBox from '../../components/NotificationsBox'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import ConfirmPhoneModal from '../../components/ConfirmPhoneModal'
+import { cityIndexSeparator } from '../../components/Dropdown/Dropdown'
 
 const cityNameById = id => {
   if (id === 1) return 'Москва'
@@ -53,9 +54,10 @@ const Profile = () => {
   const [nameInputState, setNameInputState] = useState(
     currentUser ? currentUser.name : null
   )
-  const [cityInputState, setCityInputState] = useState(
-    currentUser ? cityNameById(currentUser.cityId) : null
-  )
+  const [cityInputState, setCityInputState] = useState({
+    id: currentUser ? currentUser.cityId : null,
+    value: currentUser ? cityNameById(currentUser.cityId) : null,
+  })
   const [phoneInputState, setPhoneInputState] = useState(
     currentUser ? currentUser.phoneNumber : null
   )
@@ -64,13 +66,17 @@ const Profile = () => {
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
   const [toastVisibility, setToastVisibility] = useState(false)
 
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const [profileData, setProfileData] = useState(null)
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
+  const [phoneChangeError, setPhoneChangeError] = useState(null)
 
   const resetFields = () => {
     if (currentUser) {
       setNameInputState(currentUser.name)
-      setCityInputState(cityNameById(currentUser.cityId))
+      setCityInputState({
+        id: currentUser.cityId,
+        value: cityNameById(currentUser.cityId),
+      })
       setPhoneInputState(currentUser.phoneNumber)
     }
   }
@@ -96,13 +102,13 @@ const Profile = () => {
 
   const onInputChange = evt => {
     const newValue = evt.currentTarget.value
-
-    switch (evt.currentTarget.id) {
+    const eventId = evt.currentTarget.id.split(cityIndexSeparator)[0]
+    switch (eventId) {
       case InputTypes.name:
         setNameInputState(newValue)
         break
       case InputTypes.cityName:
-        setCityInputState(newValue)
+        setCityInputState({ id: cityIdByName(newValue), value: newValue })
         break
       case InputTypes.phone:
         setPhoneInputState(newValue)
@@ -126,39 +132,53 @@ const Profile = () => {
       .catch(console.error)
   }
 
+  const onClosePhoneConfirmModal = () => {
+    setIsConfirmModalVisible(false)
+    setPhoneChangeError(null)
+  }
+
   const onSubmitPhoneChange = verificationCode => {
     let applicationVerifier
     try {
-      applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-        size: 'invisible',
-      })
+      applicationVerifier = new firebase.auth.RecaptchaVerifier(
+        'phone-confirm-recaptcha',
+        {
+          size: 'normal',
+        }
+      )
     } catch (e) {
-      applicationVerifier = document.getElementById('recaptcha')
+      applicationVerifier = document.getElementById('phone-confirm-recaptcha')
     }
-    const provider = new firebase.auth.PhoneAuthProvider()
-    provider
-      .verifyPhoneNumber(phoneInputState, applicationVerifier)
-      .then(verificationId => {
-        const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
-          verificationId,
-          verificationCode
-        )
-        firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
-      })
-      .then(res => {
-        console.log(res)
-        updateProfile()
-      })
-      .catch(console.error)
-  }
-
-  const onCancelPhoneChange = () => {
-    setIsConfirmModalVisible(false)
-    updateProfile()
+    try {
+      const provider = new firebase.auth.PhoneAuthProvider()
+      provider
+        .verifyPhoneNumber(phoneInputState, applicationVerifier)
+        .then(verificationId => {
+          try {
+            const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
+              verificationId,
+              verificationCode
+            )
+            firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
+          } catch (e) {
+            setPhoneChangeError(e.code)
+          }
+        })
+        .then(() => {
+          onClosePhoneConfirmModal()
+          updateProfile()
+        })
+        .catch(e => {
+          setPhoneChangeError(e.code)
+        })
+    } catch (e) {
+      setPhoneChangeError(e.code)
+      console.error(e)
+    }
   }
 
   const onSubmit = async () => {
-    const updatedCity = cityIdByName(cityInputState)
+    const updatedCity = cityInputState.id
     const isPhoneUpdated = phoneInputState !== currentUser.phoneNumber
     const userToPatch = {
       name: nameInputState !== currentUser.name ? nameInputState : null,
@@ -189,7 +209,8 @@ const Profile = () => {
       <ConfirmPhoneModal
         visible={isConfirmModalVisible}
         onSubmit={onSubmitPhoneChange}
-        onClose={onCancelPhoneChange}
+        onClose={onClosePhoneConfirmModal}
+        errorCode={phoneChangeError}
       />
       <div className='content'>
         <header className='mainHeader'>Личный кабинет</header>
@@ -226,11 +247,13 @@ const Profile = () => {
                 </Link>
               </footer>
             </nav>
-            <ProfileInfoContainer title={activeSection.title}>
+            <ProfileInfoContainer section={activeSection}>
               {activeSection === SectionKeys.userInfo && (
                 <UserInfoBox
                   name={nameInputState}
-                  cityName={cityInputState}
+                  currentCity={{
+                    ...cityInputState,
+                  }}
                   phone={phoneInputState}
                   onInputChange={onInputChange}
                   onSubmit={onSubmit}
@@ -243,7 +266,15 @@ const Profile = () => {
             </ProfileInfoContainer>
           </div>
         )}
-        {currentUser === 'hasError' && <p>Error</p>}
+        {!currentUser && (
+          <footer className='buttonFooter'>
+            <Link href='/login'>
+              <button type='button' className='btn logoutBtn'>
+                Войти
+              </button>
+            </Link>
+          </footer>
+        )}
       </div>
       <style jsx>
         {`
@@ -290,6 +321,7 @@ const Profile = () => {
             display: flex;
             justify-content: space-around;
             margin-top: 150px;
+            padding-bottom: 20px;
           }
 
           nav.container .avatar {

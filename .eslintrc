@@ -44,6 +44,7 @@
     "react/button-has-type": [1, { "reset": true }],
     "prettier/prettier": ["error", {
      "endOfLine":"auto"
-   }]
+   }],
+    "func-names": "off"
   }
 }
