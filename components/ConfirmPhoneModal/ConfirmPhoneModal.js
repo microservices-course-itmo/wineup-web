@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import ModalWrapper from '../ModalWrapper'
 import CustomFormButton from '../CustomFormButton'
 
@@ -25,9 +25,13 @@ const unknownErrorMessage = 'Профиль не обновлен: систем�
  * @param {function} onClose
  * @param {function} onSubmit
  */
-const ConfirmPhoneModal = ({ visible, errorCode, onSubmit, onClose }) => {
-  const [verificationCode, setVerificationCode] = useState('')
-
+const ConfirmPhoneModal = ({
+  visible,
+  errorCode,
+  onClose,
+  verificationCode,
+  setVerificationCode,
+}) => {
   const errorMessage = useMemo(() => {
     if (errorCode) return ErrorCodesMapper[errorCode] || unknownErrorMessage
     return null
@@ -67,10 +71,8 @@ const ConfirmPhoneModal = ({ visible, errorCode, onSubmit, onClose }) => {
               width='49%'
               text='Подтвердить'
               disabled={isSubmitDisabled}
-              onClick={() => onSubmit(verificationCode)}
             />
           </div>
-          <div id='phone-confirm-recaptcha' />
         </div>
       </ModalWrapper>
       <style jsx>{`

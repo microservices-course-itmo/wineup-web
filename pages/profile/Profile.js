@@ -71,6 +71,8 @@ const Profile = () => {
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const [phoneChangeError, setPhoneChangeError] = useState(null)
 
+  const [verificationCode, setVerificationCode] = useState('')
+
   const resetFields = () => {
     if (currentUser) {
       setNameInputState(currentUser.name)
@@ -139,29 +141,24 @@ const Profile = () => {
     setPhoneChangeError(null)
   }
 
-  const onSubmitPhoneChange = verificationCode => {
-    let applicationVerifier
+  const onSubmitPhoneChange = applicationVerifier => {
+    console.log('STAS')
     try {
-      applicationVerifier = new firebase.auth.RecaptchaVerifier(
-        'phone-confirm-recaptcha',
-        {
-          size: 'normal',
-        }
-      )
-    } catch (e) {
-      applicationVerifier = document.getElementById('phone-confirm-recaptcha')
-    }
-    try {
+      console.log(firebase.auth().currentUser)
+      console.log(phoneInputState)
       const provider = new firebase.auth.PhoneAuthProvider()
       provider
         .verifyPhoneNumber(phoneInputState, applicationVerifier)
         .then(verificationId => {
           try {
+            console.log(verificationId)
+            console.log(firebase.auth().currentUser.phoneNumber)
             const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
               verificationId,
               verificationCode
             )
             firebase.auth().currentUser.updatePhoneNumber(phoneCredential)
+            console.log(firebase.auth().currentUser.phoneNumber)
           } catch (e) {
             setPhoneChangeError(e.code)
           }
@@ -179,7 +176,7 @@ const Profile = () => {
     }
   }
 
-  const onSubmit = async () => {
+  const onSubmit = async applicationVerifier => {
     if (
       currentUser.name === nameInputState &&
       currentUser.cityId === cityInputState.id &&
@@ -201,6 +198,7 @@ const Profile = () => {
     if (isPhoneUpdated) {
       setIsConfirmModalVisible(true)
       setProfileData(preparedData)
+      onSubmitPhoneChange(applicationVerifier)
     } else {
       updateProfile(preparedData)
     }
@@ -218,9 +216,11 @@ const Profile = () => {
       <Header />
       <ConfirmPhoneModal
         visible={isConfirmModalVisible}
-        onSubmit={onSubmitPhoneChange}
         onClose={onClosePhoneConfirmModal}
         errorCode={phoneChangeError}
+        verificationCode={verificationCode}
+        setVerificationCode={setVerificationCode}
+        onClick={onSubmitPhoneChange}
       />
       <div className='content'>
         <header className='mainHeader'>Личный кабинет</header>

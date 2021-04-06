@@ -1,4 +1,5 @@
 import React from 'react'
+import firebase from 'firebase'
 import CustomInput from '../CustomInput'
 import Dropdown from '../Dropdown'
 
@@ -56,7 +57,19 @@ const UserInfoBox = ({
       isCityNameValid(currentCity.value) &&
       isTelephoneValid(phone)
     ) {
-      onSubmit()
+      let applicationVerifier
+      try {
+        applicationVerifier = new firebase.auth.RecaptchaVerifier(
+          'phone-confirm-recaptcha',
+          {
+            size: 'normal',
+          }
+        )
+      } catch (e) {
+        applicationVerifier = document.getElementById('phone-confirm-recaptcha')
+        console.log(e)
+      }
+      onSubmit(applicationVerifier)
     } else {
       alert('Поля не соответствуют требованиям')
     }
@@ -102,9 +115,14 @@ const UserInfoBox = ({
         >
           Подтвердить
         </button>
+        <div id='phone-confirm-recaptcha' className='captcha' />
       </footer>
       <style jsx>
         {`
+          .captcha {
+            z-index: 666666;
+          }
+
           .buttonFooter {
             display: flex;
             justify-content: space-around;
