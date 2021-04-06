@@ -48,11 +48,11 @@ export const winesQuery = selector({
         }
         if (el === 'priceTo') {
           return acc.concat(
-            `${acc.includes('price') ? '~' : ''}price<${wineFilter[el]};`
+            `${acc.includes('price') ? '*' : ''}price<${wineFilter[el]};`
           )
         }
         const filters = wineFilter[el].reduce((a, e) => {
-          return a.concat(`${a.includes(el) ? '~' : ''}${el}:${e};`)
+          return a.concat(`${a.includes(el) ? '*' : ''}${el}:${e};`)
         }, '')
 
         return acc.concat(filters)
