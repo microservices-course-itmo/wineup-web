@@ -6,6 +6,7 @@ import {
   deleteWineQuery,
   sortedFavoritesWinesState,
   emptyState,
+  fetchedState,
 } from '../Favorites/favoritesStore'
 import { winesState } from '../Catalog/store'
 import { userState } from '../../store/GlobalRecoilWrapper/store'
@@ -56,16 +57,13 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
   const [, setEmpty] = useRecoilState(emptyState)
+  const fetched = useRecoilValue(fetchedState)
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
     const item = allWinesStore.find(x => x.wine_position_id === id)
     // eslint-disable-next-line
     const copy = sortedWine.map(a => Object.assign({}, a))
-    if (copy.length === 0) {
-      setEmpty(false)
-      copy.push(item)
-    } else {
-      setEmpty(true)
+    if (fetched) {
       copy.push(item)
       setSortedWine(() => copy)
     }

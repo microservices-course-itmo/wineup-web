@@ -14,6 +14,7 @@ import {
   favoritesSortState,
   sortedFavoritesWinesState,
   emptyState,
+  fetchedState,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -29,6 +30,7 @@ const Favorite = () => {
   const [, setFavorites] = useRecoilState(favoritesState)
   const empty = useRecoilValue(emptyState)
   const [, setEmpty] = useRecoilState(emptyState)
+  const [, setFetched] = useRecoilState(fetchedState)
   const sortedWine = useRecoilValue(sortedFavoritesWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
@@ -37,6 +39,7 @@ const Favorite = () => {
       if (contentQueryLoadable.state === 'hasValue') {
         setFavorites(() => contentQueryLoadable.contents)
         setEmpty(true)
+        setFetched(true)
       }
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])

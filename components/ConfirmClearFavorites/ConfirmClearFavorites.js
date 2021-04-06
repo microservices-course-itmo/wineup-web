@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRecoilState, useRecoilValue, useRecoilCallback } from 'recoil'
+import { useRecoilState, useRecoilCallback } from 'recoil'
 import Link from 'next/link'
 import CustomFormButton from '../CustomFormButton'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -12,17 +12,10 @@ import {
 const ConfirmClearFavorites = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const [, setEmpty] = useRecoilState(emptyState)
-  const sortedWine = useRecoilValue(sortedFavoritesWinesState)
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
     await snapshot.getPromise(deleteQuery(accessToken))
-    // eslint-disable-next-line
-    const copy = sortedWine.map(a => Object.assign({}, a))
-    copy.forEach(element => {
-      const index = copy.indexOf(element)
-      copy.splice(index, 1)
-    })
-
+    const copy = []
     setSortedWine(() => copy)
     setEmpty(true)
   })

@@ -6,6 +6,10 @@ export const emptyState = atom({
   key: 'emptyState',
   default: false,
 })
+export const fetchedState = atom({
+  key: 'fetchedState',
+  default: false,
+})
 export const favoritesState = atom({
   key: 'favorites',
   default: [],
