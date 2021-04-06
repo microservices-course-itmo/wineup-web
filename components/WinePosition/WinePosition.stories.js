@@ -1,4 +1,5 @@
 import React from 'react'
+import { RecoilRoot } from 'recoil'
 import WinePosition from './WinePosition'
 
 export default {
@@ -6,7 +7,11 @@ export default {
   component: WinePosition,
 }
 
-const Template = args => <WinePosition {...args} />
+const Template = args => (
+  <RecoilRoot>
+    <WinePosition {...args} />
+  </RecoilRoot>
+)
 export const winePosition = Template.bind({})
 winePosition.args = {
   imageSrc:

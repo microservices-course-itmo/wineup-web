@@ -39,9 +39,7 @@ const AuthorizationForm = () => {
 
   const exitAuthForm = e => {
     if (e.target.className.includes('authFormMain')) {
-      setTimeout(() => {
-        router.push('/')
-      }, 1000)
+      router.push('/')
     }
   }
 

@@ -1,13 +1,16 @@
 import { useCallback } from 'react'
 import firebase from 'firebase'
+import { useRouter } from 'next/router'
 import { ReducerType } from '../AuthorizationForm/store'
 import CustomFormButton from '../CustomFormButton/CustomFormButton'
+import CloseButton from '../CloseButton'
 
 const phoneRegex = /[ `1234567890№!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
 const TELEPHONE_MAX_SIZE = 12
 
 const TelephoneForm = props => {
   const { dispatch, telephone, telephoneError } = props
+  const router = useRouter()
   const handleTelephone = useCallback(
     e => {
       const telephone = e.target.value
@@ -69,6 +72,7 @@ const TelephoneForm = props => {
 
   return (
     <div className='authForm1'>
+      <CloseButton callback={() => router.push('/')} />
       <div className='header'>Войдите или зарегистрируйтесь</div>
 
       <div className='inputForm'>
@@ -103,6 +107,7 @@ const TelephoneForm = props => {
             left: 200px;
           }
           .authForm1 {
+            position: relative;
             background: white;
             display: block;
             border: 2px solid black;
