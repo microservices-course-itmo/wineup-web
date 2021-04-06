@@ -7,6 +7,29 @@ class Api {
     })
   }
 
+  async meLogin(token) {
+    const response = await this.sendRequest({
+      url: '/user-service/users/me',
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (response.status !== 200) {
+      return {
+        error: true,
+        message: 'Ошибка авторизации',
+      }
+    }
+
+    return {
+      error: false,
+      user: response.data,
+    }
+  }
+
   async login(data) {
     const response = await this.sendRequest({
       url: '/user-service/login',
