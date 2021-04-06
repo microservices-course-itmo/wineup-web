@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import NotificationTooltip from '../NotificationTooltip'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import ModalWrapper from '../ModalWrapper'
 
 const SectionKeys = {
   userInfo: {
@@ -36,7 +37,7 @@ const ProfileInfoContainer = ({ section, children }) => {
           <div className='buttonWrapper'>
             <button
               type='button'
-              className='button'
+              className='button-settings'
               onClick={() => setTooltipVisible(prevState => !prevState)}
             >
               <img
@@ -44,14 +45,18 @@ const ProfileInfoContainer = ({ section, children }) => {
                 alt='settings'
               />
             </button>
-            {tooltipVisible && (
+            <ModalWrapper
+              isModal={false}
+              visible={tooltipVisible}
+              onClose={() => setTooltipVisible(false)}
+            >
               <div className='tooltipWrapper'>
                 <NotificationTooltip
                   notificationEnable={isDisabled}
                   onChnage={toggleDisableNotifications}
                 />
               </div>
-            )}
+            </ModalWrapper>
           </div>
         )}
       </div>
@@ -101,7 +106,7 @@ const ProfileInfoContainer = ({ section, children }) => {
         .buttonWrapper {
           position: relative;
         }
-        .button {
+        .button-settings {
           padding: 0;
           outline: none;
           border: none;

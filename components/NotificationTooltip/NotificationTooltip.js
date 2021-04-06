@@ -1,10 +1,13 @@
+import { useRecoilValue } from 'recoil'
 import CustomFormButton from '../CustomFormButton'
 import CustomSwitchCheckbox from '../CustomSwitchCheckbox'
+import { unreadNotificationsCountState } from '../../store/GlobalRecoilWrapper/store'
 
 /**
  * @param {boolean} notificationEnable
  */
 const NotificationTooltip = ({ notificationEnable, onChnage }) => {
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState)
   return (
     <div>
       <div className='tooltipContainer'>
@@ -27,6 +30,7 @@ const NotificationTooltip = ({ notificationEnable, onChnage }) => {
               fontSize='14px'
               onClick={() => {}}
               text='Удалить все уведомления'
+              disabled={!unreadNotificationsCount}
             />
           </div>
         </div>

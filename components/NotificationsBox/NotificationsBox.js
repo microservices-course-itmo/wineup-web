@@ -34,7 +34,9 @@ const NotificationsBox = () => {
             )
         )
       ) : (
-        <p className='noNotifications'>Нет уведомлений</p>
+        <div className='noNotifications-wrapper'>
+          <span className='noNotifications'>У вас пока нет уведомлений...</span>
+        </div>
       )}
 
       <style jsx>
@@ -46,9 +48,18 @@ const NotificationsBox = () => {
             overflow: scroll;
           }
 
+          .noNotifications-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 620px;
+          }
+
           .noNotifications {
-            padding: 5px;
             font-family: 'PT Sans', sans-serif;
+            display: flex;
+            font-size: 20px;
+            padding: 5px;
           }
         `}
       </style>

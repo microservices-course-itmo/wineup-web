@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import api from '../../api'
+import { throttle } from '../../utils/helpers'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
@@ -63,7 +64,11 @@ const Notification = ({
             <p className='text'>{notificationMessage}</p>
             <p className='time'>{new Date(date).toLocaleString()}</p>
           </div>
-          <button type='button' className='button' onClick={deleteNotification}>
+          <button
+            type='button'
+            className='button'
+            onClick={throttle(deleteNotification, 2000)}
+          >
             <img
               src={`${prefix}/assets/notifications/trash.svg`}
               alt='settings'
@@ -71,7 +76,6 @@ const Notification = ({
           </button>
         </div>
       </div>
-
       <style jsx>{`
         .notification {
           margin: 0 5px;
