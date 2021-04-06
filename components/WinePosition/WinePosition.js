@@ -70,8 +70,7 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
         setIsFavorite(true)
         addFavorite(id, token)
         const item = allWinesStore.find(x => x.wine_position_id === id)
-        // eslint-disable-next-line
-        const copy = sortedWine.map(a => Object.assign({}, a))
+        const copy = sortedWine.map(a => ({ ...a }))
         if (fetched) {
           copy.push(item)
           setSortedWine(() => copy)
@@ -79,8 +78,7 @@ const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
       } else {
         setIsFavorite(false)
         deleteFavorite(id, token)
-        // eslint-disable-next-line
-        const copy = sortedWine.map(a => Object.assign({}, a))
+        const copy = sortedWine.map(a => ({ ...a }))
         const item = copy.find(x => x.wine_position_id === id)
         const index = copy.indexOf(item)
         copy.splice(index, 1)
