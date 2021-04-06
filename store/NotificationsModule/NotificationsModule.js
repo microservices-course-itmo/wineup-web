@@ -3,23 +3,27 @@ import firebase from 'firebase'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { notificationsState, userState } from '../GlobalRecoilWrapper/store'
 import { fetchNotifications } from './helpers'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const NotificationsModule = () => {
   const currentUser = useRecoilValue(userState)
   const [, setNotifications] = useRecoilState(notificationsState)
+  const [isDisabled] = useLocalStorage('notificationsDisabled')
 
   useEffect(() => {
     fetchNotifications(currentUser, setNotifications)
   }, [currentUser, setNotifications])
 
   const onMessageHandler = payload => {
-    const notificationTitle = payload.notification.title || 'Wineup-web'
-    const notificationOptions = {
-      body: payload.notification.body || 'Вам пришло сообщение!',
-      icon: payload.notification.image || './assets/notifications/wineup.svg',
+    if (!isDisabled) {
+      const notificationTitle = payload.notification.title || 'Wineup-web'
+      const notificationOptions = {
+        body: payload.notification.body || 'Вам пришло сообщение!',
+        icon: payload.notification.image || './assets/notifications/wineup.svg',
+      }
+      /* eslint-disable no-new */
+      new Notification(notificationTitle, notificationOptions)
     }
-    /* eslint-disable no-new */
-    new Notification(notificationTitle, notificationOptions)
     fetchNotifications(currentUser, setNotifications)
   }
 

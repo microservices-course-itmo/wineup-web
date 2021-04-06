@@ -1,26 +1,21 @@
-import { useState } from 'react'
 import CustomFormButton from '../CustomFormButton'
 import CustomSwitchCheckbox from '../CustomSwitchCheckbox'
 
 /**
  * @param {boolean} notificationEnable
  */
-const NotificationTooltip = ({ notificationEnable }) => {
-  const [switchValue, setSwitchValue] = useState(notificationEnable)
-  const onSwitchCheckbox = () => {
-    setSwitchValue(prevState => !prevState)
-  }
+const NotificationTooltip = ({ notificationEnable, onChnage }) => {
   return (
     <div>
       <div className='tooltipContainer'>
         <div className='tooltipContent'>
           <div className='switchWrapper'>
-            <div className='switchLabel' onClick={onSwitchCheckbox}>
+            <div className='switchLabel' onClick={onChnage}>
               Выключить уведомления
             </div>
             <CustomSwitchCheckbox
-              checked={switchValue}
-              onChange={onSwitchCheckbox}
+              checked={notificationEnable}
+              onChange={onChnage}
             />
           </div>
           <div className='buttonFooter'>

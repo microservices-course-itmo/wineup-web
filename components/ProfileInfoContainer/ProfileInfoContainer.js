@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import NotificationTooltip from '../NotificationTooltip'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const SectionKeys = {
   userInfo: {
@@ -21,6 +22,12 @@ const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
  */
 const ProfileInfoContainer = ({ section, children }) => {
   const [tooltipVisible, setTooltipVisible] = useState(false)
+  const [isDisabled, setIsDisabled] = useLocalStorage('notificationsDisabled')
+
+  const toggleDisableNotifications = () => {
+    setIsDisabled(!isDisabled)
+  }
+
   return (
     <div className='wrapper'>
       <div className='header'>
@@ -39,7 +46,10 @@ const ProfileInfoContainer = ({ section, children }) => {
             </button>
             {tooltipVisible && (
               <div className='tooltipWrapper'>
-                <NotificationTooltip notificationEnable={false} />
+                <NotificationTooltip
+                  notificationEnable={isDisabled}
+                  onChnage={toggleDisableNotifications}
+                />
               </div>
             )}
           </div>
@@ -52,7 +62,7 @@ const ProfileInfoContainer = ({ section, children }) => {
         .wrapper {
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: flex-start;
           flex-basis: 70%;
           flex-grow: 3;
           background-color: white;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import NotificationsTypeGroup from '../NotificationsTypeGroup'
 import {
@@ -11,11 +11,6 @@ const NotificationsBox = () => {
   const [notificationsList] = useRecoilState(notificationsState)
   const currentUser = useRecoilValue(userState)
   const [, setNotifications] = useRecoilState(notificationsState)
-
-  useEffect(() => {
-    fetchNotifications(currentUser, setNotifications)
-  }, [currentUser, setNotifications])
-  console.log(notificationsList)
 
   const isEmpty =
     notificationsList.reduce(
