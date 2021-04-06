@@ -52,7 +52,7 @@ export const winesQuery = selector({
           )
         }
         const filters = wineFilter[el].reduce((a, e) => {
-          return a.concat(`${a.includes(el) ? '*' : ''}${el}:${e};`)
+          return a.concat(`${a.includes(el) ? '~' : ''}${el}:${e};`)
         }, '')
 
         return acc.concat(filters)
