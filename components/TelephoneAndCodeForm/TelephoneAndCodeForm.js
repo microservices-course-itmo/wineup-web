@@ -49,7 +49,10 @@ const TelephoneAndCodeForm = props => {
         const response = await api.login(data)
 
         if (!response.error) {
-          setUser(response.user.user)
+          const responseMe = await api.meLogin(response.user.accessToken)
+          const { user } = response.user
+          user.name = responseMe.user.name
+          setUser(user)
           setAccessToken(response.user.accessToken)
           setRefreshToken(response.user.refreshToken)
           dispatch({

@@ -165,10 +165,15 @@ export const calculateDiscount = wine => {
 }
 
 export const parseImageSrc = src => {
+  if (src === '') {
+    return 'assets/card/wine_1.png'
+  }
+  if (src.includes('upload') && !src.includes('amwine.ru')) {
+    return `//amwine.ru/${src}`
+  }
   if (src.lastIndexOf('https:') !== 0) {
     return src.slice(src.lastIndexOf('https:'))
   }
-
   return src
 }
 
