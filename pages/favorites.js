@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import {
   useRecoilValueLoadable,
   useRecoilState,
-  useRecoilValue,
   useRecoilCallback,
+  useSetRecoilState,
 } from 'recoil'
 import Link from 'next/link'
 import Header from '../components/Header'
@@ -11,12 +11,14 @@ import Search from '../components/Search'
 import CatalogFavorite from '../components/CatalogFavorite'
 import WineCard from '../components/WineCard'
 import ButtonGroup from '../components/ButtonGroup'
+import Loader from '../components/Loader'
 import {
   favoritesState,
   contentQuery,
   deleteQuery,
   favoritesSortState,
-  sortedWinesState,
+  emptyState,
+  sortedFavoritesWinesState,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -27,66 +29,159 @@ import useLocalStorage from '../hooks/useLocalStorage'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
-  const [, setFavorites] = useRecoilState(favoritesState)
-  const sortedWine = useRecoilValue(sortedWinesState)
+  const setFavorites = useSetRecoilState(favoritesState)
+  const [empty, setEmpty] = useRecoilState(emptyState)
+  const [sortedWine, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
+
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
   const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
     await snapshot.getPromise(deleteQuery(accessToken))
+    setSortedWine(() => '')
+    setEmpty(true)
   })
   useEffect(() => {
-    if (contentQueryLoadable.state === 'hasValue') {
-      setFavorites(() => contentQueryLoadable.contents)
+    if (sortedWine.length === 0 && !empty) {
+      if (
+        contentQueryLoadable.state === 'hasValue' &&
+        !contentQueryLoadable.contents.error
+      ) {
+        setFavorites(() => contentQueryLoadable.contents)
+        setEmpty(true)
+      }
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
-
   return (
     <div className='wrapper'>
       <Header />
       <Search />
       <div className='content'>
-        <ButtonGroup
-          title='Сортировать по'
-          activeButton={favoritesSort}
-          buttons={sortingButtons}
-          onChange={event => setFavoritesSort(event.currentTarget.value)}
-        />
-        <div>
-          <button
-            type='button'
-            className='buttonClear'
-            onClick={() => clearFavorites()}
-          >
-            <text className='textBtn'>Очистить избранное?</text>
-          </button>
-        </div>
-        <CatalogFavorite>
-          {sortedWine && sortedWine.length > 0 ? (
-            sortedWine.map(wine => (
-              <WineCard
-                key={wine.wine_position_id}
-                wineId={wine.wine_position_id}
-                imageSrc={parseImageSrc(wine.image)}
-                info={getWineInfo(wine)}
-                isLiked='true'
-                color='3'
-              />
-            ))
-          ) : (
-            <div className='emptyContainer'>
-              <div className='emptyFavorite'>
-                <p className='emptyContainerText'>
-                  Тут пока пусто, но наш каталог поможет вам что-нибудь найти...
-                </p>
-                <Link href='/'>
-                  <a href='/#' className='linkText'>
-                    Перейти в каталог...
-                  </a>
-                </Link>
-              </div>
+        {!contentQueryLoadable.contents.error ? (
+          <>
+            <ButtonGroup
+              title='Сортировать по'
+              activeButton={favoritesSort}
+              buttons={sortingButtons}
+              onChange={event => setFavoritesSort(event.currentTarget.value)}
+            />
+            <div>
+              <button
+                type='button'
+                className='buttonClear'
+                onClick={() => clearFavorites()}
+              >
+                <text className='textBtn'>Очистить избранное?</text>
+              </button>
             </div>
-          )}
-        </CatalogFavorite>
+            <CatalogFavorite>
+              {contentQueryLoadable.state === 'hasValue' &&
+                (sortedWine && sortedWine.length > 0 ? (
+                  sortedWine.map(wine => (
+                    <WineCard
+                      key={wine.wine_position_id}
+                      wineId={wine.wine_position_id}
+                      imageSrc={parseImageSrc(wine.image)}
+                      info={getWineInfo(wine)}
+                      isLiked
+                      color={wine.color}
+                    />
+                  ))
+                ) : (
+                  <div className='emptyContainer'>
+                    <div className='emptyFavorite'>
+                      <p className='emptyContainerText'>
+                        Тут пока пусто, но наш каталог поможет вам что-нибудь
+                        найти...
+                      </p>
+                      <Link href='/'>
+                        <a href='/#' className='linkText'>
+                          Перейти в каталог...
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              {contentQueryLoadable.state !== 'hasValue' && (
+                <div>
+                  {contentQueryLoadable.state === 'hasError' && (
+                    <div className='loading'>
+                      <img
+                        className='errorIcon'
+                        src='/assets/error.svg'
+                        alt='error icon'
+                      />
+                      <p>
+                        Произошла ошибка
+                        <br />
+                        Попробуйте перезагрузить страницу
+                      </p>
+                    </div>
+                  )}
+                  {contentQueryLoadable.state === 'loading' && (
+                    <div className='loading'>
+                      <Loader />
+                      <p>Загружаем каталог избранного...</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CatalogFavorite>
+          </>
+        ) : (
+          <>
+            <header className='mainHeader'>
+              Чтобы просматривать Избранное, авторизуйтесь
+            </header>
+            <footer className='buttonFooter'>
+              <Link href='/login'>
+                <button type='button' className='btnLogin'>
+                  Войти
+                </button>
+              </Link>
+            </footer>
+          </>
+        )}
+
+        {/* {favorites && !favorites.length ? (
+          <div />
+        ) : (
+          <div>
+            <div>
+              <hr className='line' />
+              <p className='textFavorite'>Найдено в каталоге:</p>
+            </div>
+            <CatalogFavorite>
+              {favorites &&
+                favorites.map((item, index) => (
+                  <div id={index} className={`${index > 3 ? showResults : ''}`}>
+                    <WineCard
+                      key={wine.wine_position_id}
+                      wineId={wine.wine_position_id}
+                      imageSrc={parseImageSrc(wine.image)}
+                      info={getWineInfo(wine)}
+                      isLiked={Math.round(Math.random())}
+                      color="3"
+                    />
+                  </div>
+                ))}
+            </CatalogFavorite>
+            <div className='btnAllFavoritesContainer'>
+              {favorites.length > 4 ? (
+                <button
+                  type='button'
+                  className='btnAllFavorites'
+                  onClick={() => handleAllFavorites()}
+                >
+                  <text className='emptyContainerText'>
+                    {clicked ? 'Скрыть' : 'Посмотреть больше'}{' '}
+                  </text>
+                </button>
+              ) : (
+                ''
+              )}
+            </div>
+          </div>
+        )} */}
       </div>
       <style jsx>{`
         .wrapper {
@@ -145,14 +240,14 @@ const Favorite = () => {
         .textBtn {
           font-size: 12px;
           color: grey;
-          font-family: arial;
+          font-family: 'Arial', serif;
           text-decoration-line: underline;
           cursor: pointer;
         }
 
         .textFavorite {
           font-size: 18px;
-          font-family: times new roman;
+          font-family: 'Times New Roman', serif;
           font-weight: bold;
         }
 
@@ -181,7 +276,7 @@ const Favorite = () => {
 
         .emptyContainerText {
           font-size: 28px;
-          font-family: 'Times New Roman';
+          font-family: 'Times New Roman', serif;
         }
 
         .linkText {
@@ -208,6 +303,45 @@ const Favorite = () => {
           height: 57px;
           box-sizing: border-box;
           outline: 0;
+        }
+
+        .loading {
+          max-width: 250px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          margin-top: 60px;
+          margin-left: 700px;
+        }
+
+        .loading p {
+          margin-top: 25px;
+          font-family: Playfair Display, serif;
+          font-size: 16px;
+          color: #000000;
+        }
+        .mainHeader {
+          font-size: 32px;
+          font-weight: bold;
+          padding: 30px;
+          text-align: center;
+        }
+        .buttonFooter {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 150px;
+          padding-bottom: 20px;
+        }
+        .btnLogin {
+          border: 1px solid;
+          border-radius: 50px;
+          background-color: #931332;
+          color: white;
+          font-size: 18px;
+          padding: 5px 60px;
+          cursor: pointer;
+          outline: none;
         }
       `}</style>
     </div>

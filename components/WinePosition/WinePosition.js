@@ -1,4 +1,21 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import {
+  useRecoilCallback,
+  useRecoilValue,
+  useRecoilState,
+  useSetRecoilState,
+} from 'recoil'
+import { userState } from '../../store/GlobalRecoilWrapper/store'
+
+import {
+  addWineQuery,
+  deleteWineQuery,
+  sortedFavoritesWinesState,
+  emptyState,
+} from '../Favorites/favoritesStore'
+import { winesState } from '../Catalog/store'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 // Форматирует цены
 const { format: formatPrice } = new Intl.NumberFormat('ru-RU', {
@@ -20,6 +37,7 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
  * @param {number} color - Номер цвета заднего фона, всего их три, они указаны в массиве colors
  * @param {boolean} favorite - Является ли избранным вином
  * @param {Object} info - Информация о вине
+ * @param {string} wineId
  * @param {string} info.name - Название вина
  * @param {string} info.grape - Сорт винограда
  * @param {number} info.size - Размер бутылки
@@ -36,9 +54,54 @@ const colors = ['#931332', '#BBADA4', '#FAA4A4']
  * @param {number} info.discount.price - Цена со скидкой
  * @param {number} info.discount.percent - Сколько процентов скидка
  */
-const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
+const WinePosition = ({ imageSrc, info, favorite, wineId, color = 0 }) => {
+  const userExist = useRecoilValue(userState)
+  const [accessToken] = useLocalStorage('accessToken')
   const [isFavorite, setIsFavorite] = useState(favorite)
+  const router = useRouter()
+  const [sortedWine, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
 
+  const allWinesStore = useRecoilValue(winesState)
+  const setEmpty = useSetRecoilState(emptyState)
+  const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
+    await snapshot.getPromise(addWineQuery([id, accessToken]))
+    const item = allWinesStore.find(x => x.wine_position_id === id)
+    const copy = sortedWine.map(a => ({ ...a }))
+
+    if (copy.length === 0) {
+      setEmpty(false)
+      copy.push(item)
+    } else {
+      setEmpty(true)
+      copy.push(item)
+      setSortedWine(() => copy)
+    }
+  })
+  const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
+    await snapshot.getPromise(deleteWineQuery([id, accessToken]))
+    const copy = sortedWine.map(a => ({ ...a }))
+
+    const item = copy.find(x => x.wine_position_id === id)
+    const index = copy.indexOf(item)
+    copy.splice(index, 1)
+    if (copy.length === 0) {
+      setEmpty(true)
+    }
+    setSortedWine(() => copy)
+  })
+  const clickHeart = (id, token) => {
+    if (userExist) {
+      if (!isFavorite) {
+        setIsFavorite(true)
+        addFavorite(id, token)
+      } else {
+        setIsFavorite(false)
+        deleteFavorite(id, token)
+      }
+    } else {
+      router.push('/login')
+    }
+  }
   return (
     <>
       <h2 className='name'>{info.name}</h2>
@@ -102,7 +165,7 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
           <button
             type='button'
             className='favorite'
-            onClick={() => setIsFavorite(!isFavorite)}
+            onClick={() => clickHeart(wineId, accessToken)}
           >
             {isFavorite ? (
               <>
@@ -129,7 +192,6 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             line-height: 43px;
             color: #000000;
           }
-
           .card {
             width: 100%;
             margin-top: 80px;
@@ -147,20 +209,17 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             );
             border-bottom: 1px solid #c4c4c4;
           }
-
           .img {
             flex-basis: 33%;
             display: flex;
             flex-direction: column;
             align-items: center;
           }
-
           .wineImg {
             width: 120px;
             height: auto;
             margin-bottom: 25px;
           }
-
           .info {
             flex-basis: 33%;
             min-width: 315px;
@@ -170,7 +229,6 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             background: rgba(252, 252, 252, 0.91);
             box-shadow: 0 4px 29px rgba(0, 0, 0, 0.15);
           }
-
           .infoTitle {
             margin-bottom: 20px;
             font-family: PT Sans, sans-serif;
@@ -180,11 +238,9 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             line-height: 28px;
             color: #9e9e9e;
           }
-
           .infoText {
             color: #000;
           }
-
           .goToShop {
             margin-top: 20px;
             padding: 10px;
@@ -200,19 +256,15 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             text-decoration: none;
             transition: 0.2s;
           }
-
           .goToShop img {
             margin-left: 10px;
           }
-
           .goToShop:hover {
             background: #af2f4e;
           }
-
           .goToShop:focus {
             background: #680019;
           }
-
           .rightBlock {
             margin-top: 105px;
             flex-basis: 33%;
@@ -224,20 +276,16 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             text-align: center;
             color: #fff;
           }
-
           .previousPrice {
             text-decoration-line: line-through;
             color: #000;
           }
-
           .currentPrice {
             font-size: 50px;
           }
-
           .pricePt {
             padding-top: 1.5rem;
           }
-
           .scoreCaption {
             padding-right: 15px;
             font-family: PT Sans, sans-serif;
@@ -248,7 +296,6 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             text-align: left;
             color: #000000;
           }
-
           .scorePercent {
             padding-left: 15px;
             font-style: normal;
@@ -257,7 +304,6 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             line-height: 28px;
             color: #ecab2e;
           }
-
           .favorite {
             margin: 50px 20px 0 auto;
             padding: 10px 20px;
@@ -274,11 +320,9 @@ const WinePosition = ({ imageSrc, info, color = 0, favorite = false }) => {
             outline: none;
             transition: 0.2s;
           }
-
           .favorite img {
             margin-left: 10px;
           }
-
           .favorite:hover {
             border-color: #af2f4e;
             box-shadow: 0 0 5px #af2f4e;

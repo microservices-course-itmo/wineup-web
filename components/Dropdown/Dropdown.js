@@ -1,5 +1,4 @@
-import React, { useReducer, useState } from 'react'
-import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
+import React, { useState } from 'react'
 
 /**
  * @param {Object} options - массив городов
@@ -8,31 +7,62 @@ import { initialState, reducer, ReducerType } from '../AuthorizationForm/store'
  * @param {string} defaultValue - дефолтное значение списка
  */
 
+const options = [
+  {
+    id: 1,
+    value: 'Москва',
+    selected: true,
+  },
+  {
+    id: 2,
+    value: 'Санкт-Петербург',
+    selected: false,
+  },
+]
+
+export const cityIndexSeparator = '\u0333'
+
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-const Dropdown = ({ options, defaultValue }) => {
-  const [formState, dispatch] = useReducer(reducer, initialState, reducer)
-  const [selectedCity, setSelectedCity] = useState(defaultValue)
+/**
+ * @param {number} optional id for Profile change handling
+ * @param {{
+ *   id: number,
+ *   value: string,
+ * }} selectСity - выбранный город
+ * @param {function} onChange - функция для смены значения
+ */
+const Dropdown = ({
+  id,
+  width,
+  selectedCity,
+  backgroundColor,
+  margin,
+  colorLabel,
+  color,
+  border,
+  marginLabel,
+  onChange,
+}) => {
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 
   const toggleIsDropdownVisible = () => {
-    dispatch({
-      type: ReducerType.showDropdown,
-      payload: !formState.isDropdownVisible,
-    })
-  }
-
-  const handleSelect = item => {
-    dispatch({ type: ReducerType.setCityId, payload: item.id })
-    setSelectedCity(item.value)
-    toggleIsDropdownVisible()
+    setIsDropdownVisible(!isDropdownVisible)
   }
 
   return (
     <div>
       <div className='inputForm'>
         <div className='formName'>Город</div>
-        <div className='inputField' onClick={toggleIsDropdownVisible}>
-          <span className='selectedCity'>{selectedCity}</span>
+        <div className='wrapper'>
+          <input
+            className='inputField'
+            value={selectedCity.value}
+            autoComplete='off'
+            placeholder={selectedCity.value}
+            onClick={toggleIsDropdownVisible}
+            readOnly
+          />
           <img
             className='arrow'
             src={`${prefix}assets/authorization/arrow.svg`}
@@ -40,62 +70,73 @@ const Dropdown = ({ options, defaultValue }) => {
           />
         </div>
         <div className='list'>
-          {options.map(option => (
+          {options.map(({ id: cityId, value }) => (
             <button
-              key={option.id}
+              id={`${id}${cityIndexSeparator}${cityId}`}
+              key={`city-option-${cityId}`}
               type='button'
+              value={value}
               className='option'
-              onClick={() => handleSelect(option)}
+              onClick={event => {
+                onChange(event)
+                toggleIsDropdownVisible()
+              }}
             >
-              {option.value}
+              {value}
             </button>
           ))}
         </div>
-        <input className='errorMessage' disabled />
       </div>
       <style jsx>
         {`
+          input {
+            outline: none;
+          }
+          .wrapper {
+            position: relative;
+            display: flex;
+          }
+
           .inputField {
+            color: ${color};
+            background: ${backgroundColor};
             position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
             height: 53px;
             text-indent: 25px;
-            width: 499px;
+            width: ${width};
             font-size: 18px;
             font-family: 'PT Sans', sans-serif;
-            border: 1px solid #9e9e9e;
-            border-radius: ${formState.isDropdownVisible
-              ? '5px 5px 0 0'
-              : '5px'};
+            border: ${border};
+            border-radius: ${isDropdownVisible ? '5px 5px 0 0' : '5px'};
             cursor: pointer;
+            z-index: 100;
           }
 
           .inputForm {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            margin: 2px 93px 12px 93px;
-            width: 499px;
-            height: 110px;
+            margin: ${margin};
+            width: ${width};
+            /*height: 110px;*/
           }
 
           .formName {
             height: 22px;
-            margin-bottom: 10px;
+            margin: ${marginLabel};
             font-size: 22px;
             font-family: 'PT Sans', sans-serif;
-            color: black;
+            color: ${colorLabel};
           }
 
           .list {
             position: absolute;
-            display: ${formState.isDropdownVisible ? 'flex' : 'none'};
+            display: ${isDropdownVisible ? 'flex' : 'none'};
             flex-direction: column;
             z-index: 1000;
             top: 85px;
-            width: 499px;
+            width: ${width};
             text-indent: 35px;
             box-shadow: 0 0 11px rgba(0, 0, 0, 0.11);
           }
@@ -105,8 +146,8 @@ const Dropdown = ({ options, defaultValue }) => {
             text-indent: 35px;
             background: white;
             border: none;
-            border-left: 1px solid #9e9e9e;
-            border-right: 1px solid #9e9e9e;
+            border-left: ${border};
+            border-right: ${border};
             padding: 5px 0 5px 0;
             font-size: 18px;
             line-height: 23px;
@@ -116,12 +157,11 @@ const Dropdown = ({ options, defaultValue }) => {
           }
 
           .option:hover {
-            background-color: rgba(142, 142, 142, 0.05);
             font-weight: bold;
           }
 
           .option:last-child {
-            border-bottom: 1px solid #9e9e9e;
+            border-bottom: ${border};
             border-radius: 0 0 5px 5px;
           }
 
@@ -130,21 +170,12 @@ const Dropdown = ({ options, defaultValue }) => {
           }
 
           .arrow {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
             margin-right: 18px;
-          }
-
-          .errorMessage {
-            color: #cf3737;
-            font-family: 'PT Sans', sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 18px;
-            height: 18px;
-            width: 499px;
-            border: 0;
-            padding: 0 0 2px;
-            background: inherit;
+            z-index: 100;
           }
         `}
       </style>

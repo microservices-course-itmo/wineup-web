@@ -18,7 +18,7 @@ const GlobalRecoilWrapper = ({ children }) => {
       const { error, message, data } = await api.refreshToken(refreshToken)
 
       if (error) {
-        setError({ error, message })
+        console.error(error, message)
         return
       }
 
@@ -32,7 +32,6 @@ const GlobalRecoilWrapper = ({ children }) => {
     refreshToken,
     setAccessToken,
     setCurrentUser,
-    setError,
     setRefreshToken,
   ])
 
@@ -55,7 +54,7 @@ const GlobalRecoilWrapper = ({ children }) => {
       {children}
       <style jsx>{`
         .wrapper {
-          position: relative
+          position: relative;
           max-width: 1440px;
           padding: 0 20px;
           margin: 0 auto;

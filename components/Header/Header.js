@@ -81,17 +81,17 @@ const Header = () => {
         labelText='Лайки'
       />
       <HeaderMenuItem
-        href={`${currentUser ? '/favorites' : 'login'}`}
+        href={`${currentUser ? '/favorites' : '/login'}`}
         iconSrc={imagePaths.favorites}
         isActive={activeImage === MenuItemKeys.favorites}
         labelText='Избранное'
       />
       <HeaderMenuItem
-        href={`${currentUser ? '/profile' : 'login'}`}
+        href={`${currentUser ? '/profile' : '/login'}`}
         iconSrc={imagePaths.login}
         isActive={activeImage === MenuItemKeys.login}
         labelText={currentUser ? currentUser.name : 'Войти'}
-        badgeCount={unreadNotificationsCount}
+        badgeCount={currentUser ? unreadNotificationsCount : 0}
       />
 
       <style jsx>
