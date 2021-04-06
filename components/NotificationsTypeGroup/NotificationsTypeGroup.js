@@ -15,6 +15,7 @@ const titles = type => {
 /**
  * Контейнер для списка уведомлений
  * @param {string} groupType - Тип уведомлений
+ * @param {function} refetch - refetch нотификаций
  * @param {Array} notifications - Объект уведомления
  * @param {string} notifications.text - Текст уведомления
  * @param {string} notifications.time - Время создания уведомления
@@ -22,21 +23,26 @@ const titles = type => {
  */
 const NotificationsTypeGroup = ({
   type: groupType = 'unread',
+  refetch,
   notifications = [],
 }) => (
   <>
     <h2 className='title'>{titles(groupType)}</h2>
-
     <div className='container'>
-      {notifications.map(({ message, date, type: notificationType }, index) => (
-        <Notification
-          date={date}
-          message={message}
-          type={notificationType}
-          key={`${groupType}-${index + 1}`}
-          isViewed={groupType === 'viewed'}
-        />
-      ))}
+      {notifications.map(
+        ({ id, message, timestamp, wineId, type: notificationType }, index) => (
+          <Notification
+            id={id}
+            wineId={wineId}
+            date={timestamp}
+            refetch={refetch}
+            message={message}
+            type={notificationType}
+            key={`${groupType}-${index + 1}`}
+            isViewed={groupType === 'viewed'}
+          />
+        )
+      )}
     </div>
 
     <style jsx>

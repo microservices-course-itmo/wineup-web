@@ -19,61 +19,11 @@ const notificationsState = atom({
   default: [
     {
       type: 'viewed',
-      notifications: [
-        {
-          id: 0,
-          message: 'Banti',
-          date: Date.now(),
-          type: 'WINE_PRICE_UPDATED',
-          userId: 80,
-          wineId: 'wine-328',
-        },
-        {
-          id: 1,
-          message: 'Banti',
-          date: Date.now(),
-          type: 'WINE_PRICE_UPDATED',
-          userId: 80,
-          wineId: 'wine-328',
-        },
-      ],
+      notifications: [],
     },
     {
       type: 'unviewed',
-      notifications: [
-        {
-          id: 2,
-          message: 'Banti',
-          date: Date.now(),
-          type: 'WINE_PRICE_UPDATED',
-          userId: 80,
-          wineId: 'wine-328',
-        },
-        {
-          id: 3,
-          message: 'Banti',
-          date: Date.now(),
-          type: 'WINE_PRICE_UPDATED',
-          userId: 80,
-          wineId: 'wine-328',
-        },
-        {
-          id: 4,
-          message: 'Banti',
-          date: Date.now(),
-          type: 'WINE_PRICE_UPDATED',
-          userId: 80,
-          wineId: 'wine-328',
-        },
-        {
-          id: 5,
-          message: 'Banti',
-          date: Date.now(),
-          type: 'WINE_PRICE_UPDATED',
-          userId: 80,
-          wineId: 'wine-328',
-        },
-      ],
+      notifications: [],
     },
   ],
 })

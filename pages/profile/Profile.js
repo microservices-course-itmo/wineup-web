@@ -6,7 +6,6 @@ import Header from '../../components/Header'
 import {
   userState,
   errorState,
-  notificationsState,
   unreadNotificationsCountState,
 } from '../../store/GlobalRecoilWrapper/store'
 import api from '../../api'
@@ -60,9 +59,6 @@ const Profile = () => {
     currentUser ? currentUser.phoneNumber : null
   )
   const [activeSection, setActiveSection] = useState(SectionKeys.userInfo)
-  const [notificationsList, setNotificationsList] = useRecoilState(
-    notificationsState
-  ) // mock
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState) // mock
   const [toastVisibility, setToastVisibility] = useState(false)
 
@@ -240,10 +236,7 @@ const Profile = () => {
                 />
               )}
               {activeSection === SectionKeys.notifications && (
-                <NotificationsBox
-                  notificationsGroupList={notificationsList}
-                  setNotificationsList={setNotificationsList}
-                />
+                <NotificationsBox />
               )}
             </ProfileInfoContainer>
           </div>

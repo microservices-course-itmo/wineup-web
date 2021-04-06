@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import api from '../../api'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
@@ -17,18 +18,34 @@ const images = type => {
 
 /**
  * Элемент списка уведомлений
+ * @param {string} id
  * @param {boolean} isViewed - Флаг прочитанного сообщения
  * @param {string} message - Текст уведомления
+ * @param {string} wineId - название вина
  * @param {string} date - Время создания уведомления
  * @param {string} type - Тип уведомления
+ * @param {function} refetch - refetch уведомлений
  */
-const Notification = ({ isViewed, message, date, type }) => {
+const Notification = ({
+  id,
+  isViewed,
+  wineId,
+  message,
+  date,
+  type,
+  refetch,
+}) => {
+  const deleteNotification = () => {
+    api.deleteNotificationById(id).then(() => {
+      refetch()
+    })
+  }
   const notificationMessage = useMemo(() => {
     switch (type) {
       case NOTIFICATION_TYPES.WINE_PRICE_UPDATED:
         return (
           <span>
-            Выбранный Вами <b>товар {message}</b> теперь со скидкой! Спешите
+            Выбранный Вами <b>товар {wineId}</b> теперь со скидкой! Спешите
             приобрести по выгодной цене!
           </span>
         )
@@ -46,7 +63,7 @@ const Notification = ({ isViewed, message, date, type }) => {
             <p className='text'>{notificationMessage}</p>
             <p className='time'>{new Date(date).toLocaleString()}</p>
           </div>
-          <button type='button' className='button'>
+          <button type='button' className='button' onClick={deleteNotification}>
             <img
               src={`${prefix}/assets/notifications/trash.svg`}
               alt='settings'

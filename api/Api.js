@@ -224,6 +224,23 @@ class Api {
     return response.data
   }
 
+  async deleteNotificationById(notificationId) {
+    const response = await this.sendRequest({
+      url: `/notification-service/notification/${notificationId}`,
+      method: 'DELETE',
+      headers: {
+        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Server Error')
+    }
+
+    return response.data
+  }
+
   async getProfile(accessToken) {
     const response = await this.sendRequest({
       url: '/user-service/users/me',

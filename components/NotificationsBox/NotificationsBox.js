@@ -1,33 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import NotificationsTypeGroup from '../NotificationsTypeGroup'
+import {
+  notificationsState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import { fetchNotifications } from '../../store/NotificationsModule/helpers'
 
-/**
- * Контейнер для списка уведомлений
- * @param {Array} notificationsGroupList - Объект уведомления
- */
-const NotificationsBox = ({ notificationsGroupList }) => {
+const NotificationsBox = () => {
+  const [notificationsList] = useRecoilState(notificationsState)
+  const currentUser = useRecoilValue(userState)
+  const [, setNotifications] = useRecoilState(notificationsState)
+
+  useEffect(() => {
+    fetchNotifications(currentUser, setNotifications)
+  }, [currentUser, setNotifications])
+  console.log(notificationsList)
+
   const isEmpty =
-    notificationsGroupList.reduce(
+    notificationsList.reduce(
       (prev, currentGroup) => prev + currentGroup.notifications.length,
       0
     ) === 0
   return (
     <div className='container'>
       {!isEmpty ? (
-        notificationsGroupList
-          .sort(a => {
-            return a.type === 'viewed' ? 1 : -1
-          })
-          .map(
-            group =>
-              group.notifications.length > 0 && (
-                <NotificationsTypeGroup
-                  key={group.type}
-                  type={group.type}
-                  notifications={group.notifications}
-                />
-              )
-          )
+        notificationsList.map(
+          group =>
+            group.notifications.length > 0 && (
+              <NotificationsTypeGroup
+                key={group.type}
+                type={group.type}
+                notifications={group.notifications}
+                refetch={() =>
+                  fetchNotifications(currentUser, setNotifications)
+                }
+              />
+            )
+        )
       ) : (
         <p className='noNotifications'>Нет уведомлений</p>
       )}
