@@ -247,6 +247,7 @@ const RegistrationForm = props => {
           margin='50px 206px 5px 205px'
           onClick={registration}
           text='Зарегистрироваться'
+          textColorOnHovеr='#fff'
         />
 
         <div className='soulContract'>
