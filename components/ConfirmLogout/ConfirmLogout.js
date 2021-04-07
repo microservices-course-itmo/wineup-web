@@ -30,7 +30,7 @@ const ConfirmLogout = () => {
                 width='230px'
                 height='33px'
                 margin='0 40px 0 0'
-                background='white'
+                backgroundColor='white'
                 color='#931332'
                 fontSize='18px'
                 fontWeight='normal'
@@ -44,7 +44,7 @@ const ConfirmLogout = () => {
               <CustomFormButton
                 width='230px'
                 height='33px'
-                background='white'
+                backgroundColor='white'
                 color='#931332'
                 fontSize='18px'
                 fontWeight='normal'

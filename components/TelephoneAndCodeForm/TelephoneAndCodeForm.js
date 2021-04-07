@@ -120,12 +120,14 @@ const TelephoneAndCodeForm = props => {
             width='49%'
             onClick={handleSecondForm}
             text='Подтвердить'
+            textColorOnHovеr='#fff'
           />
 
           <CustomFormButton
             width='49%'
             onClick={tryHandleFirstFormAgain}
             text='Отправить повторно'
+            textColorOnHovеr='#fff'
           />
         </div>
       </div>

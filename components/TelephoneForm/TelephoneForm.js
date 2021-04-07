@@ -96,6 +96,7 @@ const TelephoneForm = props => {
         margin='50px 120px 5px 119px'
         onClick={handleFirstForm}
         text='Запросить код подтверждения'
+        textColorOnHovеr='#fff'
       />
 
       <div id='recaptcha' className='captcha' />
