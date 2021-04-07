@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import CustomInput from '../CustomInput'
 import Dropdown from '../Dropdown'
 
@@ -34,6 +34,26 @@ const isTelephoneValid = phoneNumber => {
   const validRegex = phoneRegex.test(phoneNumber)
   return validLength && validRegex
 }
+
+const initialState = {
+  name: true,
+  phone: true,
+}
+
+const reducer = (state, action) => {
+  if (!action) {
+    return initialState
+  }
+
+  switch (action.type) {
+    case 'name-input':
+      return { ...state, name: !state.name }
+    case 'phone-input':
+      return { ...state, phone: !state.phone }
+    default:
+      return initialState
+  }
+}
 /**
  * @param{string} name
  * @param{string} currentCity
@@ -50,6 +70,7 @@ const UserInfoBox = ({
   onSubmit,
   onCancel,
 }) => {
+  const [inputState, dispatch] = useReducer(reducer, initialState)
   const validateAndSubmit = () => {
     if (
       isUsernameValid(name) &&
@@ -57,10 +78,12 @@ const UserInfoBox = ({
       isTelephoneValid(phone)
     ) {
       onSubmit()
+      dispatch()
     } else {
       alert('Поля не соответствуют требованиям')
     }
   }
+
   return (
     <>
       <div className='infoList'>
@@ -70,6 +93,8 @@ const UserInfoBox = ({
           value={name}
           hasError={!isUsernameValid(name)}
           onChange={onInputChange}
+          isDisabled={inputState.name}
+          dispatch={dispatch}
         />
         <Dropdown
           id={InputTypes.cityName}
@@ -89,6 +114,8 @@ const UserInfoBox = ({
           value={phone}
           hasError={!isTelephoneValid(phone)}
           onChange={onInputChange}
+          isDisabled={inputState.phone}
+          dispatch={dispatch}
         />
       </div>
       <footer className='buttonFooter'>
