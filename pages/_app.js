@@ -4,6 +4,8 @@ import 'swiper/swiper-bundle.min.css'
 
 import { initFirebase } from '../utils/firebaseConfig'
 import RecoilObserver from '../store/RecoilObserver'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 import NotificationsModule from '../store/NotificationsModule'
 import '@firebase/messaging'
 
@@ -12,9 +14,12 @@ initFirebase()
 const App = ({ Component, pageProps }) => {
   return (
     <RecoilRoot>
+      <Header />
       {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
       <NotificationsModule />
       <Component {...pageProps} />
+      <Footer />
+
       <style jsx global>
         {`
           /* Box sizing rules */

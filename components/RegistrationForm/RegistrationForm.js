@@ -185,7 +185,7 @@ const RegistrationForm = props => {
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
-      }, 2000)
+      }, 10)
     }
   }
 

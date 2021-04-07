@@ -1,5 +1,6 @@
 import { useRecoilCallback, useRecoilValue, useRecoilState } from 'recoil'
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import ReactCountryFlag from 'react-country-flag'
 import {
@@ -7,6 +8,7 @@ import {
   deleteWineQuery,
   sortedFavoritesWinesState,
   emptyState,
+  fetchedState,
 } from '../Favorites/favoritesStore'
 import { winesState } from '../Catalog/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -58,31 +60,13 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
   const allWinesStore = useRecoilValue(winesState)
   const [, setEmpty] = useRecoilState(emptyState)
+  const fetched = useRecoilValue(fetchedState)
+  const router = useRouter()
   const addFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(addWineQuery([id, accessToken]))
-    const item = allWinesStore.find(x => x.wine_position_id === id)
-    // eslint-disable-next-line
-    const copy = sortedWine.map(a => Object.assign({}, a))
-    if (copy.length === 0) {
-      setEmpty(false)
-      copy.push(item)
-    } else {
-      setEmpty(true)
-      copy.push(item)
-      setSortedWine(() => copy)
-    }
   })
   const deleteFavorite = useRecoilCallback(({ snapshot }) => async id => {
     await snapshot.getPromise(deleteWineQuery([id, accessToken]))
-    // eslint-disable-next-line
-    const copy = sortedWine.map(a => Object.assign({}, a))
-    const item = copy.find(x => x.wine_position_id === id)
-    const index = copy.indexOf(item)
-    copy.splice(index, 1)
-    if (copy.length === 0) {
-      setEmpty(true)
-    }
-    setSortedWine(() => copy)
   })
   const clickHeart = (e, id, token) => {
     e.stopPropagation()
@@ -90,10 +74,26 @@ const WineCard = ({ imageSrc, info, isLiked, color, wineId }) => {
       if (!isHeartFilled) {
         setIsHeartFilled(true)
         addFavorite(id, token)
+        const item = allWinesStore.find(x => x.wine_position_id === id)
+        const copy = sortedWine.map(a => ({ ...a }))
+        if (fetched) {
+          copy.push(item)
+          setSortedWine(() => copy)
+        }
       } else {
         setIsHeartFilled(false)
         deleteFavorite(id, token)
+        const copy = sortedWine.map(a => ({ ...a }))
+        const item = copy.find(x => x.wine_position_id === id)
+        const index = copy.indexOf(item)
+        copy.splice(index, 1)
+        if (copy.length === 0) {
+          setEmpty(true)
+        }
+        setSortedWine(() => copy)
       }
+    } else {
+      router.push('/login')
     }
   }
   return (

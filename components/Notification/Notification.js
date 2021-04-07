@@ -65,6 +65,7 @@ const Notification = ({
             <p className='time'>{new Date(date).toLocaleString()}</p>
           </div>
           <button
+            id={id}
             type='button'
             className='button'
             onClick={throttle(deleteNotification, 500)}
@@ -84,6 +85,11 @@ const Notification = ({
           align-items: center;
         }
 
+        .read > .notification {
+          padding-top: 0;
+          margin-bottom: 10px;
+          border-bottom: 1px solid #9e9e9e;
+        }
         .viewed > .notification {
           padding-top: 0;
           margin-bottom: 10px;

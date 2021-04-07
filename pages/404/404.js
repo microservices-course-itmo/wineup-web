@@ -1,11 +1,9 @@
 import Link from 'next/link'
-import Header from '../../components/Header'
 import Search from '../../components/Search'
 
 const Custom404 = () => {
   return (
-    <div>
-      <Header />
+    <>
       <Search />
       <div className='contentWrapper'>
         <div className='iconContainer'>
@@ -33,7 +31,7 @@ const Custom404 = () => {
             flex-flow: row nowrap;
             justify-content: center;
             align-items: center;
-            margin-top: 95px;
+            margin: 95px 0;
           }
 
           .iconContainer {
@@ -67,7 +65,7 @@ const Custom404 = () => {
           }
         `}
       </style>
-    </div>
+    </>
   )
 }
 

@@ -29,6 +29,7 @@ const CustomFormButton = ({
   color = 'white',
   backgroundOnHover = '#af2f4e',
   colorOnHover = backgroundOnHover,
+  textColorOnHovеr = '#af2f4e',
   border = 'none',
   disabled = false,
 }) => (
@@ -59,6 +60,7 @@ const CustomFormButton = ({
         }
 
         .button:hover {
+          color: ${textColorOnHovеr};
           background: ${backgroundOnHover};
           background-color: ${disabled ? '#e9e9e9' : colorOnHover};
           box-shadow: ${disabled ? 'none' : '0 0 8px rgba(253, 0, 0, 0.5)'};
