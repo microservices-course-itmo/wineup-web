@@ -6,7 +6,18 @@ export const emptyState = atom({
   key: 'emptyState',
   default: false,
 })
-
+export const fetchedState = atom({
+  key: 'fetchedState',
+  default: false,
+})
+export const showClearState = atom({
+  key: 'showClearState',
+  default: false,
+})
+export const showClearSuccessState = atom({
+  key: 'showClearSuccessState',
+  default: false,
+})
 export const favoritesState = atom({
   key: 'favorites',
   default: [],

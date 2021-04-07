@@ -81,7 +81,7 @@ const Header = () => {
         labelText='Лайки'
       />
       <HeaderMenuItem
-        href={`${currentUser ? '/favorites' : '/login'}`}
+        href='/favorites'
         iconSrc={imagePaths.favorites}
         isActive={activeImage === MenuItemKeys.favorites}
         labelText='Избранное'

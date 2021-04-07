@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import {
   useRecoilValueLoadable,
   useRecoilState,
-  useRecoilCallback,
   useSetRecoilState,
 } from 'recoil'
 import Link from 'next/link'
@@ -14,10 +13,11 @@ import Loader from '../components/Loader'
 import {
   favoritesState,
   contentQuery,
-  deleteQuery,
   favoritesSortState,
   emptyState,
+  fetchedState,
   sortedFavoritesWinesState,
+  showClearState,
 } from '../components/Favorites/favoritesStore'
 import {
   parseImageSrc,
@@ -25,20 +25,18 @@ import {
   sortingButtons,
 } from '../components/Catalog/utils'
 import useLocalStorage from '../hooks/useLocalStorage'
+import ConfirmClearFavorites from '../components/ConfirmClearFavorites'
+import ClearFavoritesSuccess from '../components/ClearFavoritesSuccess'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
+  const [, setShowClear] = useRecoilState(showClearState)
   const setFavorites = useSetRecoilState(favoritesState)
+  const [, setFetched] = useRecoilState(fetchedState)
   const [empty, setEmpty] = useRecoilState(emptyState)
-  const [sortedWine, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
-
+  const [sortedWine] = useRecoilState(sortedFavoritesWinesState)
   const [favoritesSort, setFavoritesSort] = useRecoilState(favoritesSortState)
   const contentQueryLoadable = useRecoilValueLoadable(contentQuery(accessToken))
-  const clearFavorites = useRecoilCallback(({ snapshot }) => async () => {
-    await snapshot.getPromise(deleteQuery(accessToken))
-    setSortedWine(() => '')
-    setEmpty(true)
-  })
   useEffect(() => {
     if (sortedWine.length === 0 && !empty) {
       if (
@@ -47,6 +45,7 @@ const Favorite = () => {
       ) {
         setFavorites(() => contentQueryLoadable.contents)
         setEmpty(true)
+        setFetched(true)
       }
     }
   }, [contentQueryLoadable.contents, setFavorites, contentQueryLoadable.state])
@@ -56,6 +55,8 @@ const Favorite = () => {
       <div className='content'>
         {!contentQueryLoadable.contents.error ? (
           <>
+            <ConfirmClearFavorites />
+            <ClearFavoritesSuccess />
             <ButtonGroup
               title='Сортировать по'
               activeButton={favoritesSort}
@@ -66,7 +67,9 @@ const Favorite = () => {
               <button
                 type='button'
                 className='buttonClear'
-                onClick={() => clearFavorites()}
+                onClick={() => {
+                  setShowClear(true)
+                }}
               >
                 <text className='textBtn'>Очистить избранное?</text>
               </button>
