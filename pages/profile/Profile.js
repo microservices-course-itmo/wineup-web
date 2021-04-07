@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import firebase from 'firebase'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import Header from '../../components/Header'
 import {
   userState,
   errorState,
@@ -207,155 +206,158 @@ const Profile = () => {
   }
 
   return (
-    <GlobalRecoilWrapper>
-      {toastVisibility ? (
-        <Toast
-          type='success'
-          text='Пользователь успешно изменен'
-          closeCallback={() => setToastVisibility(false)}
+    <>
+      <GlobalRecoilWrapper>
+        {toastVisibility ? (
+          <Toast
+            type='success'
+            text='Пользователь успешно изменен'
+            closeCallback={() => setToastVisibility(false)}
+          />
+        ) : null}
+        <ConfirmPhoneModal
+          visible={isConfirmModalVisible}
+          onSubmit={onSubmitPhoneChange}
+          onClose={onClosePhoneConfirmModal}
+          errorCode={phoneChangeError}
         />
-      ) : null}
-      <Header />
-      <ConfirmPhoneModal
-        visible={isConfirmModalVisible}
-        onSubmit={onSubmitPhoneChange}
-        onClose={onClosePhoneConfirmModal}
-        errorCode={phoneChangeError}
-      />
-      <div className='content'>
-        <header className='mainHeader'>Личный кабинет</header>
-        {currentUser && (
-          <div className='profile'>
-            <nav className='container'>
-              <div className='userAvatar'>
-                <img
-                  className='avatar'
-                  src='/assets/wineup-avatar-default.svg'
-                  alt='User Avatar'
-                />
-              </div>
-              <ul className='navList'>
-                <ProfileSectionMenuItem
-                  active={activeSection === SectionKeys.userInfo}
-                  labelText={SectionKeys.userInfo.title}
-                  onClick={() => setActiveSection(SectionKeys.userInfo)}
-                />
-                <ProfileSectionMenuItem
-                  active={activeSection === SectionKeys.notifications}
-                  labelText={SectionKeys.notifications.title}
-                  onClick={() => setActiveSection(SectionKeys.notifications)}
-                >
-                  <Badge count={unreadNotificationsCount} />
-                </ProfileSectionMenuItem>
-              </ul>
+        <div className='content'>
+          <header className='mainHeader'>Личный кабинет</header>
+          {currentUser && (
+            <div className='profile'>
+              <nav className='container'>
+                <div className='userAvatar'>
+                  <img
+                    className='avatar'
+                    src='/assets/wineup-avatar-default.svg'
+                    alt='User Avatar'
+                  />
+                </div>
+                <ul className='navList'>
+                  <ProfileSectionMenuItem
+                    active={activeSection === SectionKeys.userInfo}
+                    labelText={SectionKeys.userInfo.title}
+                    onClick={() => setActiveSection(SectionKeys.userInfo)}
+                  />
+                  <ProfileSectionMenuItem
+                    active={activeSection === SectionKeys.notifications}
+                    labelText={SectionKeys.notifications.title}
+                    onClick={() => setActiveSection(SectionKeys.notifications)}
+                  >
+                    <Badge count={unreadNotificationsCount} />
+                  </ProfileSectionMenuItem>
+                </ul>
 
-              <footer className='buttonFooter'>
-                <Link href='logout'>
-                  <button type='button' className='btn logoutBtn'>
-                    Выйти
-                  </button>
-                </Link>
-              </footer>
-            </nav>
-            <ProfileInfoContainer section={activeSection}>
-              {activeSection === SectionKeys.userInfo && (
-                <UserInfoBox
-                  name={nameInputState}
-                  currentCity={{
-                    ...cityInputState,
-                  }}
-                  phone={phoneInputState}
-                  onInputChange={onInputChange}
-                  onSubmit={onSubmit}
-                  onCancel={resetFields}
-                />
-              )}
-              {activeSection === SectionKeys.notifications && (
-                <NotificationsBox notificationsGroupList={notificationsList} />
-              )}
-            </ProfileInfoContainer>
-          </div>
-        )}
-        {!currentUser && (
-          <footer className='buttonFooter'>
-            <Link href='/login'>
-              <button type='button' className='btn logoutBtn'>
-                Войти
-              </button>
-            </Link>
-          </footer>
-        )}
-      </div>
-      <style jsx>
-        {`
-          .content {
-            display: flex;
-            margin-top: 40px;
-            padding: 0 20px;
-            flex-direction: column;
-            background-color: #f5f5f5;
-          }
+                <footer className='buttonFooter'>
+                  <Link href='logout'>
+                    <button type='button' className='btn logoutBtn'>
+                      Выйти
+                    </button>
+                  </Link>
+                </footer>
+              </nav>
+              <ProfileInfoContainer section={activeSection}>
+                {activeSection === SectionKeys.userInfo && (
+                  <UserInfoBox
+                    name={nameInputState}
+                    currentCity={{
+                      ...cityInputState,
+                    }}
+                    phone={phoneInputState}
+                    onInputChange={onInputChange}
+                    onSubmit={onSubmit}
+                    onCancel={resetFields}
+                  />
+                )}
+                {activeSection === SectionKeys.notifications && (
+                  <NotificationsBox
+                    notificationsGroupList={notificationsList}
+                  />
+                )}
+              </ProfileInfoContainer>
+            </div>
+          )}
+          {!currentUser && (
+            <footer className='buttonFooter'>
+              <Link href='/login'>
+                <button type='button' className='btn logoutBtn'>
+                  Войти
+                </button>
+              </Link>
+            </footer>
+          )}
+        </div>
+        <style jsx>
+          {`
+            .content {
+              display: flex;
+              margin-top: 40px;
+              padding: 0 20px;
+              flex-direction: column;
+              background-color: #f5f5f5;
+            }
 
-          .mainHeader {
-            font-size: 32px;
-            font-weight: bold;
-            padding: 30px;
-          }
-          .profile {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-between;
-            width: 100%;
-          }
-          nav.container {
-            flex-basis: 30%;
-            flex-grow: 1;
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: space-between;
-            background-color: white;
-            padding: 40px;
-            margin-bottom: 40px;
-          }
-          .navList {
-            padding: 50px 0;
-          }
+            .mainHeader {
+              font-size: 32px;
+              font-weight: bold;
+              padding: 30px;
+            }
+            .profile {
+              display: flex;
+              flex-flow: row nowrap;
+              justify-content: space-between;
+              width: 100%;
+            }
+            nav.container {
+              flex-basis: 30%;
+              flex-grow: 1;
+              display: flex;
+              flex-flow: column nowrap;
+              justify-content: space-between;
+              background-color: white;
+              padding: 40px;
+              margin-bottom: 40px;
+            }
+            .navList {
+              padding: 50px 0;
+            }
 
-          .userAvatar {
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: flex-end;
-          }
+            .userAvatar {
+              display: flex;
+              flex-flow: row nowrap;
+              align-items: flex-end;
+            }
 
-          .buttonFooter {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 150px;
-            padding-bottom: 20px;
-          }
+            .buttonFooter {
+              display: flex;
+              justify-content: space-around;
+              margin-top: 150px;
+              padding-bottom: 20px;
+            }
 
-          nav.container .avatar {
-            height: 210px;
-            width: 210px;
-            border-radius: 50%;
-          }
-          .btn {
-            border: 1px solid;
-            border-radius: 50px;
-            font-size: 18px;
-            padding: 5px 60px;
-            cursor: pointer;
-            outline: none;
-          }
+            nav.container .avatar {
+              height: 210px;
+              width: 210px;
+              border-radius: 50%;
+            }
+            .btn {
+              border: 1px solid;
+              border-radius: 50px;
+              font-size: 18px;
+              padding: 5px 60px;
+              cursor: pointer;
+              outline: none;
+            }
 
-          .logoutBtn {
-            background-color: #931332;
-            border-color: #931332;
-            color: white;
-          }
-        `}
-      </style>
-    </GlobalRecoilWrapper>
+            .logoutBtn {
+              background-color: #931332;
+              border-color: #931332;
+              color: white;
+            }
+          `}
+        </style>
+      </GlobalRecoilWrapper>
+    </>
   )
 }
 

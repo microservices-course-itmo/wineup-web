@@ -4,14 +4,19 @@ import 'swiper/swiper-bundle.min.css'
 
 import { initFirebase } from '../utils/firebaseConfig'
 import RecoilObserver from '../store/RecoilObserver'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 initFirebase()
 
 const App = ({ Component, pageProps }) => {
   return (
     <RecoilRoot>
+      <Header />
       {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
       <Component {...pageProps} />
+      <Footer />
+
       <style jsx global>
         {`
           /* Box sizing rules */
