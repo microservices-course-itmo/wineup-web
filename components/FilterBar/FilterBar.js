@@ -18,6 +18,8 @@ const initialFormState = {
 
 const FilterBar = () => {
   const [formState, setFormState] = useRecoilState(formFiltersState)
+  const isClearFilterDisabled =
+    JSON.stringify(initialFormState) === JSON.stringify(formState)
 
   const handleCheckoutChange = event => {
     const { name, value, checked } = event.target
@@ -339,7 +341,7 @@ const FilterBar = () => {
       <button
         type='reset'
         className='clearFilterButton'
-        disabled={Object.is(formState, initialFormState)}
+        disabled={isClearFilterDisabled}
       >
         <span className='btnText'>
           <span>Очистить фильтр</span>
@@ -389,9 +391,7 @@ const FilterBar = () => {
             background-color: #931332;
             color: white;
             font-size: 22px;
-            cursor: ${Object.is(formState, initialFormState)
-              ? 'not-allowed'
-              : 'pointer'};
+            cursor: ${isClearFilterDisabled ? 'not-allowed' : 'pointer'};
           }
 
           .btnText {
