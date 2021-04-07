@@ -259,6 +259,20 @@ class Api {
     }
   }
 
+  async getRecommendedWines(wineID) {
+    const response = await this.sendRequest({
+      url: '/ml3-recommendation-service/api/bert/predict',
+      method: 'POST',
+      data: { '"id"': wineID },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Server Error')
+    }
+
+    return response.data
+  }
+
   async sendRequest({ url, method, data, headers, params }) {
     try {
       const response = await this.request({

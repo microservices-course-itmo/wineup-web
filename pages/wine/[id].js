@@ -28,12 +28,27 @@ export const winesPositionState = selectorFamily({
   },
 })
 
+export const recommendedWinesState = selectorFamily({
+  key: 'recommendedWinesState',
+  get: id => async () => {
+    if (id) {
+      const response = await api.getRecommendedWines(id)
+
+      return response
+    }
+    throw new Error()
+  },
+})
+
 const Wine = () => {
   const [accessToken] = useLocalStorage('accessToken')
   const router = useRouter()
   const { state, contents } = useRecoilValueLoadable(
     winesPositionState([router.query.id, accessToken])
   )
+  // const recommendedWinesLoadable = useRecoilValueLoadable(
+  //   recommendedWinesState(router.query.id)
+  // )
 
   return (
     <GlobalRecoilWrapper>
@@ -86,19 +101,23 @@ const Wine = () => {
           padding: 0 20px;
           margin: 0 auto;
         }
+
         .winePosition {
           margin-top: 80px;
         }
+
         .container {
           padding-top: 20px;
           display: flex;
           justify-content: space-between;
         }
+
         .message {
           padding-top: 30px;
           display: flex;
           justify-content: center;
         }
+
         .loading {
           max-width: 250px;
           display: flex;
@@ -106,12 +125,14 @@ const Wine = () => {
           align-items: center;
           text-align: center;
         }
+
         .loading p {
           margin-top: 25px;
           font-family: Playfair Display, serif;
           font-size: 16px;
           color: #000000;
         }
+
         .errorIcon {
           width: 120px;
           height: auto;
