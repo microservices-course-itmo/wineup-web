@@ -197,10 +197,11 @@ const Profile = () => {
     const preparedData = Object.fromEntries(
       Object.entries(userToPatch).filter(field => field[1] !== null)
     )
+    const isEmptyObj = obj => Object.keys(obj).length === 0
     if (isPhoneUpdated) {
       setIsConfirmModalVisible(true)
       setProfileData(preparedData)
-    } else {
+    } else if (!isEmptyObj(preparedData)) {
       updateProfile(preparedData)
     }
   }
