@@ -67,7 +67,7 @@ const Notification = ({
           <button
             type='button'
             className='button'
-            onClick={throttle(deleteNotification, 5000)}
+            onClick={throttle(deleteNotification, 500)}
           >
             <img
               src={`${prefix}/assets/notifications/trash.svg`}
