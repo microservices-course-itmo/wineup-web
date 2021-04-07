@@ -33,11 +33,34 @@ const NotificationsModule = () => {
   }
 
   if (typeof window !== 'undefined') {
-    const messaging = firebase.messaging()
-    messaging.onMessage(onMessageHandler)
-    messaging.getToken().then(token => {
-      setNotificationToken(token)
-    })
+    if ('Notification' in window) {
+      const messaging = firebase.messaging()
+      if (Notification.permission === 'granted') {
+        messaging.onMessage(onMessageHandler)
+        messaging
+          .getToken({
+            vapidKey:
+              'BIM1no3idn0Jx6Spr2RZsboh-9nDLwGWkIbXN_OzQjK_PLFufwBzKACJEfMbnTBN6WVqU6MLmo5KliLV5ovNG2E',
+          })
+          .then(token => {
+            setNotificationToken(token)
+          })
+      } else {
+        Notification.requestPermission().then(result => {
+          if (result === 'granted') {
+            messaging.onMessage(onMessageHandler)
+            messaging
+              .getToken({
+                vapidKey:
+                  'BIM1no3idn0Jx6Spr2RZsboh-9nDLwGWkIbXN_OzQjK_PLFufwBzKACJEfMbnTBN6WVqU6MLmo5KliLV5ovNG2E',
+              })
+              .then(token => {
+                setNotificationToken(token)
+              })
+          }
+        })
+      }
+    }
   }
 
   return null
