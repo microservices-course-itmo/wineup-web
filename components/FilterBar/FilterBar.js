@@ -353,7 +353,7 @@ const FilterBar = () => {
         {`
           .filterListContainer {
             background-color: gray;
-            background-image: url('/assets/filterBackground.png');
+            background-image: url('/assets/filterBackground.jpg');
             min-width: 375px;
             overflow: hidden;
             height: 100vh;
