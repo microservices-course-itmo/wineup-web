@@ -27,6 +27,7 @@ import {
 } from '../components/Catalog/utils'
 import useLocalStorage from '../hooks/useLocalStorage'
 import ConfirmClearFavorites from '../components/ConfirmClearFavorites'
+import ClearFavoritesSuccess from '../components/ClearFavoritesSuccess'
 
 const Favorite = () => {
   const [accessToken] = useLocalStorage('accessToken')
@@ -57,6 +58,7 @@ const Favorite = () => {
         {!contentQueryLoadable.contents.error ? (
           <>
             <ConfirmClearFavorites />
+            <ClearFavoritesSuccess />
             <ButtonGroup
               title='Сортировать по'
               activeButton={favoritesSort}

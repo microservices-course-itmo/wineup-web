@@ -7,10 +7,12 @@ import {
   sortedFavoritesWinesState,
   emptyState,
   showClearState,
+  showClearSuccessState,
 } from '../Favorites/favoritesStore'
 
 const ConfirmClearFavorites = () => {
   const [show, setShow] = useRecoilState(showClearState)
+  const [, setShowSuccess] = useRecoilState(showClearSuccessState)
   const [accessToken] = useLocalStorage('accessToken')
   const [, setEmpty] = useRecoilState(emptyState)
   const [, setSortedWine] = useRecoilState(sortedFavoritesWinesState)
@@ -20,6 +22,7 @@ const ConfirmClearFavorites = () => {
     setSortedWine(() => copy)
     setEmpty(true)
     setShow(false)
+    setShowSuccess(true)
   })
 
   return (

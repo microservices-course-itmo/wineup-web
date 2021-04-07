@@ -14,6 +14,10 @@ export const showClearState = atom({
   key: 'showClearState',
   default: false,
 })
+export const showClearSuccessState = atom({
+  key: 'showClearSuccessState',
+  default: false,
+})
 export const favoritesState = atom({
   key: 'favorites',
   default: [],
