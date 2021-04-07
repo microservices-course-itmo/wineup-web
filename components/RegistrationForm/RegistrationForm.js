@@ -10,6 +10,7 @@ import CustomFormButton from '../CustomFormButton'
 import { CalendarErrors } from '../FormCalendar/FormCalendar'
 import Dropdown from '../Dropdown'
 import { cityIndexSeparator } from '../Dropdown/Dropdown'
+import CloseButton from '../CloseButton'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const usernameRegex = /[`0№!@#$%^&*()_+=[\]{};':"\\|,.<>/?~]/
@@ -184,13 +185,14 @@ const RegistrationForm = props => {
       dispatch({ type: ReducerType.showMessage })
       setTimeout(() => {
         router.push('/')
-      }, 2000)
+      }, 10)
     }
   }
 
   return (
     <div>
       <div className='authForm3'>
+        <CloseButton callback={() => router.push('/')} />
         <div className='header'>Войдите или зарегистрируйтесь</div>
         <div className='inputForm'>
           <div className='formName'>Введите имя</div>
@@ -255,6 +257,7 @@ const RegistrationForm = props => {
       <style jsx>
         {`
           .authForm3 {
+            position: relative;
             background: white;
             display: block;
             border: 2px solid black;
