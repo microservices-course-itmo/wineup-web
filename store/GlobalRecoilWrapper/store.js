@@ -14,6 +14,11 @@ const errorState = atom({
   },
 })
 
+const notificationTokenState = atom({
+  key: 'notificationTokenState',
+  default: null,
+})
+
 const notificationsState = atom({
   key: 'notifications',
   default: [
@@ -43,5 +48,6 @@ export {
   userState,
   errorState,
   notificationsState,
+  notificationTokenState,
   unreadNotificationsCountState,
 }

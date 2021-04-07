@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import NotificationTooltip from '../NotificationTooltip'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import ModalWrapper from '../ModalWrapper'
+import {
+  notificationTokenState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import api from '../../api'
 
 const SectionKeys = {
   userInfo: {
@@ -22,11 +28,22 @@ const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
  * @param {Node} children
  */
 const ProfileInfoContainer = ({ section, children }) => {
+  const currentUser = useRecoilValue(userState)
   const [tooltipVisible, setTooltipVisible] = useState(false)
   const [isDisabled, setIsDisabled] = useLocalStorage('notificationsDisabled')
+  const notificationToken = useRecoilValue(notificationTokenState)
 
   const toggleDisableNotifications = () => {
-    setIsDisabled(!isDisabled)
+    if (!isDisabled && currentUser) {
+      api
+        .addNotificationsTokenByUserId(currentUser.id, notificationToken)
+        .then(() => setIsDisabled(!isDisabled))
+    }
+    if (isDisabled) {
+      api
+        .deleteCurrentUserNotificationToken()
+        .then(() => setIsDisabled(!isDisabled))
+    }
   }
 
   return (
@@ -37,7 +54,7 @@ const ProfileInfoContainer = ({ section, children }) => {
           <div className='buttonWrapper'>
             <button
               type='button'
-              className='button-settings'
+              className='buttonSettings'
               onClick={() => setTooltipVisible(prevState => !prevState)}
             >
               <img
@@ -53,7 +70,7 @@ const ProfileInfoContainer = ({ section, children }) => {
               <div className='tooltipWrapper'>
                 <NotificationTooltip
                   notificationEnable={isDisabled}
-                  onChnage={toggleDisableNotifications}
+                  onChange={toggleDisableNotifications}
                 />
               </div>
             </ModalWrapper>
@@ -106,7 +123,7 @@ const ProfileInfoContainer = ({ section, children }) => {
         .buttonWrapper {
           position: relative;
         }
-        .button-settings {
+        .buttonSettings {
           padding: 0;
           outline: none;
           border: none;

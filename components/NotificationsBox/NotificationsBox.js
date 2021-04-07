@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import NotificationsTypeGroup from '../NotificationsTypeGroup'
 import {
@@ -6,8 +6,10 @@ import {
   userState,
 } from '../../store/GlobalRecoilWrapper/store'
 import { fetchNotifications } from '../../store/NotificationsModule/helpers'
+import Toast from '../Toast'
 
 const NotificationsBox = () => {
+  const [toastVisibility, setToastVisibility] = useState(false)
   const [notificationsList] = useRecoilState(notificationsState)
   const currentUser = useRecoilValue(userState)
   const [, setNotifications] = useRecoilState(notificationsState)
@@ -19,6 +21,14 @@ const NotificationsBox = () => {
     ) === 0
   return (
     <div className='container'>
+      {toastVisibility ? (
+        <Toast
+          type='success'
+          text='Уведомление успешно удалено'
+          closeCallback={() => setToastVisibility(false)}
+          closeTimeout={500}
+        />
+      ) : null}
       {!isEmpty ? (
         notificationsList.map(
           group =>
@@ -27,14 +37,15 @@ const NotificationsBox = () => {
                 key={group.type}
                 type={group.type}
                 notifications={group.notifications}
-                refetch={() =>
+                refetch={() => {
                   fetchNotifications(currentUser, setNotifications)
-                }
+                  setToastVisibility(true)
+                }}
               />
             )
         )
       ) : (
-        <div className='noNotifications-wrapper'>
+        <div className='noNotificationsWrapper'>
           <span className='noNotifications'>У вас пока нет уведомлений...</span>
         </div>
       )}
@@ -48,7 +59,7 @@ const NotificationsBox = () => {
             overflow: scroll;
           }
 
-          .noNotifications-wrapper {
+          .noNotificationsWrapper {
             display: flex;
             align-items: center;
             justify-content: center;

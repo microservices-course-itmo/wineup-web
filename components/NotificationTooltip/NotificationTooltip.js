@@ -1,24 +1,42 @@
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import CustomFormButton from '../CustomFormButton'
 import CustomSwitchCheckbox from '../CustomSwitchCheckbox'
-import { unreadNotificationsCountState } from '../../store/GlobalRecoilWrapper/store'
+import {
+  notificationsState,
+  unreadNotificationsCountState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import api from '../../api'
+import { fetchNotifications } from '../../store/NotificationsModule/helpers'
 
 /**
  * @param {boolean} notificationEnable
+ * @param {function} onChange
  */
-const NotificationTooltip = ({ notificationEnable, onChnage }) => {
+const NotificationTooltip = ({ notificationEnable, onChange }) => {
+  const currentUser = useRecoilValue(userState)
+  const [, setNotifications] = useRecoilState(notificationsState)
   const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState)
+
+  const handleDeleteAllNotifications = () => {
+    if (currentUser) {
+      api.deleteAllNotificationsByUserId(currentUser.id).then(() => {
+        fetchNotifications(currentUser, setNotifications)
+      })
+    }
+  }
+
   return (
     <div>
       <div className='tooltipContainer'>
         <div className='tooltipContent'>
           <div className='switchWrapper'>
-            <div className='switchLabel' onClick={onChnage}>
+            <div className='switchLabel' onClick={onChange}>
               Выключить уведомления
             </div>
             <CustomSwitchCheckbox
               checked={notificationEnable}
-              onChange={onChnage}
+              onChange={onChange}
             />
           </div>
           <div className='buttonFooter'>
@@ -28,7 +46,7 @@ const NotificationTooltip = ({ notificationEnable, onChnage }) => {
               height='33px'
               padding='5px 20px'
               fontSize='14px'
-              onClick={() => {}}
+              onClick={handleDeleteAllNotifications}
               text='Удалить все уведомления'
               disabled={!unreadNotificationsCount}
             />

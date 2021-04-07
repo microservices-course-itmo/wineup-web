@@ -10,7 +10,7 @@ const useCatchOutsideClick = (ref, onAction) => {
       if (
         ref.current &&
         !ref.current.contains(event.target) &&
-        event.target.className !== 'button-settings'
+        event.target.className !== 'buttonSettings'
       )
         onAction()
     }

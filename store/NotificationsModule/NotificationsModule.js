@@ -1,12 +1,17 @@
 import { useEffect } from 'react'
 import firebase from 'firebase'
 import { useRecoilValue, useRecoilState } from 'recoil'
-import { notificationsState, userState } from '../GlobalRecoilWrapper/store'
+import {
+  notificationsState,
+  userState,
+  notificationTokenState,
+} from '../GlobalRecoilWrapper/store'
 import { fetchNotifications } from './helpers'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 const NotificationsModule = () => {
   const currentUser = useRecoilValue(userState)
+  const [, setNotificationToken] = useRecoilState(notificationTokenState)
   const [, setNotifications] = useRecoilState(notificationsState)
   const [isDisabled] = useLocalStorage('notificationsDisabled')
 
@@ -30,7 +35,9 @@ const NotificationsModule = () => {
   if (typeof window !== 'undefined') {
     const messaging = firebase.messaging()
     messaging.onMessage(onMessageHandler)
-    messaging.getToken().then(a => console.log(a))
+    messaging.getToken().then(token => {
+      setNotificationToken(token)
+    })
   }
 
   return null
