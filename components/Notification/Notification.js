@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import api from '../../api'
+import { throttle } from '../../utils/helpers'
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
+export const NOTIFICATION_TYPES = {
+  WINE_PRICE_UPDATED: 'WINE_PRICE_UPDATED',
+}
+
 const images = type => {
   switch (type) {
-    case 'wineup':
-      return `${prefix}/assets/notifications/wineup.svg`
-    case 'liked':
+    case NOTIFICATION_TYPES.WINE_PRICE_UPDATED:
       return `${prefix}/assets/notifications/liked.svg`
     default:
       return `${prefix}/assets/notifications/wineup.svg`
@@ -15,22 +19,57 @@ const images = type => {
 
 /**
  * Элемент списка уведомлений
- * @param {string} type - Тип уведомлений
- * @param {string} text - Текст уведомления
- * @param {string} time - Время создания уведомления
- * @param {string} imageType - Тип изображения слева
+ * @param {string} id
+ * @param {boolean} isViewed - Флаг прочитанного сообщения
+ * @param {string} message - Текст уведомления
+ * @param {string} wineId - название вина
+ * @param {string} date - Время создания уведомления
+ * @param {string} type - Тип уведомления
+ * @param {function} refetch - refetch уведомлений
  */
-const Notification = ({ id, type, imageType, text, time }) => {
+const Notification = ({
+  id,
+  isViewed,
+  wineId,
+  message,
+  date,
+  type,
+  refetch,
+}) => {
+  const deleteNotification = () => {
+    api.deleteNotificationById(id).then(() => {
+      refetch()
+    })
+  }
+  const notificationMessage = useMemo(() => {
+    switch (type) {
+      case NOTIFICATION_TYPES.WINE_PRICE_UPDATED:
+        return (
+          <span>
+            Выбранный Вами <b>товар {wineId}</b> теперь со скидкой! Спешите
+            приобрести по выгодной цене!
+          </span>
+        )
+      default:
+        return message
+    }
+  }, [type, message])
+
   return (
     <>
-      <div className={`container ${type}`}>
+      <div className={`container ${isViewed ? 'viewed' : 'unviewed'}`}>
         <div className='notification'>
-          <img className='image' src={images(imageType)} alt='settings' />
+          <img className='image' src={images(type)} alt='settings' />
           <div>
-            <p className='text'>{text}</p>
-            <p className='time'>{time}</p>
+            <p className='text'>{notificationMessage}</p>
+            <p className='time'>{new Date(date).toLocaleString()}</p>
           </div>
-          <button id={id} type='button' className='button'>
+          <button
+            id={id}
+            type='button'
+            className='button'
+            onClick={throttle(deleteNotification, 500)}
+          >
             <img
               src={`${prefix}/assets/notifications/trash.svg`}
               alt='settings'
@@ -38,7 +77,6 @@ const Notification = ({ id, type, imageType, text, time }) => {
           </button>
         </div>
       </div>
-
       <style jsx>{`
         .notification {
           margin: 0 5px;
@@ -52,8 +90,13 @@ const Notification = ({ id, type, imageType, text, time }) => {
           margin-bottom: 10px;
           border-bottom: 1px solid #9e9e9e;
         }
+        .viewed > .notification {
+          padding-top: 0;
+          margin-bottom: 10px;
+          border-bottom: 1px solid #9e9e9e;
+        }
 
-        .unread > .notification {
+        .unviewed > .notification {
           margin-bottom: 10px;
           background-color: #f2f0f0;
           border-radius: 2px;

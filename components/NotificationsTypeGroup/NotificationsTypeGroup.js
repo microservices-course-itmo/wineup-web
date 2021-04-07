@@ -3,9 +3,9 @@ import Notification from '../Notification'
 
 const titles = type => {
   switch (type) {
-    case 'read':
+    case 'viewed':
       return 'Прочитанные'
-    case 'unread':
+    case 'unviewed':
       return 'Новые'
     default:
       return 'Уведомления'
@@ -14,54 +14,60 @@ const titles = type => {
 
 /**
  * Контейнер для списка уведомлений
- * @param {string} type - Тип уведомлений
+ * @param {string} groupType - Тип уведомлений
+ * @param {function} refetch - refetch нотификаций
  * @param {Array} notifications - Объект уведомления
  * @param {string} notifications.text - Текст уведомления
  * @param {string} notifications.time - Время создания уведомления
  * @param {string} notifications.imageType - Тип изображения слева
  */
-const NotificationsTypeGroup = ({ type = 'unread', notifications = [] }) => {
-  return (
-    <>
-      <h2 className='title'>{titles(type)}</h2>
-
-      <div className='container'>
-        {notifications.map((notification, index) => (
+const NotificationsTypeGroup = ({
+  type: groupType = 'unread',
+  refetch,
+  notifications = [],
+}) => (
+  <>
+    <h2 className='title'>{titles(groupType)}</h2>
+    <div className='container'>
+      {notifications.map(
+        ({ id, message, timestamp, wineId, type: notificationType }, index) => (
           <Notification
-            id={index}
-            key={`${type}-${index + 1}`}
-            text={notification.text}
-            time={notification.time}
-            type={type}
-            imageType={notification.imageType}
+            id={id}
+            wineId={wineId}
+            date={timestamp}
+            refetch={refetch}
+            message={message}
+            type={notificationType}
+            key={`${groupType}-${index + 1}`}
+            isViewed={groupType === 'viewed'}
           />
-        ))}
-      </div>
+        )
+      )}
+    </div>
 
-      <style jsx>
-        {`
-          .title {
-            margin-bottom: 15px;
-            padding: 5px 0;
-            font-weight: normal;
-            font-size: 22px;
-            line-height: 28px;
-            border-bottom: 1px solid #9e9e9e;
-            color: #931332;
-          }
+    <style jsx>
+      {`
+        .title {
+          margin-bottom: 15px;
+          padding: 5px 0;
+          font-weight: normal;
+          font-size: 22px;
+          line-height: 28px;
+          border-bottom: 1px solid #9e9e9e;
+          color: #931332;
+        }
 
-          .container {
-            margin-bottom: 30px;
-          }
+        .container {
+          margin-bottom: 30px;
+        }
 
-          .noNotifications {
-            padding: 5px;
-            font-family: 'PT Sans', sans-serif;
-          }
-        `}
-      </style>
-    </>
-  )
-}
+        .noNotifications {
+          padding: 5px;
+          font-family: 'PT Sans', sans-serif;
+        }
+      `}
+    </style>
+  </>
+)
 
 export default NotificationsTypeGroup

@@ -1,31 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import NotificationsTypeGroup from '../NotificationsTypeGroup'
+import {
+  notificationsState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import { fetchNotifications } from '../../store/NotificationsModule/helpers'
+import Toast from '../Toast'
 
-/**
- * Контейнер для списка уведомлений
- * @param {Array} notificationsGroupList - Объект уведомления
- */
-const NotificationsBox = ({ notificationsGroupList }) => {
+const NotificationsBox = () => {
+  const [toastVisibility, setToastVisibility] = useState(false)
+  const [notificationsList] = useRecoilState(notificationsState)
+  const currentUser = useRecoilValue(userState)
+  const [, setNotifications] = useRecoilState(notificationsState)
+
   const isEmpty =
-    notificationsGroupList.reduce(
+    notificationsList.reduce(
       (prev, currentGroup) => prev + currentGroup.notifications.length,
       0
     ) === 0
   return (
     <div className='container'>
+      {toastVisibility ? (
+        <Toast
+          type='success'
+          text='Уведомление успешно удалено'
+          closeCallback={() => setToastVisibility(false)}
+          closeTimeout={500}
+        />
+      ) : null}
       {!isEmpty ? (
-        notificationsGroupList.map(
+        notificationsList.map(
           group =>
             group.notifications.length > 0 && (
               <NotificationsTypeGroup
                 key={group.type}
                 type={group.type}
                 notifications={group.notifications}
+                refetch={() => {
+                  fetchNotifications(currentUser, setNotifications)
+                  setToastVisibility(true)
+                }}
               />
             )
         )
       ) : (
-        <p className='noNotifications'>Нет уведомлений</p>
+        <div className='noNotificationsWrapper'>
+          <span className='noNotifications'>У вас пока нет уведомлений...</span>
+        </div>
       )}
 
       <style jsx>
@@ -37,9 +59,18 @@ const NotificationsBox = ({ notificationsGroupList }) => {
             overflow: scroll;
           }
 
+          .noNotificationsWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 620px;
+          }
+
           .noNotifications {
-            padding: 5px;
             font-family: 'PT Sans', sans-serif;
+            display: flex;
+            font-size: 20px;
+            padding: 5px;
           }
         `}
       </style>

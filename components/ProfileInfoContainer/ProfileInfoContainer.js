@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import NotificationTooltip from '../NotificationTooltip'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import ModalWrapper from '../ModalWrapper'
+import {
+  notificationTokenState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import api from '../../api'
 
 const SectionKeys = {
   userInfo: {
@@ -20,7 +28,24 @@ const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
  * @param {Node} children
  */
 const ProfileInfoContainer = ({ section, children }) => {
+  const currentUser = useRecoilValue(userState)
   const [tooltipVisible, setTooltipVisible] = useState(false)
+  const [isDisabled, setIsDisabled] = useLocalStorage('notificationsDisabled')
+  const notificationToken = useRecoilValue(notificationTokenState)
+
+  const toggleDisableNotifications = () => {
+    if (!isDisabled && currentUser) {
+      api
+        .addNotificationsTokenByUserId(currentUser.id, notificationToken)
+        .then(() => setIsDisabled(!isDisabled))
+    }
+    if (isDisabled) {
+      api
+        .deleteCurrentUserNotificationToken()
+        .then(() => setIsDisabled(!isDisabled))
+    }
+  }
+
   return (
     <div className='wrapper'>
       <div className='header'>
@@ -29,7 +54,7 @@ const ProfileInfoContainer = ({ section, children }) => {
           <div className='buttonWrapper'>
             <button
               type='button'
-              className='button'
+              className='buttonSettings'
               onClick={() => setTooltipVisible(prevState => !prevState)}
             >
               <img
@@ -37,11 +62,18 @@ const ProfileInfoContainer = ({ section, children }) => {
                 alt='settings'
               />
             </button>
-            {tooltipVisible && (
+            <ModalWrapper
+              isModal={false}
+              visible={tooltipVisible}
+              onClose={() => setTooltipVisible(false)}
+            >
               <div className='tooltipWrapper'>
-                <NotificationTooltip notificationEnable={false} />
+                <NotificationTooltip
+                  notificationEnable={isDisabled}
+                  onChange={toggleDisableNotifications}
+                />
               </div>
-            )}
+            </ModalWrapper>
           </div>
         )}
       </div>
@@ -52,7 +84,7 @@ const ProfileInfoContainer = ({ section, children }) => {
         .wrapper {
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: flex-start;
           flex-basis: 70%;
           flex-grow: 3;
           background-color: white;
@@ -91,7 +123,7 @@ const ProfileInfoContainer = ({ section, children }) => {
         .buttonWrapper {
           position: relative;
         }
-        .button {
+        .buttonSettings {
           padding: 0;
           outline: none;
           border: none;

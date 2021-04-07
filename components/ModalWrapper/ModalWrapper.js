@@ -3,20 +3,32 @@ import useCatchOutsideClick from '../../hooks/useCatchOutsideClick'
 
 /**
  * @param {boolean} visible
+ * @param {boolean} isModal
  * @param {ReactNode} children
  * @param {function} onClose
  */
-const ModalWrapper = ({ visible = true, children, onClose }) => {
+const ModalWrapper = ({
+  visible = true,
+  children,
+  onClose,
+  isModal = true,
+}) => {
   const wrapperRef = useRef(null)
 
   useCatchOutsideClick(wrapperRef, onClose)
 
   return visible ? (
     <div>
-      <div className='wrapper' ref={wrapperRef}>
-        <div className='content'>{children}</div>
-      </div>
-      <div className='overlay' />
+      {isModal ? (
+        <>
+          <div className='wrapper' ref={wrapperRef}>
+            <div className='content'>{children}</div>
+          </div>
+          <div className='overlay' />
+        </>
+      ) : (
+        <div ref={wrapperRef}>{children}</div>
+      )}
       <style jsx>{`
         .wrapper {
           position: fixed;

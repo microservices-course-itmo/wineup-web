@@ -1,26 +1,42 @@
-import { useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import CustomFormButton from '../CustomFormButton'
 import CustomSwitchCheckbox from '../CustomSwitchCheckbox'
+import {
+  notificationsState,
+  unreadNotificationsCountState,
+  userState,
+} from '../../store/GlobalRecoilWrapper/store'
+import api from '../../api'
+import { fetchNotifications } from '../../store/NotificationsModule/helpers'
 
 /**
  * @param {boolean} notificationEnable
+ * @param {function} onChange
  */
-const NotificationTooltip = ({ notificationEnable }) => {
-  const [switchValue, setSwitchValue] = useState(notificationEnable)
-  const onSwitchCheckbox = () => {
-    setSwitchValue(prevState => !prevState)
+const NotificationTooltip = ({ notificationEnable, onChange }) => {
+  const currentUser = useRecoilValue(userState)
+  const [, setNotifications] = useRecoilState(notificationsState)
+  const unreadNotificationsCount = useRecoilValue(unreadNotificationsCountState)
+
+  const handleDeleteAllNotifications = () => {
+    if (currentUser) {
+      api.deleteAllNotificationsByUserId(currentUser.id).then(() => {
+        fetchNotifications(currentUser, setNotifications)
+      })
+    }
   }
+
   return (
     <div>
       <div className='tooltipContainer'>
         <div className='tooltipContent'>
           <div className='switchWrapper'>
-            <div className='switchLabel' onClick={onSwitchCheckbox}>
+            <div className='switchLabel' onClick={onChange}>
               Выключить уведомления
             </div>
             <CustomSwitchCheckbox
-              checked={switchValue}
-              onChange={onSwitchCheckbox}
+              checked={notificationEnable}
+              onChange={onChange}
             />
           </div>
           <div className='buttonFooter'>
@@ -30,8 +46,9 @@ const NotificationTooltip = ({ notificationEnable }) => {
               height='33px'
               padding='5px 20px'
               fontSize='14px'
-              onClick={() => {}}
+              onClick={handleDeleteAllNotifications}
               text='Удалить все уведомления'
+              disabled={!unreadNotificationsCount}
             />
           </div>
         </div>

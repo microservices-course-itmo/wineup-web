@@ -23,14 +23,24 @@ export default {
 
 const Template = args => <Notification {...args} />
 
-export const notifications = Template.bind({})
+export const winePriceUpdated = Template.bind({})
+export const notificationGeneral = Template.bind({})
 
-notifications.args = {
-  type: 'read',
-  imageType: 'wineup',
-  text:
-    'WineUp поздровляет Вас с днем рождения! Порадуйте себя мпецаильно подобранными внами по вашим предпочтениям!',
-  time: '19:01',
+winePriceUpdated.args = {
+  isViewed: true,
+  type: 'WINE_PRICE_UPDATED',
+  message: 'Chianti',
+  date: Date.now(),
 }
 
-notifications.storyName = 'Notification'
+winePriceUpdated.storyName = 'Wine price updated'
+
+notificationGeneral.args = {
+  isViewed: true,
+  type: 'NOT_WINE_PRICE_UPDATED',
+  message:
+    'WineUp поздравляет Вас с днём рождения! Порадуйте себя специально подобранными винами по Вашим предпочтениям!',
+  date: Date.now(),
+}
+
+notificationGeneral.storyName = 'General view message'

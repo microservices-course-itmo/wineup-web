@@ -1,3 +1,4 @@
+import React from 'react'
 import Search from '../components/Search/Search'
 import Catalog from '../components/Catalog'
 import FilterBar from '../components/FilterBar'

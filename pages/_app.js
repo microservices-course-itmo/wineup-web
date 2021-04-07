@@ -6,6 +6,8 @@ import { initFirebase } from '../utils/firebaseConfig'
 import RecoilObserver from '../store/RecoilObserver'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import NotificationsModule from '../store/NotificationsModule'
+import '@firebase/messaging'
 
 initFirebase()
 
@@ -14,6 +16,7 @@ const App = ({ Component, pageProps }) => {
     <RecoilRoot>
       <Header />
       {process.env.NODE_ENV !== 'production' && <RecoilObserver />}
+      <NotificationsModule />
       <Component {...pageProps} />
       <Footer />
 

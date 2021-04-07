@@ -13,12 +13,17 @@ const titleBackground = type => {
   }
 }
 
-const Toast = ({ type, text, closeCallback = () => {} }) => {
+const Toast = ({
+  type,
+  text,
+  closeCallback = () => {},
+  closeTimeout = 1000,
+}) => {
   const [isHidden, setHidden] = useState(false)
 
   const clickHandler = useCallback(() => {
     setHidden(true)
-    setTimeout(closeCallback, 1000)
+    setTimeout(closeCallback, closeTimeout)
   }, [closeCallback])
 
   return (

@@ -14,54 +14,21 @@ const errorState = atom({
   },
 })
 
+const notificationTokenState = atom({
+  key: 'notificationTokenState',
+  default: null,
+})
+
 const notificationsState = atom({
   key: 'notifications',
   default: [
     {
-      type: 'unread',
-      notifications: [
-        {
-          imageType: 'liked',
-          text:
-            'Порадуйте себя специально подобранными винами по вашим предпочтениям!',
-          time: '19:02',
-        },
-        {
-          imageType: 'wineup',
-          text:
-            'WineUp поздравляет подобранными винами по вашим предпочтениям!',
-          time: '19:03',
-        },
-      ],
+      type: 'viewed',
+      notifications: [],
     },
     {
-      type: 'read',
-      notifications: [
-        {
-          imageType: 'wineup',
-          text:
-            'WineUp поздравляет Вас с днем рождения! Порадуйте себя специально подобранными винами по вашим предпочтениям!',
-          time: '19:01',
-        },
-        {
-          imageType: 'wineup',
-          text:
-            'WineUp поздравляет Вас с днем рождения! Порадуйте себя специально подобранными винами по вашим предпочтениям!',
-          time: '19:01',
-        },
-        {
-          imageType: 'liked',
-          text:
-            'Порадуйте себя специально подобранными винами по вашим предпочтениям!',
-          time: '19:02',
-        },
-        {
-          imageType: 'wineup',
-          text:
-            'WineUp поздравляет подобранными винами по вашим предпочтениям!',
-          time: '19:03',
-        },
-      ],
+      type: 'unviewed',
+      notifications: [],
     },
   ],
 })
@@ -71,7 +38,7 @@ const unreadNotificationsCountState = selector({
   get: ({ get }) => {
     const notifications = get(notificationsState)
     for (const group of notifications) {
-      if (group.type === 'unread') return group.notifications.length
+      if (group.type === 'unviewed') return group.notifications.length
     }
     return 0
   },
@@ -81,5 +48,6 @@ export {
   userState,
   errorState,
   notificationsState,
+  notificationTokenState,
   unreadNotificationsCountState,
 }

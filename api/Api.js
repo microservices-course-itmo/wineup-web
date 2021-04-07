@@ -234,6 +234,91 @@ class Api {
     return response.data
   }
 
+  async getNotificationsByUserId(userId) {
+    const response = await this.sendRequest({
+      url: `/notification-service/notification/?userId=${userId}`,
+      method: 'GET',
+      headers: {
+        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Server Error')
+    }
+
+    return response.data
+  }
+
+  async deleteNotificationById(notificationId) {
+    const response = await this.sendRequest({
+      url: `/notification-service/notification/${notificationId}`,
+      method: 'DELETE',
+      headers: {
+        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Server Error')
+    }
+
+    return response.data
+  }
+
+  async deleteAllNotificationsByUserId(userId) {
+    const response = await this.sendRequest({
+      url: `/notification-service/notification?userId=${userId}`,
+      method: 'DELETE',
+      headers: {
+        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Server Error')
+    }
+
+    return response.data
+  }
+
+  async addNotificationsTokenByUserId(userId, token) {
+    const response = await this.sendRequest({
+      url: `/user-service/notification_tokens/${userId}?token=${token}&tokenType=FCM_TOKEN`,
+      method: 'POST',
+      headers: {
+        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      console.error('Server Error')
+    }
+
+    return response.data
+  }
+
+  async deleteCurrentUserNotificationToken(token) {
+    const response = await this.sendRequest({
+      url: `/user-service/notification_tokens/?token=${token}`,
+      method: 'DELETE',
+      headers: {
+        accessToken: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response.status !== 200) {
+      console.error('Server Error')
+    }
+
+    return response.data
+  }
+
   async getProfile(accessToken) {
     const response = await this.sendRequest({
       url: '/user-service/users/me',
