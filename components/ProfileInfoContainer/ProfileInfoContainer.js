@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import NotificationTooltip from '../NotificationTooltip'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import ModalWrapper from '../ModalWrapper'
@@ -31,7 +31,7 @@ const ProfileInfoContainer = ({ section, children }) => {
   const currentUser = useRecoilValue(userState)
   const [tooltipVisible, setTooltipVisible] = useState(false)
   const [isDisabled, setIsDisabled] = useLocalStorage('notificationsDisabled')
-  const notificationToken = useRecoilValue(notificationTokenState)
+  const [notificationToken] = useRecoilState(notificationTokenState)
 
   const toggleDisableNotifications = () => {
     if (!isDisabled && currentUser) {
@@ -41,7 +41,7 @@ const ProfileInfoContainer = ({ section, children }) => {
     }
     if (isDisabled) {
       api
-        .deleteCurrentUserNotificationToken()
+        .deleteCurrentUserNotificationToken(notificationToken)
         .then(() => setIsDisabled(!isDisabled))
     }
   }
