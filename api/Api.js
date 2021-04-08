@@ -279,7 +279,7 @@ class Api {
     })
 
     if (response.status !== 200) {
-      throw new Error('Server Error')
+      console.error('Server Error')
     }
 
     return response.data
